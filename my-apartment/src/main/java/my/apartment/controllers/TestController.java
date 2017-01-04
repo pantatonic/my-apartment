@@ -1,8 +1,8 @@
 package my.apartment.controllers;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import my.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class TestController {
     
     private final String privateParamString = "This is private parameter string";
-    private static final String WS_URI = "http://localhost:7001/my-apartment-services/webresources/test";
+    private static final String WS_URI = ServiceDomain.WS_URL + "test";
     
     @RequestMapping(value = "/test.html", method = {RequestMethod.GET})
     @ResponseBody

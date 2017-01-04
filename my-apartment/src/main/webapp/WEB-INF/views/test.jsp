@@ -7,6 +7,7 @@
         <title>Test view</title>
         
         <script type="text/javascript" src="<c:url value="assets/js/jquery.1.11.0.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="assets/js/common_constant.js" />"></script>
         <script type="text/javascript">
             var jsonArrayData = ${jsonArrayData}
             var jsona = ${jsona};
@@ -14,6 +15,7 @@
             jQuery(document).ready(function() {
                 render1();
                 render2();
+                dataFromWebService();
             });
             
             function render1() {
@@ -38,6 +40,42 @@
                 + 'Surname : ' + jsona[0].surname;
                 
                 $('#jsona').html(html);
+            }
+            
+            function dataFromWebService() {
+                var dataFromWebServiceElement = jQuery('#data-from-web-service');
+                dataFromWebServiceElement.html('Calling Web Service...');
+                
+                setTimeout(function() {
+                    jQuery.ajax({
+                        type: 'get',
+                        url: WS_URL + 'test/get_all_test',
+                        cache: false,
+                        success: function(response) {
+                            if(typeof response !== 'object') {
+                                response = JSON.parse(response);
+                            }
+                            
+                            var responseData = response.data;
+                            var html = '';
+                            
+                            if(response.result === SUCCESS_STRING) {
+                                for(var index in responseData) {
+                                    console.log(responseData[index]);
+                                    html += '- Id : ' + responseData[index].id
+                                        + ' Name : ' + responseData[index].name
+                                        + ' Surname : ' + responseData[index].surname
+                                        + '<br>';
+                                }
+                            }
+                            
+                            dataFromWebServiceElement.html(html);
+                        },
+                        error: function() {
+                            alert('Error to call Web service');
+                        }
+                    });
+                }, 500);
             }
         </script>
     </head>
@@ -67,5 +105,9 @@
         
         <hr>
         <span id="jsona"></span>
+        
+        <hr>
+        <h2>Data From Web Service</h2>
+        <span id="data-from-web-service"></span>
     </body>
 </html>
