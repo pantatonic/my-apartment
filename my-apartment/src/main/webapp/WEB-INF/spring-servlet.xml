@@ -25,5 +25,26 @@
             </list>
         </property>
     </bean>
+    
+    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="locale"/>
+    </bean>
+    
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="WEB-INF/messages/messages" />
+    </bean>
+
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="th_TH"/>
+        <property name="cookieName" value="locale"/>
+        <!--<property name="cookieMaxAge" value="3600"/> -->
+    </bean>
+
+    <!--<mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <property name="paramName" value="locale"/>
+        </bean>
+    </mvc:interceptors>-->
 
 </beans>

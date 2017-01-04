@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -108,5 +109,7 @@
         <hr>
         <h2>Data From Web Service</h2>
         <span id="data-from-web-service"></span>
+        
+        <h1><spring:message code="test.message" /></h1>
     </body>
 </html>
