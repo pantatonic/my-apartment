@@ -61,7 +61,6 @@
                             
                             if(response.result === SUCCESS_STRING) {
                                 for(var index in responseData) {
-                                    console.log(responseData[index]);
                                     html += '- Id : ' + responseData[index].id
                                         + ' Name : ' + responseData[index].name
                                         + ' Surname : ' + responseData[index].surname
