@@ -59,8 +59,8 @@ public class TestController {
         JSONArray jsona = resultRtJsonObject.getJSONArray("data");
         modelAndView.addObject("jsona", jsona);
         
-        //locale = LocaleContextHolder.getLocale();
-        LocaleContextHolder.setLocale(new Locale("en_US"));
+        locale = LocaleContextHolder.getLocale();
+        //LocaleContextHolder.setLocale(new Locale("en_US"));
         
         locale = LocaleContextHolder.getLocale();
 

@@ -1,2 +1,4 @@
 /my-apartment-services/target/
 /my-apartment/target/
+/my-apartment/src/main/webapp/assets/highcharts/exporting-server/java/highcharts-export/highcharts-export-convert/target/
+/my-apartment/src/main/webapp/assets/highcharts/exporting-server/java/highcharts-export/highcharts-export-web/target/
