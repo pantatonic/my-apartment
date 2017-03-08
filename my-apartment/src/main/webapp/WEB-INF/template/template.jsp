@@ -13,10 +13,11 @@
         <c:set var="req" value="${pageContext.request}" />
         <c:set var="url">${req.requestURL}</c:set>
         <c:set var="uri" value="${req.requestURI}" />
-        <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" 
-               scope="application" />
+        <%-- <c:set var="baseUrl" value="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" 
+               scope="application" /> --%>
+        <c:set var="baseUrl" value="http://localhost:7001/my-apartment/" scope="application" />
         
-        <%-- ${fn:substring(url, 0, fn:length(url) - fn:length(uri))} --%>
+        <!-- ${baseUrl} -->
         
         <c:set var="appAssetsString" value="assets" scope="application" />
         <c:set var="appAssets" value="${baseUrl}${appAssetsString}" scope="application" />
@@ -107,10 +108,12 @@
 
     </head>
 
-    <body>
-
-        <tiles:insertAttribute name="header" />
-        <tiles:insertAttribute name="body" />
-        <tiles:insertAttribute name="footer" />
+    <body class="skin-dark-blue sidebar-mini">
+        <div class="wrapper">
+            <tiles:insertAttribute name="header" />
+            <tiles:insertAttribute name="aside" />
+            <tiles:insertAttribute name="body" />
+            <tiles:insertAttribute name="footer" />
+        </div>
     </body>
 </html>

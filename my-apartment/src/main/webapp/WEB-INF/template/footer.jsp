@@ -1,4 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<hr>
-<h2>Footer</h2>
+<footer class="main-footer">
+    <div class="pull-right hidden-xs">
+        <b>&nbsp;</b>
+    </div>
+    <strong>&nbsp;</strong>
+</footer>

@@ -6,7 +6,7 @@ var page = (function() {
     
     return {
         init_example: function() {
-            alert('This is test tiles');
+            
         }
     };
 })();
