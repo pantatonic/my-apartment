@@ -95,6 +95,9 @@
         
         <link rel="stylesheet" href="<c:url value="${appCssResource}/app.css?v=${randomTextVersion}" />" />
         <tiles:insertAttribute name="css" ignore="true" />
+        
+        <!-- final override -->
+        <link rel="stylesheet" href="${appCssResource}/final_override.css?v=${randomTextVersion}">
 
         <script type="text/javascript" src="<c:url value="${appJsResource}/common_constant.js?v=${randomTextVersion}" />"></script>
         <script type="text/javascript" src="<c:url value="${appJsResource}/app.js?v=${randomTextVersion}" />"></script>
