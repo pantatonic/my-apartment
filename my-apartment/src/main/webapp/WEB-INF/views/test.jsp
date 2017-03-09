@@ -7,8 +7,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Test view</title>
         
-        <script type="text/javascript" src="<c:url value="assets/js/jquery.1.11.0.min.js" />"></script>
-        <script type="text/javascript" src="<c:url value="assets/js/common_constant.js" />"></script>
+        <script type="text/javascript" src="<c:url value="assets/plugins/jQuery/jQuery-2.1.4.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="assets/view_resources/js/common_constant.js" />"></script>
         <script type="text/javascript">
             var jsonArrayData = ${jsonArrayData}
             var jsona = ${jsona};
