@@ -64,7 +64,7 @@ public class TestController {
         
         locale = LocaleContextHolder.getLocale();
 
-        
+        สวัสดี
         System.out.println(locale + " xxx");
 
         return modelAndView;
