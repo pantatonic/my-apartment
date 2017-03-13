@@ -6,7 +6,7 @@ var page = (function() {
     
     return {
         init_example: function() {
-            
+            console.log('ok');
         }
     };
 })();
