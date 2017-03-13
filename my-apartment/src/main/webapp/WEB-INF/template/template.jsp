@@ -99,7 +99,7 @@
 
     </head>
 
-    <body class="skin-dark-blue sidebar-mini">
+    <body class="skin-blue sidebar-mini">
         <div class="wrapper">
             <tiles:insertAttribute name="header" />
             <tiles:insertAttribute name="aside" />
