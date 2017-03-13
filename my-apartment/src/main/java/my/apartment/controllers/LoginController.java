@@ -54,8 +54,8 @@ public class LoginController {
                     session.setAttribute("user_email", j.getString("email"));
                     session.setAttribute("user_firstname", j.getString("firstname"));
                     session.setAttribute("user_lastname", j.getString("lastname"));
-                    session.setAttribute("user_is_admin", j.getString("isAdmin"));
-                    session.setAttribute("user_status", j.getString("status"));
+                    session.setAttribute("user_is_admin", Integer.toString(j.getInt("isAdmin")));
+                    session.setAttribute("user_status", Integer.toString(j.getInt("status")));
                     
                     System.out.println(session.getAttribute("user_id"));
 
