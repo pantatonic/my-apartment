@@ -103,26 +103,52 @@
             });
             
             var page = (function() {
+                var _setSessionLogin = function(data) {
+                    jQuery.ajax({
+                        type: 'post',
+                        url: 'xxx',
+                        data: '',
+                        cache: false,
+                        success: function() {
+                            
+                        }
+                    });
+                };
+                
                 
                 return {
                     init_login_process: function() {
                         jQuery('form[name="login_form"]').submit(function(e) {
                             e.preventDefault();
-                            var this_form = jQuery(this);
-                            var form_data = this_form.serialize();
+                            var thisForm = jQuery(this);
+                            var formData = thisForm.serialize();
+                            var buttonSubmit = thisForm.find('[type="submit"]');
                             
-                            jQuery.ajax({
-                                type: 'post',
-                                url: WS_URL + 'login',
-                                data: form_data,
-                                cache: false,
-                                success: function(response) {
-                                    console.log(response);
-                                },
-                                error: function() {
-                                    app.alertSomethingError();
-                                }
-                            });
+                            buttonSubmit.bootstrapBtn('loading');
+                            
+                            setTimeout(function() {
+                                jQuery.ajax({
+                                    type: 'post',
+                                    url: 'login_process.html',
+                                    data: formData,
+                                    cache: false,
+                                    success: function(response) {
+                                        console.log(response);
+                                        /*if(response.result === SUCCESS_STRING) {
+                                            _setSessionLogin(response.data);
+                                        }
+                                        else {
+                                            alert('No...');
+                                        }*/
+                                        
+                                        buttonSubmit.bootstrapBtn('reset');
+                                    },
+                                    error: function() {
+                                        app.alertSomethingError();
+                                        buttonSubmit.bootstrapBtn('reset');
+                                    }
+                                });
+                            }, 500);
                         });
                     }
                 };
@@ -134,13 +160,13 @@
     <body class="login-page">
         <div class="login-box">
         <div class="login-logo">
-            <b>My</b> Apartment
+            <b>My</b> Apartment | <c:out value="${sessionScope.user_firstname}" />
         </div>
         <div class="login-box-body">
             <p class="login-box-msg"><spring:message code="common.login" /></p>
             <form id="login-form" name="login_form" method="post" action="xxx">
                 <div class="form-group has-feedback">
-                    <input type="text" name="user" placeholder="<spring:message code="common.user" />" 
+                    <input type="text" name="email" placeholder="<spring:message code="common.user" />" 
                         autocomplete="off" 
                         class="form-control" autofocus="autofocus" value="">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>

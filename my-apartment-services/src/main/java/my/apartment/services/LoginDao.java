@@ -1,7 +1,10 @@
 package my.apartment.services;
 
+import java.util.List;
+import my.apartment.model.User;
+
 public interface LoginDao {
     
-    public Boolean loginProcess(String user, String password);
+    public List<User> loginProcess(User user);
     
 }
