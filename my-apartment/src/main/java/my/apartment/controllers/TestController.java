@@ -22,7 +22,7 @@ public class TestController {
 
     @RequestMapping(value = "/test.html", method = {RequestMethod.GET})
     @ResponseBody
-    public String test() {
+    public String test(Locale locale) {
         return "This is Test Controller";
     }
 
