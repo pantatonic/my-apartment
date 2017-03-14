@@ -16,7 +16,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import my.apartment.model.User;
+import my.apartment.model.Users;
 import my.apartment.services.LoginDao;
 import my.apartment.services.LoginDaoImpl;
 import my.common.CommonString;
@@ -56,11 +56,11 @@ public class LoginResource {
         try {
             LoginDao loginDaoImpl = new LoginDaoImpl();
             
-            User u = new User();
+            Users u = new Users();
             u.setEmail(email);
             u.setPassword(password);
             
-            List<User> resultUsers = loginDaoImpl.loginProcess(u);
+            List<Users> resultUsers = loginDaoImpl.loginProcess(u);
              
             if(resultUsers.size() == 0) {
                 jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)

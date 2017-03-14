@@ -22,5 +22,18 @@ var app = {
             text: 'Something error please try again',
             type: 'error'
         });
+    },
+    convert_to_json_object: function(data) {
+        if(typeof data !== 'object') {
+            try {
+                return JSON.parse(data);
+            }
+            catch(e) {
+                return data;
+            }
+        }
+        else {
+            return data;
+        }
     }
 };

@@ -103,18 +103,6 @@
             });
             
             var page = (function() {
-                var _setSessionLogin = function(data) {
-                    jQuery.ajax({
-                        type: 'post',
-                        url: 'xxx',
-                        data: '',
-                        cache: false,
-                        success: function() {
-                            
-                        }
-                    });
-                };
-                
                 
                 return {
                     init_login_process: function() {
@@ -133,13 +121,14 @@
                                     data: formData,
                                     cache: false,
                                     success: function(response) {
-                                        console.log(response);
-                                        /*if(response.result === SUCCESS_STRING) {
-                                            _setSessionLogin(response.data);
+                                        response = app.convert_to_json_object(response);
+
+                                        if(response.result === SUCCESS_STRING) {
+                                            alert('To be continue...');
                                         }
                                         else {
                                             alert('No...');
-                                        }*/
+                                        }
                                         
                                         buttonSubmit.bootstrapBtn('reset');
                                     },
@@ -160,7 +149,7 @@
     <body class="login-page">
         <div class="login-box">
         <div class="login-logo">
-            <b>My</b> Apartment | <c:out value="${sessionScope.user_firstname}" />
+            <b>My</b> Apartment
         </div>
         <div class="login-box-body">
             <p class="login-box-msg"><spring:message code="common.login" /></p>

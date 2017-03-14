@@ -36,30 +36,23 @@ public class LoginController {
             RestTemplate restTemplate = new RestTemplate();
             String resultWs = restTemplate.postForObject(LoginController.WS_URI + "login", parametersMap, String.class);
             JSONObject resultWsJsonObject = new JSONObject(resultWs);
-            
-            System.out.println("============");
-            System.out.println(resultWsJsonObject);
-            System.out.println("============");
-            
+
             if(resultWsJsonObject.get(CommonString.RESULT_STRING).equals(CommonString.SUCCESS_STRING)) {
                 JSONArray jsonArrayData = resultWsJsonObject.getJSONArray("data");
                 
                 for(Integer i = 0; i <= jsonArrayData.length() - 1; i++) {
                     JSONObject j = jsonArrayData.getJSONObject(i);
 
-                    /*System.out.println(j.getString("firstname"));
-                    System.out.println(j.getInt("id"));*/
-                    
-                    session.setAttribute("user_id", Integer.toString(j.getInt("id")));
-                    session.setAttribute("user_email", j.getString("email"));
-                    session.setAttribute("user_firstname", j.getString("firstname"));
-                    session.setAttribute("user_lastname", j.getString("lastname"));
-                    session.setAttribute("user_is_admin", Integer.toString(j.getInt("isAdmin")));
-                    session.setAttribute("user_status", Integer.toString(j.getInt("status")));
-                    
-                    System.out.println(session.getAttribute("user_id"));
-
+                    session.setAttribute("userId", Integer.toString(j.getInt("id")));
+                    session.setAttribute("userEmail", j.getString("email"));
+                    session.setAttribute("userFirstname", j.getString("firstname"));
+                    session.setAttribute("userLastname", j.getString("lastname"));
+                    session.setAttribute("userIsAdmin", Integer.toString(j.getInt("isAdmin")));
+                    session.setAttribute("userStatus", Integer.toString(j.getInt("status")));
                 }
+                
+                jsonObjectReturn.put(CommonString.RESULT_STRING, resultWsJsonObject.get(CommonString.RESULT_STRING))
+                        .put(CommonString.MESSAGE_STRING, resultWsJsonObject.get(CommonString.MESSAGE_STRING));
             }
             else {
                 jsonObjectReturn.put(CommonString.RESULT_STRING, resultWsJsonObject.get(CommonString.RESULT_STRING))

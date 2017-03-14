@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import my.apartment.model.User;
+import my.apartment.model.Users;
 import my.common.CommonString;
 import my.common.Config;
 import org.json.JSONObject;
@@ -18,21 +18,19 @@ import org.json.JSONObject;
 public class LoginDaoImpl implements LoginDao {
     
     @Override
-    public List<User> loginProcess(User user) {
+    public List<Users> loginProcess(Users user) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         
-        JSONObject jsonObjectReturn = null;
-        
-        List<User> userList = new ArrayList<User>();
+        List<Users> userList = new ArrayList<Users>();
         
         try {
             Class.forName(Config.JDBC_DRIVER);
             
             con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
             
-            String stringQuery = "SELECT * FROM user WHERE email = ? AND password = ?";
+            String stringQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
             
             ps = con.prepareStatement(stringQuery);
             ps.setString(1, user.getEmail());
@@ -40,7 +38,7 @@ public class LoginDaoImpl implements LoginDao {
             rs = ps.executeQuery();
             
             if(rs.next()) {
-                User userReturn = new User();
+                Users userReturn = new Users();
                 
                 userReturn.setId(rs.getInt("id"));
                 userReturn.setEmail(rs.getString("email"));
