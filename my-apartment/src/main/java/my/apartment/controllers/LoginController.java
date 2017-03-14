@@ -68,4 +68,20 @@ public class LoginController {
         return jsonObjectReturn.toString();
     }
     
+    @RequestMapping(value = "/logout_process.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String logoutProcess(
+            HttpSession session
+    ) {
+        if(session.getAttribute("userId") != null) {
+            String sessionFullName = session.getAttribute("userFirstname").toString() + session.getAttribute("userLastname").toString();
+            
+            session.invalidate();
+            
+            return "Logout account : " + sessionFullName;
+        }
+        
+        return "...";
+    }
+    
 }

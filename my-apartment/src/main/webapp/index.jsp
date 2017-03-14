@@ -109,13 +109,25 @@
                                     data: formData,
                                     cache: false,
                                     success: function(response) {
-                                        response = app.convert_to_json_object(response);
+                                        response = app.convertToJsonObject(response);
 
                                         if(response.result === SUCCESS_STRING) {
                                             alert('To be continue...');
                                         }
                                         else {
-                                            alert('No...');
+                                            if(response.message == 'DATA_NOT_FOUND') {
+                                                app.showNotice({
+                                                    message: app.translate('account_not_found'),
+                                                    type: response.result
+                                                });
+                                            }
+                                            else
+                                            if(response.message == 'STATUS IS DISABLED') {
+                                                app.showNotice({
+                                                    message: app.translate('account_is_disabled'),
+                                                    type: response.result
+                                                });
+                                            }
                                         }
                                         
                                         buttonSubmit.bootstrapBtn('reset');
@@ -135,36 +147,38 @@
     </head>
 
     <body class="login-page">
+        
         <div class="login-box">
-        <div class="login-logo">
-            <b>My</b> Apartment
-        </div>
-        <div class="login-box-body">
-            <p class="login-box-msg"><spring:message code="common.login" /></p>
-            <form id="login-form" name="login_form" method="post" action="xxx">
-                <div class="form-group has-feedback">
-                    <input type="text" name="email" placeholder="<spring:message code="common.user" />" 
-                        autocomplete="off" 
-                        class="form-control" autofocus="autofocus" value="">
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                </div>
-                <div class="form-group has-feedback">
-                    <input type="password" name="password" placeholder="<spring:message code="common.password" />" autocomplete="off" 
-                           class="form-control" value="">
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <button type="submit" 
-                            class="btn btn-primary btn-block btn-flat full-width btn-submit" 
-                            data-loading-text="<spring:message code="common.now_processing" />">
-                                <spring:message code="common.login" />
-                        </button>
+            <div class="login-logo">
+                <b>My</b> Apartment | ${sessionScope.userFirstname}
+                <jsp:include page="WEB-INF/views/message_sources.jsp" />
+            </div>
+            <div class="login-box-body">
+                <p class="login-box-msg"><spring:message code="common.login" /></p>
+                <form id="login-form" name="login_form" method="post" action="xxx">
+                    <div class="form-group has-feedback">
+                        <input type="text" name="email" placeholder="<spring:message code="common.user" />" 
+                            autocomplete="off" 
+                            class="form-control" autofocus="autofocus" value="">
+                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
-                </div>
-                <br><br>
-            </form>
-        </div
-    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" name="password" placeholder="<spring:message code="common.password" />" autocomplete="off" 
+                               class="form-control" value="">
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" 
+                                class="btn btn-primary btn-block btn-flat full-width btn-submit" 
+                                data-loading-text="<spring:message code="common.now_processing" />">
+                                    <spring:message code="common.login" />
+                            </button>
+                        </div>
+                    </div>
+                    <br><br>
+                </form>
+            </div>
+        </div>
     </body>
 </html>

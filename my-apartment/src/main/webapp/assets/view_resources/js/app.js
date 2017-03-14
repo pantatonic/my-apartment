@@ -1,12 +1,13 @@
 var app = {
     translate : function(key) {
-        var js_string = jQuery('#js_language_strings').text();
-        js_string = JSON.parse(js_string);
+        var jsString = jQuery('#js_language_strings').text();
+        jsString = JSON.parse(jsString);
 
-        if(key in js_string) {
-            return js_string[key];
+        if(key in jsString) {
+            return jsString[key];
         }
         else {
+            alert('[app.translate] : Not found key : ' + key);
             return key;
         }
     },
@@ -23,7 +24,7 @@ var app = {
             type: 'error'
         });
     },
-    convert_to_json_object: function(data) {
+    convertToJsonObject: function(data) {
         if(typeof data !== 'object') {
             try {
                 return JSON.parse(data);
@@ -35,5 +36,17 @@ var app = {
         else {
             return data;
         }
+    },
+    showNotice: function(options) {
+        if(options.addclass == undefined) {
+            options.addclass = '';
+        }
+
+        new PNotify({
+            title: app.translate('common.message'),
+            text: options.message,
+            type: options.type,
+            addclass: options.addclass
+        });
     }
 };
