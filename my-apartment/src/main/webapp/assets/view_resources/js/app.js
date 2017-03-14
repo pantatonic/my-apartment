@@ -48,5 +48,17 @@ var app = {
             type: options.type,
             addclass: options.addclass
         });
+    },
+    
+    valueUtils: {
+        isEmptyValue: function(stringData) {
+            return (stringData.trim() == '' ? true : false);
+        },
+        undefinedToEmpty: function(data) {
+            return data == undefined ? '':data;
+        },
+        nullToEmpty: function(data) {
+            return data == null ? '':data;
+        }
     }
 };

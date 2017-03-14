@@ -91,6 +91,29 @@
             });
             
             var page = (function() {
+                _validateInputEmail = function() {
+                    var email = jQuery('[name="email"]');
+                    var validatePass = true;
+                    
+                    email.removeClass(INPUT_ERROR_CLASS);
+                    
+                    if(app.valueUtils.isEmptyValue( email.val() )) {
+                        app.showNotice({
+                            message: app.translate('common.please_enter_data'),
+                            type: WARNING_STRING
+                        });
+                        
+                        email.addClass(INPUT_ERROR_CLASS);
+                        
+                        validatePass = false;
+                    }
+                    
+                    return validatePass;
+                };
+                
+                _validateInputPassword = function() {
+                    
+                };
                 
                 return {
                     init_login_process: function() {
@@ -99,45 +122,57 @@
                             var thisForm = jQuery(this);
                             var formData = thisForm.serialize();
                             var buttonSubmit = thisForm.find('[type="submit"]');
+                            var _validate = function() {
+                                var validatePass = true;
+                                var resultValidateEmail = _validateInputEmail();
+                                
+                                if(!resultValidateEmail) {
+                                    validatePass = false;
+                                }
+                                
+                                return validatePass;
+                            };
                             
-                            buttonSubmit.bootstrapBtn('loading');
+                            if(_validate()) {
+                                buttonSubmit.bootstrapBtn('loading');
                             
-                            setTimeout(function() {
-                                jQuery.ajax({
-                                    type: 'post',
-                                    url: 'login_process.html',
-                                    data: formData,
-                                    cache: false,
-                                    success: function(response) {
-                                        response = app.convertToJsonObject(response);
+                                setTimeout(function() {
+                                    jQuery.ajax({
+                                        type: 'post',
+                                        url: thisForm.attr('action'),
+                                        data: formData,
+                                        cache: false,
+                                        success: function(response) {
+                                            response = app.convertToJsonObject(response);
 
-                                        if(response.result === SUCCESS_STRING) {
-                                            alert('To be continue...');
-                                        }
-                                        else {
-                                            if(response.message == 'DATA_NOT_FOUND') {
-                                                app.showNotice({
-                                                    message: app.translate('account_not_found'),
-                                                    type: response.result
-                                                });
+                                            if(response.result === SUCCESS_STRING) {
+                                                alert('To be continue...');
                                             }
-                                            else
-                                            if(response.message == 'STATUS IS DISABLED') {
-                                                app.showNotice({
-                                                    message: app.translate('account_is_disabled'),
-                                                    type: response.result
-                                                });
+                                            else {
+                                                if(response.message == 'DATA_NOT_FOUND') {
+                                                    app.showNotice({
+                                                        message: app.translate('account_not_found'),
+                                                        type: response.result
+                                                    });
+                                                }
+                                                else
+                                                if(response.message == 'STATUS IS DISABLED') {
+                                                    app.showNotice({
+                                                        message: app.translate('account_is_disabled'),
+                                                        type: response.result
+                                                    });
+                                                }
                                             }
+
+                                            buttonSubmit.bootstrapBtn('reset');
+                                        },
+                                        error: function() {
+                                            app.alertSomethingError();
+                                            buttonSubmit.bootstrapBtn('reset');
                                         }
-                                        
-                                        buttonSubmit.bootstrapBtn('reset');
-                                    },
-                                    error: function() {
-                                        app.alertSomethingError();
-                                        buttonSubmit.bootstrapBtn('reset');
-                                    }
-                                });
-                            }, 500);
+                                    });
+                                }, 500);
+                            }
                         });
                     }
                 };
@@ -155,7 +190,7 @@
             </div>
             <div class="login-box-body">
                 <p class="login-box-msg"><spring:message code="common.login" /></p>
-                <form id="login-form" name="login_form" method="post" action="xxx">
+                <form id="login-form" name="login_form" method="post" action="<c:url value="/login_process.html" />">
                     <div class="form-group has-feedback">
                         <input type="text" name="email" placeholder="<spring:message code="common.user" />" 
                             autocomplete="off" 
