@@ -60,24 +60,12 @@
         <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="<c:url value="/assets/dist/css/skins/_all-skins.css" />">
         
-        <script type="text/javascript" src="<c:url value="/assets/bootstrap-datetimepicker/js/moment-with-locales.js" />"></script>
-        <link rel="stylesheet" href="<c:url value="/assets/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" />">
-        <script type="text/javascript" src="<c:url value="/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" />"></script>
         
         <!-- pnotify -->
         <link rel="stylesheet" href="<c:url value="/assets/pnotify/pnotify.custom.css" />">
         <link rel="stylesheet" href="<c:url value="/assets/pnotify/pnotify.override.css?v=${randomTextVersion}" />">
         <script type="text/javascript" src="<c:url value="/assets/pnotify/pnotify.custom.js" />"></script>
         
-        <!-- data table -->
-        <link rel="stylesheet" href="<c:url value="/assets/data_table/media/css/dataTables.bootstrap.css" />">
-        <link rel="stylesheet" href="<c:url value="/assets/data_table/extensions/Responsive/css/responsive.bootstrap.css" />">
-        <script type="text/javascript" src="<c:url value="/assets/data_table/media/js/jquery.dataTables.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/assets/data_table/media/js/dataTables.bootstrap.js" />"></script>
-        <script type="text/javascript" src="<c:url value="/assets/data_table/extensions/Responsive/js/dataTables.responsive.js" />"></script>
-        
-        <!-- table auto row -->
-        <script type="text/javascript" src="<c:url value="/assets/plugins/jquery-table-auto-row.js" />"></script>
         
         <!-- sweet alert 2 -->
         <link rel="stylesheet" href="<c:url value="/assets/sweetalert2/sweetalert2.min.css" />">
