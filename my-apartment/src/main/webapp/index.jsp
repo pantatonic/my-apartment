@@ -98,21 +98,58 @@
                     email.removeClass(INPUT_ERROR_CLASS);
                     
                     if(app.valueUtils.isEmptyValue( email.val() )) {
-                        app.showNotice({
-                            message: app.translate('common.please_enter_data'),
-                            type: WARNING_STRING
-                        });
-                        
-                        email.addClass(INPUT_ERROR_CLASS);
-                        
+                        if(!app.checkNoticeExist('notice-input-data')) {
+                            app.showNotice({
+                                message: app.translate('common.please_enter_data'),
+                                type: WARNING_STRING,
+                                addclass: 'notice-input-data'
+                            });
+                        }
+
                         validatePass = false;
+                    }
+                    else {
+                        if(!app.validateEmail(email.val())) {
+                            if(!app.checkNoticeExist('notice-invalid-email-format')) {
+                                app.showNotice({
+                                    message: app.translate('common.invalid_email_format'),
+                                    type: WARNING_STRING,
+                                    addclass: 'notice-invalid-email-format'
+                                });
+                            }
+                            
+                            validatePass = false;
+                        }
+                    }
+                    
+                    if(!validatePass) {
+                        email.addClass(INPUT_ERROR_CLASS);
                     }
                     
                     return validatePass;
                 };
                 
                 _validateInputPassword = function() {
+                    var password = jQuery('[name="password"]');
+                    var validatePass = true;
                     
+                    password.removeClass(INPUT_ERROR_CLASS);
+                    
+                    if(app.valueUtils.isEmptyValue( password.val() )) {
+                        if(!app.checkNoticeExist('notice-input-data')) {
+                            app.showNotice({
+                                message: app.translate('common.please_enter_data'),
+                                type: WARNING_STRING,
+                                addclass: 'notice-input-data'
+                            });
+                        }
+                        
+                        password.addClass(INPUT_ERROR_CLASS);
+                        
+                        validatePass = false;
+                    }
+                    
+                    return validatePass;
                 };
                 
                 return {
@@ -124,10 +161,14 @@
                             var buttonSubmit = thisForm.find('[type="submit"]');
                             var _validate = function() {
                                 var validatePass = true;
-                                var resultValidateEmail = _validateInputEmail();
+                                var arrayValidateFunction = [
+                                    _validateInputEmail(), _validateInputPassword()
+                                ];
                                 
-                                if(!resultValidateEmail) {
-                                    validatePass = false;
+                                for(var index in arrayValidateFunction){
+                                    if(arrayValidateFunction[index] === false) {
+                                        validatePass = false;
+                                    }
                                 }
                                 
                                 return validatePass;

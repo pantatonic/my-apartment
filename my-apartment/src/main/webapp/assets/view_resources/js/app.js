@@ -1,6 +1,6 @@
 var app = {
     translate : function(key) {
-        var jsString = jQuery('#js_language_strings').text();
+        var jsString = jQuery('#js-language-strings').text();
         jsString = JSON.parse(jsString);
 
         if(key in jsString) {
@@ -13,7 +13,7 @@ var app = {
     },
     alertSomethingError : function() {
         /*new PNotify({
-            title: app.translate('Message'),
+            title: app.translate('common.message'),
             text: app.translate('Something error please try again'),
             type: 'error'
         });*/
@@ -48,6 +48,18 @@ var app = {
             type: options.type,
             addclass: options.addclass
         });
+    },
+    checkNoticeExist: function(specifyClass) {
+        if(specifyClass == undefined) {
+            return jQuery('.ui-pnotify').length > 0 ? true : false;    
+        }
+        else {
+            return jQuery('.'+ specifyClass).length > 0 ? true : false;
+        }
+    },
+    validateEmail: function(emailString) {
+        var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        return re.test(emailString);
     },
     
     valueUtils: {
