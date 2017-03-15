@@ -12,15 +12,9 @@ var app = {
         }
     },
     alertSomethingError : function() {
-        /*new PNotify({
-            title: app.translate('common.message'),
-            text: app.translate('Something error please try again'),
-            type: 'error'
-        });*/
-        
         new PNotify({
-            title: 'Message',
-            text: 'Something error please try again',
+            title: app.translate('common.message'),
+            text: app.translate('common.something_error_try_again'),
             type: 'error'
         });
     },
