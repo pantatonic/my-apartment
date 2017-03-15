@@ -86,10 +86,6 @@
         <script type="text/javascript" src="<c:url value="/assets/view_resources/js/alert_util.js?v=${randomTextVersion}" />"></script>
         
         <script type="text/javascript">
-            jQuery(document).ready(function() {
-                page.init_login_process();
-            });
-            
             var page = (function() {
                 _validateInputEmail = function() {
                     var email = jQuery('[name="email"]');
@@ -215,9 +211,25 @@
                                 }, 500);
                             }
                         });
+                    },
+                    redirectIfLogin: function() {
+                        var sessionUserId = '${sessionScope.userId}';
+                        var contextPath = '${pageContext.request.contextPath}';
+                        
+                        if(sessionUserId != '') {
+                            window.location.href = contextPath + '/dashboard.html';
+                        }
                     }
                 };
             })();
+            
+            page.redirectIfLogin();
+            
+            jQuery(document).ready(function() {
+                page.init_login_process();
+            });
+            
+            
         </script>
 
     </head>
