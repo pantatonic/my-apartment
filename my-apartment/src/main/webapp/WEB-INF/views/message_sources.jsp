@@ -15,6 +15,9 @@
     "common.something_error_try_again":"<spring:message code="common.something_error_try_again" />",
     
     "account_not_found":"<spring:message code="account_not_found" />",
-    "account_is_disabled":"<spring:message code="account_is_disabled" />"
+    "account_is_disabled":"<spring:message code="account_is_disabled" />",
+    
+    "dashboard.dashboard.page_title":"<spring:message code="dashboard.dashboard.page_title" />",
+    "dashboard.dashboard.page_sub_title":"<spring:message code="dashboard.dashboard.page_sub_title" />"
     }
 </div>
