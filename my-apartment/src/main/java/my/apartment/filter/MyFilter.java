@@ -14,9 +14,7 @@ import javax.servlet.http.HttpSession;
 public class MyFilter implements Filter {
     
     private String[] ignorePages = {
-        "/login_process.html",
-        "/login_process2.html",
-        "/login_process3.html"
+        "/login_process.html"
     };
 
     @Override
