@@ -11,6 +11,24 @@
     <tiles:putAttribute name="js">
         <%--<script type="text/javascript" 
                 src="<c:url value="/assets/view_resources/test/test_tiles/js/test_tiles.js?v=${randomTextVersion}"/>"></script>--%>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('body').dblclick(function() {
+                    $.ajax({
+                        type: 'get',
+                        url: _CONTEXT_PATH_ + '/d.html',
+                        data: {
+                            xxx: 'yyy'
+                        },
+                        cache: false,
+                        success: function(response) {
+                            $('.content-wrapper').append(response);
+                        }
+                    });
+                });
+            });
+        </script>
+        
     </tiles:putAttribute>
     <tiles:putAttribute name="body">
        

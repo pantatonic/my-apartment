@@ -17,4 +17,9 @@ public class DashboardController {
         return modelAndView;
     }
     
+    @RequestMapping(value = "/d.html", method = {RequestMethod.GET})
+    public ModelAndView d() {
+        return new ModelAndView("dashboard/d");
+    }
+    
 }
