@@ -35,6 +35,7 @@
         <link rel="stylesheet" href="<c:url value="/assets/bootstrap/css/bootstrap.css" />">
         <script type="text/javascript" src="<c:url value="/assets/bootstrap/js/bootstrap.min.js" />"></script>
         <script type="text/javascript">
+            var _CONTEXT_PATH_ = '${pageContext.request.contextPath}';
             var bootstrapButton = $.fn.button.noConflict();
             $.fn.bootstrapBtn = bootstrapButton;
 
@@ -183,7 +184,7 @@
                                             response = app.convertToJsonObject(response);
 
                                             if(response.result === SUCCESS_STRING) {
-                                                alert('To be continue...');
+                                                window.location.href = _CONTEXT_PATH_ + '/dashboard.html';
                                             }
                                             else {
                                                 if(response.message == 'DATA_NOT_FOUND') {
@@ -214,7 +215,7 @@
                     },
                     redirectIfLogin: function() {
                         var sessionUserId = '${sessionScope.userId}';
-                        var contextPath = '${pageContext.request.contextPath}';
+                        var contextPath = _CONTEXT_PATH_;
                         
                         if(sessionUserId != '') {
                             window.location.href = contextPath + '/dashboard.html';

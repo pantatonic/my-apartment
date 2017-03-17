@@ -34,6 +34,7 @@
         <link rel="stylesheet" href="<c:url value="/assets/bootstrap/css/bootstrap.css" />">
         <script type="text/javascript" src="<c:url value="/assets/bootstrap/js/bootstrap.min.js" />"></script>
         <script type="text/javascript">
+            var _CONTEXT_PATH_ = '${pageContext.request.contextPath}';
             var bootstrapButton = $.fn.button.noConflict();
             $.fn.bootstrapBtn = bootstrapButton;
 
