@@ -101,6 +101,8 @@
     </head>
 
     <body class="skin-blue sidebar-mini">
+        <jsp:include page="/WEB-INF/views/message_sources.jsp" />
+        
         <div class="wrapper">
             <tiles:insertAttribute name="header" />
             <tiles:insertAttribute name="aside" />

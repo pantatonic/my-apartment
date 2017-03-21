@@ -200,6 +200,12 @@
                                                         type: response.result
                                                     });
                                                 }
+                                                else {
+                                                    app.showNotice({
+                                                        message: response.message,
+                                                        type: response.result
+                                                    });
+                                                }
                                             }
 
                                             buttonSubmit.bootstrapBtn('reset');
@@ -248,12 +254,12 @@
                     <div class="form-group has-feedback">
                         <input type="text" name="email" placeholder="<spring:message code="common.user" />" 
                             autocomplete="off" 
-                            class="form-control" autofocus="autofocus" value="">
+                            class="form-control" autofocus="autofocus" value="admin@admin.com">
                         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
                         <input type="password" name="password" placeholder="<spring:message code="common.password" />" autocomplete="off" 
-                               class="form-control" value="">
+                               class="form-control" value="1234">
                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
                     <div class="row">

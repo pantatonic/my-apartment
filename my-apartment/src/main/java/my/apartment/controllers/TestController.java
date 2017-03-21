@@ -3,7 +3,7 @@ package my.apartment.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import my.common.ServiceDomain;
+import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.context.i18n.LocaleContextHolder;

@@ -1,8 +1,8 @@
 package my.apartment.controllers;
 
 import javax.servlet.http.HttpSession;
-import my.common.CommonString;
-import my.common.ServiceDomain;
+import my.apartment.common.CommonString;
+import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;

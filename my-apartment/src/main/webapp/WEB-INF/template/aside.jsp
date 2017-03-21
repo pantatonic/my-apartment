@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <aside class="main-sidebar">
     <section class="sidebar">
@@ -31,12 +32,20 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="header">
-                xxx
+                &nbsp;
             </li>
-            <li class="treeview ">
+            <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-file-o"></i> Test 1
+                    <i class="fa fa-bars"></i>
+                    <span><spring:message code="apartment" /></span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="<c:url value="/building.html" />">
+                            <i class="fa fa-circle-o"></i> <spring:message code="apartment.building" />
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="treeview ">
                 <a href="#">

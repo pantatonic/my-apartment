@@ -18,18 +18,18 @@ import my.common.Config;
 public class LoginDaoImpl implements LoginDao {
     
     //Add salt
-    private static byte[] getSalt() throws NoSuchAlgorithmException {
+    /*private static byte[] getSalt() throws NoSuchAlgorithmException {
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
         byte[] salt = new byte[16];
         sr.nextBytes(salt);
         return salt;
-    }
+    }*/
     
-    private static String get_SHA_1_SecurePassword(String passwordToHash, byte[] salt) {
+    private static String get_SHA_1_SecurePassword(String passwordToHash/*, byte[] salt*/) {
         String generatedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(salt);
+            /*md.update(salt);*/
             byte[] bytes = md.digest(passwordToHash.getBytes());
             StringBuilder sb = new StringBuilder();
             for(int i=0; i< bytes.length ;i++)
@@ -61,20 +61,14 @@ public class LoginDaoImpl implements LoginDao {
             String stringQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
             
             String pwd = user.getPassword();
-            byte[] salt = getSalt();
-            //String securePassword = get_SHA_1_SecurePassword(pwd, salt);
-            String securePassword = "2addb31043aabf7bdbd797ab5bc8dedc4043c55f";
-            String x = get_SHA_1_SecurePassword("1234", salt);
-            
-            System.out.println(securePassword);
-            System.out.println("---------------");
-            System.out.println(x);
-            System.out.println("===============");
-            System.out.println(securePassword.compareTo(x));
+           // byte[] salt = getSalt();
+           
+            String securePassword = get_SHA_1_SecurePassword(pwd);
+            //System.out.println(securePassword.compareTo(x));
             
             ps = con.prepareStatement(stringQuery);
             ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
+            ps.setString(2, securePassword);
             rs = ps.executeQuery();
             
             if(rs.next()) {

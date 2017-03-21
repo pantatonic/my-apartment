@@ -4,6 +4,9 @@
 <div id="js-language-strings" style="display: none;">
     {
     "test.message":"<spring:message code="test.message" />",
+    
+    "application.footer":"<spring:message code="application.footer" />",
+    
     "common.message":"<spring:message code="common.message" />",
     "common.login":"<spring:message code="common.login" />",
     "common.user":"<spring:message code="common.user" />",
@@ -13,11 +16,29 @@
     "common.please_enter_data":"<spring:message code="common.please_enter_data" />",
     "common.invalid_email_format":"<spring:message code="common.invalid_email_format" />",
     "common.something_error_try_again":"<spring:message code="common.something_error_try_again" />",
+    "common.close":"<spring:message code="common.close" />",
+    "common.save":"<spring:message code="common.save" />",
     
     "account_not_found":"<spring:message code="account_not_found" />",
     "account_is_disabled":"<spring:message code="account_is_disabled" />",
     
     "dashboard.dashboard.page_title":"<spring:message code="dashboard.dashboard.page_title" />",
-    "dashboard.dashboard.page_sub_title":"<spring:message code="dashboard.dashboard.page_sub_title" />"
+    "dashboard.dashboard.page_sub_title":"<spring:message code="dashboard.dashboard.page_sub_title" />",
+    
+    "apartment":"<spring:message code="apartment" />",
+    
+    "apartment.building":"<spring:message code="apartment.building" />",
+    "apartment.building.page_title":"<spring:message code="apartment.building.page_title" />",
+    "apartment.building.page_sub_title":"<spring:message code="apartment.building.page_sub_title" />",
+    "apartment.add_building":"<spring:message code="apartment.add_building" />",
+    
+    "building.name":"<spring:message code="building.name" />",
+    "building.address":"<spring:message code="building.address" />",
+    "building.tel":"<spring:message code="building.tel" />",
+    "building.electricity_charge_per_unit":"<spring:message code="building.electricity_charge_per_unit" />",
+    "building.min_electricity_unit":"<spring:message code="building.min_electricity_unit" />",
+    "building.min_electricity_charge":"<spring:message code="building.min_electricity_charge" />",
+    "building.min_water_unit":"<spring:message code="building.min_water_unit" />",
+    "building.min_water_charge":"<spring:message code="building.min_water_charge" />"
     }
 </div>

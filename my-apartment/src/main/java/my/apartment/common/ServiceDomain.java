@@ -1,4 +1,4 @@
-package my.common;
+package my.apartment.common;
 
 import org.mvel2.util.ThisLiteral;
 
