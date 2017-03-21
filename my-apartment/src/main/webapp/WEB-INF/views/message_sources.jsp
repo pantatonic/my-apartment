@@ -5,8 +5,11 @@
     {
     "test.message":"<spring:message code="test.message" />",
     
+    "application.session_expired":"<spring:message code="application.session_expired" />",
     "application.footer":"<spring:message code="application.footer" />",
     
+    "common.ok":"<spring:message code="common.ok" />",
+    "common.cancel":"<spring:message code="common.cancel" />",
     "common.message":"<spring:message code="common.message" />",
     "common.login":"<spring:message code="common.login" />",
     "common.user":"<spring:message code="common.user" />",
@@ -39,6 +42,9 @@
     "building.min_electricity_unit":"<spring:message code="building.min_electricity_unit" />",
     "building.min_electricity_charge":"<spring:message code="building.min_electricity_charge" />",
     "building.min_water_unit":"<spring:message code="building.min_water_unit" />",
-    "building.min_water_charge":"<spring:message code="building.min_water_charge" />"
+    "building.min_water_charge":"<spring:message code="building.min_water_charge" />",
+    
+    "building.use_min_electricity":"<spring:message code="building.use_min_electricity" />",
+    "building.use_min_water":"<spring:message code="building.use_min_water" />"
     }
 </div>

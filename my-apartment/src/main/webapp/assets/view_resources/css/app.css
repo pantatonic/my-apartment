@@ -5,3 +5,23 @@
 textarea {
     resize: vertical;
 }
+
+.force-inline {
+    display: inline !important;
+}
+
+.force-none-float {
+    float: none;
+}
+
+.force-text-left {
+    text-align: left !important;
+}
+
+.swal2-modal, .swal2-modal button {
+    border-radius: 0px !important;
+}
+
+.swal2-overlay {
+    z-index: 1050;
+}

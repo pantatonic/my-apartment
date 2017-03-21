@@ -49,7 +49,7 @@
             </li>
             <li class="treeview ">
                 <a href="#">
-                    <i class="fa fa-file-o"></i> Test 2
+                    <i class="fa fa-file-o"></i> <span>Test 2</span>
                 </a>
             </li>
             <li class="treeview">

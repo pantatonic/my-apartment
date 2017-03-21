@@ -1,3 +1,5 @@
+/* global alert_util */
+
 var app = {
     translate : function(key) {
         var jsString = jQuery('#js-language-strings').text();
@@ -16,6 +18,21 @@ var app = {
             title: app.translate('common.message'),
             text: app.translate('common.something_error_try_again'),
             type: 'error'
+        });
+    },
+    noticeSomethingError : function() {
+        new PNotify({
+            title: app.translate('common.message'),
+            text: app.translate('common.something_error_try_again'),
+            type: 'error'
+        });
+    },
+    alertSessionExpired: function() {
+        alert_util.basicWarningAlert(app.translate('application.session_expired'), function() {
+					
+        },{
+            animation: false,
+            type: null
         });
     },
     convertToJsonObject: function(data) {

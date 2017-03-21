@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -34,6 +35,7 @@
         <link rel="stylesheet" href="<c:url value="/assets/bootstrap/css/bootstrap.css" />">
         <script type="text/javascript" src="<c:url value="/assets/bootstrap/js/bootstrap.min.js" />"></script>
         <script type="text/javascript">
+            var _LOCALE_ =  '${pageContext.response.locale}';
             var _CONTEXT_PATH_ = '${pageContext.request.contextPath}';
             var bootstrapButton = $.fn.button.noConflict();
             $.fn.bootstrapBtn = bootstrapButton;
@@ -102,6 +104,9 @@
 
     <body class="skin-blue sidebar-mini">
         <jsp:include page="/WEB-INF/views/message_sources.jsp" />
+        
+        <spring:message code="common.now_processing" var="msgNowProcessing_" />
+        <c:set var="msgNowProcessing" value="${msgNowProcessing_}" scope="application" />
         
         <div class="wrapper">
             <tiles:insertAttribute name="header" />

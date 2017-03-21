@@ -1,13 +1,9 @@
+/* global swal, OK_STRING, CANCEL_STRING */
+
 var alert_util = (function () {
-    var _confirmButtonText;
-    var _cancelButtonText;
-    if (typeof _LOCALE_ === 'undefined' || _LOCALE_.toLowerCase() === 'thai') {
-        _confirmButtonText = 'ตกลง';
-        _cancelButtonText = 'ยกเลิก';
-    } else if (_LOCALE_.toLowerCase() === 'english') {
-        _confirmButtonText = 'OK';
-        _cancelButtonText = 'Cancel';
-    }
+    /*var _confirmButtonText = OK_STRING;
+    var _cancelButtonText = CANCEL_STRING;*/
+
     var _mergeObject = function (baseObject, secondaryObject) {
         if (secondaryObject !== undefined) {
             for (var key in secondaryObject) {
@@ -18,7 +14,7 @@ var alert_util = (function () {
     };
 
     var _basicAlert = function (dataOption, functionCallBack) {
-        dataOption.confirmButtonText = _confirmButtonText;
+        dataOption.confirmButtonText = OK_STRING;
 
         if (typeof functionCallBack === 'object' || functionCallBack === undefined) {
             swal(dataOption);
@@ -32,11 +28,11 @@ var alert_util = (function () {
 
     var _confirmAlert = function (dataOption, functionConfirm) {
         if (dataOption.confirmButtonText === undefined) {
-            dataOption.confirmButtonText = _confirmButtonText;
+            dataOption.confirmButtonText = OK_STRING;
         }
 
         if (dataOption.cancelButtonText === undefined) {
-            dataOption.cancelButtonText = _cancelButtonText;
+            dataOption.cancelButtonText = CANCEL_STRING;
         }
 
         swal(dataOption).then(function (isConfirm) {
@@ -48,11 +44,11 @@ var alert_util = (function () {
 
     var _confirmCancelAlert = function (dataOption, functionConfirm, functionCancel) {
         if (dataOption.confirmButtonText === undefined) {
-            dataOption.confirmButtonText = _confirmButtonText;
+            dataOption.confirmButtonText = OK_STRING;
         }
 
         if (dataOption.cancelButtonText === undefined) {
-            dataOption.cancelButtonText = _cancelButtonText;
+            dataOption.cancelButtonText = CANCEL_STRING;
         }
 
         swal(dataOption)

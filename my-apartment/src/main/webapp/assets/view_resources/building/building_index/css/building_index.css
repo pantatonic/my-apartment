@@ -1,0 +1,4 @@
+[name="electricity_charge_per_unit"], [name="min_electricity_unit"], [name="min_electricity_charge"],
+[name="water_charge_per_unit"], [name="min_water_unit"], [name="min_water_charge"] {
+    width: 120px;
+}

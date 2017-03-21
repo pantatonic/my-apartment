@@ -1,4 +1,6 @@
-$(document).ready(function() {
+/* global modalBuildingDetail */
+
+jQuery(document).ready(function() {
     page.add_event();
 });
 
@@ -6,8 +8,36 @@ var page = (function() {
     
     return {
         add_event: function() {
-            $('.add-button').click(function() {
+            jQuery('.add-button').click(function() {
                 page.showBuildingDetail();
+            });
+            
+            modalBuildingDetail.getModal().find('#use-min-electricity').click(function() {
+                var thisElement = jQuery(this);
+                
+                if(thisElement.is(':checked')) {
+                    modalBuildingDetail.minElectricityBlog.show();
+                }
+                else {
+                    modalBuildingDetail.minElectricityBlog.hide();
+                }
+            });
+            
+            modalBuildingDetail.getModal().find('#use-min-water').click(function() {
+                var thisElement = jQuery(this);
+                
+                if(thisElement.is(':checked')) {
+                    modalBuildingDetail.minWaterBlog.show();
+                }
+                else {
+                    modalBuildingDetail.minWaterBlog.hide();
+                }
+            });
+            
+            modalBuildingDetail.getForm().submit(function(e) {
+                e.preventDefault();
+                
+                modalBuildingDetail.save();
             });
         },
         showBuildingDetail: function(type) {
@@ -15,7 +45,9 @@ var page = (function() {
                 type = 'add';
             }
             
-            $('#modal-building-detail').modal('show');            
+            modalBuildingDetail.checkUseElectricityWater();
+            
+            modalBuildingDetail.getModal().modal('show');            
         }
     };
 })();
