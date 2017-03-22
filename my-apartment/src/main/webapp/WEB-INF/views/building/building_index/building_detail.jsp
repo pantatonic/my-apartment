@@ -28,8 +28,8 @@
                             <spring:message code="building.name" />
                         </label>
                         <div class="col-sm-9">
-                            <input type="text" name="id" value="">
-                            <input type="text" name="name" class="form-control" 
+                            <input type="hidden" name="id" value="">
+                            <input type="text" name="name" class="form-control my-required-field" 
                                    placeholder="<spring:message code="building.name" />">
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                         </label>
                         <div class="col-sm-9">
                             <input type="text" name="electricity_charge_per_unit" 
-                                   class="form-control force-inline" 
+                                   class="form-control force-inline my-required-field" 
                                    placeholder="">
                             
                             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -90,7 +90,7 @@
                         </label>
                         <div class="col-sm-9">
                             <input type="text" name="water_charge_per_unit" 
-                                   class="form-control force-inline" 
+                                   class="form-control force-inline my-required-field" 
                                    placeholder="">
                             
                             &nbsp;&nbsp;&nbsp;&nbsp;

@@ -9,3 +9,4 @@ var OK_STRING = '_OK_';
 var CANCEL_STRING = '_CANCEL_';
 
 var INPUT_ERROR_CLASS = 'my-input-error';
+var REQUIRED_CLASS = 'my-required-field';

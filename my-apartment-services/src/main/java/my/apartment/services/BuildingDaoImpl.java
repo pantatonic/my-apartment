@@ -1,5 +1,6 @@
 package my.apartment.services;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -56,16 +57,30 @@ public class BuildingDaoImpl implements BuildingDao {
                         + "WHERE id = ?";
             }
             
-
+           
             ps = con.prepareStatement(querysString, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, building.getName());
             ps.setString(2, building.getAddress());
             ps.setString(3, building.getTel());
             ps.setBigDecimal(4, building.getElectricityChargePerUnit());
-            ps.setInt(5, building.getMinElectricityUnit());
+            
+            if(building.getMinElectricityUnit() == null) {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            }
+            else {
+                ps.setInt(0, building.getMinElectricityUnit());
+            }
+
             ps.setBigDecimal(6, building.getMinElectricityCharge());
             ps.setBigDecimal(7, building.getWaterChargePerUnit());
-            ps.setInt(8, building.getMinWaterUnit());
+            
+            if(building.getMinWaterUnit() == null) {
+                ps.setNull(8, java.sql.Types.INTEGER);
+            }
+            else {
+                ps.setInt(8, building.getMinWaterUnit());
+            }
+            
             ps.setBigDecimal(9, building.getMinWaterCharge());
             
             if (building.getId() != null) {
