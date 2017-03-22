@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import my.apartment.model.Users;
-import my.common.Config;
+import my.apartment.common.Config;
 
 public class LoginDaoImpl implements LoginDao {
     

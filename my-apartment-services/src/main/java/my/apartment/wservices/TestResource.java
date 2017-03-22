@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 import my.apartment.model.Test;
 import my.apartment.services.TestDao;
 import my.apartment.services.TestDaoImpl;
-import my.common.CommonString;
+import my.apartment.common.CommonString;
 import org.json.JSONObject;
 
 

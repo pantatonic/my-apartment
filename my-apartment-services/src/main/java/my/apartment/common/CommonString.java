@@ -1,4 +1,4 @@
-package my.common;
+package my.apartment.common;
 
 public class CommonString {
     
@@ -9,5 +9,7 @@ public class CommonString {
     public static final String MESSAGE_STRING = "message";
     public static final String SERVICE_ERROR_STRING = "SERVICE ERROR";
     public static final String DATA_NOT_FOUND_STRING = "DATA_NOT_FOUND";
+    public static final String SAVE_DATA_ERROR_STRING = "SAVE_DATA_ERROR";
+    public static final String SAVE_DATA_SUCCESS = "SAVE_DATA_SUCCESS";
     
 }

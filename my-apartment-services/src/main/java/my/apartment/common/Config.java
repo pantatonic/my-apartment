@@ -1,4 +1,4 @@
-package my.common;
+package my.apartment.common;
 
 
 public class Config {

@@ -27,6 +27,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(my.apartment.wservices.BuildingResource.class);
         resources.add(my.apartment.wservices.LoginResource.class);
         resources.add(my.apartment.wservices.TestResource.class);
     }

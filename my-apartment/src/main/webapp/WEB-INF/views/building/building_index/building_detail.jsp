@@ -5,7 +5,7 @@
 
 <jsp:useBean id="commonHtml" class="my.apartment.common.CommonHtml" scope="page" />
 
-<form id="building-form" name="building_form" method="post" class="form-horizontal"
+<form id="building-form" name="building_form" method="post" class="form-horizontal" 
       action="<c:url value="building/building_save.html" />">
     
     <div class="modal fade modal-scroll" id="modal-building-detail" tabindex="-1" role="dialog" aria-labelledby="modal-building-detail-label">
@@ -28,6 +28,7 @@
                             <spring:message code="building.name" />
                         </label>
                         <div class="col-sm-9">
+                            <input type="text" name="id" value="">
                             <input type="text" name="name" class="form-control" 
                                    placeholder="<spring:message code="building.name" />">
                         </div>
