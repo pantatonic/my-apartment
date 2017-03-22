@@ -1,4 +1,4 @@
-/* global modalBuildingDetail */
+/* global modalBuildingDetail, app */
 
 jQuery(document).ready(function() {
     page.add_event();
@@ -43,6 +43,9 @@ var page = (function() {
         showBuildingDetail: function(type) {
             if(type == undefined) {
                 type = 'add';
+                
+                app.clearFormData(modalBuildingDetail.getForm());
+                modalBuildingDetail.clearInputId();
             }
             
             modalBuildingDetail.checkUseElectricityWater();

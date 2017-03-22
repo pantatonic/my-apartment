@@ -72,6 +72,17 @@ var app = {
         var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
         return re.test(emailString);
     },
+    clearFormData: function(jqueryFormObject) {
+        var resetButton = jQuery('<button/>', {
+            type: 'reset',
+            html: 'Reset',
+            style: 'display: none'
+        });
+        
+        resetButton.appendTo(jqueryFormObject);
+        jqueryFormObject.find('button[type="reset"]').click();
+        resetButton.remove();
+    },
     
     valueUtils: {
         isEmptyValue: function(stringData) {

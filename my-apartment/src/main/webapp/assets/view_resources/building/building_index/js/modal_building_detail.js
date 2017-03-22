@@ -16,6 +16,9 @@ var modalBuildingDetail = (function() {
         getForm: function() {
             return _getBuildingForm();
         },
+        clearInputId: function() {
+            _getBuildingForm().find('[name="id"]').val('');
+        },
         checkUseElectricityWater: function() {
             var modal = _getModalBuildingDetail();
             var useMinElectricity = modal.find('#use-min-electricity');
