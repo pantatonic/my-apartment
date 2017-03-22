@@ -20,7 +20,6 @@ public class CommonUtils {
             String value = formData.getFirst(keyString);
             
             jsonObject.put(keyString, value);
-
         }
 
         return jsonObject;
