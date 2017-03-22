@@ -44,16 +44,16 @@ public class BuildingDaoImpl implements BuildingDao {
                 /** update process */
                 
                 querysString = "UPDATE building SET "
-                    + "name = ?, "
-                    + "address = ?, "
-                    + "tel = ?, "
-                    + "electricity_charge_per_unit = ?, "
-                    + "min_electricity_unit = ?, "
-                    + "min_electricity_charge = ?, "
-                    + "water_charge_per_unit = ?, "
-                    + "min_water_unit = ?, "
-                    + "min_water_charge = ? "
-                    + "WHERE id = ?";
+                        + "name = ?, "
+                        + "address = ?, "
+                        + "tel = ?, "
+                        + "electricity_charge_per_unit = ?, "
+                        + "min_electricity_unit = ?, "
+                        + "min_electricity_charge = ?, "
+                        + "water_charge_per_unit = ?, "
+                        + "min_water_unit = ?, "
+                        + "min_water_charge = ? "
+                        + "WHERE id = ?";
             }
             
 
