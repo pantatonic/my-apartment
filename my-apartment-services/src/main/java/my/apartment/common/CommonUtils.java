@@ -18,7 +18,7 @@ public class CommonUtils {
         try {
             StringBuilder crunchifyBuilder = new StringBuilder();
             
-            BufferedReader in = new BufferedReader(new InputStreamReader(incomingData));
+            BufferedReader in = new BufferedReader(new InputStreamReader(incomingData, "UTF-8"));
             String line = null;
             while ((line = in.readLine()) != null) {
                 crunchifyBuilder.append(line);

@@ -1,13 +1,17 @@
 /* global modalBuildingDetail, app */
 
 jQuery(document).ready(function() {
-    page.add_event();
+    page.initialProcess();
+    page.addEvent();
 });
 
 var page = (function() {
     
     return {
-        add_event: function() {
+        initialProcess: function() {
+            page.getBuilding();
+        },
+        addEvent: function() {
             jQuery('.add-button').click(function() {
                 page.showBuildingDetail();
             });
@@ -51,6 +55,16 @@ var page = (function() {
             modalBuildingDetail.checkUseElectricityWater();
             
             modalBuildingDetail.getModal().modal('show');            
+        },
+        getBuilding: function() {
+            jQuery.ajax({
+                type: 'get',
+                url: _CONTEXT_PATH_ + '/building_get.html',
+                cache: false,
+                success: function(response) {
+                    //response = app.convertToJsonObject(response);
+                }
+            });
         }
     };
 })();

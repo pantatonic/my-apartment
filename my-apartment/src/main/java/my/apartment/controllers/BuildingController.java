@@ -1,5 +1,6 @@
 package my.apartment.controllers;
 
+import java.nio.charset.Charset;
 import my.apartment.common.CommonUtils;
 import my.apartment.common.ServiceDomain;
 import org.json.JSONObject;
@@ -39,10 +40,11 @@ public class BuildingController {
             RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData).toString();
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
+            MediaType mediaType = new MediaType("application", "json", Charset.forName("UTF-8"));
+            headers.setContentType(mediaType);
 
             HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "building/building_save", entity, String.class);
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "building/building_save", entity, String.class, "UTF8");
             
             JSONObject resultWsJsonObject = new JSONObject(resultWs);
             
@@ -52,9 +54,25 @@ public class BuildingController {
             e.printStackTrace();
         }
         
-        System.out.println(jsonObjectReturn);
-
         return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/building_get.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String buildingGet() {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "building/building_get", String.class);
+            System.out.println(resultWs);
+        }
+        catch(Exception e) {
+            
+        }
+        
+        
+        return "Test";
     }
 
 }

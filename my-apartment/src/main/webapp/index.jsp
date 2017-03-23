@@ -150,7 +150,7 @@
                 };
                 
                 return {
-                    init_login_process: function() {
+                    initLoginProcess: function() {
                         jQuery('form[name="login_form"]').submit(function(e) {
                             e.preventDefault();
                             var thisForm = jQuery(this);
@@ -233,7 +233,7 @@
             page.redirectIfLogin();
             
             jQuery(document).ready(function() {
-                page.init_login_process();
+                page.initLoginProcess();
             });
             
             

@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -37,11 +39,31 @@ public class BuildingResource {
      * Retrieves representation of an instance of my.apartment.wservices.BuildingResource
      * @return an instance of java.lang.String
      */
+    @Path("building_get")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            BuildingDao buildingDaoImpl = new BuildingDaoImpl();
+            
+            List<Building> buildings = buildingDaoImpl.get();
+            
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
+                    .put(CommonString.MESSAGE_STRING, "Test building get");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+        }
+        
+        
+        
+        return jsonObjectReturn.toString();
     }
 
     @Path("building_save")
@@ -80,7 +102,7 @@ public class BuildingResource {
             building.setMinWaterCharge(
                     CommonUtils.stringToBigDecimal(jsonObjectReceive.getString("min_water_charge"))
             );
-            
+
             Building resultSave = buildingDaoImpl.save(building);
             
             if(resultSave != null) {

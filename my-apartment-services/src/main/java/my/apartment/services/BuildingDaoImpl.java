@@ -1,19 +1,48 @@
 package my.apartment.services;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import my.apartment.common.Config;
 import my.apartment.model.Building;
 
 public class BuildingDaoImpl implements BuildingDao {
+    
+    @Override
+    public List<Building> get() {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<Building> buildings = new ArrayList<Building>();
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+            
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String stringQuery = "SELECT * FROM building";
+            
+            ps = con.prepareStatement(stringQuery);
+            rs = ps.executeQuery();
+            if(rs.next()) {
+                
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return buildings;
+    }
 
+    @Override
     public Building save(Building building) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -57,7 +86,6 @@ public class BuildingDaoImpl implements BuildingDao {
                         + "WHERE id = ?";
             }
             
-           
             ps = con.prepareStatement(querysString, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, building.getName());
             ps.setString(2, building.getAddress());
