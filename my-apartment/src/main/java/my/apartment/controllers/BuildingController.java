@@ -40,7 +40,7 @@ public class BuildingController {
             RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData).toString();
             HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = new MediaType("application", "json", Charset.forName("UTF-8"));
+            MediaType mediaType = CommonUtils.jsonMediaType();
             headers.setContentType(mediaType);
 
             HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);

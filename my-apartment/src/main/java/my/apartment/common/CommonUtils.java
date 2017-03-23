@@ -1,7 +1,9 @@
 package my.apartment.common;
 
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import org.json.JSONObject;
+import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 
 public class CommonUtils {
@@ -23,6 +25,10 @@ public class CommonUtils {
         }
 
         return jsonObject;
+    }
+    
+    public static MediaType jsonMediaType() {
+        return new MediaType("application", "json", Charset.forName("UTF-8"));
     }
 
 }
