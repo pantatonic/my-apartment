@@ -7,10 +7,13 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.core.MediaType;
 import org.json.JSONObject;
 
 
 public class CommonUtils {
+    
+    public static final String MEDIA_TYPE_JSON = MediaType.APPLICATION_JSON  + ";charset=utf-8";
     
     public static JSONObject receiveJsonObject(InputStream incomingData) {
         JSONObject jsonObject = new JSONObject();

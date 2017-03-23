@@ -1,6 +1,8 @@
 package my.apartment.controllers;
 
 import java.nio.charset.Charset;
+import javax.servlet.http.HttpServletResponse;
+import my.apartment.common.CommonString;
 import my.apartment.common.CommonUtils;
 import my.apartment.common.ServiceDomain;
 import org.json.JSONObject;
@@ -59,20 +61,25 @@ public class BuildingController {
     
     @RequestMapping(value = "/building_get.html", method = {RequestMethod.GET})
     @ResponseBody
-    public String buildingGet() {
+    public String buildingGet(HttpServletResponse response) {
         JSONObject jsonObjectReturn = new JSONObject();
+        
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
         
         try {
             RestTemplate restTemplate = new RestTemplate();
             String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "building/building_get", String.class);
-            System.out.println(resultWs);
+
+            jsonObjectReturn = new JSONObject(resultWs);
         }
         catch(Exception e) {
-            
+            e.printStackTrace();
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
         }
         
-        
-        return "Test";
+        return jsonObjectReturn.toString();
     }
 
 }

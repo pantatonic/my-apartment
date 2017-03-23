@@ -41,18 +41,17 @@ public class BuildingResource {
      */
     @Path("building_get")
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(CommonUtils.MEDIA_TYPE_JSON)
     public String getJson() {
         JSONObject jsonObjectReturn = new JSONObject();
-        
+
         try {
             BuildingDao buildingDaoImpl = new BuildingDaoImpl();
             
             List<Building> buildings = buildingDaoImpl.get();
-            
-            
+
             jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                    .put(CommonString.MESSAGE_STRING, "Test building get");
+                    .put(CommonString.DATA_STRING, buildings);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -60,8 +59,6 @@ public class BuildingResource {
             jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
                     .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
         }
-        
-        
         
         return jsonObjectReturn.toString();
     }

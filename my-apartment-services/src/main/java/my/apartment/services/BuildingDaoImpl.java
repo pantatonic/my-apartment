@@ -32,7 +32,20 @@ public class BuildingDaoImpl implements BuildingDao {
             ps = con.prepareStatement(stringQuery);
             rs = ps.executeQuery();
             if(rs.next()) {
+                Building building = new Building();
                 
+                building.setId(rs.getInt("id"));
+                building.setName(rs.getString("name"));
+                building.setAddress(rs.getString("address"));
+                building.setTel(rs.getString("tel"));
+                building.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
+                building.setMinElectricityUnit(rs.getInt("min_electricity_unit"));
+                building.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
+                building.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
+                building.setMinWaterUnit(rs.getInt("min_water_unit"));
+                building.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
+                
+                buildings.add(building);
             }
         }
         catch(Exception e) {
