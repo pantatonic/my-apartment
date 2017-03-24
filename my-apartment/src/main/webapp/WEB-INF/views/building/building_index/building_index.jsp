@@ -52,10 +52,17 @@
         </div>
                     
         <textarea id="box-building-template">
-            <div class="col-sm-2 box-building hover-box">
-                <i class="fa fa-building building-icon"></i>
+            <div class="col-xs-12 col-sm-6 col-md-3 box-building_">
+                <div class="box-building hover-box">
+                    <i class="fa fa-building building-icon"></i>
+                    <div class="clearfix"></div>
+                    <div class="box-building-name"></div>
+                    
+                </div>
+                
                 <div class="clearfix"></div>
-                <div class="box-building-name"></div>
+                <spring:message code="common.delete" var="msgDeleteBuilding" />
+                ${commonHtml.getDeleteButton(msgDeleteBuilding, msgNowProcessing)}
             </div>
         </textarea>
 

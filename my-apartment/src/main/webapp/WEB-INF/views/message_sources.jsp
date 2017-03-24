@@ -22,6 +22,8 @@
     "common.close":"<spring:message code="common.close" />",
     "common.save":"<spring:message code="common.save" />",
     "common.save_success":"<spring:message code="common.save_success" />",
+    "common.delete":"<spring:message code="common.delete" />",
+    "common.delete_success":"<spring:message code="common.delete_success" />",
     
     "account_not_found":"<spring:message code="account_not_found" />",
     "account_is_disabled":"<spring:message code="account_is_disabled" />",

@@ -6,6 +6,7 @@ public class CommonHtml {
     private final String fontAddClass = "<i class=\"fa fa-plus\"></i>";
     private final String classButtonAdd = "btn btn-warning btn-flat add-button";
     private final String fontSaveClass = "<i class=\"fa fa-save\"></i>";
+    private final String fontDeleteClass = "<i class=\"fa fa-times\"></i>";
     
   
     public String getAddButton(String textHtml) {
@@ -38,6 +39,20 @@ public class CommonHtml {
     public String getSaveButton(String textHtml, String loadingText) {
         return "<button type=\"submit\" class=\"btn btn-primary btn-flat\" data-loading-text=\"" + loadingText + "\">" 
                     + this.fontSaveClass + " "
+                    + textHtml 
+                + "</button>";
+    }
+    
+    public String getDeleteButton(String textHtml) {
+        return "<button type=\"button\" class=\"btn btn-warning btn-flat button-delete\">"
+                    + this.fontDeleteClass + " "
+                    + textHtml 
+                + "</button>";
+    }
+    
+    public String getDeleteButton(String textHtml, String loadingText) {
+        return "<button type=\"button\" class=\"btn btn-warning btn-flat button-delete\" data-loading-text=\"" + loadingText + "\">"
+                    + this.fontDeleteClass + " "
                     + textHtml 
                 + "</button>";
     }

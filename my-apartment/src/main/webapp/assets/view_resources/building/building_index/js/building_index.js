@@ -1,4 +1,4 @@
-/* global modalBuildingDetail, app, _CONTEXT_PATH_ */
+/* global modalBuildingDetail, app, _CONTEXT_PATH_, _DELAY_PROCESS_ */
 
 var latestBuildingIdProcess = null;
 
@@ -22,6 +22,10 @@ var page = (function() {
                 var thisElement = jQuery(this);
                 
                 page.showBuildingDetail('edit', thisElement.attr('data-id'));
+            });
+            
+            boxBuilding.getBoxBuildingContainer().on('click', '.button-delete', function() {
+                boxBuilding.deleteBuilding(jQuery(this));
             });
             
             modalBuildingDetail.getModal().find('#use-min-electricity').click(function() {
@@ -70,6 +74,28 @@ var page = (function() {
             }
         },
         getBuilding: function() {
+            boxBuilding.getBuilding();
+        }
+    };
+})();
+
+var boxBuilding = (function() {
+    
+    return {
+        getBoxBuildingContainer: function() {
+            return jQuery('#box-building-container');
+        },
+        deleteBuilding: function(buttonDelete) {
+            var id = buttonDelete.attr('data-id');
+            
+            buttonDelete.bootstrapBtn('loading');
+            
+            setTimeout(function() {
+                alert('To delete id : ' + id);
+                buttonDelete.bootstrapBtn('reset');
+            }, _DELAY_PROCESS_);
+        },
+        getBuilding: function() {
             var parent_box = jQuery('#parent-box-building-container');
             app.loadingInElement('show', parent_box);
             
@@ -89,6 +115,10 @@ var page = (function() {
                             + ' : '
                             + currentData.name
                         );
+                
+                        boxBuildingElement.closest('.box-building_')
+                                .find('.button-delete')
+                                .attr('data-id', currentData.id);
                     };
                     var __setAnimateBoxBuilding = function() {
                         if(latestBuildingIdProcess != null) {

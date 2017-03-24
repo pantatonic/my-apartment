@@ -10,6 +10,10 @@
     min-height: 300px;
 }
 
+.box-building_ {
+    text-align: center;
+}
+
 .box-building {
     border: 1px solid #ffffff;
     text-align: center;
@@ -23,5 +27,8 @@
 }
 .box-building-name {
     font-size: 12px;
+    margin-top: 15px;
+}
+.box-building_ .button-delete {
     margin-top: 15px;
 }
