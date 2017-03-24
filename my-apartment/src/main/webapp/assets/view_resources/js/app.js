@@ -1,6 +1,16 @@
-/* global alert_util, _CONTEXT_PATH_ */
+/* global alert_util, _CONTEXT_PATH_, INPUT_ERROR_CLASS */
 
 var app = {
+    camelToUnderScore : function(s) {
+        return s.replace(/(?:^|\.?)([A-Z])/g, function (x,y) { 
+                return "_" + y.toLowerCase();
+        }).replace(/^_/, "");
+    },
+    clearAllInputErrorClass: function(scopeElement) {
+        scopeElement.find('.' + INPUT_ERROR_CLASS).each(function() {
+            jQuery(this).removeClass(INPUT_ERROR_CLASS);
+        });
+    },
     translate : function(key) {
         var jsString = jQuery('#js-language-strings').text();
         jsString = JSON.parse(jsString);
@@ -111,6 +121,14 @@ var app = {
         resetButton.appendTo(jqueryFormObject);
         jqueryFormObject.find('button[type="reset"]').click();
         resetButton.remove();
+    },
+    setAnimateCustom : function(element, animateType) {
+        element.addClass('animated ' + animateType);
+        setTimeout(function() {
+            element.removeClass('animated');
+            element.removeClass(animateType);
+        },2000);
+        //element.removeClass('animated '+animate_type);
     },
     
     valueUtils: {

@@ -52,7 +52,7 @@
         </div>
                     
         <textarea id="box-building-template">
-            <div class="col-sm-2 box-building">
+            <div class="col-sm-2 box-building hover-box">
                 <i class="fa fa-building building-icon"></i>
                 <div class="clearfix"></div>
                 <div class="box-building-name"></div>

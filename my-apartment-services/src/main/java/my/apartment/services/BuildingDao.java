@@ -10,4 +10,6 @@ public interface BuildingDao {
     
     public List<Building> get();
     
+    public List<Building> getById(Integer id);
+    
 }

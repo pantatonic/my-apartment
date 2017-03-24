@@ -1,0 +1,758 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.d1.sim.itmx.rest;
+
+import java.util.Date;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PUT;
+import javax.ws.rs.QueryParam;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ * REST Web Service
+ *
+ * @author Tanapong
+ */
+@Path("/registration/")
+public class Registration {
+
+    @Context
+    private UriInfo context;
+
+    // ================== Create Registration ====================
+    @Path("participant/{participantCode}/register")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String crateRegistration(
+            @PathParam("participantCode") String participantCode, 
+            @HeaderParam("signature") String signature, 
+            String content) {
+        JSONObject ret = new JSONObject();
+
+        // Prepare & Print Log Input
+        System.out.println();
+        System.out.println("======== Create Registration ========");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/register");
+        System.out.println("Method : POST");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------- Header Param ------------");
+        System.out.println("signature : " + signature);
+        System.out.println("------------ Request Body -----------");
+        System.out.println(content);
+
+        try {
+            System.out.println("--------- Request Body (JSON) -------");
+            JSONObject body = new JSONObject(content);
+            System.out.println(body);
+
+            // Porcess
+            JSONArray registrationsIn = body.getJSONArray("registrations");
+            JSONObject account = registrationsIn.getJSONObject(0).getJSONObject("account");
+            String accountNo = account.getString("value");
+            // Error Case
+            if (accountNo == null || accountNo.equals("9999999999999")) {
+                JSONArray registrations = new JSONArray();
+                JSONObject reg1 = new JSONObject();
+                reg1.put("responseCode", "927");
+
+                registrations.put(0, reg1);
+
+                ret.put("registrations", registrations);
+
+            } else {
+
+                // "{\"registrations\":[{\n\"registrationId\":\"100000000185\",\"responseCode\":\"000\"}]}"
+                JSONArray registrations = new JSONArray();
+                JSONObject reg1 = new JSONObject();
+                reg1.put("registrationId", "100000000185");
+                reg1.put("responseCode", "000");
+
+                registrations.put(0, reg1);
+
+                ret.put("registrations", registrations);
+            }
+
+        } catch (Exception e) {
+            JSONArray registrations = new JSONArray();
+            JSONObject reg1 = new JSONObject();
+            reg1.put("responseCode", "602");
+
+            registrations.put(0, reg1);
+
+            ret.put("registrations", registrations);
+
+            e.printStackTrace();
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    // =================== Amend Registration ===================
+    @Path("participant/{participantCode}/amend/registrationId")
+    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String amendRegistration(@PathParam("participantCode") String participantCode, String content) {
+        JSONObject ret = new JSONObject();
+
+        // Prepare & Print Log Input
+        System.out.println();
+        System.out.println("======== Amend Registration ========");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/amend/registrationId");
+        System.out.println("Method : PUT");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------ Request Body -----------");
+        System.out.println(content);
+
+        try {
+            System.out.println("--------- Request Body (JSON) -------");
+            JSONObject body = new JSONObject(content);
+            System.out.println(body);
+
+            // Porcess
+            long registrationId = body.getLong("registrationId");
+            // Error Case
+            if (String.valueOf(registrationId).contains("99999")) {
+                ret.put("responseCode", "910");
+            } else {
+
+                ret.put("responseCode", "000");
+                ret.put("registrationId", registrationId);
+            }
+
+        } catch (Exception e) {
+            ret.put("responseCode", "602");
+            e.printStackTrace();
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    //================ Registration Enquiry by Participant ================
+    //Enquiry by Registration ID
+    @Path("participant/{participantCode}/enquiry/registrationId")
+    @GET
+    @Produces("application/json")
+    public String regEnquiryByRegistrationId(
+            @PathParam("participantCode") String participantCode,
+            @QueryParam("registrationId") String registrationId) {
+        JSONObject ret = new JSONObject();
+
+        // Input
+        System.out.println();
+        System.out.println("======== Enquiry by Registration ID ========");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/enquiry");
+        System.out.println("Method : GET");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------- Parameter -------------");
+        System.out.println("registrationId : " + registrationId);
+
+        // Process
+        // Error Case
+        if (registrationId == null || registrationId.length() < 10) {
+            ret.put("responseCode", "912");
+        } else {
+            ret = new JSONObject("{\n"
+                    + "   \"responseCode\":\"000\",\n"
+                    + "   \"registration\":{\n"
+                    + "      \"registrationId\":" + registrationId + ",\n"
+                    + "      \"displayName\":\"SAMPP1\",\n"
+                    + "      \"participant\":{\n"
+                    + "         \"code\":\"" + participantCode + "\",\n"
+                    + "         \"name\":\"Sample Participant\"\n"
+                    + "      },\n"
+                    + "      \"proxy\":{\n"
+                    + "         \"type\":\"MSISDN\",\n"
+                    + "         \"value\":\"+66123456789\",\n"
+                    + "         \"status\":\"SUBSCR\"\n"
+                    + "      },\n"
+                    + "      \"account\":{\n"
+                    + "         \"type\":\"BANKAC\",\n"
+                    + "         \"value\":\"1101234567890\",\n"
+                    + "         \"name\":\"SAMPLE BANKAC 1\",\n"
+                    + "         \"status\":\"ACTIVE\"\n"
+                    + "      },\n"
+                    + "      \"accountHolder\":{\n"
+                    + "         \"person\":{\n"
+                    + "            \"firstName\":\"SAMPLE\",\n"
+                    + "            \"secondName\":\"PERSON\",\n"
+                    + "            \"lastName\":\"ONE\"\n"
+                    + "         }\n"
+                    + "      },\n"
+                    + "      \"status\":\"ACTIVE\",\n"
+                    + "      \"registrationTimestamp\":\"2013-05-08T14:03:34.536+0100\"\n"
+                    + "   }\n"
+                    + "}");
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("Finish : " + new Date());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    //Enquiry by Proxy and Account
+    @Path("participant/{participantCode}/enquiry/proxyAndAccount")
+    @GET
+    @Produces("application/json")
+    public String regEnquiryByProxyAndAccount(
+            @PathParam("participantCode") String participantCode,
+            @QueryParam("proxyType") String proxyType,
+            @QueryParam("proxyValue") String proxyValue,
+            @QueryParam("accountType") String accountType,
+            @QueryParam("accountValue") String accountValue) {
+        JSONObject ret = new JSONObject();
+
+        // Input
+        System.out.println();
+        System.out.println("======= Enquiry by Proxy and Account =====");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/enquiry/proxyAndAccount");
+        System.out.println("Method : GET");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------- Parameter -------------");
+        System.out.println("proxyType : " + proxyType);
+        System.out.println("proxyValue : " + proxyValue);
+        System.out.println("accountType : " + accountType);
+        System.out.println("accountValue : " + accountValue);
+
+        // Process
+        if (proxyType != null && (proxyType.equals("MSISDN") || proxyType.equals("NATID"))
+                && accountType != null && accountType.equals("BANKAC")) {
+            ret = new JSONObject("{\n"
+                    + "   \"responseCode\":\"000\",\n"
+                    + "   \"registrations\":[\n"
+                    + "      {\n"
+                    + "         \"registrationId\":1000000020,\n"
+                    + "         \"displayName\":\"FirstAcc\",\n"
+                    + "         \"participant\":{\n"
+                    + "            \"code\":\"" + participantCode + "\",\n"
+                    + "            \"name\":\"Sample Participant\"\n"
+                    + "         },\n"
+                    + "         \"proxy\":{\n"
+                    + "            \"type\":\"" + proxyType + "\",\n"
+                    + "            \"value\":\"" + proxyValue + "\",\n"
+                    + "            \"status\":\"ACTIVE\"\n"
+                    + "         },\n"
+                    + "         \"account\":{\n"
+                    + "            \"type\":\"" + accountType + "\",\n"
+                    + "            \"value\":\"" + accountValue + "\",\n"
+                    + "            \"name\":\"First account name\",\n"
+                    + "            \"status\":\"ACTIVE\"\n"
+                    + "         },\n"
+                    + "         \"accountHolder\":{\n"
+                    + "            \"person\":{\n"
+                    + "               \"firstName\":\"Bruce\",\n"
+                    + "               \"secondName\":\"Robert\",\n"
+                    + "               \"lastName\":\"Lee\"\n"
+                    + "            }\n"
+                    + "         },\n"
+                    + "         \"status\":\"ACTIVE\",\n"
+                    + "         \"registrationTimestamp\":\"2016-03-17 13:33:38.469857\"\n"
+                    + "      }\n"
+                    + "   ]\n"
+                    + "}");
+        } else {
+            ret.put("responseCode", "903");
+
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    // Enquiry by Proxy
+    @Path("participant/{participantCode}/enquiry/proxy")
+    @GET
+    @Produces("application/json")
+    public String regEnquiryByProxy(
+            @PathParam("participantCode") String participantCode,
+            @QueryParam("proxyType") String proxyType,
+            @QueryParam("proxyValue") String proxyValue,
+            @QueryParam("registrationStatus") String registrationStatus,
+            @QueryParam("pageNumber") String pageNumber,
+            @QueryParam("pageSize") String pageSize) {
+        JSONObject ret = new JSONObject();
+
+        // Input
+        System.out.println();
+        System.out.println("======= Enquiry by Proxy =====");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/enquiry/proxy");
+        System.out.println("Method : GET");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------- Parameter -------------");
+        System.out.println("proxyType : " + proxyType);
+        System.out.println("proxyValue : " + proxyValue);
+        System.out.println("registrationStatus : " + registrationStatus);
+        System.out.println("pageNumber : " + pageNumber);
+        System.out.println("pageSize : " + pageSize);
+
+        // Process
+        if (proxyType != null && (proxyType.equals("MSISDN") || proxyType.equals("NATID"))) {
+            ret = new JSONObject("{\n"
+                    + "   \"responseCode\":\"000\",\n"
+                    + "   \"page\":{\n"
+                    + "      \"paginationInfo\":{\n"
+                    + "         \"totalResults\":1,\n"
+                    + "         \"pageSize\":" + pageSize + ",\n"
+                    + "         \"pageNumber\":" + pageNumber + "\n"
+                    + "      },\n"
+                    + "      \"pageItems\":[\n"
+                    + "         {\n"
+                    + "            \"registrationId\":100000000185,\n"
+                    + "            \"displayName\":\"SAMPB1\",\n"
+                    + "            \"participant\":{\n"
+                    + "               \"code\":\"SAMP\",\n"
+                    + "               \"name\":\"Sample Participant\"\n"
+                    + "            },\n"
+                    + "            \"proxy\":{\n"
+                    + "               \"type\":\"" + proxyType + "\",\n"
+                    + "               \"value\":\"" + proxyValue + "\",\n"
+                    + "               \"status\":\"ACTIVE\"\n"
+                    + "            },\n"
+                    + "            \"account\":{\n"
+                    + "               \"type\":\"BANKAC\",\n"
+                    + "               \"value\":\"1101234567890\",\n"
+                    + "               \"name\":\"SAMPLE BANKAC 1\",\n"
+                    + "               \"status\":\"ACTIVE\"\n"
+                    + "            },\n"
+                    + "            \"accountHolder\":{\n"
+                    + "               \"business\":{\n"
+                    + "                  \"name\":\"SAMPLE BUSINESS 1\",\n"
+                    + "                  \"registeredDate\":\"2001-01-01\"\n"
+                    + "               }\n"
+                    + "            },\n"
+                    + "            \"status\":\"ACTIVE\",\n"
+                    + "            \"registrationTimestamp\":\"2013-05-09T13:19:13.468+0100\"\n"
+                    + "         }\n"
+                    + "      ]\n"
+                    + "   }\n"
+                    + "}");
+        } else {
+            ret.put("responseCode", "801");
+
+            JSONObject page = new JSONObject("{\n"
+                    + "   \"paginationInfo\":{\n"
+                    + "      \"totalResults\":0,\n"
+                    + "      \"pageSize\":" + pageSize + ",\n"
+                    + "      \"pageNumber\":" + pageNumber + "\n"
+                    + "   },\n"
+                    + "   \"pageItems\":[\n"
+                    + "   ]\n"
+                    + "}");
+            ret.put("page", page);
+
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    // Enquiry by Account
+    @Path("participant/{participantCode}/enquiry/account")
+    @GET
+    @Produces("application/json")
+    public String regEnquiryByAccount(
+            @PathParam("participantCode") String participantCode,
+            @QueryParam("accountType") String accountType,
+            @QueryParam("accountValue") String accountValue,
+            @QueryParam("registrationStatus") String registrationStatus,
+            @QueryParam("pageNumber") String pageNumber,
+            @QueryParam("pageSize") String pageSize) {
+        JSONObject ret = new JSONObject();
+
+        // Input
+        System.out.println();
+        System.out.println("======= Enquiry by Account =====");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/enquiry/account");
+        System.out.println("Method : GET");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------- Parameter -------------");
+        System.out.println("accountType : " + accountType);
+        System.out.println("accountValue : " + accountValue);
+        System.out.println("registrationStatus : " + registrationStatus);
+        System.out.println("pageNumber : " + pageNumber);
+        System.out.println("pageSize : " + pageSize);
+
+        // Process
+        if (accountType != null && accountType.equals("BANKAC")
+                && (pageNumber == null || pageNumber.equals("1"))) {
+            ret = new JSONObject("{\n"
+                    + "   \"responseCode\":\"000\",\n"
+                    + "   \"page\":{\n"
+                    + "      \"paginationInfo\":{\n"
+                    + "         \"totalResults\":1,\n"
+                    + "         \"pageSize\":" + pageSize + ",\n"
+                    + "         \"pageNumber\":" + pageNumber + "\n"
+                    + "      },\n"
+                    + "      \"pageItems\":[\n"
+                    + "         {\n"
+                    + "            \"registrationId\":100000000185,\n"
+                    + "            \"displayName\":\"SAMPB1\",\n"
+                    + "            \"participant\":{\n"
+                    + "               \"code\":\"SAMP\",\n"
+                    + "               \"name\":\"Sample Participant\"\n"
+                    + "            },\n"
+                    + "            \"proxy\":{\n"
+                    + "               \"type\":\"MSISDN\",\n"
+                    + "               \"value\":\"+66123456789\",\n"
+                    + "               \"status\":\"ACTIVE\"\n"
+                    + "            },\n"
+                    + "            \"account\":{\n"
+                    + "               \"type\":\"" + accountType + "\",\n"
+                    + "               \"value\":\"" + accountValue + "\",\n"
+                    + "               \"name\":\"SAMPLE BANKAC 1\",\n"
+                    + "               \"status\":\"ACTIVE\"\n"
+                    + "            },\n"
+                    + "            \"accountHolder\":{\n"
+                    + "               \"business\":{\n"
+                    + "                  \"name\":\"SAMPLE BUSINESS 1\",\n"
+                    + "                  \"registeredDate\":\"2001-01-01\"\n"
+                    + "               }\n"
+                    + "            },\n"
+                    + "            \"status\":\"ACTIVE\",\n"
+                    + "            \"registrationTimestamp\":\"2013-05-09T13:19:13.468+0100\"\n"
+                    + "         }\n"
+                    + "      ]\n"
+                    + "   }\n"
+                    + "}");
+        } else if (pageNumber != null && !pageNumber.equals("1")) {
+            ret.put("responseCode", "930");
+
+            JSONObject page = new JSONObject("{\n"
+                    + "   \"paginationInfo\":{\n"
+                    + "      \"totalResults\":0,\n"
+                    + "      \"pageSize\":" + pageSize + ",\n"
+                    + "      \"pageNumber\":" + pageNumber + "\n"
+                    + "   },\n"
+                    + "   \"pageItems\":[\n"
+                    + "   ]\n"
+                    + "}");
+            ret.put("page", page);
+
+            ret.put("errorMessage", "Requested page " + pageNumber + " however only 1 pages available");
+            ret.put("error", "PAGE_OUT_OF_BOUNDS");
+
+        } else {
+            ret.put("responseCode", "930");
+
+            JSONObject page = new JSONObject("{\n"
+                    + "   \"paginationInfo\":{\n"
+                    + "      \"totalResults\":0,\n"
+                    + "      \"pageSize\":" + pageSize + ",\n"
+                    + "      \"pageNumber\":" + pageNumber + "\n"
+                    + "   },\n"
+                    + "   \"pageItems\":[\n"
+                    + "   ]\n"
+                    + "}");
+            ret.put("page", page);
+
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    // Enquiry by Non-Owning Participant
+    @Path("participant/{participantCode}/enquiry/proxyOwner")
+    @GET
+    @Produces("application/json")
+    public String regEnquiryByProxyOwner(
+            @PathParam("participantCode") String participantCode,
+            @QueryParam("proxyType") String proxyType,
+            @QueryParam("proxyValue") String proxyValue) {
+        JSONObject ret = new JSONObject();
+
+        // Input
+        System.out.println();
+        System.out.println("======= Enquiry by Non-Owning Participant =====");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/enquiry/proxyOwner");
+        System.out.println("Method : GET");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------- Parameter -------------");
+        System.out.println("proxyType : " + proxyType);
+        System.out.println("proxyValue : " + proxyValue);
+
+        // Process
+        if (proxyType != null && (proxyType.equals("MSISDN") || proxyType.equals("NATID"))) {
+            ret = new JSONObject("{  \n"
+                    + "   \"responseCode\":\"000\",\n"
+                    + "   \"proxyOwner\":{  \n"
+                    + "      \"proxyType\":\"" + proxyType + "\",\n"
+                    + "      \"proxyValue\":\"" + proxyValue + "\",\n"
+                    + "      \"participantName\":\"Sample Participant\"\n"
+                    + "   }\n"
+                    + "}");
+        } else {
+            ret.put("responseCode", "802");
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    // =================== Deactivate Registration ===================
+    // Deactivate Registration by Registration ID
+    @Path("participant/{participantCode}/deactivate/registrationId")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String deactivateByRegistrationId(@PathParam("participantCode") String participantCode, String content) {
+        JSONObject ret = new JSONObject();
+
+        // Prepare & Print Log Input
+        System.out.println();
+        System.out.println("======== Deactivate Registration by Registration ID ========");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/deactivate/registrationId");
+        System.out.println("Method : POST");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------ Request Body -----------");
+        System.out.println(content);
+
+        try {
+            System.out.println("--------- Request Body (JSON) -------");
+            JSONObject body = new JSONObject(content);
+            System.out.println(body);
+
+            // Porcess
+            long registrationId = body.getLong("registrationId");
+            // Error Case
+            if (String.valueOf(registrationId).contains("99999")) {
+                ret.put("responseCode", "912");
+            } else {
+
+                ret.put("responseCode", "000");
+                ret.put("registrationId", registrationId);
+            }
+
+        } catch (Exception e) {
+            ret.put("responseCode", "602");
+
+            e.printStackTrace();
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    // Deactivate Registration by Proxy and Account
+    @Path("participant/{participantCode}/deactivate/proxyAndAccount")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String deactivateByProxyAndAccount(@PathParam("participantCode") String participantCode, String content) {
+        JSONObject ret = new JSONObject();
+
+        // Prepare & Print Log Input
+        System.out.println();
+        System.out.println("======== Deactivate Registration by Proxy and Account ========");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/deactivate/proxyAndAccount");
+        System.out.println("Method : POST");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------ Request Body -----------");
+        System.out.println(content);
+
+        try {
+            System.out.println("--------- Request Body (JSON) -------");
+            JSONObject body = new JSONObject(content);
+            System.out.println(body);
+
+            // Porcess
+            String proxyType = body.getJSONObject("proxy").getString("type");
+            String accountType = body.getJSONObject("account").getString("type");
+            // Error Case
+            if ((!proxyType.equals("MSISDN") && !proxyType.equals("NATID")) || !accountType.equals("BANKAC")) {
+                ret.put("responseCode", "907");
+            } else {
+
+                ret.put("responseCode", "000");
+                ret.put("registrationId", 100000000185L);
+            }
+
+        } catch (Exception e) {
+            ret.put("responseCode", "602");
+
+            e.printStackTrace();
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    // Deactivate Registration by Proxy
+    @Path("participant/{participantCode}/deactivate/proxy")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String deactivateByProxy(@PathParam("participantCode") String participantCode, String content) {
+        JSONObject ret = new JSONObject();
+
+        // Prepare & Print Log Input
+        System.out.println();
+        System.out.println("======== Deactivate Registration by Proxy ========");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/deactivate/proxy");
+        System.out.println("Method : POST");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------ Request Body -----------");
+        System.out.println(content);
+
+        try {
+            System.out.println("--------- Request Body (JSON) -------");
+            JSONObject body = new JSONObject(content);
+            System.out.println(body);
+
+            // Porcess
+            String proxyType = body.getJSONObject("proxy").getString("type");
+            // Error Case
+            if (!proxyType.equals("MSISDN") && !proxyType.equals("NATID")) {
+                ret.put("responseCode", "802");
+            } else {
+
+                ret.put("responseCode", "000");
+                JSONArray registrations = new JSONArray();
+                JSONObject reg1 = new JSONObject();
+                reg1.put("registrationId", 100000000185L);
+                registrations.put(reg1);
+
+                ret.put("registrations", reg1);
+            }
+
+        } catch (Exception e) {
+            ret.put("responseCode", "602");
+
+            e.printStackTrace();
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+    // Deactivate Registration by Account
+    @Path("participant/{participantCode}/deactivate/account")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String deactivateByAccount(@PathParam("participantCode") String participantCode, String content) {
+        JSONObject ret = new JSONObject();
+
+        // Prepare & Print Log Input
+        System.out.println();
+        System.out.println("======== Deactivate Registration by Account ========");
+        System.out.println("Date : " + new Date());
+        System.out.println("URL : /registration/participant/" + participantCode + "/deactivate/account");
+        System.out.println("Method : POST");
+        System.out.println("------------- Path Param ------------");
+        System.out.println("participantCode : " + participantCode);
+        System.out.println("------------ Request Body -----------");
+        System.out.println(content);
+
+        try {
+            System.out.println("--------- Request Body (JSON) -------");
+            JSONObject body = new JSONObject(content);
+            System.out.println(body);
+
+            // Porcess
+            String accountType = body.getJSONObject("account").getString("type");
+
+            // Error Case
+            if (!accountType.equals("BANKAC")) {
+                ret.put("responseCode", "902");
+            } else {
+
+                ret.put("responseCode", "000");
+                JSONArray registrations = new JSONArray();
+                JSONObject reg1 = new JSONObject();
+                reg1.put("registrationId", 100000000185L);
+                registrations.put(reg1);
+
+                ret.put("registrations", reg1);
+            }
+
+        } catch (Exception e) {
+            ret.put("responseCode", "602");
+
+            e.printStackTrace();
+        }
+
+        // Output
+        System.out.println("------------ Response Body ----------");
+        System.out.println(ret.toString());
+        System.out.println("=====================================");
+
+        return ret.toString();
+    }
+
+}

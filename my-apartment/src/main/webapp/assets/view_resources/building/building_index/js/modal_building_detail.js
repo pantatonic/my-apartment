@@ -19,6 +19,76 @@ var modalBuildingDetail = (function() {
         clearInputId: function() {
             _getBuildingForm().find('[name="id"]').val('');
         },
+        getBuildingDetail: function(buildingId) {
+            var _setData = function(response) {
+                var data = response.data[0];
+                var modal = _getModalBuildingDetail();
+                var modal_body = modal.find('.modal-body');
+                var __checkedUseElectricityWater = function() {
+                    var minElectricityUnit = modal_body.find('[name="min_electricity_unit"]');
+                    var minElectricityCharge = modal_body.find('[name="min_electricity_charge"]');
+                    
+                    var minWaterUnit = modal_body.find('[name="min_water_unit"]');
+                    var minWaterCharge = modal_body.find('[name="min_water_charge"]');
+                    
+                    if(!app.valueUtils.isEmptyValue( minElectricityUnit.val() ) 
+                            || !app.valueUtils.isEmptyValue( minElectricityCharge.val() )
+                    ) {
+                        jQuery('#use-min-electricity').prop('checked', true);
+                    }
+                    
+                    if(!app.valueUtils.isEmptyValue( minWaterUnit.val() ) 
+                            || !app.valueUtils.isEmptyValue( minWaterCharge.val() )
+                    ) {
+                        jQuery('#use-min-water').prop('checked', true);
+                    }
+                    
+                    modalBuildingDetail.checkUseElectricityWater();
+                };
+                
+                app.clearAllInputErrorClass(modal_body);
+                
+                app.clearFormData(modalBuildingDetail.getForm());
+                modalBuildingDetail.clearInputId();
+                
+                for(var key in data) {
+                    var key_ = app.camelToUnderScore(key);
+                    modal_body.find('[name="' + key_ + '"]').val(data[key]);
+                }
+                
+                __checkedUseElectricityWater();
+                
+                modal.modal('show');
+            };
+            
+            app.loading('show');
+            
+            setTimeout(function() {
+                jQuery.ajax({
+                    type: 'get',
+                    url: _CONTEXT_PATH_ + '/building_get_by_id.html',
+                    data: {
+                        id: buildingId
+                    },
+                    cache: false,
+                    success: function(response) {
+                        response = app.convertToJsonObject(response);
+                        
+                        app.loading('remove');
+                        
+                        if(response.result == SUCCESS_STRING) {
+                            _setData(response);
+                        }
+                       
+                    },
+                    error: function() {
+                        app.alertSomethingError();
+                        
+                        app.loading('remove');
+                    }
+                });
+            }, 500);
+        },
         checkUseElectricityWater: function() {
             var modal = _getModalBuildingDetail();
             var useMinElectricity = modal.find('#use-min-electricity');
@@ -63,6 +133,7 @@ var modalBuildingDetail = (function() {
             }
         },
         save: function() {
+            var modal = modalBuildingDetail.getModal();
             var form_ = _getBuildingForm();
             var submitButton = form_.find('[type="submit"]');
             var _validate = function() {
@@ -112,25 +183,35 @@ var modalBuildingDetail = (function() {
                         
                         if(response.result === SUCCESS_STRING) {
                             app.showNotice({
-                                message: response.message,
+                                message: app.translate('common.save_success'),
                                 type: response.result
                             });
                             
                             if(response.id != undefined) {
                                 form_.find('[name="id"]').val(response.id);
+                                latestBuildingIdProcess = response.id;
                             }
-                            
+
+                            modal.modal('hide');
                             page.getBuilding();
                         }
                         else {
                             if(response.message == SESSION_EXPIRE_STRING) {
                                 app.alertSessionExpired();
                             }
+                            else {
+                                app.showNotice({
+                                    message: app.translate('common.processing_failed'),
+                                    type: response.result
+                                });
+                            }
                         }
                         
                         submitButton.bootstrapBtn('reset');
                     },
                     error: function() {
+                        app.alertSomethingError();
+                        
                         submitButton.bootstrapBtn('reset');
                     }
                 });

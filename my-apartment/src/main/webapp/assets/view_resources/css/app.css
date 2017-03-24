@@ -75,3 +75,7 @@ textarea {
 .swal2-overlay {
     z-index: 1050;
 }
+
+.hover-box:hover {
+    border: 1px solid #b9b7b7;
+}

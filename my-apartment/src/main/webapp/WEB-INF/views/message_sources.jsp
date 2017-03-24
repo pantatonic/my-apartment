@@ -21,6 +21,7 @@
     "common.something_error_try_again":"<spring:message code="common.something_error_try_again" />",
     "common.close":"<spring:message code="common.close" />",
     "common.save":"<spring:message code="common.save" />",
+    "common.save_success":"<spring:message code="common.save_success" />",
     
     "account_not_found":"<spring:message code="account_not_found" />",
     "account_is_disabled":"<spring:message code="account_is_disabled" />",

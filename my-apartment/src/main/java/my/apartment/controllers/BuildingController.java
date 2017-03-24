@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,6 +55,9 @@ public class BuildingController {
         }
         catch(Exception e) {
             e.printStackTrace();
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
         }
         
         return jsonObjectReturn.toString();
@@ -74,6 +78,33 @@ public class BuildingController {
         }
         catch(Exception e) {
             e.printStackTrace();
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/building_get_by_id.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String buildingGetById(
+            @RequestParam(value = "id", required = true) String id,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonUtils.setResponseHeader(response);
+        
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "building/building_get_by_id/" + id, String.class);
+            
+            jsonObjectReturn = new JSONObject(resultWs);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
             jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
                     .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
         }

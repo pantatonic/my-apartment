@@ -53,5 +53,9 @@ public class CommonUtils {
         }
     }
     
+    public static Integer integerZeroToNull(int integerValue) {
+        return integerValue == 0 ? null : integerValue;
+    }
+    
     
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.apartment.common.CommonUtils;
 import my.apartment.common.Config;
 import my.apartment.model.Building;
 
@@ -34,7 +35,7 @@ public class BuildingDaoImpl implements BuildingDao {
             
             while(rs.next()) {
                 Building building = new Building();
-                System.out.println("x");
+
                 building.setId(rs.getInt("id"));
                 building.setName(rs.getString("name"));
                 building.setAddress(rs.getString("address"));
@@ -48,10 +49,87 @@ public class BuildingDaoImpl implements BuildingDao {
                 
                 buildings.add(building);
             }
-
         }
         catch(Exception e) {
             e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return buildings;
+    }
+    
+    @Override
+    public List<Building> getById(Integer id) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<Building> buildings = new ArrayList<Building>();
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+            
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String stringQuery = "SELECT * FROM building WHERE id = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            
+            if(rs.next()) {
+                Building building = new Building();
+                
+                building.setId(rs.getInt("id"));
+                building.setName(rs.getString("name"));
+                building.setAddress(rs.getString("address"));
+                building.setTel(rs.getString("tel"));
+                building.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
+                building.setMinElectricityUnit(CommonUtils.integerZeroToNull(rs.getInt("min_electricity_unit")));
+                building.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
+
+                building.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
+                building.setMinWaterUnit(CommonUtils.integerZeroToNull(rs.getInt("min_water_unit")));
+                building.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
+                
+                buildings.add(building);
+            }            
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
         
         return buildings;
@@ -111,7 +189,7 @@ public class BuildingDaoImpl implements BuildingDao {
                 ps.setNull(5, java.sql.Types.INTEGER);
             }
             else {
-                ps.setInt(0, building.getMinElectricityUnit());
+                ps.setInt(5, building.getMinElectricityUnit());
             }
 
             ps.setBigDecimal(6, building.getMinElectricityCharge());
