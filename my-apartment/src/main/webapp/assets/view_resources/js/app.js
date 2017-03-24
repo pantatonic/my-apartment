@@ -1,4 +1,4 @@
-/* global alert_util */
+/* global alert_util, _CONTEXT_PATH_ */
 
 var app = {
     translate : function(key) {
@@ -19,6 +19,35 @@ var app = {
             text: app.translate('common.something_error_try_again'),
             type: 'error'
         });
+    },
+    loading : function(type) {
+        if (type == 'show') {
+            if (jQuery('#overlay').length > 0) {
+                return false;
+            }
+            var over = '<div id="overlay">' +
+                '<img id="loading" src="' + _CONTEXT_PATH_ + '/assets/dist/img/loading.gif">' +
+                '</div>';
+            jQuery(over).appendTo('body');
+        }
+        else if (type == 'remove') {
+            jQuery('#overlay').remove();
+        }
+    },
+    loadingInElement : function(type, elementObject) {
+        if (type == 'show') {
+            if (jQuery('.overlay-in-element').length > 0) {
+                return false;
+            }
+            var over = '<div class="overlay-in-element">' +
+                '<img class="loading_2" src="' + _CONTEXT_PATH_ + '/assets/dist/img/loading.gif">' +
+                '</div>';
+            //jQuery(over).appendTo(element);
+            elementObject.prepend(over);
+        }
+        else if (type == 'remove') {
+            elementObject.find('.overlay-in-element').remove();
+        }
     },
     noticeSomethingError : function() {
         new PNotify({

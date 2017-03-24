@@ -2,3 +2,29 @@
 [name="water_charge_per_unit"], [name="min_water_unit"], [name="min_water_charge"] {
     width: 120px;
 }
+#box-building-template {
+    display: none;
+}
+
+#box-building-container {
+    min-height: 300px;
+}
+
+.box-building {
+    border: 1px solid #ffffff;
+    text-align: center;
+    margin-left: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+.box-building:hover {
+    border: 1px solid #464646;
+}
+
+.building-icon {
+    font-size: 80px;
+}
+.box-building-name {
+    font-size: 12px;
+    margin-top: 15px;
+}

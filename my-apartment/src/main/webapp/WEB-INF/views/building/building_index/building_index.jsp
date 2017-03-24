@@ -30,7 +30,7 @@
 
 
             <section class="content">
-                <div class="box box-primary">
+                <div id="parent-box-building-container" class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">
                             &nbsp;
@@ -39,18 +39,25 @@
                         ${commonHtml.getAddButton(msgAddBuilding)}
                     </div>
 
-                    <div class="box-body">
-
+                    <div id="box-building-container" class="box-body">
+                        
                     </div>
 
                     <div class="box-footer">
                         &nbsp;
-
                     </div>
                 </div>
 
             </section>
         </div>
+                    
+        <textarea id="box-building-template">
+            <div class="col-sm-2 box-building">
+                <i class="fa fa-building building-icon"></i>
+                <div class="clearfix"></div>
+                <div class="box-building-name"></div>
+            </div>
+        </textarea>
 
         <jsp:include page="building_detail.jsp" flush="true" />
 

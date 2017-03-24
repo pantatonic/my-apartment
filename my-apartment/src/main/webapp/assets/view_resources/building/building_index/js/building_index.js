@@ -1,4 +1,4 @@
-/* global modalBuildingDetail, app */
+/* global modalBuildingDetail, app, _CONTEXT_PATH_ */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -14,6 +14,10 @@ var page = (function() {
         addEvent: function() {
             jQuery('.add-button').click(function() {
                 page.showBuildingDetail();
+            });
+            
+            jQuery('#box-building-container').on('click', '.box-building', function() {
+                alert('test');
             });
             
             modalBuildingDetail.getModal().find('#use-min-electricity').click(function() {
@@ -57,14 +61,48 @@ var page = (function() {
             modalBuildingDetail.getModal().modal('show');            
         },
         getBuilding: function() {
-            jQuery.ajax({
-                type: 'get',
-                url: _CONTEXT_PATH_ + '/building_get.html',
-                cache: false,
-                success: function(response) {
-                    //response = app.convertToJsonObject(response);
-                }
-            });
+            var parent_box = jQuery('#parent-box-building-container');
+            app.loadingInElement('show', parent_box);
+            
+            setTimeout(function() {
+                var _renderBoxBuilding = function(response) {
+                    var buildingData = response.data;
+                    var html = '';
+                    var __getTemplate = function() {
+                        return jQuery('#box-building-template').val();
+                    };
+                    var boxBuildingContainer = jQuery('#box-building-container');
+
+                    boxBuildingContainer.html(html);
+
+                    for(var index in buildingData) {
+                        var currentData = buildingData[index];
+                        html = __getTemplate();
+
+                        boxBuildingContainer.append(html);
+                        var currentBoxBuilding = boxBuildingContainer.find('.box-building').last();
+
+                        currentBoxBuilding.find('.box-building-name').html(
+                            app.translate('apartment.building') 
+                            + ' : '
+                            + currentData.name
+                        );
+                    }
+                    
+                    app.loadingInElement('remove', parent_box);
+                };
+
+                jQuery.ajax({
+                    type: 'get',
+                    url: _CONTEXT_PATH_ + '/building_get.html',
+                    cache: false,
+                    success: function(response) {
+                        response = app.convertToJsonObject(response);
+
+                        _renderBoxBuilding(response);
+                    }
+                });
+            }, 500);
         }
     };
 })();

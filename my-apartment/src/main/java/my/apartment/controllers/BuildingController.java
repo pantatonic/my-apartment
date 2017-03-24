@@ -64,8 +64,7 @@ public class BuildingController {
     public String buildingGet(HttpServletResponse response) {
         JSONObject jsonObjectReturn = new JSONObject();
         
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
+        CommonUtils.setResponseHeader(response);
         
         try {
             RestTemplate restTemplate = new RestTemplate();

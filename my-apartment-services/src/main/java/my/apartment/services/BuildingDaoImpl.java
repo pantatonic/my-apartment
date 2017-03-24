@@ -31,9 +31,10 @@ public class BuildingDaoImpl implements BuildingDao {
             
             ps = con.prepareStatement(stringQuery);
             rs = ps.executeQuery();
-            if(rs.next()) {
+            
+            while(rs.next()) {
                 Building building = new Building();
-                
+                System.out.println("x");
                 building.setId(rs.getInt("id"));
                 building.setName(rs.getString("name"));
                 building.setAddress(rs.getString("address"));
@@ -47,6 +48,7 @@ public class BuildingDaoImpl implements BuildingDao {
                 
                 buildings.add(building);
             }
+
         }
         catch(Exception e) {
             e.printStackTrace();

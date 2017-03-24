@@ -1,4 +1,4 @@
-/* global _DELAY_PROCESS_, _CONTEXT_PATH_, app, SUCCESS_STRING, alert_util, SESSION_EXPIRE_STRING, REQUIRED_CLASS, INPUT_ERROR_CLASS, WARNING_STRING */
+/* global _DELAY_PROCESS_, _CONTEXT_PATH_, app, SUCCESS_STRING, alert_util, SESSION_EXPIRE_STRING, REQUIRED_CLASS, INPUT_ERROR_CLASS, WARNING_STRING, page */
 
 var modalBuildingDetail = (function() {
     var _getModalBuildingDetail = function() {
@@ -119,6 +119,8 @@ var modalBuildingDetail = (function() {
                             if(response.id != undefined) {
                                 form_.find('[name="id"]').val(response.id);
                             }
+                            
+                            page.getBuilding();
                         }
                         else {
                             if(response.message == SESSION_EXPIRE_STRING) {
