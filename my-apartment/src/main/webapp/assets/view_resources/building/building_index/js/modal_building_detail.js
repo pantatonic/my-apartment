@@ -79,6 +79,17 @@ var modalBuildingDetail = (function() {
                         if(response.result == SUCCESS_STRING) {
                             _setData(response);
                         }
+                        else {
+                            if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                            }
+                            else {
+                                app.showNotice({
+                                    message: app.translate('common.processing_failed'),
+                                    type: response.result
+                                });
+                            }
+                        }
                        
                     },
                     error: function() {
