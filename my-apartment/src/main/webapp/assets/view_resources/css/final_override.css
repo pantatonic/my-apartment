@@ -60,4 +60,17 @@ header.main-header .navbar .sidebar-toggle:hover {
     background-color: #3a7579;
     border-color: #345e61;
 }
-
+.btn-primary.disabled {
+    background-color: #75abaf;
+    border-color: #55797b;
+}
+.btn-primary.disabled:hover {
+    background-color: #4f8488;
+}
+.btn-primary:active {
+    background-color: #4f8488;
+}
+.btn-primary:active:focus {
+    background-color: #325658;
+}
+325658
