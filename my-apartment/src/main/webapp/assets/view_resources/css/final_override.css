@@ -67,10 +67,9 @@ header.main-header .navbar .sidebar-toggle:hover {
 .btn-primary.disabled:hover {
     background-color: #4f8488;
 }
-.btn-primary:active {
+.btn-primary:active:hover, .btn-primary:active {
     background-color: #4f8488;
 }
-.btn-primary:active:focus {
+.btn-primary:focus, .btn-primary:active, .btn-primary:active:focus {
     background-color: #325658;
 }
-325658

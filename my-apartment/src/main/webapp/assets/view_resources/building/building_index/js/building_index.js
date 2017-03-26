@@ -36,6 +36,7 @@ var page = (function() {
                 }
                 else {
                     modalBuildingDetail.minElectricityBlog.hide();
+                    modalBuildingDetail.minElectricityBlog.clearInputValue();
                 }
             });
             
@@ -47,6 +48,7 @@ var page = (function() {
                 }
                 else {
                     modalBuildingDetail.minWaterBlog.hide();
+                    modalBuildingDetail.minWaterBlog.clearInputValue();
                 }
             });
             

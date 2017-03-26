@@ -85,7 +85,9 @@
         <link rel="stylesheet" href="<c:url value="/assets/sweetalert2/sweetalert2.min.css" />">
         <script type="text/javascript" src="<c:url value="/assets/sweetalert2/sweetalert2.min.js" />"></script>
         <script type="text/javascript" src="<c:url value="/assets/sweetalert2/promise.min.js" />"></script>
-
+        
+        
+        <script type="text/javascript" src="<c:url value="/assets/plugins/my-number-only.js" />"></script>
         <!-- ------------------------------- -->
         
         <link rel="stylesheet" href="<c:url value="/assets/view_resources/css/app.css?v=${randomTextVersion}" />" />

@@ -129,6 +129,12 @@ var modalBuildingDetail = (function() {
                 _getModalBuildingDetail()
                         .find('#use-min-electricity-blog')
                         .hide();
+            },
+            clearInputValue: function() {
+                var modal = _getModalBuildingDetail();
+                
+                modal.find('[name="min_electricity_unit"]').val('');
+                modal.find('[name="min_electricity_charge"]').val('');
             }
         },
         minWaterBlog: {
@@ -141,6 +147,12 @@ var modalBuildingDetail = (function() {
                 _getModalBuildingDetail()
                         .find('#use-min-water-blog')
                         .hide();
+            },
+            clearInputValue: function() {
+                var modal = _getModalBuildingDetail();
+                
+                modal.find('[name="min_water_unit"]').val('');
+                modal.find('[name="min_water_charge"]').val('');
             }
         },
         save: function() {
@@ -149,6 +161,64 @@ var modalBuildingDetail = (function() {
             var submitButton = form_.find('[type="submit"]');
             var _validate = function() {
                 var validatePass = true;
+                var __validateMinelectricityWater = function() {
+                    var _validatePass = true;
+                    var _useMinElectricity = modal.find('#use-min-electricity');
+                    var _minElectricityUnit = modal.find('[name="min_electricity_unit"]');
+                    var _minElectricityCharge = modal.find('[name="min_electricity_charge"]');
+                    
+                    var _useMinWater = modal.find('#use-min-water');
+                    var _minWaterUnit  = modal.find('[name="min_water_unit"]');
+                    var _minWaterCharge = modal.find('[name="min_water_charge"]');
+                    
+                    if(_useMinElectricity.is(':checked')) {
+                        if(app.valueUtils.isEmptyValue(_minElectricityUnit.val())) {
+                            _minElectricityUnit.addClass(INPUT_ERROR_CLASS);
+                            _validatePass = false;
+                        }
+                        else {
+                            _minElectricityUnit.removeClass(INPUT_ERROR_CLASS);
+                        }
+                        
+                        if(app.valueUtils.isEmptyValue(_minElectricityCharge.val())) {
+                            _minElectricityCharge.addClass(INPUT_ERROR_CLASS);
+                            _validatePass = false;
+                        }
+                        else {
+                             _minElectricityCharge.removeClass(INPUT_ERROR_CLASS);
+                        }
+                    }
+                    
+                    if(_useMinWater.is(':checked')) {
+                        if(app.valueUtils.isEmptyValue(_minWaterUnit.val())) {
+                            _minWaterUnit.addClass(INPUT_ERROR_CLASS);
+                            _validatePass = false;
+                        }
+                        else {
+                            _minWaterUnit.removeClass(INPUT_ERROR_CLASS);
+                        }
+                        
+                        if(app.valueUtils.isEmptyValue(_minWaterCharge.val())) {
+                            _minWaterCharge.addClass(INPUT_ERROR_CLASS);
+                            _validatePass = false;
+                        }
+                        else {
+                            _minWaterCharge.removeClass(INPUT_ERROR_CLASS);
+                        }
+                    }
+                    
+                    if(!_validatePass) {
+                        if(!app.checkNoticeExist('notice-enter-data')) {
+                            app.showNotice({
+                                type: WARNING_STRING,
+                                message: app.translate('common.please_enter_data'),
+                                addclass: 'notice-enter-data'
+                            });
+                        }
+                    }
+                    
+                    return _validatePass;
+                };
                 
                 form_.find('.' + REQUIRED_CLASS).each(function() {
                     var thisElement = jQuery(this);
@@ -170,6 +240,10 @@ var modalBuildingDetail = (function() {
                         thisElement.removeClass(INPUT_ERROR_CLASS);
                     }
                 });
+
+                if(!__validateMinelectricityWater()) {
+                    validatePass = false;
+                }
                 
                 return validatePass;
             };

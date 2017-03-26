@@ -56,7 +56,7 @@
                         </label>
                         <div class="col-sm-9">
                             <input type="text" name="electricity_charge_per_unit" 
-                                   class="form-control force-inline my-required-field" 
+                                   class="form-control force-inline number-decimal-separate my-required-field" 
                                    placeholder="">
                             
                             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -72,14 +72,14 @@
                         </label>
                         <div class="col-sm-9">
                             <input type="text" name="min_electricity_unit" 
-                                   class="form-control force-inline" 
+                                   class="form-control force-inline number-int" maxlength="2"
                                    placeholder="">
                             
                             <label class="col-sm-4 control-label force-none-float">
                                 <spring:message code="building.min_electricity_charge" />
                             </label>
                             <input type="text" name="min_electricity_charge" 
-                                   class="form-control force-inline" 
+                                   class="form-control force-inline number-decimal-separate" 
                                    placeholder="">
                         </div>
                     </div>
