@@ -8,6 +8,15 @@
 
             }
         }, options);
+        
+        var _triggerCtrl = function (thisElement) {
+            var keyEvent = $.Event("keydown");
+            keyEvent.ctrlKey = true;
+            keyEvent.key = 'Control';
+            keyEvent.keyCode = 17;
+
+            thisElement.trigger(keyEvent);
+        };
 
         var _countDot = function (thisElement) {
             var str = thisElement.val();
@@ -63,10 +72,17 @@
                 36, //home
                 9, //tab
                 16, //shift
-                13 //enter
+                13, //enter
+                37, 38, 39, 40 //arrow left, up, right, down
+
             ];
 
+            if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39|| e.keyCode == 40) {
+                return true;
+            }
+
             if (e.keyCode == 46 || e.keyCode == 8) {
+                _triggerCtrl(thisElement);
                 return true;
             }
 
@@ -94,19 +110,20 @@
             if (e.type == 'keyup') {
                 _settings.callBackFunction(thisElement);
             }
+
+
         };
 
         var _firstInit = function (thisElement) {
-            var keyEvent = $.Event("keydown");
-            keyEvent.ctrlKey = true;
-            keyEvent.key = 'Control';
-            keyEvent.keyCode = 17;
+            thisElement.each(function() {
+                var currentElement = $(this);
 
-            if (isNaN(thisElement.val())) {
-                thisElement.val('');
-            }
+                if (isNaN(currentElement.val())) {
+                    currentElement.val('');
+                }
 
-            thisElement.trigger(keyEvent);
+                _triggerCtrl(currentElement);
+            });
         };
 
 

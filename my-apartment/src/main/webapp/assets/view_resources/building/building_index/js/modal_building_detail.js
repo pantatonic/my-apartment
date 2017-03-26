@@ -45,10 +45,7 @@ var modalBuildingDetail = (function() {
                     
                     modalBuildingDetail.checkUseElectricityWater();
                 };
-                var __triggerCtrl = function(element) {
-                    
-                };
-                
+                                
                 app.clearAllInputErrorClass(modalBody);
                 
                 app.clearFormData(modalBuildingDetail.getForm());
