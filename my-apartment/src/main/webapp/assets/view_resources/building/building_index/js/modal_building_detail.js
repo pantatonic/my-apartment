@@ -23,13 +23,13 @@ var modalBuildingDetail = (function() {
             var _setData = function(response) {
                 var data = response.data[0];
                 var modal = _getModalBuildingDetail();
-                var modal_body = modal.find('.modal-body');
+                var modalBody = modal.find('.modal-body');
                 var __checkedUseElectricityWater = function() {
-                    var minElectricityUnit = modal_body.find('[name="min_electricity_unit"]');
-                    var minElectricityCharge = modal_body.find('[name="min_electricity_charge"]');
+                    var minElectricityUnit = modalBody.find('[name="min_electricity_unit"]');
+                    var minElectricityCharge = modalBody.find('[name="min_electricity_charge"]');
                     
-                    var minWaterUnit = modal_body.find('[name="min_water_unit"]');
-                    var minWaterCharge = modal_body.find('[name="min_water_charge"]');
+                    var minWaterUnit = modalBody.find('[name="min_water_unit"]');
+                    var minWaterCharge = modalBody.find('[name="min_water_charge"]');
                     
                     if(!app.valueUtils.isEmptyValue( minElectricityUnit.val() ) 
                             || !app.valueUtils.isEmptyValue( minElectricityCharge.val() )
@@ -45,15 +45,20 @@ var modalBuildingDetail = (function() {
                     
                     modalBuildingDetail.checkUseElectricityWater();
                 };
+                var __triggerCtrl = function(element) {
+                    
+                };
                 
-                app.clearAllInputErrorClass(modal_body);
+                app.clearAllInputErrorClass(modalBody);
                 
                 app.clearFormData(modalBuildingDetail.getForm());
                 modalBuildingDetail.clearInputId();
                 
                 for(var key in data) {
                     var key_ = app.camelToUnderScore(key);
-                    modal_body.find('[name="' + key_ + '"]').val(data[key]);
+                    modalBody.find('[name="' + key_ + '"]').val(data[key]);
+
+                    app.triggerCtrl(modalBody.find('[name="' + key_ + '"]'));
                 }
                 
                 __checkedUseElectricityWater();

@@ -40,8 +40,13 @@ public class BuildingController {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
+            String[] keyToCleanValue = {
+                "electricity_charge_per_unit", "min_electricity_charge", 
+                "water_charge_per_unit", "min_water_charge"
+            };
+            
             RestTemplate restTemplate = new RestTemplate();
-            String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData).toString();
+            String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData,keyToCleanValue).toString();
             HttpHeaders headers = new HttpHeaders();
             MediaType mediaType = CommonUtils.jsonMediaType();
             headers.setContentType(mediaType);
@@ -110,6 +115,18 @@ public class BuildingController {
         }
         
         return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/building_delete_by_id.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String buildingDeleteById(
+            @RequestParam(value = "id", required = true) String id,
+            HttpServletResponse response
+    ) {
+        
+        CommonUtils.setResponseHeader(response);
+        
+        return "Test delete " + id;
     }
 
 }

@@ -93,8 +93,24 @@ var boxBuilding = (function() {
             buttonDelete.bootstrapBtn('loading');
             
             setTimeout(function() {
-                alert('To delete id : ' + id);
-                buttonDelete.bootstrapBtn('reset');
+                jQuery.ajax({
+                    type: 'post',
+                    url: _CONTEXT_PATH_ + '/building_delete_by_id.html',
+                    data: {
+                        id: id
+                    },
+                    cache: false,
+                    success: function(response) {
+                        console.log(response);
+                        
+                        buttonDelete.bootstrapBtn('reset');
+                    },
+                    error: function() {
+                        app.alertSomethingError();
+                        
+                        buttonDelete.bootstrapBtn('reset');
+                    }
+                });
             }, _DELAY_PROCESS_);
         },
         getBuilding: function() {

@@ -130,6 +130,15 @@ var app = {
         },2000);
         //element.removeClass('animated '+animate_type);
     },
+    triggerCtrl : function(element) {
+        var keyEvent = $.Event("keydown");
+                    
+        keyEvent.ctrlKey = true;
+        keyEvent.key = 'Control';
+        keyEvent.keyCode = 17;
+
+        element.trigger(keyEvent);
+    },
     
     valueUtils: {
         isEmptyValue: function(stringData) {
