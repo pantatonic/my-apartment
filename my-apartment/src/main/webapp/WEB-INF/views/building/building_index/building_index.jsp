@@ -7,7 +7,8 @@
 <jsp:useBean id="commonHtml" class="my.apartment.common.CommonHtml" scope="page" />
 
 <tiles:insertDefinition name="defaultTemplate">
-    <tiles:putAttribute name="title" value="Test Tiles" />
+    <spring:message code="apartment.building.page_title" var="msgPageTitle" /> 
+    <tiles:putAttribute name="title" value="${msgPageTitle}" />
     <tiles:putAttribute name="css">
         <link rel="stylesheet" 
            href="<c:url value="/assets/view_resources/building/building_index/css/building_index.css?v=${randomTextVersion}"/>">

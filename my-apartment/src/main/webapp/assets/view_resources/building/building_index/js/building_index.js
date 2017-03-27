@@ -18,6 +18,10 @@ var page = (function() {
                 page.getBuilding();
             });
             
+            jQuery('#box-building-container').on('click', '.button-room', function() {
+                page.gotoRoomSetting(jQuery(this).attr('data-id'));
+            });
+            
             jQuery('.add-button').click(function() {
                 page.showBuildingDetail('add');
             });
@@ -83,6 +87,9 @@ var page = (function() {
         },
         getBuilding: function() {
             boxBuilding.getBuilding();
+        },
+        gotoRoomSetting: function(buildingId) {
+            window.location.href = _CONTEXT_PATH_ + '/room.html?building_id=' + buildingId;
         }
     };
 })();
