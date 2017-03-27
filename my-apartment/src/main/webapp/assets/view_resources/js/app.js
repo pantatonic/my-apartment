@@ -1,4 +1,4 @@
-/* global alertUtil, _CONTEXT_PATH_, INPUT_ERROR_CLASS */
+/* global alertUtil, _CONTEXT_PATH_, INPUT_ERROR_CLASS, _DELAY_PROCESS_ */
 
 var app = {
     camelToUnderScore : function(s) {
@@ -140,7 +140,7 @@ var app = {
         element.trigger(keyEvent);
     },
     
-    valueUtils: {
+    valueUtils : {
         isEmptyValue: function(stringData) {
             return (stringData.trim() == '' ? true : false);
         },
@@ -150,5 +150,14 @@ var app = {
         nullToEmpty: function(data) {
             return data == null ? '':data;
         }
+    },
+    
+    modalUtils : {
+        bodyScrollTop: function(modalElement) {
+            setTimeout(function() {
+                modalElement.find('.modal-body').scrollTop(0);
+            }, _DELAY_PROCESS_);
+        }
     }
+    
 };

@@ -70,6 +70,8 @@ var page = (function() {
                 modalBuildingDetail.checkUseElectricityWater();
             
                 modalBuildingDetail.getModal().modal('show');
+                
+                app.modalUtils.bodyScrollTop(modalBuildingDetail.getModal());
             }
             else {
                 modalBuildingDetail.getBuildingDetail(buildingId);

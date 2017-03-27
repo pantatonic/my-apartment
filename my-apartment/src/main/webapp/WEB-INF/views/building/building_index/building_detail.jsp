@@ -99,6 +99,7 @@
                                    autocomplete="off">
                         </div>
                     </div>
+                    <hr>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
                             <spring:message code="building.water_meter_digit" />

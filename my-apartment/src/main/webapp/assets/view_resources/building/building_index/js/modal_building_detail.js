@@ -61,6 +61,8 @@ var modalBuildingDetail = (function() {
                 __checkedUseElectricityWater();
                 
                 modal.modal('show');
+                
+                app.modalUtils.bodyScrollTop(modal);
             };
             
             app.loading('show');
@@ -100,7 +102,7 @@ var modalBuildingDetail = (function() {
                         app.loading('remove');
                     }
                 });
-            }, 500);
+            }, _DELAY_PROCESS_);
         },
         checkUseElectricityWater: function() {
             var modal = _getModalBuildingDetail();
@@ -222,6 +224,34 @@ var modalBuildingDetail = (function() {
                     return _validatePass;
                 };
                 
+                var __validateMeterDigit = function() {
+                    var _validatePass = true;
+                    var _electricityMeterDigit = modal.find('[name="electricity_meter_digit"]');
+                    var _waterMeterDigit = modal.find('[name="water_meter_digit"]');
+                    
+                    if(_electricityMeterDigit.val() == '0') {
+                        _electricityMeterDigit.addClass(INPUT_ERROR_CLASS);
+                        _validatePass = false;
+                    }
+                    
+                    if(_waterMeterDigit.val() == '0') {
+                        _waterMeterDigit.addClass(INPUT_ERROR_CLASS);
+                        _validatePass = false;
+                    }
+                    
+                    if(!_validatePass) {
+                        if(!app.checkNoticeExist('notice-meter-digit-data')) {
+                            app.showNotice({
+                                type: WARNING_STRING,
+                                message: app.translate('building.meter_digit_must_more_than_zero'),
+                                addclass: 'notice-meter-digit-data'
+                            });
+                        }
+                    }
+                    
+                    return _validatePass;
+                };
+                
                 form_.find('.' + REQUIRED_CLASS).each(function() {
                     var thisElement = jQuery(this);
                     
@@ -243,7 +273,7 @@ var modalBuildingDetail = (function() {
                     }
                 });
 
-                if(!__validateMinelectricityWater()) {
+                if(!__validateMinelectricityWater() || !__validateMeterDigit()) {
                     validatePass = false;
                 }
                 
