@@ -154,6 +154,9 @@ public class BuildingResource {
             building.setName(jsonObjectReceive.getString("name"));
             building.setAddress(jsonObjectReceive.getString("address"));
             building.setTel(jsonObjectReceive.getString("tel"));
+            building.setElectricityMeterDigit(
+                    CommonUtils.stringToInteger(jsonObjectReceive.getString("electricity_meter_digit"))
+            );
             building.setElectricityChargePerUnit(
                     CommonUtils.stringToBigDecimal(jsonObjectReceive.getString("electricity_charge_per_unit"))
             );
@@ -164,6 +167,9 @@ public class BuildingResource {
                     CommonUtils.stringToBigDecimal(jsonObjectReceive.getString("min_electricity_charge"))
             );
             
+            building.setWaterMeterDigit(
+                    CommonUtils.stringToInteger(jsonObjectReceive.getString("water_meter_digit"))
+            );
             building.setWaterChargePerUnit(
                     CommonUtils.stringToBigDecimal(jsonObjectReceive.getString("water_charge_per_unit"))
             );

@@ -1,4 +1,4 @@
-/* global alert_util, _CONTEXT_PATH_, INPUT_ERROR_CLASS */
+/* global alertUtil, _CONTEXT_PATH_, INPUT_ERROR_CLASS */
 
 var app = {
     camelToUnderScore : function(s) {
@@ -67,7 +67,7 @@ var app = {
         });
     },
     alertSessionExpired: function() {
-        alert_util.basicWarningAlert(app.translate('application.session_expired'), function() {
+        alertUtil.basicWarningAlert(app.translate('application.session_expired'), function() {
 					
         },{
             animation: false,

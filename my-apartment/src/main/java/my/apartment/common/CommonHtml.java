@@ -44,14 +44,14 @@ public class CommonHtml {
     }
     
     public String getDeleteButton(String textHtml) {
-        return "<button type=\"button\" class=\"btn btn-warning btn-flat button-delete\">"
+        return "<button type=\"button\" class=\"btn btn-danger btn-flat button-delete\">"
                     + this.fontDeleteClass + " "
                     + textHtml 
                 + "</button>";
     }
     
     public String getDeleteButton(String textHtml, String loadingText) {
-        return "<button type=\"button\" class=\"btn btn-warning btn-flat button-delete\" data-loading-text=\"" + loadingText + "\">"
+        return "<button type=\"button\" class=\"btn btn-danger btn-flat button-delete\" data-loading-text=\"" + loadingText + "\">"
                     + this.fontDeleteClass + " "
                     + textHtml 
                 + "</button>";

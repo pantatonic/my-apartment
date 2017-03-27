@@ -1,3 +1,6 @@
+[name="electricity_meter_digit"], [name="water_meter_digit"] {
+    width: 50px;
+}
 [name="electricity_charge_per_unit"], [name="min_electricity_unit"], [name="min_electricity_charge"],
 [name="water_charge_per_unit"], [name="min_water_unit"], [name="min_water_charge"] {
     width: 120px;
@@ -12,6 +15,7 @@
 
 .box-building_ {
     text-align: center;
+    margin-top: 10px;
 }
 
 .box-building {

@@ -29,7 +29,8 @@
                         <div class="col-sm-9">
                             <input type="hidden" name="id" value="">
                             <input type="text" name="name" class="form-control my-required-field" 
-                                   placeholder="<spring:message code="building.name" />">
+                                   placeholder="<spring:message code="building.name" />" 
+                                   autocomplete="off">
                         </div>
                     </div>
                     <div class="form-group">
@@ -47,7 +48,19 @@
                         </label>
                         <div class="col-sm-9">
                             <input type="text" name="tel" class="form-control" 
-                                   placeholder="<spring:message code="building.tel" />">
+                                   placeholder="<spring:message code="building.tel" />" 
+                                   autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            <spring:message code="building.electricity_meter_digit" />
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" name="electricity_meter_digit" maxlength="1"
+                                   class="form-control force-inline number-int my-required-field" 
+                                   autocomplete="off"
+                                   placeholder="">
                         </div>
                     </div>
                     <div class="form-group">
@@ -57,7 +70,8 @@
                         <div class="col-sm-9">
                             <input type="text" name="electricity_charge_per_unit" 
                                    class="form-control force-inline number-decimal-separate my-required-field" 
-                                   placeholder="">
+                                   placeholder="" 
+                                   autocomplete="off">
                             
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <input type="checkbox" id="use-min-electricity">
@@ -73,13 +87,25 @@
                         <div class="col-sm-9">
                             <input type="text" name="min_electricity_unit" 
                                    class="form-control force-inline number-int" maxlength="2"
-                                   placeholder="">
+                                   placeholder="" 
+                                   autocomplete="off">
                             
                             <label class="col-sm-4 control-label force-none-float">
                                 <spring:message code="building.min_electricity_charge" />
                             </label>
                             <input type="text" name="min_electricity_charge" 
                                    class="form-control force-inline number-decimal-separate" 
+                                   placeholder="" 
+                                   autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            <spring:message code="building.water_meter_digit" />
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" name="water_meter_digit" maxlength="1"
+                                   class="form-control force-inline number-int my-required-field" 
                                    placeholder="">
                         </div>
                     </div>
@@ -90,7 +116,8 @@
                         <div class="col-sm-9">
                             <input type="text" name="water_charge_per_unit" 
                                    class="form-control force-inline number-decimal-separate my-required-field" 
-                                   placeholder="">
+                                   placeholder="" 
+                                   autocomplete="off">
                             
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <input type="checkbox" id="use-min-water">
@@ -106,14 +133,16 @@
                         <div class="col-sm-9">
                             <input type="text" name="min_water_unit" 
                                    class="form-control force-inline number-int" 
-                                   placeholder="">
+                                   placeholder="" 
+                                   autocomplete="off">
                             
                             <label class="col-sm-4 control-label force-none-float">
                                 <spring:message code="building.min_water_charge" />
                             </label>
                             <input type="text" name="min_water_charge" 
                                    class="form-control force-inline number-decimal-separate" 
-                                   placeholder="">
+                                   placeholder="" 
+                                   autocomplete="off">
                         </div>
                     </div>
                         

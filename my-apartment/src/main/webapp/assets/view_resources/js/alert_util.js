@@ -1,6 +1,6 @@
 /* global swal, OK_STRING, CANCEL_STRING */
 
-var alert_util = (function () {
+var alertUtil = (function () {
     /*var _confirmButtonText = OK_STRING;
     var _cancelButtonText = CANCEL_STRING;*/
 

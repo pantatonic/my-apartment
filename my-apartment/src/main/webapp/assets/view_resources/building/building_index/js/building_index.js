@@ -1,4 +1,4 @@
-/* global modalBuildingDetail, app, _CONTEXT_PATH_, _DELAY_PROCESS_ */
+/* global modalBuildingDetail, app, _CONTEXT_PATH_, _DELAY_PROCESS_, alertUtil */
 
 var latestBuildingIdProcess = null;
 
@@ -82,51 +82,61 @@ var page = (function() {
 })();
 
 var boxBuilding = (function() {
+    var _deleteBuilding = function(buttonDelete) {
+        var id = buttonDelete.attr('data-id');
+            
+        buttonDelete.bootstrapBtn('loading');
+
+        setTimeout(function() {
+            jQuery.ajax({
+                type: 'post',
+                url: _CONTEXT_PATH_ + '/building_delete_by_id.html',
+                data: {
+                    id: id
+                },
+                cache: false,
+                success: function(response) {
+                    response = app.convertToJsonObject(response);
+
+                    if(response.result == SUCCESS_STRING) {
+                        app.showNotice({
+                            message: app.translate('common.delete_success'),
+                            type: response.result
+                        });
+                    }
+                    else {
+                        app.showNotice({
+                            message: app.translate('common.processing_failed'),
+                            type: response.result
+                        });
+                    }
+
+                    buttonDelete.bootstrapBtn('reset');
+
+                    boxBuilding.getBuilding();
+                },
+                error: function() {
+                    app.alertSomethingError();
+
+                    buttonDelete.bootstrapBtn('reset');
+                }
+            });
+        }, _DELAY_PROCESS_);
+    };
     
     return {
         getBoxBuildingContainer: function() {
             return jQuery('#box-building-container');
         },
         deleteBuilding: function(buttonDelete) {
-            var id = buttonDelete.attr('data-id');
-            
-            buttonDelete.bootstrapBtn('loading');
-            
-            setTimeout(function() {
-                jQuery.ajax({
-                    type: 'post',
-                    url: _CONTEXT_PATH_ + '/building_delete_by_id.html',
-                    data: {
-                        id: id
-                    },
-                    cache: false,
-                    success: function(response) {
-                        response = app.convertToJsonObject(response);
-                        
-                        if(response.result == SUCCESS_STRING) {
-                            app.showNotice({
-                                message: app.translate('common.delete_success'),
-                                type: response.result
-                            });
-                        }
-                        else {
-                            app.showNotice({
-                                message: app.translate('common.processing_failed'),
-                                type: response.result
-                            });
-                        }
-                        
-                        buttonDelete.bootstrapBtn('reset');
-                        
-                        boxBuilding.getBuilding();
-                    },
-                    error: function() {
-                        app.alertSomethingError();
-                        
-                        buttonDelete.bootstrapBtn('reset');
-                    }
-                });
-            }, _DELAY_PROCESS_);
+            alertUtil.confirmAlert(app.translate('common.please_confirm_to_process'), function() {
+                _deleteBuilding(buttonDelete);
+            }, function() {
+                
+            },{
+                animation: false,
+                type: null
+            });
         },
         getBuilding: function() {
             var parent_box = jQuery('#parent-box-building-container');

@@ -40,9 +40,13 @@ public class BuildingDaoImpl implements BuildingDao {
                 building.setName(rs.getString("name"));
                 building.setAddress(rs.getString("address"));
                 building.setTel(rs.getString("tel"));
+                
+                building.setElectricityMeterDigit(rs.getInt("electricity_meter_digit"));
                 building.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
                 building.setMinElectricityUnit(rs.getInt("min_electricity_unit"));
                 building.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
+                
+                building.setWaterMeterDigit(rs.getInt("water_meter_digit"));
                 building.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
                 building.setMinWaterUnit(rs.getInt("min_water_unit"));
                 building.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
@@ -100,10 +104,13 @@ public class BuildingDaoImpl implements BuildingDao {
                 building.setName(rs.getString("name"));
                 building.setAddress(rs.getString("address"));
                 building.setTel(rs.getString("tel"));
+                
+                building.setElectricityMeterDigit(rs.getInt("electricity_meter_digit"));
                 building.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
                 building.setMinElectricityUnit(CommonUtils.integerZeroToNull(rs.getInt("min_electricity_unit")));
                 building.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
 
+                building.setWaterMeterDigit(rs.getInt("water_meter_digit"));
                 building.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
                 building.setMinWaterUnit(CommonUtils.integerZeroToNull(rs.getInt("min_water_unit")));
                 building.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
@@ -153,9 +160,7 @@ public class BuildingDaoImpl implements BuildingDao {
             ps.setInt(1, id);
             
             Integer effectRow = ps.executeUpdate();
-            System.out.println("xxxxxxxxxxxxxx");
-            System.out.println(effectRow);
-            System.out.println("xxxxxxxxxxxxxx");
+
             if (effectRow == 0) {
                 resultDelete = Boolean.FALSE;
             }
@@ -204,61 +209,67 @@ public class BuildingDaoImpl implements BuildingDao {
                 /** insert process */
                 
                 querysString = "INSERT INTO building ("
-                        + "name, "
-                        + "address, "
-                        + "tel, "
-                        + "electricity_charge_per_unit, "
-                        + "min_electricity_unit, "
-                        + "min_electricity_charge, "
-                        + "water_charge_per_unit, "
-                        + "min_water_unit, "
-                        + "min_water_charge) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        + "name, " //1
+                        + "address, " //2
+                        + "tel, " //3
+                        + "electricity_meter_digit, " //4
+                        + "electricity_charge_per_unit, " //5
+                        + "min_electricity_unit, " //6
+                        + "min_electricity_charge, " //7
+                        + "water_meter_digit, " //8
+                        + "water_charge_per_unit, " //9
+                        + "min_water_unit, " //10
+                        + "min_water_charge) " //11
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             } else {
                 /** update process */
                 
                 querysString = "UPDATE building SET "
-                        + "name = ?, "
-                        + "address = ?, "
-                        + "tel = ?, "
-                        + "electricity_charge_per_unit = ?, "
-                        + "min_electricity_unit = ?, "
-                        + "min_electricity_charge = ?, "
-                        + "water_charge_per_unit = ?, "
-                        + "min_water_unit = ?, "
-                        + "min_water_charge = ? "
-                        + "WHERE id = ?";
+                        + "name = ?, " //1
+                        + "address = ?, " //2
+                        + "tel = ?, " //3
+                        + "electricity_meter_digit = ?, " //4
+                        + "electricity_charge_per_unit = ?, " //5
+                        + "min_electricity_unit = ?, " //6
+                        + "min_electricity_charge = ?, " //7
+                        + "water_meter_digit = ?, " //8
+                        + "water_charge_per_unit = ?, " //9
+                        + "min_water_unit = ?, " //10
+                        + "min_water_charge = ? " //11
+                        + "WHERE id = ?"; //12
             }
             
             ps = con.prepareStatement(querysString, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, building.getName());
             ps.setString(2, building.getAddress());
             ps.setString(3, building.getTel());
-            ps.setBigDecimal(4, building.getElectricityChargePerUnit());
+            ps.setInt(4, building.getElectricityMeterDigit());
+            ps.setBigDecimal(5, building.getElectricityChargePerUnit());
             
             if(building.getMinElectricityUnit() == null) {
-                ps.setNull(5, java.sql.Types.INTEGER);
+                ps.setNull(6, java.sql.Types.INTEGER);
             }
             else {
-                ps.setInt(5, building.getMinElectricityUnit());
+                ps.setInt(6, building.getMinElectricityUnit());
             }
 
-            ps.setBigDecimal(6, building.getMinElectricityCharge());
-            ps.setBigDecimal(7, building.getWaterChargePerUnit());
+            ps.setBigDecimal(7, building.getMinElectricityCharge());
+            ps.setInt(8, building.getWaterMeterDigit());
+            ps.setBigDecimal(9, building.getWaterChargePerUnit());
             
             if(building.getMinWaterUnit() == null) {
-                ps.setNull(8, java.sql.Types.INTEGER);
+                ps.setNull(10, java.sql.Types.INTEGER);
             }
             else {
-                ps.setInt(8, building.getMinWaterUnit());
+                ps.setInt(10, building.getMinWaterUnit());
             }
             
-            ps.setBigDecimal(9, building.getMinWaterCharge());
+            ps.setBigDecimal(11, building.getMinWaterCharge());
             
             if (building.getId() != null) {
                 /** insert process */
                 
-                ps.setInt(10, building.getId());
+                ps.setInt(12, building.getId());
             }
 
             Integer effectRow = ps.executeUpdate();

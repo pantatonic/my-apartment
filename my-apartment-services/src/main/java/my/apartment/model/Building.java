@@ -12,9 +12,11 @@ public class Building implements Serializable {
     private String name;
     private String address;
     private String tel;
+    private Integer electricityMeterDigit;
     private BigDecimal electricityChargePerUnit;
     private Integer minElectricityUnit;
     private BigDecimal minElectricityCharge;
+    private Integer waterMeterDigit;
     private BigDecimal waterChargePerUnit;
     private Integer minWaterUnit;
     private BigDecimal minWaterCharge;
@@ -22,14 +24,16 @@ public class Building implements Serializable {
     public Building() {
     }
 
-    public Building(Integer id, String name, String address, String tel, BigDecimal electricityChargePerUnit, Integer minElectricityUnit, BigDecimal minElectricityCharge, BigDecimal waterChargePerUnit, Integer minWaterUnit, BigDecimal minWaterCharge) {
+    public Building(Integer id, String name, String address, String tel, Integer electricityMeterDigit, BigDecimal electricityChargePerUnit, Integer minElectricityUnit, BigDecimal minElectricityCharge, Integer waterMeterDigit, BigDecimal waterChargePerUnit, Integer minWaterUnit, BigDecimal minWaterCharge) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.tel = tel;
+        this.electricityMeterDigit = electricityMeterDigit;
         this.electricityChargePerUnit = electricityChargePerUnit;
         this.minElectricityUnit = minElectricityUnit;
         this.minElectricityCharge = minElectricityCharge;
+        this.waterMeterDigit = waterMeterDigit;
         this.waterChargePerUnit = waterChargePerUnit;
         this.minWaterUnit = minWaterUnit;
         this.minWaterCharge = minWaterCharge;
@@ -67,6 +71,14 @@ public class Building implements Serializable {
         this.tel = tel;
     }
 
+    public Integer getElectricityMeterDigit() {
+        return electricityMeterDigit;
+    }
+
+    public void setElectricityMeterDigit(Integer electricityMeterDigit) {
+        this.electricityMeterDigit = electricityMeterDigit;
+    }
+
     public BigDecimal getElectricityChargePerUnit() {
         return electricityChargePerUnit;
     }
@@ -89,6 +101,14 @@ public class Building implements Serializable {
 
     public void setMinElectricityCharge(BigDecimal minElectricityCharge) {
         this.minElectricityCharge = minElectricityCharge;
+    }
+
+    public Integer getWaterMeterDigit() {
+        return waterMeterDigit;
+    }
+
+    public void setWaterMeterDigit(Integer waterMeterDigit) {
+        this.waterMeterDigit = waterMeterDigit;
     }
 
     public BigDecimal getWaterChargePerUnit() {
@@ -117,7 +137,7 @@ public class Building implements Serializable {
 
     @Override
     public String toString() {
-        return "Buildings{" + "id=" + id + ", name=" + name + ", address=" + address + ", tel=" + tel + ", electricityChargePerUnit=" + electricityChargePerUnit + ", minElectricityUnit=" + minElectricityUnit + ", minElectricityCharge=" + minElectricityCharge + ", waterChargePerUnit=" + waterChargePerUnit + ", minWaterUnit=" + minWaterUnit + ", minWaterCharge=" + minWaterCharge + '}';
+        return "Building{" + "id=" + id + ", name=" + name + ", address=" + address + ", tel=" + tel + ", electricityMeterDigit=" + electricityMeterDigit + ", electricityChargePerUnit=" + electricityChargePerUnit + ", minElectricityUnit=" + minElectricityUnit + ", minElectricityCharge=" + minElectricityCharge + ", waterMeterDigit=" + waterMeterDigit + ", waterChargePerUnit=" + waterChargePerUnit + ", minWaterUnit=" + minWaterUnit + ", minWaterCharge=" + minWaterCharge + '}';
     }
 
 }
