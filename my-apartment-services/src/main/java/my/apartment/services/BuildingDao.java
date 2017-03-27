@@ -12,4 +12,6 @@ public interface BuildingDao {
     
     public List<Building> getById(Integer id);
     
+    public Boolean deleteById(Integer id);
+    
 }

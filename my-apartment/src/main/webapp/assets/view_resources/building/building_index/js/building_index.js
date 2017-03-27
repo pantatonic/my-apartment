@@ -101,9 +101,24 @@ var boxBuilding = (function() {
                     },
                     cache: false,
                     success: function(response) {
-                        console.log(response);
+                        response = app.convertToJsonObject(response);
+                        
+                        if(response.result == SUCCESS_STRING) {
+                            app.showNotice({
+                                message: app.translate('common.delete_success'),
+                                type: response.result
+                            });
+                        }
+                        else {
+                            app.showNotice({
+                                message: app.translate('common.processing_failed'),
+                                type: response.result
+                            });
+                        }
                         
                         buttonDelete.bootstrapBtn('reset');
+                        
+                        boxBuilding.getBuilding();
                     },
                     error: function() {
                         app.alertSomethingError();

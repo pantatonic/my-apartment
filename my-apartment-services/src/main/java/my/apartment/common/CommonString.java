@@ -10,6 +10,9 @@ public class CommonString {
     public static final String SERVICE_ERROR_STRING = "SERVICE ERROR";
     public static final String DATA_NOT_FOUND_STRING = "DATA_NOT_FOUND";
     public static final String SAVE_DATA_ERROR_STRING = "SAVE_DATA_ERROR";
-    public static final String SAVE_DATA_SUCCESS = "SAVE_DATA_SUCCESS";
+    public static final String SAVE_DATA_SUCCESS_STRING = "SAVE_DATA_SUCCESS";
+    public static final String DELETE_DATA_SUCCESS_STRING = "DELETE_DATA_SUCCESS";
+    public static final String DATA_ALREADY_DELETE_STRING = "DATA_ALREADY_DELETE";
+    public static final String PROCESSING_FAILED_STRING = "PROCESSING_FAILED";
     
 }

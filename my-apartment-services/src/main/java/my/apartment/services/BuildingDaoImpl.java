@@ -134,6 +134,57 @@ public class BuildingDaoImpl implements BuildingDao {
         
         return buildings;
     }
+    
+    @Override
+    public Boolean deleteById(Integer id) {
+        Boolean resultDelete = Boolean.TRUE;
+        
+        Connection con = null;
+        PreparedStatement ps = null;
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+
+            String querysString = "DELETE FROM building WHERE id = ?";
+            
+            ps = con.prepareStatement(querysString);
+            ps.setInt(1, id);
+            
+            Integer effectRow = ps.executeUpdate();
+            System.out.println("xxxxxxxxxxxxxx");
+            System.out.println(effectRow);
+            System.out.println("xxxxxxxxxxxxxx");
+            if (effectRow == 0) {
+                resultDelete = Boolean.FALSE;
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            resultDelete = Boolean.FALSE;
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return resultDelete;
+    }
 
     @Override
     public Building save(Building building) {

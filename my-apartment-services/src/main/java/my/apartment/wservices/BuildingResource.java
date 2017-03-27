@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
@@ -77,13 +78,49 @@ public class BuildingResource {
             BuildingDao buildingDaoImpl = new BuildingDaoImpl();
             
             List<Building> buildings = buildingDaoImpl.getById(buildingId);
-            
-            /*System.out.println("Wservice --------------");
-            System.out.println(buildings);
-            System.out.println("Wservice --------------");*/
-            
+
             jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
                     .put(CommonString.DATA_STRING, buildings);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @Path("building_delete_by_id")
+    @POST
+    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    public String buildingDeleteById(
+            @FormParam("building_id") Integer buildingId
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            BuildingDao buildingDaoImpl = new BuildingDaoImpl();
+            
+            List<Building> buildings = buildingDaoImpl.getById(buildingId);
+            
+            if(buildings.isEmpty()) {
+                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_ALREADY_DELETE_STRING);
+            }
+            else {
+                Boolean resultDelete = buildingDaoImpl.deleteById(buildingId);
+                
+                if(resultDelete == Boolean.TRUE) {
+                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
+                        .put(CommonString.DATA_STRING, CommonString.DELETE_DATA_SUCCESS_STRING);
+                }
+                else {
+                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
+                        .put(CommonString.DATA_STRING, CommonString.PROCESSING_FAILED_STRING);
+                }
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -136,7 +173,7 @@ public class BuildingResource {
             
             if(resultSave != null) {
                 jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.SAVE_DATA_SUCCESS)
+                        .put(CommonString.MESSAGE_STRING, CommonString.SAVE_DATA_SUCCESS_STRING)
                         .put("id", resultSave.getId());
             }
             else {
