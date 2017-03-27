@@ -35,14 +35,6 @@ public class CommonUtils {
 
         Iterator<String> iterator = formData.keySet().iterator();
         
-        /*for(String k : keyToCleanValue) {
-            System.out.println(keyToCleanValue[0]);
-        }*/
-        
-        /*if(ArrayUtils.contains(keyToCleanValue, "electricity_charge_per_unit")) {
-            System.out.println("Found");
-        }*/
-
         while (iterator.hasNext()) {
             String keyString = (String) iterator.next();
             String value = formData.getFirst(keyString);
@@ -53,7 +45,7 @@ public class CommonUtils {
 
             jsonObject.put(keyString, value);
         }
-System.out.println(jsonObject);
+
         return jsonObject;
     }
     
