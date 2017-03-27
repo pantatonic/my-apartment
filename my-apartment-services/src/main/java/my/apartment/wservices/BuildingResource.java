@@ -110,6 +110,11 @@ public class BuildingResource {
                     .put(CommonString.MESSAGE_STRING, CommonString.DATA_ALREADY_DELETE_STRING);
             }
             else {
+                /**
+                 * TODO : check building data (example: floor, room) 
+                 * if have data not allow to delete
+                 */
+                
                 Boolean resultDelete = buildingDaoImpl.deleteById(buildingId);
                 
                 if(resultDelete == Boolean.TRUE) {
