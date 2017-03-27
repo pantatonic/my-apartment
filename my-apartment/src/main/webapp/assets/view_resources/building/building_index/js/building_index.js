@@ -14,6 +14,10 @@ var page = (function() {
             page.getBuilding();
         },
         addEvent: function() {
+            jQuery('.refresh-building-list').click(function() {
+                page.getBuilding();
+            });
+            
             jQuery('.add-button').click(function() {
                 page.showBuildingDetail('add');
             });
@@ -153,6 +157,8 @@ var boxBuilding = (function() {
                     };
                     var boxBuildingContainer = jQuery('#box-building-container');
                     var __setData = function(boxBuildingElement, currentData) {
+                        var boxBuildingElement_ = boxBuildingElement.closest('.box-building_');
+                        
                         boxBuildingElement.attr('data-id', currentData.id);
                         
                         boxBuildingElement.find('.box-building-name').html(
@@ -161,9 +167,9 @@ var boxBuilding = (function() {
                             + currentData.name
                         );
                 
-                        boxBuildingElement.closest('.box-building_')
-                                .find('.button-delete')
-                                .attr('data-id', currentData.id);
+                        boxBuildingElement_.find('.button-delete').attr('data-id', currentData.id);
+                        
+                        boxBuildingElement_.find('.button-room').attr('data-id', currentData.id);
                     };
                     var __setAnimateBoxBuilding = function() {
                         if(latestBuildingIdProcess != null) {

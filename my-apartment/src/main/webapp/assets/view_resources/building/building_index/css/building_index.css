@@ -33,6 +33,6 @@
     font-size: 12px;
     margin-top: 15px;
 }
-.box-building_ .button-delete {
+.box-building_ .button-delete, .box-building_ .button-room {
     margin-top: 15px;
 }

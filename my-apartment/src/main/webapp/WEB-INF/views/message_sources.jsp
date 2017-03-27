@@ -50,6 +50,8 @@
     
     "building.use_min_electricity":"<spring:message code="building.use_min_electricity" />",
     "building.use_min_water":"<spring:message code="building.use_min_water" />",
-    "building.meter_digit_must_more_than_zero":"<spring:message code="building.meter_digit_must_more_than_zero" />"
+    "building.meter_digit_must_more_than_zero":"<spring:message code="building.meter_digit_must_more_than_zero" />",
+    
+    "building.room":"<spring:message code="building.room" />"
     }
 </div>

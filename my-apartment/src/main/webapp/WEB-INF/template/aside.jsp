@@ -45,6 +45,11 @@
                             <i class="fa fa-circle-o"></i> <spring:message code="apartment.building" />
                         </a>
                     </li>
+                    <li>
+                        <a href="<c:url value="/room.html" />">
+                            <i class="fa fa-circle-o"></i> <spring:message code="building.room" />
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="treeview ">

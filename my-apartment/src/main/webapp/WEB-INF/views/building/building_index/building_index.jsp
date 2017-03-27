@@ -37,6 +37,13 @@
                         </h3>
                         <spring:message code="apartment.add_building" var="msgAddBuilding" />
                         ${commonHtml.getAddButton(msgAddBuilding)}
+                        
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool refresh-building-list"
+                                title="">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <div id="box-building-container" class="box-body">
@@ -61,6 +68,11 @@
                 </div>
                 
                 <div class="clearfix"></div>
+                <button type="button" class="btn btn-primary btn-flat button-room" 
+                        data-loading-text="<spring:message code="common.now_processing" />">
+                    <i class="fa fa-columns"></i> 
+                    <spring:message code="building.room" />
+                </button>
                 <spring:message code="common.delete" var="msgDeleteBuilding" />
                 ${commonHtml.getDeleteButton(msgDeleteBuilding, msgNowProcessing)}
             </div>
