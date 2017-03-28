@@ -1,4 +1,4 @@
-/* global buildingIdString, app */
+/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_ */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -21,9 +21,8 @@ var page = (function() {
                 page.getRoom();
             });
             
-            jQuery('body').dblclick(function() {
-                modalRoomDetail.getModal().modal('show');
-                modalRoomDetail.getForm();
+            page.getElement.getAddButton().click(function() {
+                page.showRoomDetail();
             });
         },
         setBuildingList: function() {
@@ -40,8 +39,61 @@ var page = (function() {
             var buildingId = buildingList.val();
             
             if(!app.valueUtils.isEmptyValue(buildingId)) {
-                alert('To get room');
+                jQuery.ajax({
+                    type: 'get',
+                    url: _CONTEXT_PATH_ + '/room_get_by_building_id.html',
+                    data: {
+                        building_id: buildingId
+                    },
+                    cache: false,
+                    success: function(response) {
+                        response = app.convertToJsonObject(response);
+                    },
+                    error: function() {
+                        app.alertSomethingError();
+                    }
+                });
             }
+        },
+        getElement: {
+            getAddButton: function() {
+                return jQuery('.add-button');
+            },
+            getBuildingListElement: function() {
+                return _getBuildingListElement();
+            }
+        },
+        showRoomDetail: function(type, roomId) {
+            var buildingList = page.getElement.getBuildingListElement();
+            
+            if(type == undefined) {
+                type = 'add';
+            }
+            
+            buildingList.removeClass(INPUT_ERROR_CLASS);
+            
+            if(!app.valueUtils.isEmptyValue(buildingList.val())) {
+                if(type == 'add') {
+
+                    modalRoomDetail.getModal().modal('show');
+                }
+                else {
+
+                }
+            }
+            else {
+                if(!app.checkNoticeExist('notice-select-data')) {
+                    app.showNotice({
+                        type: WARNING_STRING,
+                        message: app.translate('common.please_enter_data'),
+                        addclass: 'notice-select-data'
+                    });
+                }
+                
+                buildingList.addClass(INPUT_ERROR_CLASS);
+            }
+            
+            
         }
     };
 })();

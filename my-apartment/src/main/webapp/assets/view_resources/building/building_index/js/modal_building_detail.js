@@ -1,4 +1,4 @@
-/* global _DELAY_PROCESS_, _CONTEXT_PATH_, app, SUCCESS_STRING, alertUtil, SESSION_EXPIRE_STRING, REQUIRED_CLASS, INPUT_ERROR_CLASS, WARNING_STRING, page */
+/* global _DELAY_PROCESS_, _CONTEXT_PATH_, app, SUCCESS_STRING, alertUtil, SESSION_EXPIRE_STRING, REQUIRED_CLASS, INPUT_ERROR_CLASS, WARNING_STRING, page, DATA_NOT_FOUND_STRING */
 
 var modalBuildingDetail = (function() {
     var _getModalBuildingDetail = function() {
@@ -86,6 +86,13 @@ var modalBuildingDetail = (function() {
                         else {
                             if(response.message == SESSION_EXPIRE_STRING) {
                                 app.alertSessionExpired();
+                            }
+                            else
+                            if(response.message == DATA_NOT_FOUND_STRING) {
+                                app.showNotice({
+                                    message: app.translate('common.data_not_found'),
+                                    type: response.result
+                                });
                             }
                             else {
                                 app.showNotice({

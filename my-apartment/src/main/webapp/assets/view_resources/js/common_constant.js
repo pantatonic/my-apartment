@@ -7,6 +7,7 @@ var WARNING_STRING = 'warning';
 var SESSION_EXPIRE_STRING = 'SESSION_EXPIRE';
 var OK_STRING = '_OK_';
 var CANCEL_STRING = '_CANCEL_';
+var DATA_NOT_FOUND_STRING = "DATA_NOT_FOUND";
 
 var INPUT_ERROR_CLASS = 'my-input-error';
 var REQUIRED_CLASS = 'my-required-field';

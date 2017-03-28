@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonUtils;
 import my.apartment.common.ServiceDomain;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -107,6 +108,11 @@ public class BuildingController {
             String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "building/building_get_by_id/" + id, String.class);
             
             jsonObjectReturn = new JSONObject(resultWs);
+            
+            if(CommonUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
+                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
+            }
         }
         catch(Exception e) {
             e.printStackTrace();

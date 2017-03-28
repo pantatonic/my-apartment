@@ -79,7 +79,6 @@
                                     <option value="${roomStatusList.getJSONObject(index).getInt("id")}">
                                         <c:set var="dynamicMsgRoomStatus" value="${roomStatusList.getJSONObject(index).getString(\"status\")}" />
                                         <spring:message code="${dynamicMsgRoomStatus}" />
-                                        
                                     </option>
                                 </c:forEach>
                             </select>
