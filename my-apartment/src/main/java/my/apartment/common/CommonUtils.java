@@ -23,7 +23,7 @@ public class CommonUtils {
         while (iterator.hasNext()) {
             String keyString = (String) iterator.next();
             String value = formData.getFirst(keyString);
-            System.out.println(keyString + " : " + value);
+
             jsonObject.put(keyString, value);
         }
 
@@ -56,6 +56,10 @@ public class CommonUtils {
     public static void setResponseHeader(HttpServletResponse response) {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
+    }
+    
+    public static String nullToStringEmpty(String dataString) {
+        return dataString == null ? StringUtils.EMPTY : dataString;
     }
 
 }

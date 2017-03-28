@@ -11,13 +11,17 @@
     <tiles:putAttribute name="title" value="${msgPageTitle}" />
     <tiles:putAttribute name="title" value="Test Tiles" />
     <tiles:putAttribute name="css">
-        <%--<link rel="stylesheet" 
-           href="<c:url value="/assets/view_resources/building/building_index/css/building_index.css?v=${randomTextVersion}"/>">--%>
+        <link rel="stylesheet" 
+           href="<c:url value="/assets/view_resources/room/room_index/css/room_index.css?v=${randomTextVersion}"/>">
     </tiles:putAttribute>
     <tiles:putAttribute name="js">
-        <%--<script type="text/javascript" 
-            src="<c:url value="/assets/view_resources/building/building_index/js/building_index.js?v=${randomTextVersion}"/>"></script>
+        <script type="text/javascript">
+            var buildingIdString = '${buildingIdString}';
+        </script>
+        
         <script type="text/javascript" 
+            src="<c:url value="/assets/view_resources/room/room_index/js/room_index.js?v=${randomTextVersion}"/>"></script>
+        <%--<script type="text/javascript" 
             src="<c:url value="/assets/view_resources/building/building_index/js/modal_building_detail.js?v=${randomTextVersion}"/>"></script>--%>
     </tiles:putAttribute>
     <tiles:putAttribute name="body">
@@ -36,9 +40,22 @@
                         <h3 class="box-title">
                             &nbsp;
                         </h3>
+                        
+                        <select id="building-list" class="form-control">
+                            <option value=""> -- <spring:message code="building.select_building" /> -- </option>
+                            <c:forEach begin="0" end="${buildingList.length() - 1}" var="index">
+                                <option value="${buildingList.getJSONObject(index).getInt("id")}">
+                                    ${buildingList.getJSONObject(index).getString("name")}
+                                </option>
+                            </c:forEach>
+                        </select>
+
+                        
+                        
                     </div>
 
                     <div class="box-body">
+                        
                         
                     </div>
 

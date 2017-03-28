@@ -25,6 +25,7 @@
     "common.delete":"<spring:message code="common.delete" />",
     "common.delete_success":"<spring:message code="common.delete_success" />",
     "common.please_confirm_to_process":"<spring:message code="common.please_confirm_to_process" />",
+    "common.please_select_data":"<spring:message code="common.please_select_data" />",
     
     "account_not_found":"<spring:message code="account_not_found" />",
     "account_is_disabled":"<spring:message code="account_is_disabled" />",
@@ -50,7 +51,9 @@
     
     "building.use_min_electricity":"<spring:message code="building.use_min_electricity" />",
     "building.use_min_water":"<spring:message code="building.use_min_water" />",
+    
     "building.meter_digit_must_more_than_zero":"<spring:message code="building.meter_digit_must_more_than_zero" />",
+    "building.select_building":"<spring:message code="building.select_building" />",
     
     "building.room":"<spring:message code="building.room" />"
     }
