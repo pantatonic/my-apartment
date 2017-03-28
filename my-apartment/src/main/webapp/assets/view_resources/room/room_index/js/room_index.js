@@ -20,6 +20,11 @@ var page = (function() {
             buildingList.change(function() {
                 page.getRoom();
             });
+            
+            jQuery('body').dblclick(function() {
+                modalRoomDetail.getModal().modal('show');
+                modalRoomDetail.getForm();
+            });
         },
         setBuildingList: function() {
             if(!app.valueUtils.isEmptyValue(buildingIdString)) {
@@ -37,6 +42,25 @@ var page = (function() {
             if(!app.valueUtils.isEmptyValue(buildingId)) {
                 alert('To get room');
             }
+        }
+    };
+})();
+
+var modalRoomDetail = (function() {
+    var _getModal = function() {
+        return jQuery('#modal-room-detail');
+    };
+    
+    var _getForm = function() {
+        return jQuery('[name="room_form"]');
+    };
+    
+    return {
+        getModal: function() {
+            return _getModal();
+        },
+        getForm: function() {
+            return _getForm();
         }
     };
 })();

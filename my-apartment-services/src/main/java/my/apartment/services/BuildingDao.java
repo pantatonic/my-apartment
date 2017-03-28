@@ -8,7 +8,7 @@ public interface BuildingDao {
     
     public Building save(Building building);
     
-    public List<Building> get();
+    public List<Building> getAll();
     
     public List<Building> getById(Integer id);
     

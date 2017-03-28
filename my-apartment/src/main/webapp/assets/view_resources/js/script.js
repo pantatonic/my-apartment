@@ -4,7 +4,7 @@ var _DELAY_PROCESS_ = 500;
 
 jQuery(document).ready(function() {
     jQuery('.modal-scroll .modal-body').css({
-        'height': (jQuery(window).height() * 60) / 90, // /100
+        'max-height': (jQuery(window).height() * 60) / 90, // /100
         'overflow-x': 'auto',
         'overflow-y': 'auto'
     });

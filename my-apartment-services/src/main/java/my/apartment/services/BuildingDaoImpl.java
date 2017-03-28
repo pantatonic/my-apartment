@@ -17,7 +17,7 @@ import my.apartment.model.Building;
 public class BuildingDaoImpl implements BuildingDao {
     
     @Override
-    public List<Building> get() {
+    public List<Building> getAll() {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;

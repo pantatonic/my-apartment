@@ -37,10 +37,11 @@
             <section class="content">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            &nbsp;
-                        </h3>
-                        
+                        <spring:message code="room.add_room" var="msgAddRoom" />
+                        ${commonHtml.getAddButton(msgAddRoom)}
+                    </div>
+
+                    <div class="box-body">
                         <select id="building-list" class="form-control">
                             <option value=""> -- <spring:message code="building.select_building" /> -- </option>
                             <c:forEach begin="0" end="${buildingList.length() - 1}" var="index">
@@ -49,23 +50,20 @@
                                 </option>
                             </c:forEach>
                         </select>
-
-                        
-                        
-                    </div>
-
-                    <div class="box-body">
-                        
+                            
+                        <hr>
                         
                     </div>
 
                     <div class="box-footer">
-                        &nbsp;
+                        
                     </div>
                 </div>
 
             </section>
         </div>     
 
+        <jsp:include page="room_detail.jsp" flush="true" />
+                            
     </tiles:putAttribute>
 </tiles:insertDefinition>

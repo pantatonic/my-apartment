@@ -55,6 +55,19 @@
     "building.meter_digit_must_more_than_zero":"<spring:message code="building.meter_digit_must_more_than_zero" />",
     "building.select_building":"<spring:message code="building.select_building" />",
     
-    "building.room":"<spring:message code="building.room" />"
+    "building.room":"<spring:message code="building.room" />",
+    
+    "room.add_room":"<spring:message code="room.add_room" />",
+    "room.status.enabled":"<spring:message code="room.status.enabled" />",
+    "room.status.disabled":"<spring:message code="room.status.disabled" />",
+    "room.status.maintenance":"<spring:message code="room.status.maintenance" />",
+    
+    "room.floor":"<spring:message code="room.floor" />",
+    "room.room_no":"<spring:message code="room.room_no" />",
+    "room.name":"<spring:message code="room.name" />",
+    "room.price_per_month":"<spring:message code="room.price_per_month" />",
+    "room.status":"<spring:message code="room.status" />",
+    
+    "room.select_floor":"<spring:message code="room.select_floor" />"
     }
 </div>

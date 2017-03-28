@@ -50,7 +50,7 @@ public class BuildingResource {
         try {
             BuildingDao buildingDaoImpl = new BuildingDaoImpl();
             
-            List<Building> buildings = buildingDaoImpl.get();
+            List<Building> buildings = buildingDaoImpl.getAll();
 
             jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
                     .put(CommonString.DATA_STRING, buildings);

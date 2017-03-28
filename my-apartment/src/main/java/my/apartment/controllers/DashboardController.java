@@ -12,8 +12,7 @@ public class DashboardController {
     @RequestMapping(value = "/dashboard.html", method = {RequestMethod.GET})
     @ResponseBody
     public ModelAndView dashboard() {
-        ModelAndView modelAndView = new ModelAndView("dashboard/dashboard");
-        
+        ModelAndView modelAndView = new ModelAndView("dashboard/dashboard_index");
         return modelAndView;
     }
     

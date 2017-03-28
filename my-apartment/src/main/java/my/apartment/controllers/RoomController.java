@@ -22,17 +22,39 @@ public class RoomController {
         ModelAndView modelAndView = new ModelAndView("room/room_index/room_index");
         
         JSONObject resultGetBuilding = this.getBuilding();
+        JSONArray jsonArrayBuilding = new JSONArray(resultGetBuilding.get("data").toString());
         
-        JSONArray jasonArrayBuilding = new JSONArray(resultGetBuilding.get("data").toString());
-        
+        JSONObject resultGetRoomStatus = this.getRoomStatus();
+        JSONArray jsonArrayRoomStatus = new JSONArray(resultGetRoomStatus.get("data").toString());
         /*for(Integer i = 0; i < ja.length(); i ++) {
             System.out.println(ja.getJSONObject(i));
         }*/
 
-        modelAndView.addObject("buildingList", jasonArrayBuilding);
+        modelAndView.addObject("buildingList", jsonArrayBuilding);
         modelAndView.addObject("buildingIdString", CommonUtils.nullToStringEmpty(buildingId));
-        
+        modelAndView.addObject("roomStatusList", jsonArrayRoomStatus);
+            
         return modelAndView;
+    }
+    
+    private JSONObject getRoomStatus() {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            
+            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "room_status/get_all", String.class);
+            
+            jsonObjectReturn = new JSONObject(resultWs);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+        }
+        
+        return jsonObjectReturn;
     }
     
     private JSONObject getBuilding() {

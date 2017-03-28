@@ -2,3 +2,18 @@
     width: 200px;
     margin: auto;
 }
+
+form[name="room_form"] [name="room_no"]/*, 
+form[name="room_form"] [name="name"]*/
+ {
+    width: 100px;
+}
+
+form[name="room_form"] [name="floor_seq"],
+form[name="room_form"] [name="room_status_id"] {
+    width: 150px;
+}
+
+form[name="room_form"] [name="price_per_month"] {
+    width: 200px;
+}
