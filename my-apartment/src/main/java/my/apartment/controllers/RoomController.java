@@ -55,10 +55,10 @@ public class RoomController {
             
             jsonObjectReturn = new JSONObject(resultWs);
             
-            if(CommonUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
+            /*if(CommonUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
                 jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
                     .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
-            }
+            }*/
         }
         catch(Exception e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_ */
+/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_ */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -37,22 +37,31 @@ var page = (function() {
         getRoom: function() {
             var buildingList = _getBuildingListElement();
             var buildingId = buildingList.val();
+            var contentBox = page.getElement.getContentBox();
             
             if(!app.valueUtils.isEmptyValue(buildingId)) {
-                jQuery.ajax({
-                    type: 'get',
-                    url: _CONTEXT_PATH_ + '/room_get_by_building_id.html',
-                    data: {
-                        building_id: buildingId
-                    },
-                    cache: false,
-                    success: function(response) {
-                        response = app.convertToJsonObject(response);
-                    },
-                    error: function() {
-                        app.alertSomethingError();
-                    }
-                });
+                app.loadingInElement('show', contentBox);
+                
+                setTimeout(function() {
+                    jQuery.ajax({
+                        type: 'get',
+                        url: _CONTEXT_PATH_ + '/room_get_by_building_id.html',
+                        data: {
+                            building_id: buildingId
+                        },
+                        cache: false,
+                        success: function(response) {
+                            response = app.convertToJsonObject(response);
+
+                            app.loadingInElement('remove', contentBox);
+                        },
+                        error: function() {
+                            app.loadingInElement('remove', contentBox);
+
+                            app.alertSomethingError();
+                        }
+                    });
+                }, _DELAY_PROCESS_);
             }
         },
         getElement: {
@@ -61,6 +70,9 @@ var page = (function() {
             },
             getBuildingListElement: function() {
                 return _getBuildingListElement();
+            },
+            getContentBox: function() {
+                return jQuery('.box-primary');
             }
         },
         showRoomDetail: function(type, roomId) {
