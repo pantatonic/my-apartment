@@ -267,7 +267,7 @@ public class BuildingDaoImpl implements BuildingDao {
             ps.setBigDecimal(11, building.getMinWaterCharge());
             
             if (building.getId() != null) {
-                /** insert process */
+                /** update process */
                 
                 ps.setInt(12, building.getId());
             }

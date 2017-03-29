@@ -2,6 +2,8 @@ package my.apartment.common;
 
 public class CommonString {
     
+    public static final String UTF8_STRING = "UTF8";
+    
     public static final String RESULT_STRING = "result";
     public static final String SUCCESS_STRING = "success";
     public static final String ERROR_STRING = "error";

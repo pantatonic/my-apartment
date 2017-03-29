@@ -54,7 +54,7 @@ public class BuildingController {
             headers.setContentType(mediaType);
 
             HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "building/building_save", entity, String.class, "UTF8");
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "building/building_save", entity, String.class, CommonString.UTF8_STRING);
             
             JSONObject resultWsJsonObject = new JSONObject(resultWs);
             

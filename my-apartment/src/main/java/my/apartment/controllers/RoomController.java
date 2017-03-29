@@ -6,7 +6,12 @@ import my.apartment.common.CommonUtils;
 import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -90,6 +95,39 @@ public class RoomController {
                 jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
                     .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
             }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/room_save.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String roomSave(@RequestBody MultiValueMap<String, String> formData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            String[] keyToCleanValue = {
+                "price_per_month"
+            };
+            
+            RestTemplate restTemplate = new RestTemplate();
+            String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData,keyToCleanValue).toString();
+            HttpHeaders headers = new HttpHeaders();
+            MediaType mediaType = CommonUtils.jsonMediaType();
+            headers.setContentType(mediaType);
+            
+            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_save", entity, String.class, CommonString.UTF8_STRING);
+            
+            JSONObject resultWsJsonObject = new JSONObject(resultWs);
+            
+            jsonObjectReturn = resultWsJsonObject;            
         }
         catch(Exception e) {
             e.printStackTrace();

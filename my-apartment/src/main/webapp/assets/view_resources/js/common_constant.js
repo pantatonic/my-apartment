@@ -12,3 +12,5 @@ var BUILDING_HAS_ANY_DATA = 'BUILDING_HAS_ANY_DATA';
 
 var INPUT_ERROR_CLASS = 'my-input-error';
 var REQUIRED_CLASS = 'my-required-field';
+
+var EDIT_ANIMATED_CLASS = 'jello';

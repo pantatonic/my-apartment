@@ -6,8 +6,10 @@ import my.apartment.model.Room;
 
 public interface RoomDao {
     
-    List<Room> getByBuildingId(Integer buildingId);
+    public List<Room> getByBuildingId(Integer buildingId);
     
-    List<Room> getById(Integer roomId);
+    public List<Room> getById(Integer roomId);
+    
+    public Room save(Room room);
     
 }

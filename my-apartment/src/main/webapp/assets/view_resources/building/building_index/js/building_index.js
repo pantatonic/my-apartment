@@ -1,4 +1,4 @@
-/* global modalBuildingDetail, app, _CONTEXT_PATH_, _DELAY_PROCESS_, alertUtil, BUILDING_HAS_ANY_DATA */
+/* global modalBuildingDetail, app, _CONTEXT_PATH_, _DELAY_PROCESS_, alertUtil, BUILDING_HAS_ANY_DATA, EDIT_ANIMATED_CLASS */
 
 var latestBuildingIdProcess = null;
 
@@ -197,7 +197,7 @@ var boxBuilding = (function() {
                                 }
                             });
                             
-                            app.setAnimateCustom(boxBuildingToAnimate, 'jello');
+                            app.setAnimateCustom(boxBuildingToAnimate, EDIT_ANIMATED_CLASS);
                         }
                     };
 

@@ -1,4 +1,6 @@
-/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, SUCCESS_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS */
+/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, SUCCESS_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, EDIT_ANIMATED_CLASS */
+
+var latestRoomIdProcess = null;
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -34,10 +36,16 @@ var page = (function() {
                 page.getRoom();
             });
             
-            jQuery('#box-room-container').on('click', '.box-room', function() {
+            page.getElement.getBoxRoomContainer().on('click', '.box-room', function() {
                 var thisElement = jQuery(this);
                 
                 page.showRoomDetail('edit', thisElement.attr('data-id'));
+            });
+            
+            page.getElement.getBoxRoomContainer().on('click', '.button-delete', function() {
+                var thisElement = jQuery(this);
+                
+                alert('to delete room');
             });
             
             modalRoomDetail.getForm().submit(function(e) {
@@ -119,7 +127,18 @@ var page = (function() {
                             //boxRoomElement_.find('.button-room').attr('data-id', currentData.id);
                         };
                         var __setAnimateBoxRoom = function() {
-                            
+                            if(latestRoomIdProcess != null) {
+                                var boxRoomToAnimate = jQuery('.box-room').filter(function() {
+                                    if(latestRoomIdProcess.toString() == jQuery(this).attr('data-id')) {
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                });
+
+                                app.setAnimateCustom(boxRoomToAnimate, EDIT_ANIMATED_CLASS);
+                            }
                         };
                         
                         boxRoomContainer.html(html);
@@ -137,7 +156,7 @@ var page = (function() {
                         if(roomData.length == 0) {
                             page.boxRoomContainer.noDataFound();
                         }
-                        
+
                         app.loadingInElement('remove', contentBox);
                         
                         __setAnimateBoxRoom();
@@ -191,6 +210,7 @@ var page = (function() {
                 if(type == 'add') {
                     app.clearFormData(modalRoomDetail.getForm());
                     modalRoomDetail.clearInputId();
+                    modalRoomDetail.setBuildingId();
                     
                     modalRoomDetail.getModal().modal('show');
                     
@@ -230,6 +250,14 @@ var modalRoomDetail = (function() {
         },
         getForm: function() {
             return _getForm();
+        },
+        setBuildingId: function() {
+            var buildingList = page.getElement.getBuildingListElement();
+            var form_ = modalRoomDetail.getForm();
+            
+            if(!app.valueUtils.isEmptyValue(buildingList.val())) {
+                form_.find('[name="building_id"]').val(buildingList.val());
+            }
         },
         clearInputId: function() {
             var form = _getForm();
@@ -357,7 +385,35 @@ var modalRoomDetail = (function() {
                     data: form_.serialize(),
                     cache: false,
                     success: function(response) {
+                        response = app.convertToJsonObject(response);
                         
+                        if(response.result === SUCCESS_STRING) {
+                            app.showNotice({
+                                message: app.translate('common.save_success'),
+                                type: response.result
+                            });
+                            
+                            if(response.id != undefined) {
+                                form_.find('[name="id"]').val(response.id);
+                                latestRoomIdProcess = response.id;
+                            }
+                            
+                            modal.modal('hide');
+                            page.getRoom();
+                        }
+                        else {
+                            if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                            }
+                            else {
+                                app.showNotice({
+                                    message: app.translate('common.processing_failed'),
+                                    type: response.result
+                                });
+                            }
+                        }
+                        
+                        submitButton.bootstrapBtn('reset');
                     },
                     error: function() {
                         app.alertSomethingError();
