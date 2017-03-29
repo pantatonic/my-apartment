@@ -29,7 +29,7 @@
                         <div class="col-sm-9">
                             <input type="hidden" name="id" value="">
                             <input type="hidden" name="building_id" value="">
-                            <input type="text" name="room_no" class="form-control" 
+                            <input type="text" name="room_no" class="form-control my-required-field" 
                                    placeholder="<spring:message code="room.room_no" />" 
                                    autocomplete="off">
                         </div>
@@ -49,7 +49,7 @@
                             <spring:message code="room.floor" />
                         </label>
                         <div class="col-sm-9">
-                            <select name="floor_seq" class="form-control">
+                            <select name="floor_seq" class="form-control my-required-field">
                                 <option value=""> -- <spring:message code="room.select_floor" /> -- </option>
                                 <c:forEach var="i" begin="1" step="1" end="100">
                                     <option value="${i}">${i}</option>
@@ -62,7 +62,7 @@
                             <spring:message code="room.price_per_month" />
                         </label>
                         <div class="col-sm-9">
-                            <input type="text" name="price_per_month" class="form-control" 
+                            <input type="text" name="price_per_month" class="form-control my-required-field number-decimal-separate" 
                                    placeholder="<spring:message code="room.price_per_month" />" 
                                    autocomplete="off">
                         </div>
@@ -73,7 +73,7 @@
                         </label>
                         <div class="col-sm-9">
                             
-                            <select name="room_status_id" class="form-control">
+                            <select name="room_status_id" class="form-control my-required-field">
                                 <option value=""> -- <spring:message code="common.please_select_data" /> -- </option>
                                 <c:forEach begin="0" end="${roomStatusList.length() - 1}" var="index">
                                     <option value="${roomStatusList.getJSONObject(index).getInt("id")}">
