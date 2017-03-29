@@ -59,6 +59,32 @@ public class RoomResource {
         
         return jsonObjectReturn.toString();
     }
+    
+    @Path("room_get_by_id/{room_id}")
+    @GET
+    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    public String roomGetById(
+            @PathParam("room_id") Integer roomId
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            List<Room> rooms = roomDaoImpl.getById(roomId);
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
+                    .put(CommonString.DATA_STRING, rooms);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
 
     /**
      * PUT method for updating or creating an instance of RoomResource

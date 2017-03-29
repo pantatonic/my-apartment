@@ -9,7 +9,6 @@
 <tiles:insertDefinition name="defaultTemplate">
     <spring:message code="building.room" var="msgPageTitle" /> 
     <tiles:putAttribute name="title" value="${msgPageTitle}" />
-    <tiles:putAttribute name="title" value="Test Tiles" />
     <tiles:putAttribute name="css">
         <link rel="stylesheet" 
            href="<c:url value="/assets/view_resources/room/room_index/css/room_index.css?v=${randomTextVersion}"/>">

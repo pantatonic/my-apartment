@@ -8,4 +8,6 @@ public interface RoomDao {
     
     List<Room> getByBuildingId(Integer buildingId);
     
+    List<Room> getById(Integer roomId);
+    
 }

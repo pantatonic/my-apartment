@@ -70,6 +70,37 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    @RequestMapping(value = "/room_get_by_id.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String roomGetById(
+            @RequestParam(value = "id", required = true) String id,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonUtils.setResponseHeader(response);
+        
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "room/room_get_by_id/" + id, String.class);
+            
+            jsonObjectReturn = new JSONObject(resultWs);
+            
+            if(CommonUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
+                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
     private JSONObject getRoomStatus() {
         JSONObject jsonObjectReturn = new JSONObject();
         

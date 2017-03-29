@@ -1,4 +1,4 @@
-/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_ */
+/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, SUCCESS_STRING, DATA_NOT_FOUND_STRING */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -32,6 +32,12 @@ var page = (function() {
             
             jQuery('.refresh-room-list').click(function() {
                 page.getRoom();
+            });
+            
+            jQuery('#box-room-container').on('click', '.box-room', function() {
+                var thisElement = jQuery(this);
+                
+                page.showRoomDetail('edit', thisElement.attr('data-id'));
             });
         },
         setBuildingList: function() {
@@ -181,7 +187,7 @@ var page = (function() {
                     modalRoomDetail.getModal().modal('show');
                 }
                 else {
-
+                    modalRoomDetail.getRoomDetail(roomId);
                 }
             }
             else {
@@ -214,6 +220,52 @@ var modalRoomDetail = (function() {
         },
         getForm: function() {
             return _getForm();
+        },
+        getRoomDetail: function(roomId) {
+            app.loading('show');
+            
+            setTimeout(function() {
+                jQuery.ajax({
+                    type: 'get',
+                    url: _CONTEXT_PATH_ + '/room_get_by_id.html',
+                    data: {
+                        id: roomId
+                    },
+                    cache: false,
+                    success: function(response) {
+                        response = app.convertToJsonObject(response);
+                        
+                        app.loading('remove');
+                        
+                        if(response.result == SUCCESS_STRING) {
+                            
+                        }
+                        else {
+                            if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                            }
+                            else
+                            if(response.message == DATA_NOT_FOUND_STRING) {
+                                app.showNotice({
+                                    message: app.translate('common.data_not_found'),
+                                    type: response.result
+                                });
+                            }
+                            else {
+                                app.showNotice({
+                                    message: app.translate('common.processing_failed'),
+                                    type: response.result
+                                });
+                            }
+                        }
+                    },
+                    error: function() {
+                        app.alertSomethingError();
+                        
+                        app.loading('remove');
+                    }
+                });
+            }, _DELAY_PROCESS_);
         }
     };
 })();

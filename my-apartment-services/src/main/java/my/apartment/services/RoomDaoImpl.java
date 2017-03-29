@@ -76,4 +76,61 @@ public class RoomDaoImpl implements RoomDao {
         return rooms;
     }
     
+    @Override
+    public List<Room> getById(Integer id) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<Room> rooms = new ArrayList<Room>();
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+            
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String stringQuery = "SELECT * FROM room WHERE id = ?";
+
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            
+            if(rs.next()) {
+                Room room = new Room();
+                
+                room.setId(rs.getInt("id"));
+                room.setBuildingId(rs.getInt("building_id"));
+                room.setFloorSeq(rs.getInt("floor_seq"));
+                room.setRoomNo(rs.getString("room_no"));
+                room.setName(rs.getString("name"));
+                room.setPricePerMonth(rs.getBigDecimal("price_per_month"));
+                room.setRoomStatusId(rs.getInt("room_status_id"));
+                
+                rooms.add(room);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return rooms;
+    }
+    
 }

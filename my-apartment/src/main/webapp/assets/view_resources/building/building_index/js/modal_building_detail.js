@@ -101,7 +101,6 @@ var modalBuildingDetail = (function() {
                                 });
                             }
                         }
-                       
                     },
                     error: function() {
                         app.alertSomethingError();
