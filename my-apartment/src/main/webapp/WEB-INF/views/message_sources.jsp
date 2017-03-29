@@ -54,6 +54,9 @@
     
     "building.meter_digit_must_more_than_zero":"<spring:message code="building.meter_digit_must_more_than_zero" />",
     "building.select_building":"<spring:message code="building.select_building" />",
+    
+    "building.cannot_delete_building_has_any_data":"<spring:message code="building.cannot_delete_building_has_any_data" />",
+    
     "common.data_not_found":"<spring:message code="common.data_not_found" />",
     
     "building.room":"<spring:message code="building.room" />",

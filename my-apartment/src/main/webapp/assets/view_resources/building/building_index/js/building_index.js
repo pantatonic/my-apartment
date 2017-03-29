@@ -1,4 +1,4 @@
-/* global modalBuildingDetail, app, _CONTEXT_PATH_, _DELAY_PROCESS_, alertUtil */
+/* global modalBuildingDetail, app, _CONTEXT_PATH_, _DELAY_PROCESS_, alertUtil, BUILDING_HAS_ANY_DATA */
 
 var latestBuildingIdProcess = null;
 
@@ -118,10 +118,18 @@ var boxBuilding = (function() {
                         });
                     }
                     else {
-                        app.showNotice({
-                            message: app.translate('common.processing_failed'),
-                            type: response.result
-                        });
+                        if(response.message == BUILDING_HAS_ANY_DATA) {
+                            app.showNotice({
+                                message: app.translate('building.cannot_delete_building_has_any_data'),
+                                type: response.result
+                            });
+                        }
+                        else {
+                            app.showNotice({
+                                message: app.translate('common.processing_failed'),
+                                type: response.result
+                            });
+                        }
                     }
 
                     buttonDelete.bootstrapBtn('reset');

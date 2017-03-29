@@ -50,18 +50,34 @@
                                 </option>
                             </c:forEach>
                         </select>
-                            
-                        <hr>
-                        
+
+                        <div id="box-room-container"></div>
                     </div>
 
                     <div class="box-footer">
-                        
+                        &nbsp;
                     </div>
                 </div>
 
             </section>
         </div>     
+                            
+        <textarea id="box-room-template">
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2 box-room_">
+                <div class="box-room hover-box">
+                    <i class="fa fa-bed room-icon"></i>
+                    <div class="clearfix"></div>
+                    <span class="label label-room-status">Default Label</span>
+                    <div class="box-room-name"></div>
+                    
+                </div>
+                
+                <div class="clearfix"></div>
+                
+                <spring:message code="common.delete" var="msgDeleteRoom" />
+                ${commonHtml.getDeleteButton(msgDeleteRoom, msgNowProcessing)}
+            </div>
+        </textarea>
 
         <jsp:include page="room_detail.jsp" flush="true" />
                             

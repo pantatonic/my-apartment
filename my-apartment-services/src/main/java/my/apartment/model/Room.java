@@ -15,11 +15,13 @@ public class Room implements Serializable {
     private String name;
     private BigDecimal pricePerMonth;
     private Integer roomStatusId;
+    
+    private String roomStatusText;
 
     public Room() {
     }
 
-    public Room(Integer id, Integer buildingId, Integer floorSeq, String roomNo, String name, BigDecimal pricePerMonth, Integer roomStatusId) {
+    public Room(Integer id, Integer buildingId, Integer floorSeq, String roomNo, String name, BigDecimal pricePerMonth, Integer roomStatusId, String roomStatusText) {
         this.id = id;
         this.buildingId = buildingId;
         this.floorSeq = floorSeq;
@@ -27,6 +29,7 @@ public class Room implements Serializable {
         this.name = name;
         this.pricePerMonth = pricePerMonth;
         this.roomStatusId = roomStatusId;
+        this.roomStatusText = roomStatusText;
     }
 
     public Integer getId() {
@@ -85,9 +88,17 @@ public class Room implements Serializable {
         this.roomStatusId = roomStatusId;
     }
 
+    public String getRoomStatusText() {
+        return roomStatusText;
+    }
+
+    public void setRoomStatusText(String roomStatusText) {
+        this.roomStatusText = roomStatusText;
+    }
+
     @Override
     public String toString() {
-        return "Room{" + "id=" + id + ", buildingId=" + buildingId + ", floorSeq=" + floorSeq + ", roomNo=" + roomNo + ", name=" + name + ", pricePerMonth=" + pricePerMonth + ", roomStatusId=" + roomStatusId + '}';
+        return "Room{" + "id=" + id + ", buildingId=" + buildingId + ", floorSeq=" + floorSeq + ", roomNo=" + roomNo + ", name=" + name + ", pricePerMonth=" + pricePerMonth + ", roomStatusId=" + roomStatusId + ", roomStatusText=" + roomStatusText + '}';
     }
-    
+
 }

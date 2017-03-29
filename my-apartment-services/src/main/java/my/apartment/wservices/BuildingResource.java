@@ -22,6 +22,9 @@ import my.apartment.services.BuildingDao;
 import my.apartment.services.BuildingDaoImpl;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonUtils;
+import my.apartment.model.Room;
+import my.apartment.services.RoomDao;
+import my.apartment.services.RoomDaoImpl;
 import org.json.JSONObject;
 
 
@@ -111,9 +114,16 @@ public class BuildingResource {
             }
             else {
                 /**
-                 * TODO : check building data (example: floor, room) 
+                 * TODO : check building data (example: room) 
                  * if have data not allow to delete
                  */
+                if(this.getRoomNumberInBuilding(buildingId) > 0) {
+                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                        .put(CommonString.MESSAGE_STRING, CommonString.BUILDING_HAS_ANY_DATA_STRING);
+                    
+                    return jsonObjectReturn.toString();
+                }
+                
                 
                 Boolean resultDelete = buildingDaoImpl.deleteById(buildingId);
                 
@@ -122,7 +132,7 @@ public class BuildingResource {
                         .put(CommonString.DATA_STRING, CommonString.DELETE_DATA_SUCCESS_STRING);
                 }
                 else {
-                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
+                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
                         .put(CommonString.DATA_STRING, CommonString.PROCESSING_FAILED_STRING);
                 }
             }
@@ -201,5 +211,24 @@ public class BuildingResource {
         }
         
         return jsonObjectReturn.toString();
+    }
+    
+    private Integer getRoomNumberInBuilding(Integer buildingId) {
+        Integer resultInteger = 0;
+        
+        try {
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+                
+            List<Room> rooms = roomDaoImpl.getByBuildingId(buildingId);
+            
+            if(rooms.size() > 0) {
+                resultInteger = rooms.size();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return resultInteger;
     }
 }

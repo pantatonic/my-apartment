@@ -14,5 +14,6 @@ public class CommonString {
     public static final String DELETE_DATA_SUCCESS_STRING = "DELETE_DATA_SUCCESS";
     public static final String DATA_ALREADY_DELETE_STRING = "DATA_ALREADY_DELETE";
     public static final String PROCESSING_FAILED_STRING = "PROCESSING_FAILED";
+    public static final String BUILDING_HAS_ANY_DATA_STRING = "BUILDING_HAS_ANY_DATA";
     
 }

@@ -28,7 +28,9 @@ public class RoomDaoImpl implements RoomDao {
             
             con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
             
-            String stringQuery = "SELECT * FROM room WHERE building_id = ?";
+            String stringQuery = "SELECT * "
+                    + "FROM room JOIN room_status ON room.room_status_id = room_status.id "
+                    + "WHERE building_id = ?";
             
             ps = con.prepareStatement(stringQuery);
             ps.setInt(1, buildingId);
@@ -44,6 +46,8 @@ public class RoomDaoImpl implements RoomDao {
                 room.setName(rs.getString("name"));
                 room.setPricePerMonth(rs.getBigDecimal("price_per_month"));
                 room.setRoomStatusId(rs.getInt("room_status_id"));
+                
+                room.setRoomStatusText(rs.getString("status"));
                 
                 rooms.add(room);
             }
