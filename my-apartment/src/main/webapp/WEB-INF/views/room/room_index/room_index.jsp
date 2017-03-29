@@ -37,8 +37,18 @@
             <section class="content">
                 <div class="box box-primary">
                     <div class="box-header with-border">
+                        <h3 class="box-title">
+                            &nbsp;
+                        </h3>
                         <spring:message code="room.add_room" var="msgAddRoom" />
                         ${commonHtml.getAddButton(msgAddRoom)}
+                        
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool refresh-room-list"
+                                title="">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="box-body">

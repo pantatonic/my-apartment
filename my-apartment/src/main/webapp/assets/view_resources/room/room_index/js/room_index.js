@@ -29,6 +29,10 @@ var page = (function() {
             page.getElement.getAddButton().click(function() {
                 page.showRoomDetail();
             });
+            
+            jQuery('.refresh-room-list').click(function() {
+                page.getRoom();
+            });
         },
         setBuildingList: function() {
             if(!app.valueUtils.isEmptyValue(buildingIdString)) {
