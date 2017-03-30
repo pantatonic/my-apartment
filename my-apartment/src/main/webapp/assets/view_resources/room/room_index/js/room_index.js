@@ -1,4 +1,4 @@
-/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, SUCCESS_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, EDIT_ANIMATED_CLASS, DATA_DUPLICATED_STRING */
+/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, SUCCESS_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, EDIT_ANIMATED_CLASS, DATA_DUPLICATED_STRING, alertUtil, HAS_ANY_DATA_STRING */
 
 var latestRoomIdProcess = null;
 
@@ -10,6 +10,56 @@ jQuery(document).ready(function() {
 var page = (function() {
     var _getBuildingListElement = function() {
         return jQuery('#building-list');
+    };
+    
+    var _deleteRoom = function(buttonDelete) {
+        var id = buttonDelete.attr('data-id');
+      
+        buttonDelete.bootstrapBtn('loading');
+        
+        setTimeout(function() {
+            jQuery.ajax({
+                type: 'post',
+                url: _CONTEXT_PATH_ + '/room_delete_by_id.html',
+                data: {
+                    id: id
+                },
+                cache: false,
+                success: function(response) {
+                    response = app.convertToJsonObject(response);
+                    
+                    if(response.result == SUCCESS_STRING) {
+                        app.showNotice({
+                            message: app.translate('common.delete_success'),
+                            type: response.result
+                        });
+                    }
+                    else {
+                        if(response.message == HAS_ANY_DATA_STRING) {
+                            app.showNotice({
+                                message: app.translate('room.cannot_delete_room_has_any_data'),
+                                type: response.result
+                            });
+                        }
+                        else {
+                            app.showNotice({
+                                message: app.translate('common.processing_failed'),
+                                type: response.result
+                            });
+                        }
+                    }
+                    
+                    buttonDelete.bootstrapBtn('reset');
+
+                    page.getRoom();
+                },
+                error: function() {
+                    app.alertSomethingError();
+
+                    buttonDelete.bootstrapBtn('reset');
+                }
+            });
+        }, _DELAY_PROCESS_);
     };
     
     return {
@@ -45,7 +95,7 @@ var page = (function() {
             page.getElement.getBoxRoomContainer().on('click', '.button-delete', function() {
                 var thisElement = jQuery(this);
                 
-                alert('to delete room');
+                page.deleteRoom(thisElement);
             });
             
             modalRoomDetail.getForm().submit(function(e) {
@@ -81,6 +131,16 @@ var page = (function() {
             
                 page.getElement.getBoxRoomContainer().html(html);
             }
+        },
+        deleteRoom: function(buttonDelete) {
+            alertUtil.confirmAlert(app.translate('common.please_confirm_to_process'), function() {
+                _deleteRoom(buttonDelete);
+            }, function() {
+                
+            },{
+                animation: false,
+                type: null
+            });
         },
         getRoom: function() {
             var buildingList = _getBuildingListElement();

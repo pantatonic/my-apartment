@@ -1,10 +1,12 @@
 package my.apartment.wservices;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
@@ -168,6 +170,51 @@ public class RoomResource {
         }
         
         return jsonObjectReturn.toString();
+    }
+    
+    @Path("room_delete_by_id")
+    @POST
+    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    public String roomDeleteById(
+            @FormParam("room_id") Integer roomId
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            List<Room> rooms = roomDaoImpl.getById(roomId);
+            
+            if(rooms.isEmpty()) {
+                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_ALREADY_DELETE_STRING);
+            }
+            else {
+                /**
+                 * TODO : check room data (example: invoice) 
+                 * if have data not allow to delete
+                 */
+                
+                Boolean resultDelete = roomDaoImpl.deleteById(roomId);
+                
+                if(resultDelete == Boolean.TRUE) {
+                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
+                        .put(CommonString.MESSAGE_STRING, CommonString.DELETE_DATA_SUCCESS_STRING);
+                }
+                else {
+                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                        .put(CommonString.MESSAGE_STRING, CommonString.PROCESSING_FAILED_STRING);
+                }
+            }
+            
+        }
+        catch(Exception e) {
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+        }
+        
+        return jsonObjectReturn.toString();
+        
     }
 
     /**

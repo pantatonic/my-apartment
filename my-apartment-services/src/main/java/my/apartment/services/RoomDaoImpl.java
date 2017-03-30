@@ -296,4 +296,53 @@ public class RoomDaoImpl implements RoomDao {
         return isDuplicated;
     }
     
+    @Override
+    public Boolean deleteById(Integer roomId) {
+        Boolean resultDelete = Boolean.TRUE;
+        
+        Connection con = null;
+        PreparedStatement ps = null;
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+
+            String querysString = "DELETE FROM room WHERE id = ?";
+            
+            ps = con.prepareStatement(querysString);
+            ps.setInt(1, roomId);
+            
+            Integer effectRow = ps.executeUpdate();
+
+            if (effectRow == 0) {
+                resultDelete = Boolean.FALSE;
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            resultDelete = Boolean.FALSE;
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return resultDelete;
+    }
+    
 }

@@ -14,4 +14,6 @@ public interface RoomDao {
     
     public Boolean checkRoomNoDuplicated(Room room);
     
+    public Boolean deleteById(Integer roomId);
+    
 }

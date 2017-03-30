@@ -73,6 +73,7 @@
     "room.status":"<spring:message code="room.status" />",
     
     "room.select_floor":"<spring:message code="room.select_floor" />",
-    "room.room_no_is_duplicated":"<spring:message code="room.room_no_is_duplicated" />"
+    "room.room_no_is_duplicated":"<spring:message code="room.room_no_is_duplicated" />",
+    "room.cannot_delete_room_has_any_data":"<spring:message code="room.cannot_delete_room_has_any_data" />"
     }
 </div>

@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -179,6 +180,36 @@ public class RoomController {
             JSONObject resultWsJsonObject = new JSONObject(resultWs);
             
             jsonObjectReturn = resultWsJsonObject;            
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/room_delete_by_id.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String roomDeleteById(
+            @RequestParam(value = "id", required = true) String id,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonUtils.setResponseHeader(response);
+        
+        try {
+            MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
+            parametersMap.add("room_id", id);
+            
+            RestTemplate restTemplate = new RestTemplate();
+             
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_delete_by_id", parametersMap, String.class);
+            
+            jsonObjectReturn = new JSONObject(resultWs);
         }
         catch(Exception e) {
             e.printStackTrace();

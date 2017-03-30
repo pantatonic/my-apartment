@@ -145,9 +145,9 @@ public class BuildingController {
             jsonObjectReturn = new JSONObject(resultWs);
         }
         catch(Exception e) {
-             e.printStackTrace();
+            e.printStackTrace();
              
-             jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
                     .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
         }
         

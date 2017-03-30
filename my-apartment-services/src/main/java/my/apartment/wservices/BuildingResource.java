@@ -129,11 +129,11 @@ public class BuildingResource {
                 
                 if(resultDelete == Boolean.TRUE) {
                     jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                        .put(CommonString.DATA_STRING, CommonString.DELETE_DATA_SUCCESS_STRING);
+                        .put(CommonString.MESSAGE_STRING, CommonString.DELETE_DATA_SUCCESS_STRING);
                 }
                 else {
                     jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.DATA_STRING, CommonString.PROCESSING_FAILED_STRING);
+                        .put(CommonString.MESSAGE_STRING, CommonString.PROCESSING_FAILED_STRING);
                 }
             }
         }
