@@ -1,4 +1,4 @@
-/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, SUCCESS_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, EDIT_ANIMATED_CLASS */
+/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, SUCCESS_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, EDIT_ANIMATED_CLASS, DATA_DUPLICATED_STRING */
 
 var latestRoomIdProcess = null;
 
@@ -195,6 +195,9 @@ var page = (function() {
             },
             getBoxRoomContainer: function() {
                 return jQuery('#box-room-container');;
+            },
+            getModalRoomNo: function() {
+                return modalRoomDetail.getForm().find('[name="room_no"]');
             }
         },
         showRoomDetail: function(type, roomId) {
@@ -403,6 +406,17 @@ var modalRoomDetail = (function() {
                             page.getRoom();
                         }
                         else {
+                            if(response.message == DATA_DUPLICATED_STRING) {
+                                app.showNotice({
+                                    message: app.translate('room.room_no_is_duplicated'),
+                                    type: response.result
+                                });
+                                
+                                page.getElement.getModalRoomNo()
+                                        .focus()
+                                        .addClass(INPUT_ERROR_CLASS);
+                            }
+                            else 
                             if(response.message == SESSION_EXPIRE_STRING) {
                                 app.alertSessionExpired();
                             }

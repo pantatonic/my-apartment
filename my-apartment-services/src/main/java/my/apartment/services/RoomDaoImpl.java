@@ -232,4 +232,68 @@ public class RoomDaoImpl implements RoomDao {
         return roomReturn;
     }
     
+    @Override
+    public Boolean checkRoomNoDuplicated(Room room) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Boolean isDuplicated = Boolean.FALSE;
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+        
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String aliasFieldCount = "count_row";
+
+            String stringQuery = "SELECT COUNT(id) AS " + aliasFieldCount + " "
+                    + "FROM room "
+                    + "WHERE room_no = ? " //1
+                        + "AND building_id = ? "; //2
+            
+            if (room.getId() != null) {
+                stringQuery += "AND id != ?"; //3
+            }
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setString(1, room.getRoomNo());
+            ps.setInt(2, room.getBuildingId());
+            
+            if (room.getId() != null) {
+                ps.setInt(3, room.getId());
+            }
+            
+            rs = ps.executeQuery();
+            
+            if(rs.next()) {
+                if(rs.getInt(aliasFieldCount) > 0) {
+                    isDuplicated = Boolean.TRUE;
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return isDuplicated;
+    }
+    
 }

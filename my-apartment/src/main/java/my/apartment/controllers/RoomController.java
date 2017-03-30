@@ -19,9 +19,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+
 @Controller
 public class RoomController {
     
+    /**
+     * 
+     * @param buildingId
+     * @return 
+     */
     @RequestMapping(value = "/room.html", method = {RequestMethod.GET})
     public ModelAndView roomIndex(
             @RequestParam(value = "building_id", required = false) String buildingId
@@ -44,6 +50,12 @@ public class RoomController {
         return modelAndView;
     }
     
+    /**
+     * 
+     * @param buildingId
+     * @param response
+     * @return 
+     */
     @RequestMapping(value = "/room_get_by_building_id.html", method = {RequestMethod.GET})
     @ResponseBody
     public String roomGetByBuildingId(
@@ -75,6 +87,12 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param id
+     * @param response
+     * @return 
+     */
     @RequestMapping(value = "/room_get_by_id.html", method = {RequestMethod.GET})
     @ResponseBody
     public String roomGetById(
@@ -106,6 +124,11 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param formData
+     * @return 
+     */
     @RequestMapping(value = "/room_save.html", method = {RequestMethod.POST})
     @ResponseBody
     public String roomSave(@RequestBody MultiValueMap<String, String> formData) {
@@ -135,6 +158,14 @@ public class RoomController {
                 return jsonObjectReturn.toString();
             }
             
+            /** validate room_no duplicated */
+            JSONObject resultCheckRoomNoDuplicated = this.checkRoomNoDuplicated(formData);
+            if(resultCheckRoomNoDuplicated.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
+                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                        .put(CommonString.MESSAGE_STRING, resultCheckRoomNoDuplicated.getString(CommonString.MESSAGE_STRING));
+                
+                return jsonObjectReturn.toString();
+            }
             
             RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData,keyToCleanValue).toString();
@@ -159,6 +190,11 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param formData
+     * @return 
+     */
     private JSONObject validateRequiredRoomSave(MultiValueMap<String, String> formData) {
         String[] keyToValidate = {
             "room_no", "floor_seq", "price_per_month", "room_status_id"
@@ -169,6 +205,11 @@ public class RoomController {
         return result;
     }
     
+    /**
+     * 
+     * @param formData
+     * @return 
+     */
     private JSONObject validateNumberRoomSave(MultiValueMap<String, String> formData) {
         String[] keyToValidate = {
             "price_per_month"
@@ -178,6 +219,43 @@ public class RoomController {
         
         return result;
     }
+    
+    /**
+     * 
+     * @param formData
+     * @return 
+     */
+    private JSONObject checkRoomNoDuplicated(MultiValueMap<String, String> formData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData).toString();
+            HttpHeaders headers = new HttpHeaders();
+            MediaType mediaType = CommonUtils.jsonMediaType();
+            headers.setContentType(mediaType);
+            
+            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/check_room_no_duplicated", entity, String.class, CommonString.UTF8_STRING);
+            JSONObject jsonObjectesult = new JSONObject(resultWs);
+            
+            /** if it equal "error" */
+            if(jsonObjectesult.getString(CommonString.RESULT_STRING).equals(CommonString.ERROR_STRING)) {
+                jsonObjectReturn.put(CommonString.RESULT_VALIDATE_STRING, Boolean.FALSE)
+                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_DUPLICATED_STRING);
+            }
+            else {
+                jsonObjectReturn.put(CommonString.RESULT_VALIDATE_STRING, Boolean.TRUE)
+                        .put(CommonString.MESSAGE_STRING, "");
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return jsonObjectReturn;
+    }
+    
     
     private JSONObject getRoomStatus() {
         JSONObject jsonObjectReturn = new JSONObject();

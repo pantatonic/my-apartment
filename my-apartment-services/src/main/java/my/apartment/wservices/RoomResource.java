@@ -88,6 +88,43 @@ public class RoomResource {
         return jsonObjectReturn.toString();
     }
     
+    @Path("check_room_no_duplicated")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    public String checkRoomNoDuplicated(InputStream incomingData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            JSONObject jsonObjectReceive = CommonUtils.receiveJsonObject(incomingData);
+            
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            Room room = new Room();
+            
+            room.setId(CommonUtils.stringToInteger(jsonObjectReceive.getString("id")));
+            room.setRoomNo(jsonObjectReceive.getString("room_no"));
+            room.setBuildingId(CommonUtils.stringToInteger(jsonObjectReceive.getString("building_id")));
+            
+            Boolean result = roomDaoImpl.checkRoomNoDuplicated(room);
+            
+            if(result == Boolean.FALSE) {
+                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
+                        .put(CommonString.MESSAGE_STRING, "");
+            }
+            else {
+                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                        .put(CommonString.MESSAGE_STRING, CommonString.DATA_DUPLICATED_STRING);
+            }
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
     @Path("room_save")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

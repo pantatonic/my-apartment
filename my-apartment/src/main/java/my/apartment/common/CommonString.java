@@ -16,5 +16,7 @@ public class CommonString {
     public static final String REQUIRED_FIELD_STRING = "required_field";
     public static final String RESULT_VALIDATE_STRING = "result_validate";
     public static final String FIELD_MUST_NUMBER_STRIN = "field_must_number";
+    public static final String DATA_DUPLICATED_STRING = "DATA_DUPLICATED";
+    
 
 }

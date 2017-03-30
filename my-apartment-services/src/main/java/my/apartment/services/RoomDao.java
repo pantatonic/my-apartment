@@ -12,4 +12,6 @@ public interface RoomDao {
     
     public Room save(Room room);
     
+    public Boolean checkRoomNoDuplicated(Room room);
+    
 }

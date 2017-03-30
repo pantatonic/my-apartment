@@ -27,7 +27,7 @@ public class CommonUtils {
 
         while (iterator.hasNext()) {
             String keyString = (String) iterator.next();
-            String value = formData.getFirst(keyString);
+            String value = formData.getFirst(keyString).trim();
 
             jsonObject.put(keyString, value);
         }
@@ -42,10 +42,10 @@ public class CommonUtils {
         
         while (iterator.hasNext()) {
             String keyString = (String) iterator.next();
-            String value = formData.getFirst(keyString);
+            String value = formData.getFirst(keyString).trim();
             
             if(ArrayUtils.contains(keyToCleanValue, keyString)) {
-                value = StringUtils.remove(value, ",");
+                value = StringUtils.remove(value, ",").trim();
             }
 
             jsonObject.put(keyString, value);

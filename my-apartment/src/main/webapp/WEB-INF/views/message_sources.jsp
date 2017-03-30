@@ -72,6 +72,7 @@
     "room.price_per_month":"<spring:message code="room.price_per_month" />",
     "room.status":"<spring:message code="room.status" />",
     
-    "room.select_floor":"<spring:message code="room.select_floor" />"
+    "room.select_floor":"<spring:message code="room.select_floor" />",
+    "room.room_no_is_duplicated":"<spring:message code="room.room_no_is_duplicated" />"
     }
 </div>
