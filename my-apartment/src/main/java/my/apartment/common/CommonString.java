@@ -13,5 +13,8 @@ public class CommonString {
     public static final String DATA_NOT_FOUND_STRING = "DATA_NOT_FOUND";
     public static final String CONTROLLER_ERROR_STRING = "CONTROLLER_ERROR";
     public static final String SESSION_EXPIRE_STRING = "SESSION_EXPIRE";
+    public static final String REQUIRED_FIELD_STRING = "required_field";
+    public static final String RESULT_VALIDATE_STRING = "result_validate";
+    public static final String FIELD_MUST_NUMBER_STRIN = "field_must_number";
 
 }

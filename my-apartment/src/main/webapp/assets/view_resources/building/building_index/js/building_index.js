@@ -73,6 +73,7 @@ var page = (function() {
 
             if(type == 'add') {
                 app.clearFormData(modalBuildingDetail.getForm());
+                app.clearAllInputErrorClass(modalBuildingDetail.getModal().find('.modal-body'));
                 modalBuildingDetail.clearInputId();
                 
                 modalBuildingDetail.checkUseElectricityWater();

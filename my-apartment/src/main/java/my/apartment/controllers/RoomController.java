@@ -116,6 +116,26 @@ public class RoomController {
                 "price_per_month"
             };
             
+            
+            /** validate required field */
+            JSONObject resultValidateRequired = this.validateRequiredRoomSave(formData);
+            if(resultValidateRequired.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
+                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                        .put(CommonString.MESSAGE_STRING, resultValidateRequired.getString(CommonString.MESSAGE_STRING));
+                
+                return jsonObjectReturn.toString();
+            }
+            
+            /** validate number field */
+            JSONObject resultValidateNumber = this.validateNumberRoomSave(formData);
+            if(resultValidateNumber.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
+                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
+                        .put(CommonString.MESSAGE_STRING, resultValidateNumber.getString(CommonString.MESSAGE_STRING));
+                
+                return jsonObjectReturn.toString();
+            }
+            
+            
             RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData,keyToCleanValue).toString();
             HttpHeaders headers = new HttpHeaders();
@@ -137,6 +157,26 @@ public class RoomController {
         }
         
         return jsonObjectReturn.toString();
+    }
+    
+    private JSONObject validateRequiredRoomSave(MultiValueMap<String, String> formData) {
+        String[] keyToValidate = {
+            "room_no", "floor_seq", "price_per_month", "room_status_id"
+        };
+        
+        JSONObject result = CommonUtils.simpleValidateRequire(formData, keyToValidate);
+        
+        return result;
+    }
+    
+    private JSONObject validateNumberRoomSave(MultiValueMap<String, String> formData) {
+        String[] keyToValidate = {
+            "price_per_month"
+        };
+        
+        JSONObject result = CommonUtils.simpleValidateNumberWithComma(formData, keyToValidate);
+        
+        return result;
     }
     
     private JSONObject getRoomStatus() {

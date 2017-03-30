@@ -209,6 +209,7 @@ var page = (function() {
             if(!app.valueUtils.isEmptyValue(buildingList.val())) {
                 if(type == 'add') {
                     app.clearFormData(modalRoomDetail.getForm());
+                    app.clearAllInputErrorClass(modalRoomDetail.getForm());
                     modalRoomDetail.clearInputId();
                     modalRoomDetail.setBuildingId();
                     
@@ -271,8 +272,8 @@ var modalRoomDetail = (function() {
                 var modal = _getModal();
                 var modalBody = modal.find('.modal-body');
                 
-                //app.clearAllInputErrorClass(modalBody);
-                //app.clearFormData(modalBuildingDetail.getForm());
+                app.clearAllInputErrorClass(modalBody);
+                app.clearFormData(modalRoomDetail.getForm());
                 modalRoomDetail.clearInputId();
                 
                 for(var key in data) {
