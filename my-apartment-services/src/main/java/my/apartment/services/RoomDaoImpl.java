@@ -32,7 +32,8 @@ public class RoomDaoImpl implements RoomDao {
             
             String stringQuery = "SELECT * "
                     + "FROM room JOIN room_status ON room.room_status_id = room_status.id "
-                    + "WHERE building_id = ?";
+                    + "WHERE building_id = ? "
+                    + "ORDER BY floor_seq ASC, room_no ASC";
             
             ps = con.prepareStatement(stringQuery);
             ps.setInt(1, buildingId);
