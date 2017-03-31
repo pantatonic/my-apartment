@@ -203,15 +203,35 @@ var page = (function() {
                         
                         boxRoomContainer.html(html);
                         
+                        var latestFloorSeq = 0;
+                        var htmlFloorSeq = '';
+                        var htmlFloorSeqTemplate = function(floorSeq) {
+                            return '<div style="clear: both;"></div>'
+                                    + '<div class="floor-separate"> ' 
+                                        + app.translate('room.floor') 
+                                        + ' : ' + floorSeq +
+                                    '</div>';
+                        };
                         for(var index in roomData) {
                             var currentData = roomData[index];
-                            html = __getTemplate();
+
+                            if(latestFloorSeq != currentData.floorSeq) {
+                                htmlFloorSeq = htmlFloorSeqTemplate(currentData.floorSeq);
+                                latestFloorSeq = currentData.floorSeq;
+                            }
+                            else {
+                                htmlFloorSeq = '';
+                            }
+
+                            html = htmlFloorSeq + __getTemplate();
 
                             boxRoomContainer.append(html);
                             var currentBoxRoom = boxRoomContainer.find('.box-room').last();
                             
                             __setData(currentBoxRoom, currentData);
                         }
+                        
+                        boxRoomContainer.append('<div style="clear: both;"></div>');
                         
                         if(roomData.length == 0) {
                             page.boxRoomContainer.noDataFound();
