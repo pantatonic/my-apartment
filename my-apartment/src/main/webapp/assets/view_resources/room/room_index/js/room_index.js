@@ -299,6 +299,8 @@ var page = (function() {
                     modalRoomDetail.getModal().modal('show');
                     
                     app.modalUtils.bodyScrollTop(modalRoomDetail.getModal());
+                    
+                    modalRoomDetail.setFocusAfterOpenModal();
                 }
                 else {
                     modalRoomDetail.getRoomDetail(roomId);
@@ -349,6 +351,11 @@ var modalRoomDetail = (function() {
             form.find('[name="id"]').val('');
             form.find('[name="building_id"]').val('');
         },
+        setFocusAfterOpenModal: function() {
+            setTimeout(function() {
+                _getModal().find('[name="room_no"]').focus();
+            }, _DELAY_PROCESS_);
+        },
         getRoomDetail: function(roomId) {
             var _setData = function(response) {
                 var data = response.data[0];
@@ -367,6 +374,8 @@ var modalRoomDetail = (function() {
                 }
                 
                 modal.modal('show');
+                
+                modalRoomDetail.setFocusAfterOpenModal();
             };
             
             app.loading('show');
