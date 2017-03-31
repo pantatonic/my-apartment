@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONObject;
 
 
-public class CommonUtils {
+public class CommonWsUtils {
     
     public static final String MEDIA_TYPE_JSON = MediaType.APPLICATION_JSON  + ";charset=utf-8";
     
@@ -29,7 +29,7 @@ public class CommonUtils {
             
             jsonObject = new JSONObject(crunchifyBuilder.toString());
         } catch (IOException ex) {
-            Logger.getLogger(CommonUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CommonWsUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return jsonObject;

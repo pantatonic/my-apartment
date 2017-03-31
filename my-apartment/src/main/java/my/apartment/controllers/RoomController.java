@@ -2,7 +2,9 @@ package my.apartment.controllers;
 
 import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonString;
-import my.apartment.common.CommonUtils;
+
+
+import my.apartment.common.CommonAppUtils;
 import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,7 +47,7 @@ public class RoomController {
         }*/
 
         modelAndView.addObject("buildingList", jsonArrayBuilding);
-        modelAndView.addObject("buildingIdString", CommonUtils.nullToStringEmpty(buildingId));
+        modelAndView.addObject("buildingIdString", CommonAppUtils.nullToStringEmpty(buildingId));
         modelAndView.addObject("roomStatusList", jsonArrayRoomStatus);
             
         return modelAndView;
@@ -65,7 +67,7 @@ public class RoomController {
     ) {
         JSONObject jsonObjectReturn = new JSONObject();
         
-        CommonUtils.setResponseHeader(response);
+        CommonAppUtils.setResponseHeader(response);
         
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -102,7 +104,7 @@ public class RoomController {
     ) {
         JSONObject jsonObjectReturn = new JSONObject();
         
-        CommonUtils.setResponseHeader(response);
+        CommonAppUtils.setResponseHeader(response);
         
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -110,7 +112,7 @@ public class RoomController {
             
             jsonObjectReturn = new JSONObject(resultWs);
             
-            if(CommonUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
+            if(CommonAppUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
                 jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
                     .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
             }
@@ -169,9 +171,9 @@ public class RoomController {
             }
             
             RestTemplate restTemplate = new RestTemplate();
-            String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData,keyToCleanValue).toString();
+            String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData,keyToCleanValue).toString();
             HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonUtils.jsonMediaType();
+            MediaType mediaType = CommonAppUtils.jsonMediaType();
             headers.setContentType(mediaType);
             
             HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
@@ -199,7 +201,7 @@ public class RoomController {
     ) {
         JSONObject jsonObjectReturn = new JSONObject();
         
-        CommonUtils.setResponseHeader(response);
+        CommonAppUtils.setResponseHeader(response);
         
         try {
             MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
@@ -231,7 +233,7 @@ public class RoomController {
             "room_no", "floor_seq", "price_per_month", "room_status_id"
         };
         
-        JSONObject result = CommonUtils.simpleValidateRequire(formData, keyToValidate);
+        JSONObject result = CommonAppUtils.simpleValidateRequire(formData, keyToValidate);
         
         return result;
     }
@@ -246,7 +248,7 @@ public class RoomController {
             "price_per_month"
         };
         
-        JSONObject result = CommonUtils.simpleValidateNumberWithComma(formData, keyToValidate);
+        JSONObject result = CommonAppUtils.simpleValidateNumberWithComma(formData, keyToValidate);
         
         return result;
     }
@@ -261,9 +263,9 @@ public class RoomController {
         
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData).toString();
+            String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
             HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonUtils.jsonMediaType();
+            MediaType mediaType = CommonAppUtils.jsonMediaType();
             headers.setContentType(mediaType);
             
             HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);

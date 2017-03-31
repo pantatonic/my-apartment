@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 
-public class CommonUtils {
+public class CommonAppUtils {
 
     public static String getFormData(String key, MultiValueMap<String, String> formData) {
         return formData.get(key).get(0);
@@ -72,7 +72,7 @@ public class CommonUtils {
     }
     
     public static int countJsonArrayDataFromWS(JSONObject resultWsJsonObject) {
-        return CommonUtils.getJsonArrayDataFromWS(resultWsJsonObject).length();
+        return CommonAppUtils.getJsonArrayDataFromWS(resultWsJsonObject).length();
     }
     
     public static JSONObject simpleValidateRequire(

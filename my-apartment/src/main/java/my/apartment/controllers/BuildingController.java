@@ -3,7 +3,7 @@ package my.apartment.controllers;
 import java.nio.charset.Charset;
 import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonString;
-import my.apartment.common.CommonUtils;
+import my.apartment.common.CommonAppUtils;
 import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,9 +48,9 @@ public class BuildingController {
             };
             
             RestTemplate restTemplate = new RestTemplate();
-            String requestJson = CommonUtils.simpleConvertFormDataToJSONObject(formData,keyToCleanValue).toString();
+            String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData,keyToCleanValue).toString();
             HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonUtils.jsonMediaType();
+            MediaType mediaType = CommonAppUtils.jsonMediaType();
             headers.setContentType(mediaType);
 
             HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
@@ -75,7 +75,7 @@ public class BuildingController {
     public String buildingGet(HttpServletResponse response) {
         JSONObject jsonObjectReturn = new JSONObject();
         
-        CommonUtils.setResponseHeader(response);
+        CommonAppUtils.setResponseHeader(response);
         
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -101,7 +101,7 @@ public class BuildingController {
     ) {
         JSONObject jsonObjectReturn = new JSONObject();
         
-        CommonUtils.setResponseHeader(response);
+        CommonAppUtils.setResponseHeader(response);
         
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -109,7 +109,7 @@ public class BuildingController {
             
             jsonObjectReturn = new JSONObject(resultWs);
             
-            if(CommonUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
+            if(CommonAppUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
                 jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
                     .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
             }
@@ -132,7 +132,7 @@ public class BuildingController {
     ) {
         JSONObject jsonObjectReturn = new JSONObject();
         
-        CommonUtils.setResponseHeader(response);
+        CommonAppUtils.setResponseHeader(response);
         
         try {
             MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();

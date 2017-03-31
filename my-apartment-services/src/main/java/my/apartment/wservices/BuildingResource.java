@@ -21,7 +21,7 @@ import my.apartment.model.Building;
 import my.apartment.services.BuildingDao;
 import my.apartment.services.BuildingDaoImpl;
 import my.apartment.common.CommonString;
-import my.apartment.common.CommonUtils;
+import my.apartment.common.CommonWsUtils;
 import my.apartment.model.Room;
 import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
@@ -46,7 +46,7 @@ public class BuildingResource {
      */
     @Path("building_get")
     @GET
-    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String getJson() {
         JSONObject jsonObjectReturn = new JSONObject();
 
@@ -70,8 +70,8 @@ public class BuildingResource {
     
     @Path("building_get_by_id/{building_id}")
     @GET
-    @Produces(CommonUtils.MEDIA_TYPE_JSON)
-    @Consumes(CommonUtils.MEDIA_TYPE_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    @Consumes(CommonWsUtils.MEDIA_TYPE_JSON)
     public String buildingGetById(
             @PathParam("building_id") Integer buildingId
     ) {
@@ -97,7 +97,7 @@ public class BuildingResource {
     
     @Path("building_delete_by_id")
     @POST
-    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String buildingDeleteById(
             @FormParam("building_id") Integer buildingId
     ) {
@@ -154,40 +154,32 @@ public class BuildingResource {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
-            JSONObject jsonObjectReceive = CommonUtils.receiveJsonObject(incomingData);
+            JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
             
             BuildingDao buildingDaoImpl = new BuildingDaoImpl();
             
             Building building = new Building();
             
-            building.setId(CommonUtils.stringToInteger(jsonObjectReceive.getString("id")));
+            building.setId(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("id")));
             building.setName(jsonObjectReceive.getString("name"));
             building.setAddress(jsonObjectReceive.getString("address"));
             building.setTel(jsonObjectReceive.getString("tel"));
-            building.setElectricityMeterDigit(
-                    CommonUtils.stringToInteger(jsonObjectReceive.getString("electricity_meter_digit"))
+            building.setElectricityMeterDigit(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("electricity_meter_digit"))
             );
-            building.setElectricityChargePerUnit(
-                    CommonUtils.stringToBigDecimal(jsonObjectReceive.getString("electricity_charge_per_unit"))
+            building.setElectricityChargePerUnit(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("electricity_charge_per_unit"))
             );
-            building.setMinElectricityUnit(
-                    CommonUtils.stringToInteger(jsonObjectReceive.getString("min_electricity_unit"))
+            building.setMinElectricityUnit(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("min_electricity_unit"))
             );
-            building.setMinElectricityCharge(
-                    CommonUtils.stringToBigDecimal(jsonObjectReceive.getString("min_electricity_charge"))
+            building.setMinElectricityCharge(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("min_electricity_charge"))
             );
             
-            building.setWaterMeterDigit(
-                    CommonUtils.stringToInteger(jsonObjectReceive.getString("water_meter_digit"))
+            building.setWaterMeterDigit(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("water_meter_digit"))
             );
-            building.setWaterChargePerUnit(
-                    CommonUtils.stringToBigDecimal(jsonObjectReceive.getString("water_charge_per_unit"))
+            building.setWaterChargePerUnit(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("water_charge_per_unit"))
             );
-            building.setMinWaterUnit(
-                    CommonUtils.stringToInteger(jsonObjectReceive.getString("min_water_unit"))
+            building.setMinWaterUnit(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("min_water_unit"))
             );
-            building.setMinWaterCharge(
-                    CommonUtils.stringToBigDecimal(jsonObjectReceive.getString("min_water_charge"))
+            building.setMinWaterCharge(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("min_water_charge"))
             );
 
             Building resultSave = buildingDaoImpl.save(building);

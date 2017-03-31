@@ -15,7 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
-import my.apartment.common.CommonUtils;
+import my.apartment.common.CommonWsUtils;
 import my.apartment.model.Room;
 import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
@@ -40,7 +40,7 @@ public class RoomResource {
      */
     @Path("room_get_by_building_id/{building_id}")
     @GET
-    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String roomGetByBuildingId(
             @PathParam("building_id") Integer buildingId
     ) {
@@ -66,7 +66,7 @@ public class RoomResource {
     
     @Path("room_get_by_id/{room_id}")
     @GET
-    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String roomGetById(
             @PathParam("room_id") Integer roomId
     ) {
@@ -93,20 +93,20 @@ public class RoomResource {
     @Path("check_room_no_duplicated")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String checkRoomNoDuplicated(InputStream incomingData) {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
-            JSONObject jsonObjectReceive = CommonUtils.receiveJsonObject(incomingData);
+            JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
             
             RoomDao roomDaoImpl = new RoomDaoImpl();
             
             Room room = new Room();
             
-            room.setId(CommonUtils.stringToInteger(jsonObjectReceive.getString("id")));
+            room.setId(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("id")));
             room.setRoomNo(jsonObjectReceive.getString("room_no"));
-            room.setBuildingId(CommonUtils.stringToInteger(jsonObjectReceive.getString("building_id")));
+            room.setBuildingId(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("building_id")));
             
             Boolean result = roomDaoImpl.checkRoomNoDuplicated(room);
             
@@ -130,27 +130,25 @@ public class RoomResource {
     @Path("room_save")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String roomSave(InputStream incomingData) {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
-            JSONObject jsonObjectReceive = CommonUtils.receiveJsonObject(incomingData);
+            JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
 
             RoomDao roomDaoImpl = new RoomDaoImpl();
             
             Room room = new Room();
             
-            room.setId(CommonUtils.stringToInteger(jsonObjectReceive.getString("id")));
-            room.setBuildingId(CommonUtils.stringToInteger(jsonObjectReceive.getString("building_id")));
-            room.setFloorSeq(CommonUtils.stringToInteger(jsonObjectReceive.getString("floor_seq")));
+            room.setId(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("id")));
+            room.setBuildingId(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("building_id")));
+            room.setFloorSeq(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("floor_seq")));
             room.setRoomNo(jsonObjectReceive.getString("room_no"));
             room.setName(jsonObjectReceive.getString("name"));
-            room.setPricePerMonth(
-                    CommonUtils.stringToBigDecimal(jsonObjectReceive.getString("price_per_month"))
+            room.setPricePerMonth(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("price_per_month"))
             );
-            room.setRoomStatusId(
-                    CommonUtils.stringToInteger(jsonObjectReceive.getString("room_status_id"))
+            room.setRoomStatusId(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("room_status_id"))
             );
             
             Room resultSave = roomDaoImpl.save(room);
@@ -174,7 +172,7 @@ public class RoomResource {
     
     @Path("room_delete_by_id")
     @POST
-    @Produces(CommonUtils.MEDIA_TYPE_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String roomDeleteById(
             @FormParam("room_id") Integer roomId
     ) {

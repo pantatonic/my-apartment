@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import my.apartment.common.CommonUtils;
+import my.apartment.common.CommonWsUtils;
 import my.apartment.common.Config;
 import my.apartment.model.Building;
 
@@ -107,12 +107,12 @@ public class BuildingDaoImpl implements BuildingDao {
                 
                 building.setElectricityMeterDigit(rs.getInt("electricity_meter_digit"));
                 building.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
-                building.setMinElectricityUnit(CommonUtils.integerZeroToNull(rs.getInt("min_electricity_unit")));
+                building.setMinElectricityUnit(CommonWsUtils.integerZeroToNull(rs.getInt("min_electricity_unit")));
                 building.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
 
                 building.setWaterMeterDigit(rs.getInt("water_meter_digit"));
                 building.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
-                building.setMinWaterUnit(CommonUtils.integerZeroToNull(rs.getInt("min_water_unit")));
+                building.setMinWaterUnit(CommonWsUtils.integerZeroToNull(rs.getInt("min_water_unit")));
                 building.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
                 
                 buildings.add(building);
