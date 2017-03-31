@@ -2,6 +2,7 @@ package my.apartment.controllers;
 
 import javax.servlet.http.HttpSession;
 import my.apartment.common.CommonString;
+import my.apartment.common.JsonObjectUtils;
 import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,7 +39,7 @@ public class LoginController {
             JSONObject resultWsJsonObject = new JSONObject(resultWs);
 
             if(resultWsJsonObject.get(CommonString.RESULT_STRING).equals(CommonString.SUCCESS_STRING)) {
-                JSONArray jsonArrayData = resultWsJsonObject.getJSONArray("data");
+                JSONArray jsonArrayData = resultWsJsonObject.getJSONArray(CommonString.DATA_STRING);
                 
                 for(Integer i = 0; i <= jsonArrayData.length() - 1; i++) {
                     JSONObject j = jsonArrayData.getJSONObject(i);
@@ -51,18 +52,20 @@ public class LoginController {
                     session.setAttribute("userStatus", Integer.toString(j.getInt("status")));
                 }
                 
-                jsonObjectReturn.put(CommonString.RESULT_STRING, resultWsJsonObject.get(CommonString.RESULT_STRING))
-                        .put(CommonString.MESSAGE_STRING, resultWsJsonObject.get(CommonString.MESSAGE_STRING));
+               
+                jsonObjectReturn = resultWsJsonObject;
+                
+                jsonObjectReturn.remove(CommonString.DATA_STRING);
             }
             else {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, resultWsJsonObject.get(CommonString.RESULT_STRING))
-                        .put(CommonString.MESSAGE_STRING, resultWsJsonObject.get(CommonString.MESSAGE_STRING));
+                
+                jsonObjectReturn = resultWsJsonObject;
             }
         }
         catch(Exception e) {
             e.printStackTrace();
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+         
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();

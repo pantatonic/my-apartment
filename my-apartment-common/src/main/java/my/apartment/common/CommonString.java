@@ -3,7 +3,7 @@ package my.apartment.common;
 
 public class CommonString {
     
-    public static final String VERSION = "201703311507";
+    public static final String VERSION = "201703311548";
     
     public static final String UTF8_STRING = "UTF8";
     

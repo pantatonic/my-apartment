@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import my.apartment.model.Users;
 import my.apartment.services.LoginDao;
 import my.apartment.services.LoginDaoImpl;
-import my.apartment.common.CommonString;
+import my.apartment.common.JsonObjectUtils;
 import org.json.JSONObject;
 
 
@@ -54,26 +54,23 @@ public class LoginResource {
             List<Users> resultUsers = loginDaoImpl.loginProcess(u);
              
             if(resultUsers.size() == 0) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
+                jsonObjectReturn = JsonObjectUtils.setDataNotFound(jsonObjectReturn);
             }
             else {
                 if(resultUsers.get(0).getStatus() == 0) {
-                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, "STATUS IS DISABLED");
+                    jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                            "STATUS IS DISABLED");
                 }
                 else {
-                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                        .put(CommonString.MESSAGE_STRING, "LOGIN SUCCESS")
-                        .put(CommonString.DATA_STRING, resultUsers);
+                    jsonObjectReturn = JsonObjectUtils.setSuccessWithMessageDataList(
+                            jsonObjectReturn, "LOGIN SUCCESS", resultUsers);
                 }
             }
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, "SERVICE ERROR");
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();

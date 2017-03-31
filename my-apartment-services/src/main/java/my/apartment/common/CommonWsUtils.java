@@ -57,5 +57,5 @@ public class CommonWsUtils {
         return integerValue == 0 ? null : integerValue;
     }
     
-    
+
 }
