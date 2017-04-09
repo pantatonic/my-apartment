@@ -5,6 +5,7 @@ import my.apartment.common.CommonString;
 
 
 import my.apartment.common.CommonAppUtils;
+import my.apartment.common.JsonObjectUtils;
 import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -74,17 +75,15 @@ public class RoomController {
             String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "room/room_get_by_building_id/" + buildingId, String.class);
             
             jsonObjectReturn = new JSONObject(resultWs);
-            
+
             /*if(CommonUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
+                jsonObjectReturn = JsonObjectUtils.setDataNotFound(jsonObjectReturn);
             }*/
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -113,15 +112,13 @@ public class RoomController {
             jsonObjectReturn = new JSONObject(resultWs);
             
             if(CommonAppUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
+                jsonObjectReturn = JsonObjectUtils.setDataNotFound(jsonObjectReturn);
             }
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -146,8 +143,8 @@ public class RoomController {
             /** validate required field */
             JSONObject resultValidateRequired = this.validateRequiredRoomSave(formData);
             if(resultValidateRequired.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, resultValidateRequired.getString(CommonString.MESSAGE_STRING));
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        resultValidateRequired.getString(CommonString.MESSAGE_STRING));
                 
                 return jsonObjectReturn.toString();
             }
@@ -155,8 +152,8 @@ public class RoomController {
             /** validate number field */
             JSONObject resultValidateNumber = this.validateNumberRoomSave(formData);
             if(resultValidateNumber.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, resultValidateNumber.getString(CommonString.MESSAGE_STRING));
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        resultValidateNumber.getString(CommonString.MESSAGE_STRING));
                 
                 return jsonObjectReturn.toString();
             }
@@ -164,8 +161,8 @@ public class RoomController {
             /** validate room_no duplicated */
             JSONObject resultCheckRoomNoDuplicated = this.checkRoomNoDuplicated(formData);
             if(resultCheckRoomNoDuplicated.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, resultCheckRoomNoDuplicated.getString(CommonString.MESSAGE_STRING));
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        resultCheckRoomNoDuplicated.getString(CommonString.MESSAGE_STRING));
                 
                 return jsonObjectReturn.toString();
             }
@@ -186,8 +183,7 @@ public class RoomController {
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -216,8 +212,7 @@ public class RoomController {
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -303,8 +298,7 @@ public class RoomController {
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn;
@@ -322,8 +316,7 @@ public class RoomController {
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn;

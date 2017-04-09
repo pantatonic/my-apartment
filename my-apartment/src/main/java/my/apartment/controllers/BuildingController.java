@@ -1,11 +1,10 @@
 package my.apartment.controllers;
 
-import java.nio.charset.Charset;
 import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonAppUtils;
+import my.apartment.common.JsonObjectUtils;
 import my.apartment.common.ServiceDomain;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -63,8 +62,7 @@ public class BuildingController {
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -86,8 +84,7 @@ public class BuildingController {
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -110,15 +107,13 @@ public class BuildingController {
             jsonObjectReturn = new JSONObject(resultWs);
             
             if(CommonAppUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_NOT_FOUND_STRING);
+                jsonObjectReturn = JsonObjectUtils.setDataNotFound(jsonObjectReturn);
             }
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -147,8 +142,7 @@ public class BuildingController {
         catch(Exception e) {
             e.printStackTrace();
              
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.CONTROLLER_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
