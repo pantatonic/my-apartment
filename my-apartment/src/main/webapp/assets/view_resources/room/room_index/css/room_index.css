@@ -46,7 +46,7 @@ form[name="room_form"] [name="price_per_month"] {
     font-size: 12px;
     margin-top: 15px;
 }
-.box-room_ .button-delete, .box-room_ .button-room {
+.box-room_ .button-delete, .box-room_ .button-room-manage {
     margin-top: 15px;
 }
 

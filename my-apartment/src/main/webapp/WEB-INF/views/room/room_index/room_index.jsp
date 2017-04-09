@@ -72,7 +72,7 @@
         </div>     
                             
         <textarea id="box-room-template">
-            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2 box-room_">
+            <div class="col-xs-12 col-sm-6 col-md-3 box-room_">
                 <div class="box-room hover-box">
                     <i class="fa fa-bed room-icon"></i>
                     <div class="clearfix"></div>
@@ -82,6 +82,11 @@
                 </div>
                 
                 <div class="clearfix"></div>
+                <button type="button" class="btn btn-primary btn-flat button-room-manage" 
+                        data-loading-text="<spring:message code="common.now_processing" />">
+                    <i class="fa fa-vcard-o"></i> 
+                    <spring:message code="room.manage" />
+                </button>
                 
                 <spring:message code="common.delete" var="msgDeleteRoom" />
                 ${commonHtml.getDeleteButton(msgDeleteRoom, msgNowProcessing)}

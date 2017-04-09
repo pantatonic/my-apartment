@@ -92,6 +92,10 @@ var page = (function() {
                 page.showRoomDetail('edit', thisElement.attr('data-id'));
             });
             
+            page.getElement.getBoxRoomContainer().on('click', '.button-room-manage', function() {
+                page.manageRoom(jQuery(this));
+            });
+            
             page.getElement.getBoxRoomContainer().on('click', '.button-delete', function() {
                 var thisElement = jQuery(this);
                 
@@ -131,6 +135,9 @@ var page = (function() {
             
                 page.getElement.getBoxRoomContainer().html(html);
             }
+        },
+        manageRoom: function(buttonRoomManage) {
+            alert(buttonRoomManage.attr('data-id'));
         },
         deleteRoom: function(buttonDelete) {
             alertUtil.confirmAlert(app.translate('common.please_confirm_to_process'), function() {
@@ -181,7 +188,9 @@ var page = (function() {
                             boxRoomElement.find('.label-room-status')
                                     .addClass(__getRoomStatusColorClass(currentData.roomStatusId))
                                     .html(app.translate(currentData.roomStatusText));
-                    
+                            
+                            boxRoomElement_.find('.button-room-manage').attr('data-id', currentData.id);
+                            
                             boxRoomElement_.find('.button-delete').attr('data-id', currentData.id);
                             
                             //boxRoomElement_.find('.button-room').attr('data-id', currentData.id);
