@@ -15,6 +15,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
+import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.RoomStatus;
 import my.apartment.services.RoomStatusDao;
 import my.apartment.services.RoomStatusDaoImpl;
@@ -51,9 +52,8 @@ public class RoomStatusResource {
             RoomStatusDao roomStatusDaoImpl = new RoomStatusDaoImpl();
             
             List<RoomStatus> roomStatus = roomStatusDaoImpl.getAll();
-            
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                    .put(CommonString.DATA_STRING, roomStatus);
+
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomStatus);
         }
         catch(Exception e) {
             e.printStackTrace();

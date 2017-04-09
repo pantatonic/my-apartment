@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
+import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.Room;
 import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
@@ -51,14 +52,12 @@ public class RoomResource {
             
             List<Room> rooms = roomDaoImpl.getByBuildingId(buildingId);
 
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                    .put(CommonString.DATA_STRING, rooms);
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, rooms);
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -77,14 +76,12 @@ public class RoomResource {
             
             List<Room> rooms = roomDaoImpl.getById(roomId);
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                    .put(CommonString.DATA_STRING, rooms);
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, rooms);
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -111,14 +108,12 @@ public class RoomResource {
             Boolean result = roomDaoImpl.checkRoomNoDuplicated(room);
             
             if(result == Boolean.FALSE) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                        .put(CommonString.MESSAGE_STRING, "");
+                jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             }
             else {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.DATA_DUPLICATED_STRING);
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        CommonString.DATA_DUPLICATED_STRING);
             }
-
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -154,13 +149,14 @@ public class RoomResource {
             Room resultSave = roomDaoImpl.save(room);
             
             if(resultSave != null) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.SAVE_DATA_SUCCESS_STRING)
-                        .put("id", resultSave.getId());
+                jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                        CommonString.SAVE_DATA_SUCCESS_STRING);
+                
+                jsonObjectReturn.put("id", resultSave.getId());
             }
             else {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.SAVE_DATA_ERROR_STRING);
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        CommonString.SAVE_DATA_ERROR_STRING);
             }
         }
         catch(Exception e) {
@@ -184,8 +180,8 @@ public class RoomResource {
             List<Room> rooms = roomDaoImpl.getById(roomId);
             
             if(rooms.isEmpty()) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_ALREADY_DELETE_STRING);
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        CommonString.DATA_ALREADY_DELETE_STRING);
             }
             else {
                 /**
@@ -196,12 +192,12 @@ public class RoomResource {
                 Boolean resultDelete = roomDaoImpl.deleteById(roomId);
                 
                 if(resultDelete == Boolean.TRUE) {
-                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.DELETE_DATA_SUCCESS_STRING);
+                    jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                            CommonString.DELETE_DATA_SUCCESS_STRING);
                 }
                 else {
-                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.PROCESSING_FAILED_STRING);
+                    jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                            CommonString.PROCESSING_FAILED_STRING);
                 }
             }
             
@@ -209,8 +205,7 @@ public class RoomResource {
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
