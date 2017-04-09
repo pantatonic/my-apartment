@@ -28,6 +28,14 @@ public class JsonObjectUtils {
                 .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
     }
     
+    public static JSONObject setSuccessWithMessage(
+            JSONObject jsonObject,
+            String message
+    ) {
+        return jsonObject.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
+                .put(CommonString.MESSAGE_STRING, message);
+    }
+    
     public static JSONObject setSuccessWithMessageDataList(
             JSONObject jsonObject, 
             String message,
@@ -36,6 +44,14 @@ public class JsonObjectUtils {
         return jsonObject.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
                     .put(CommonString.MESSAGE_STRING, message)
                     .put(CommonString.DATA_STRING, dataList);
+    }
+    
+    public static JSONObject setSuccessWithDataList(
+            JSONObject jsonObject,
+            List dataList
+    ) {
+        return jsonObject.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
+                .put(CommonString.DATA_STRING, dataList);
     }
     
 }

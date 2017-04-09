@@ -18,6 +18,7 @@ import my.apartment.services.BuildingDao;
 import my.apartment.services.BuildingDaoImpl;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
+import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.Room;
 import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
@@ -51,14 +52,12 @@ public class BuildingResource {
             
             List<Building> buildings = buildingDaoImpl.getAll();
 
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                    .put(CommonString.DATA_STRING, buildings);
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, buildings);
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -78,14 +77,12 @@ public class BuildingResource {
             
             List<Building> buildings = buildingDaoImpl.getById(buildingId);
 
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                    .put(CommonString.DATA_STRING, buildings);
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, buildings);
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -105,8 +102,8 @@ public class BuildingResource {
             List<Building> buildings = buildingDaoImpl.getById(buildingId);
             
             if(buildings.isEmpty()) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.DATA_ALREADY_DELETE_STRING);
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        CommonString.DATA_ALREADY_DELETE_STRING);
             }
             else {
                 /**
@@ -114,8 +111,8 @@ public class BuildingResource {
                  * if have data not allow to delete
                  */
                 if(this.getRoomNumberInBuilding(buildingId) > 0) {
-                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.BUILDING_HAS_ANY_DATA_STRING);
+                    jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                            CommonString.BUILDING_HAS_ANY_DATA_STRING);
                     
                     return jsonObjectReturn.toString();
                 }
@@ -124,20 +121,19 @@ public class BuildingResource {
                 Boolean resultDelete = buildingDaoImpl.deleteById(buildingId);
                 
                 if(resultDelete == Boolean.TRUE) {
-                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.DELETE_DATA_SUCCESS_STRING);
+                    jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                            CommonString.DELETE_DATA_SUCCESS_STRING);
                 }
                 else {
-                    jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.PROCESSING_FAILED_STRING);
+                    jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                            CommonString.PROCESSING_FAILED_STRING);
                 }
             }
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
@@ -160,42 +156,50 @@ public class BuildingResource {
             building.setName(jsonObjectReceive.getString("name"));
             building.setAddress(jsonObjectReceive.getString("address"));
             building.setTel(jsonObjectReceive.getString("tel"));
-            building.setElectricityMeterDigit(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("electricity_meter_digit"))
+            building.setElectricityMeterDigit(
+                    CommonWsUtils.stringToInteger(jsonObjectReceive.getString("electricity_meter_digit"))
             );
-            building.setElectricityChargePerUnit(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("electricity_charge_per_unit"))
+            building.setElectricityChargePerUnit(
+                    CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("electricity_charge_per_unit"))
             );
-            building.setMinElectricityUnit(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("min_electricity_unit"))
+            building.setMinElectricityUnit(
+                    CommonWsUtils.stringToInteger(jsonObjectReceive.getString("min_electricity_unit"))
             );
-            building.setMinElectricityCharge(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("min_electricity_charge"))
+            building.setMinElectricityCharge(
+                    CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("min_electricity_charge"))
             );
             
-            building.setWaterMeterDigit(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("water_meter_digit"))
+            building.setWaterMeterDigit(
+                    CommonWsUtils.stringToInteger(jsonObjectReceive.getString("water_meter_digit"))
             );
-            building.setWaterChargePerUnit(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("water_charge_per_unit"))
+            building.setWaterChargePerUnit(
+                    CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("water_charge_per_unit"))
             );
-            building.setMinWaterUnit(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("min_water_unit"))
+            building.setMinWaterUnit(
+                    CommonWsUtils.stringToInteger(jsonObjectReceive.getString("min_water_unit"))
             );
-            building.setMinWaterCharge(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("min_water_charge"))
+            building.setMinWaterCharge(
+                    CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("min_water_charge"))
             );
 
             Building resultSave = buildingDaoImpl.save(building);
             
             if(resultSave != null) {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.SUCCESS_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.SAVE_DATA_SUCCESS_STRING)
-                        .put("id", resultSave.getId());
+                jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                        CommonString.SAVE_DATA_SUCCESS_STRING);
+                
+                jsonObjectReturn.put("id", resultSave.getId());
             }
             else {
-                jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                        .put(CommonString.MESSAGE_STRING, CommonString.SAVE_DATA_ERROR_STRING);
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        CommonString.SAVE_DATA_ERROR_STRING);
             }
 
         }
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();
