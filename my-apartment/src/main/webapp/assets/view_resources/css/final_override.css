@@ -22,7 +22,7 @@
 .datepicker table tr td span:hover {
     background:none;
 }
-.active {
+.datepicker table tr td.active {
     background-image: none !important;
     background-color: #222222 !important;
     color:#FFFFFF !important;
