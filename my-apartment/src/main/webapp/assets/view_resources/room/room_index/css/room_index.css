@@ -70,3 +70,8 @@ form[name="room_form"] [name="price_per_month"] {
     background-color: #f5f5f5;
     margin-top: 20px;
 }
+
+/** modal room manage */
+#modal-room-manage .modal-dialog {
+    width: 95%;
+}

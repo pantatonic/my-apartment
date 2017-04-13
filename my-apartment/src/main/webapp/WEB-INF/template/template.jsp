@@ -37,6 +37,18 @@
         <script type="text/javascript">
             var _LOCALE_ =  '${pageContext.response.locale}';
             var _CONTEXT_PATH_ = '${pageContext.request.contextPath}';
+            var localeForDatepicker = function() {
+                switch(_LOCALE_) {
+                    case 'en_US':
+                        return 'en-GB';
+                        break;
+                    case 'th_TH':
+                        return 'th';
+                        break;
+                    default :
+                        return 'en-GB';
+                }
+            };
             var bootstrapButton = $.fn.button.noConflict();
             $.fn.bootstrapBtn = bootstrapButton;
 
@@ -63,8 +75,13 @@
         <link rel="stylesheet" href="<c:url value="/assets/dist/css/skins/_all-skins.css" />">
         
         <script type="text/javascript" src="<c:url value="/assets/bootstrap-datetimepicker/js/moment-with-locales.js" />"></script>
-        <link rel="stylesheet" href="<c:url value="/assets/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" />">
-        <script type="text/javascript" src="<c:url value="/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" />"></script>
+        <%--<link rel="stylesheet" href="<c:url value="/assets/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" />">
+        <script type="text/javascript" src="<c:url value="/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" />"></script>--%>
+        
+        <link rel="stylesheet" href="<c:url value="/assets/bootstrap_datepicker/dist/css/bootstrap-datepicker.css" />">
+        <script type="text/javascript" src="<c:url value="/assets/bootstrap_datepicker/dist/js/bootstrap-datepicker.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/assets/bootstrap_datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/assets/bootstrap_datepicker/dist/locales/bootstrap-datepicker.th.min.js" />"></script>
         
         <!-- pnotify -->
         <link rel="stylesheet" href="<c:url value="/assets/pnotify/pnotify.custom.css" />">

@@ -1,4 +1,4 @@
-/* global modalBuildingDetail, app, _CONTEXT_PATH_, _DELAY_PROCESS_, alertUtil, BUILDING_HAS_ANY_DATA, EDIT_ANIMATED_CLASS */
+/* global modalBuildingDetail, app, _CONTEXT_PATH_, _DELAY_PROCESS_, alertUtil, BUILDING_HAS_ANY_DATA, EDIT_ANIMATED_CLASS, SESSION_EXPIRE_STRING, SUCCESS_STRING */
 
 var latestBuildingIdProcess = null;
 
@@ -126,10 +126,15 @@ var boxBuilding = (function() {
                             });
                         }
                         else {
-                            app.showNotice({
-                                message: app.translate('common.processing_failed'),
-                                type: response.result
-                            });
+                            if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                            }
+                            else {
+                                app.showNotice({
+                                    message: app.translate('common.processing_failed'),
+                                    type: response.result
+                                });
+                            }
                         }
                     }
 
@@ -225,6 +230,10 @@ var boxBuilding = (function() {
                     cache: false,
                     success: function(response) {
                         response = app.convertToJsonObject(response);
+                        
+                        if(response.message == SESSION_EXPIRE_STRING) {
+                            app.alertSessionExpired();
+                        }
 
                         _renderBoxBuilding(response);
                     },

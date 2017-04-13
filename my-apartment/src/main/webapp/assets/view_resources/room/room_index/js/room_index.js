@@ -1,4 +1,4 @@
-/* global buildingIdString, app, INPUT_ERROR_CLASS, WARNING_STRING, _CONTEXT_PATH_, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, SUCCESS_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, EDIT_ANIMATED_CLASS, DATA_DUPLICATED_STRING, alertUtil, HAS_ANY_DATA_STRING */
+/* global INPUT_ERROR_CLASS, app, WARNING_STRING, modalRoomDetail, _DELAY_PROCESS_, _CONTEXT_PATH_, EDIT_ANIMATED_CLASS, alertUtil, buildingIdString, HAS_ANY_DATA_STRING, SUCCESS_STRING, modalRoomManage */
 
 var latestRoomIdProcess = null;
 
@@ -65,6 +65,14 @@ var page = (function() {
     return {
         initialProcess: function() {
             page.setBuildingList();
+            
+            jQuery('[name="test_date"]').datepicker({
+                format:'yyyy-mm-dd',
+                autoclose: true,
+                language: localeForDatepicker()
+            }).on('changeDate',function(e) {
+                alert('test');
+            });
         },
         addEvent: function() {
             var buildingList = _getBuildingListElement();
@@ -93,7 +101,7 @@ var page = (function() {
             });
             
             page.getElement.getBoxRoomContainer().on('click', '.button-room-manage', function() {
-                page.manageRoom(jQuery(this));
+                page.showRoomManage(jQuery(this));
             });
             
             page.getElement.getBoxRoomContainer().on('click', '.button-delete', function() {
@@ -136,8 +144,10 @@ var page = (function() {
                 page.getElement.getBoxRoomContainer().html(html);
             }
         },
-        manageRoom: function(buttonRoomManage) {
-            alert(buttonRoomManage.attr('data-id'));
+        showRoomManage: function(buttonRoomManage) {
+            var modalRoomManage = page.getElement.getModalRoomManage();
+            
+            modalRoomManage.modal('show');
         },
         deleteRoom: function(buttonDelete) {
             alertUtil.confirmAlert(app.translate('common.please_confirm_to_process'), function() {
@@ -260,8 +270,14 @@ var page = (function() {
                         cache: false,
                         success: function(response) {
                             response = app.convertToJsonObject(response);
-
-                            _renderBoxRoom(response);
+                            
+                            if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                                app.loadingInElement('remove', contentBox);
+                            }
+                            else {
+                                _renderBoxRoom(response);
+                            }
                         },
                         error: function() {
                             app.loadingInElement('remove', contentBox);
@@ -287,6 +303,9 @@ var page = (function() {
             },
             getModalRoomNo: function() {
                 return modalRoomDetail.getForm().find('[name="room_no"]');
+            },
+            getModalRoomManage: function() {
+                return modalRoomManage.getModal();
             }
         },
         showRoomDetail: function(type, roomId) {
@@ -330,211 +349,3 @@ var page = (function() {
     };
 })();
 
-var modalRoomDetail = (function() {
-    var _getModal = function() {
-        return jQuery('#modal-room-detail');
-    };
-    
-    var _getForm = function() {
-        return jQuery('[name="room_form"]');
-    };
-    
-    return {
-        getModal: function() {
-            return _getModal();
-        },
-        getForm: function() {
-            return _getForm();
-        },
-        setBuildingId: function() {
-            var buildingList = page.getElement.getBuildingListElement();
-            var form_ = modalRoomDetail.getForm();
-            
-            if(!app.valueUtils.isEmptyValue(buildingList.val())) {
-                form_.find('[name="building_id"]').val(buildingList.val());
-            }
-        },
-        clearInputId: function() {
-            var form = _getForm();
-            
-            form.find('[name="id"]').val('');
-            form.find('[name="building_id"]').val('');
-        },
-        setFocusAfterOpenModal: function() {
-            setTimeout(function() {
-                _getModal().find('[name="room_no"]').focus();
-            }, _DELAY_PROCESS_);
-        },
-        getRoomDetail: function(roomId) {
-            var _setData = function(response) {
-                var data = response.data[0];
-                var modal = _getModal();
-                var modalBody = modal.find('.modal-body');
-                
-                app.clearAllInputErrorClass(modalBody);
-                app.clearFormData(modalRoomDetail.getForm());
-                modalRoomDetail.clearInputId();
-                
-                for(var key in data) {
-                    var key_ = app.camelToUnderScore(key);
-                    modalBody.find('[name="' + key_ + '"]').val(data[key]);
-
-                    app.triggerCtrl(modalBody.find('[name="' + key_ + '"]'));
-                }
-                
-                modal.modal('show');
-                
-                modalRoomDetail.setFocusAfterOpenModal();
-            };
-            
-            app.loading('show');
-            
-            setTimeout(function() {
-                jQuery.ajax({
-                    type: 'get',
-                    url: _CONTEXT_PATH_ + '/room_get_by_id.html',
-                    data: {
-                        id: roomId
-                    },
-                    cache: false,
-                    success: function(response) {
-                        response = app.convertToJsonObject(response);
-                        
-                        app.loading('remove');
-                        
-                        if(response.result == SUCCESS_STRING) {
-                            _setData(response);
-                        }
-                        else {
-                            if(response.message == SESSION_EXPIRE_STRING) {
-                                app.alertSessionExpired();
-                            }
-                            else
-                            if(response.message == DATA_NOT_FOUND_STRING) {
-                                app.showNotice({
-                                    message: app.translate('common.data_not_found'),
-                                    type: response.result
-                                });
-                            }
-                            else {
-                                app.showNotice({
-                                    message: app.translate('common.processing_failed'),
-                                    type: response.result
-                                });
-                            }
-                        }
-                    },
-                    error: function() {
-                        app.alertSomethingError();
-                        
-                        app.loading('remove');
-                    }
-                });
-            }, _DELAY_PROCESS_);
-        },
-        save: function() {
-            var modal = modalRoomDetail.getModal();
-            var form_ = _getForm();
-            var submitButton = form_.find('[type="submit"]');
-            var _validate = function() {
-                var validatePass = true;
-                var __validateRequired = function() {
-                    var _validatePass = true;
-                    
-                    form_.find('.' + REQUIRED_CLASS).each(function() {
-                        var thisElement = jQuery(this);
-
-                        if(app.valueUtils.isEmptyValue(thisElement.val())) {
-                            _validatePass = false;
-
-                            thisElement.addClass(INPUT_ERROR_CLASS);
-
-                            if(!app.checkNoticeExist('notice-enter-data')) {
-                                app.showNotice({
-                                    type: WARNING_STRING,
-                                    message: app.translate('common.please_enter_data'),
-                                    addclass: 'notice-enter-data'
-                                });
-                            }
-                        }
-                        else {
-                            thisElement.removeClass(INPUT_ERROR_CLASS);
-                        }
-                    });
-                    
-                    return _validatePass;
-                };
-                
-                if(!__validateRequired()) {
-                    validatePass = false;
-                }
-                
-                return validatePass;
-            };
-            
-            var resultValidate = _validate();
-            
-            if(!resultValidate) {
-                return false;
-            }
-            
-            submitButton.bootstrapBtn('loading');
-            
-            setTimeout(function() {
-                jQuery.ajax({
-                    type: 'post',
-                    url: _CONTEXT_PATH_ + '/room_save.html',
-                    data: form_.serialize(),
-                    cache: false,
-                    success: function(response) {
-                        response = app.convertToJsonObject(response);
-                        
-                        if(response.result === SUCCESS_STRING) {
-                            app.showNotice({
-                                message: app.translate('common.save_success'),
-                                type: response.result
-                            });
-                            
-                            if(response.id != undefined) {
-                                form_.find('[name="id"]').val(response.id);
-                                latestRoomIdProcess = response.id;
-                            }
-                            
-                            modal.modal('hide');
-                            page.getRoom();
-                        }
-                        else {
-                            if(response.message == DATA_DUPLICATED_STRING) {
-                                app.showNotice({
-                                    message: app.translate('room.room_no_is_duplicated'),
-                                    type: response.result
-                                });
-                                
-                                page.getElement.getModalRoomNo()
-                                        .focus()
-                                        .addClass(INPUT_ERROR_CLASS);
-                            }
-                            else 
-                            if(response.message == SESSION_EXPIRE_STRING) {
-                                app.alertSessionExpired();
-                            }
-                            else {
-                                app.showNotice({
-                                    message: app.translate('common.processing_failed'),
-                                    type: response.result
-                                });
-                            }
-                        }
-                        
-                        submitButton.bootstrapBtn('reset');
-                    },
-                    error: function() {
-                        app.alertSomethingError();
-                        
-                        submitButton.bootstrapBtn('reset');
-                    }
-                });
-            }, _DELAY_PROCESS_);
-        }
-    };
-})();
