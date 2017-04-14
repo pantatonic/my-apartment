@@ -146,9 +146,9 @@ var page = (function() {
             }
         },
         showRoomManage: function(buttonRoomManage) {
-            var modalRoomManage = page.getElement.getModalRoomManage();
+            var roomId = buttonRoomManage.attr('data-id');
             
-            modalRoomManage.modal('show');
+            modalRoomManage.getRoomManage(roomId);
         },
         deleteRoom: function(buttonDelete) {
             alertUtil.confirmAlert(app.translate('common.please_confirm_to_process'), function() {

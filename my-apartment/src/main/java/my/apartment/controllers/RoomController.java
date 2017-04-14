@@ -322,4 +322,34 @@ public class RoomController {
         return jsonObjectReturn;
     }
     
+    @RequestMapping(value = "/room/get_room_manage.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String getRoomManage(
+            @RequestParam(value = "room_id", required = true) String roomId,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            System.out.println(ServiceDomain.WS_URL + "room/get_room_manage/" + roomId);
+            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_room_manage/" + roomId, String.class);
+            
+            jsonObjectReturn = new JSONObject(resultWs);
+            System.out.println("----------");
+            System.out.println(jsonObjectReturn);
+            System.out.println("----------");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        
+        return "... : " + roomId;
+    }
+    
 }

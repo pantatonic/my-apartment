@@ -18,8 +18,11 @@ import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.Room;
+import my.apartment.model.RoomReservation;
 import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
+import my.apartment.services.RoomReservationDao;
+import my.apartment.services.RoomReservationDaoImpl;
 import org.json.JSONObject;
 
 
@@ -53,6 +56,34 @@ public class RoomResource {
             List<Room> rooms = roomDaoImpl.getByBuildingId(buildingId);
 
             jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, rooms);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @Path("get_room_manage/{room_id}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getRoomManage(
+            @PathParam("room_id") Integer roomId
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomReservationDao roomReservationDaoImpl = new RoomReservationDaoImpl();
+            
+            List<RoomReservation> roomReservations = roomReservationDaoImpl.getByRoomId(roomId);
+            
+            System.out.println("service ----------------");
+            System.out.println(roomReservations);
+            System.out.println("service ----------------");
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "Ok123");
         }
         catch(Exception e) {
             e.printStackTrace();

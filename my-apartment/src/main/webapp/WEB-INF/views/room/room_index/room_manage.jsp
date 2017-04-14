@@ -34,7 +34,7 @@
                 <div id="my-tab-content" class="tab-content">
                     <div class="tab-pane fade in active" id="red">
                         <br>
-                        <form id="room-form" name="room_reservation_form" method="post" class="form-horizontal" 
+                        <form id="room-reservation-form" name="room_reservation_form" method="post" class="form-horizontal" 
                             action="<c:url value="room/room_reservation_save.html" />">
                             
                             <div class="form-group col-sm-6 col-md-6">
@@ -76,6 +76,7 @@
                                 </label>
                                 <div class="col-sm-6 no-padding">
                                     <div class="col-sm-12">
+                                        <input type="text" name="id">
                                         <input type="text" name="id_card" class="form-control">
                                     </div>
                                 </div>
