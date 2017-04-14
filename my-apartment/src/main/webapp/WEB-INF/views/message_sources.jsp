@@ -26,6 +26,12 @@
     "common.delete_success":"<spring:message code="common.delete_success" />",
     "common.please_confirm_to_process":"<spring:message code="common.please_confirm_to_process" />",
     "common.please_select_data":"<spring:message code="common.please_select_data" />",
+    "common.data_not_found":"<spring:message code="common.data_not_found" />",
+    
+    "common.person_name":"<spring:message code="common.person_name" />",
+    "common.person_lastname":"<spring:message code="common.person_lastname" />",
+    "common.remark":"<spring:message code="common.remark" />",
+    "common.status":"<spring:message code="common.status" />",
     
     "account_not_found":"<spring:message code="account_not_found" />",
     "account_is_disabled":"<spring:message code="account_is_disabled" />",
@@ -57,8 +63,6 @@
     
     "building.cannot_delete_building_has_any_data":"<spring:message code="building.cannot_delete_building_has_any_data" />",
     
-    "common.data_not_found":"<spring:message code="common.data_not_found" />",
-    
     "building.room":"<spring:message code="building.room" />",
     
     "room.add_room":"<spring:message code="room.add_room" />",
@@ -75,6 +79,15 @@
     "room.select_floor":"<spring:message code="room.select_floor" />",
     "room.room_no_is_duplicated":"<spring:message code="room.room_no_is_duplicated" />",
     "room.cannot_delete_room_has_any_data":"<spring:message code="room.cannot_delete_room_has_any_data" />",
-    "room.manage":"<spring:message code="room.manage" />"
+    "room.manage":"<spring:message code="room.manage" />",
+    
+    "room.reservation":"<spring:message code="room.reservation" />",
+    "room.reserve_date":"<spring:message code="room.reserve_date" /> ",
+    "room.reserve_expired":"<spring:message code="room.reserve_expired" />",
+    "room.id_card":"<spring:message code="room.id_card" />",
+    
+    "room.reserve":"<spring:message code="room.reserve" />",
+    "room.close_reserve":"<spring:message code="room.close_reserve" />",
+    "room.close_reserve_for_checkin":"<spring:message code="room.close_reserve_for_checkin" />"
     }
 </div>

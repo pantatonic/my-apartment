@@ -66,12 +66,13 @@ var page = (function() {
         initialProcess: function() {
             page.setBuildingList();
             
-            jQuery('[name="test_date"]').datepicker({
+            jQuery('.input-datepicker').datepicker({
                 format:'yyyy-mm-dd',
                 autoclose: true,
+                weekStart: 0,
                 language: localeForDatepicker()
             }).on('changeDate',function(e) {
-                alert('test');
+                
             });
         },
         addEvent: function() {

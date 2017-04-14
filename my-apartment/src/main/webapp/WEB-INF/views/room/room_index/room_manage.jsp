@@ -20,16 +20,12 @@
             </div>
             <div class="modal-body">
 
-                <%--<div class="input-group">
-                    <div class="input-group-addon">
-                        <i class="glyphicon glyphicon-calendar"></i>
-                    </div>
-                    <input type="text" name="test_date" value="2017-04-13" 
-                        autocomplete="off" class="form-control" readonly="readonly">
-                </div>--%>
-
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                    <li class="active"><a href="#red" data-toggle="tab">Red</a></li>
+                    <li class="active">
+                        <a href="#red" data-toggle="tab">
+                            <spring:message code="room.reservation" />
+                        </a>
+                    </li>
                     <li><a href="#orange" data-toggle="tab">Orange</a></li>
                     <li><a href="#yellow" data-toggle="tab">Yellow</a></li>
                     <li><a href="#green" data-toggle="tab">Green</a></li>
@@ -37,8 +33,106 @@
                 </ul>
                 <div id="my-tab-content" class="tab-content">
                     <div class="tab-pane fade in active" id="red">
-                        <h1>Red</h1>
-                        <p>red red red red red red</p>
+                        <br>
+                        <form id="room-form" name="room_reservation_form" method="post" class="form-horizontal" 
+                            action="<c:url value="room/room_reservation_save.html" />">
+                            
+                            <div class="form-group col-sm-6 col-md-6">
+                                <label class="col-sm-6 control-label">
+                                    <spring:message code="room.reserve_date" />
+                                </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
+                                        <input type="text" name="reserve_date" value="" 
+                                            autocomplete="off" class="form-control input-datepicker datepicker-fixed-width" 
+                                            readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group col-sm-6 col-md-6">
+                                <label class="col-sm-6 control-label">
+                                    <spring:message code="room.reserve_expired" />
+                                </label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </div>
+                                        <input type="text" name="reserve_expired" value="" 
+                                            autocomplete="off" class="form-control input-datepicker datepicker-fixed-width" 
+                                            readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                            <div class="form-group col-sm-6 col-md-6">
+                                <label class="col-sm-6 control-label">
+                                    <spring:message code="room.id_card" />
+                                </label>
+                                <div class="col-sm-6 no-padding">
+                                    <div class="col-sm-12">
+                                        <input type="text" name="id_card" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                            <div class="form-group col-sm-6 col-md-6">
+                                <label class="col-sm-6 control-label">
+                                    <spring:message code="common.person_name" />
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="reserve_name" class="form-control">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group col-sm-6 col-md-6">
+                                <label class="col-sm-6 control-label">
+                                    <spring:message code="common.person_lastname" />
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="reserve_lastname" class="form-control">
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    <spring:message code="common.remark" />
+                                </label>
+                                <div class="col-sm-9" style="padding-left: 7px;">
+                                    <textarea name="remark" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                            <div class="form-group col-sm-6 col-md-6">
+                                <label class="col-sm-6 control-label">
+                                    <spring:message code="common.status" />
+                                </label>
+                                <div class="col-sm-6">
+                                    <select name="status" class="form-control">
+                                        <option value=""> -- <spring:message code="common.please_select_data" /> -- </option>
+                                        <option value="1"><spring:message code="room.reserve" /></option>
+                                        <option value="2"><spring:message code="room.close_reserve" /></option>
+                                        <option value="3"><spring:message code="room.close_reserve_for_checkin" /></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                            <br>
+                            
+                            <div class="text-right">
+                                <spring:message code="common.save" var="msgSavebuttonReservation" />
+                                ${commonHtml.getSaveButton(msgSavebuttonReservation, msgNowProcessing)}
+                            </div>
+                        </form>
                     </div>
                     <div class="tab-pane fade" id="orange">
                         <h1>Orange</h1>

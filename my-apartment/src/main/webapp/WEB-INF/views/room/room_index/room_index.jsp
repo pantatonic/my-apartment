@@ -67,7 +67,6 @@
 
                     <div class="box-footer">
                         &nbsp;
-                        <jsp:include page="room_manage.jsp" flush="true" />
                     </div>
                 </div>
 
@@ -97,6 +96,8 @@
         </textarea>
 
         <jsp:include page="room_detail.jsp" flush="true" />
+        
+        <jsp:include page="room_manage.jsp" flush="true" />
                             
     </tiles:putAttribute>
 </tiles:insertDefinition>

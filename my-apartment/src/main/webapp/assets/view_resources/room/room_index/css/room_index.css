@@ -75,3 +75,9 @@ form[name="room_form"] [name="price_per_month"] {
 #modal-room-manage .modal-dialog {
     width: 95%;
 }
+
+[name="room_reservation_form"] [name="id_card"],
+[name="room_reservation_form"] [name="reserve_name"],
+[name="room_reservation_form"] [name="reserve_lastname"] {
+    width: 200px;
+}
