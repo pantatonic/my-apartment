@@ -54,7 +54,8 @@
                                             <i class="glyphicon glyphicon-calendar"></i>
                                         </div>
                                         <input type="text" name="reserve_date" value="" 
-                                            autocomplete="off" class="form-control input-datepicker datepicker-fixed-width" 
+                                            autocomplete="off" 
+                                            class="form-control input-datepicker datepicker-fixed-width my-required-field" 
                                             readonly="readonly">
                                     </div>
                                 </div>
@@ -85,7 +86,8 @@
                                     <div class="col-sm-12">
                                         <input type="hidden" name="id" value="">
                                         <input type="hidden" name="room_id" value="">
-                                        <input type="text" name="id_card" class="form-control" value="">
+                                        <input type="text" name="id_card" class="form-control my-required-field" 
+                                            value="" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -96,7 +98,8 @@
                                     <spring:message code="common.person_name" />
                                 </label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="reserve_name" class="form-control" value="">
+                                    <input type="text" name="reserve_name" class="form-control my-required-field" 
+                                           value="" autocomplete="off">
                                 </div>
                             </div>
                             
@@ -105,7 +108,8 @@
                                     <spring:message code="common.person_lastname" />
                                 </label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="reserve_lastname" class="form-control" value="">
+                                    <input type="text" name="reserve_lastname" class="form-control my-required-field" 
+                                           value="" autocomplete="off">
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -125,7 +129,7 @@
                                     <spring:message code="common.status" />
                                 </label>
                                 <div class="col-sm-6">
-                                    <select name="status" class="form-control">
+                                    <select name="status" class="form-control my-required-field">
                                         <option value=""> -- <spring:message code="common.please_select_data" /> -- </option>
                                         <option value="1"><spring:message code="room.reserve" /></option>
                                         <option value="2"><spring:message code="room.close_reserve" /></option>
