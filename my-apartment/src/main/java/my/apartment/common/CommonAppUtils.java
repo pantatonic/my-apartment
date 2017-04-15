@@ -3,7 +3,9 @@ package my.apartment.common;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
@@ -73,6 +75,12 @@ public class CommonAppUtils {
     
     public static int countJsonArrayDataFromWS(JSONObject resultWsJsonObject) {
         return CommonAppUtils.getJsonArrayDataFromWS(resultWsJsonObject).length();
+    }
+    
+    public static String getCurrentDateString() {
+        Date date = new Date();
+
+        return new SimpleDateFormat(CommonString.DATE_FORMAT_STRING).format(date);
     }
     
     public static JSONObject simpleValidateRequire(

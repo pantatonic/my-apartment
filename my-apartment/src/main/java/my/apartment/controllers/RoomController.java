@@ -1,5 +1,6 @@
 package my.apartment.controllers;
 
+import java.util.Date;
 import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonString;
 
@@ -50,6 +51,7 @@ public class RoomController {
         modelAndView.addObject("buildingList", jsonArrayBuilding);
         modelAndView.addObject("buildingIdString", CommonAppUtils.nullToStringEmpty(buildingId));
         modelAndView.addObject("roomStatusList", jsonArrayRoomStatus);
+        modelAndView.addObject("currentDateString", CommonAppUtils.getCurrentDateString());
             
         return modelAndView;
     }
@@ -331,16 +333,13 @@ public class RoomController {
         JSONObject jsonObjectReturn = new JSONObject();
         
         CommonAppUtils.setResponseHeader(response);
-        
+
         try {
             RestTemplate restTemplate = new RestTemplate();
-            System.out.println(ServiceDomain.WS_URL + "room/get_room_manage/" + roomId);
+
             String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_room_manage/" + roomId, String.class);
             
             jsonObjectReturn = new JSONObject(resultWs);
-            System.out.println("----------");
-            System.out.println(jsonObjectReturn);
-            System.out.println("----------");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -349,7 +348,35 @@ public class RoomController {
         }
         
         
-        return "... : " + roomId;
+        return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/room_reservation_save.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String roomReservationSave(@RequestBody MultiValueMap<String, String> formData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
+            HttpHeaders headers = new HttpHeaders();
+            MediaType mediaType = CommonAppUtils.jsonMediaType();
+            headers.setContentType(mediaType);
+            
+            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_reservation_save", entity, String.class, CommonString.UTF8_STRING);
+            
+            JSONObject resultWsJsonObject = new JSONObject(resultWs);
+
+            jsonObjectReturn = resultWsJsonObject;            
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
     }
     
 }

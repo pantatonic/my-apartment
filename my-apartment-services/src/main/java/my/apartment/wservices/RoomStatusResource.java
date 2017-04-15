@@ -58,8 +58,7 @@ public class RoomStatusResource {
         catch(Exception e) {
             e.printStackTrace();
             
-            jsonObjectReturn.put(CommonString.RESULT_STRING, CommonString.ERROR_STRING)
-                    .put(CommonString.MESSAGE_STRING, CommonString.SERVICE_ERROR_STRING);
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
         return jsonObjectReturn.toString();

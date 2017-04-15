@@ -116,6 +116,23 @@ var page = (function() {
                 
                 modalRoomDetail.save();
             });
+            
+            page.getElement.getModalRoomManage().on('click', '#new-room-reservation', function() {
+                var thisElement = jQuery(this);
+                
+                thisElement.hide();
+                
+                modalRoomManage.getRoomReservationForm().show();
+            });
+            
+            modalRoomManage.getRoomReservationForm().submit(function(e) {
+                e.preventDefault();
+                
+                modalRoomManage.saveRoomReservation();
+            });
+        },
+        getCurrentDateString: function() {
+            return jQuery('#current-date-string').val();
         },
         setBuildingList: function() {
             if(!app.valueUtils.isEmptyValue(buildingIdString)) {

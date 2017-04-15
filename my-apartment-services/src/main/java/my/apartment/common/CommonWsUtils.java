@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.MediaType;
@@ -14,6 +17,7 @@ import org.json.JSONObject;
 public class CommonWsUtils {
     
     public static final String MEDIA_TYPE_JSON = MediaType.APPLICATION_JSON  + ";charset=utf-8";
+    public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
     
     public static JSONObject receiveJsonObject(InputStream incomingData) {
         JSONObject jsonObject = new JSONObject();
@@ -55,6 +59,26 @@ public class CommonWsUtils {
     
     public static Integer integerZeroToNull(int integerValue) {
         return integerValue == 0 ? null : integerValue;
+    }
+    
+    public static Date stringToDate(String dateString) throws ParseException {
+        if(dateString.isEmpty()) {
+            return null;
+        }
+        else {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT_STRING);
+            
+            return simpleDateFormat.parse(dateString);
+        }
+    }
+    
+    public static String strToString(String str) {
+        if(str.isEmpty()) {
+            return null;
+        }
+        else {
+            return str;
+        }
     }
     
 

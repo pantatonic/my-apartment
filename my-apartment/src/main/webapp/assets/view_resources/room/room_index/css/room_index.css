@@ -81,3 +81,7 @@ form[name="room_form"] [name="price_per_month"] {
 [name="room_reservation_form"] [name="reserve_lastname"] {
     width: 200px;
 }
+
+#new-room-reservation {
+    margin: auto;
+}

@@ -34,6 +34,13 @@
                 <div id="my-tab-content" class="tab-content">
                     <div class="tab-pane fade in active" id="red">
                         <br>
+                        
+                        <div style="text-align: center;">
+                            <button type="button" id="new-room-reservation" class="btn btn-warning btn-flat">
+                                _Create Reservation_
+                            </button>
+                        </div>
+                        
                         <form id="room-reservation-form" name="room_reservation_form" method="post" class="form-horizontal" 
                             action="<c:url value="room/room_reservation_save.html" />">
                             
@@ -76,8 +83,9 @@
                                 </label>
                                 <div class="col-sm-6 no-padding">
                                     <div class="col-sm-12">
-                                        <input type="text" name="id">
-                                        <input type="text" name="id_card" class="form-control">
+                                        <input type="hidden" name="id" value="">
+                                        <input type="hidden" name="room_id" value="">
+                                        <input type="text" name="id_card" class="form-control" value="">
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +96,7 @@
                                     <spring:message code="common.person_name" />
                                 </label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="reserve_name" class="form-control">
+                                    <input type="text" name="reserve_name" class="form-control" value="">
                                 </div>
                             </div>
                             
@@ -97,7 +105,7 @@
                                     <spring:message code="common.person_lastname" />
                                 </label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="reserve_lastname" class="form-control">
+                                    <input type="text" name="reserve_lastname" class="form-control" value="">
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -112,7 +120,7 @@
                             </div>
                             <div class="clearfix"></div>
                             
-                            <div class="form-group col-sm-6 col-md-6">
+                            <div class="form-group col-sm-6 col-md-6" id="reserve-status-form-group">
                                 <label class="col-sm-6 control-label">
                                     <spring:message code="common.status" />
                                 </label>

@@ -10,7 +10,9 @@ public class RoomReservation implements Serializable {
     
     private Integer id;
     private Date reserveDate;
+    private String reserveDateString;
     private Date reserveExpired;
+    private String reserveExpiredString;
     private Integer roomId;
     private String idCard;
     private String reserveName;
@@ -23,10 +25,12 @@ public class RoomReservation implements Serializable {
     public RoomReservation() {
     }
 
-    public RoomReservation(Integer id, Date reserveDate, Date reserveExpired, Integer roomId, String idCard, String reserveName, String reserveLastname, String remark, Date createdDate, Date updatedDate, Integer status) {
+    public RoomReservation(Integer id, Date reserveDate, String reserveDateString, Date reserveExpired, String reserveExpiredString, Integer roomId, String idCard, String reserveName, String reserveLastname, String remark, Date createdDate, Date updatedDate, Integer status) {
         this.id = id;
         this.reserveDate = reserveDate;
+        this.reserveDateString = reserveDateString;
         this.reserveExpired = reserveExpired;
+        this.reserveExpiredString = reserveExpiredString;
         this.roomId = roomId;
         this.idCard = idCard;
         this.reserveName = reserveName;
@@ -53,12 +57,28 @@ public class RoomReservation implements Serializable {
         this.reserveDate = reserveDate;
     }
 
+    public String getReserveDateString() {
+        return reserveDateString;
+    }
+
+    public void setReserveDateString(String reserveDateString) {
+        this.reserveDateString = reserveDateString;
+    }
+
     public Date getReserveExpired() {
         return reserveExpired;
     }
 
     public void setReserveExpired(Date reserveExpired) {
         this.reserveExpired = reserveExpired;
+    }
+
+    public String getReserveExpiredString() {
+        return reserveExpiredString;
+    }
+
+    public void setReserveExpiredString(String reserveExpiredString) {
+        this.reserveExpiredString = reserveExpiredString;
     }
 
     public Integer getRoomId() {
@@ -127,7 +147,7 @@ public class RoomReservation implements Serializable {
 
     @Override
     public String toString() {
-        return "RoomReservation{" + "id=" + id + ", reserveDate=" + reserveDate + ", reserveExpired=" + reserveExpired + ", roomId=" + roomId + ", idCard=" + idCard + ", reserveName=" + reserveName + ", reserveLastname=" + reserveLastname + ", remark=" + remark + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", status=" + status + '}';
+        return "RoomReservation{" + "id=" + id + ", reserveDate=" + reserveDate + ", reserveDateString=" + reserveDateString + ", reserveExpired=" + reserveExpired + ", reserveExpiredString=" + reserveExpiredString + ", roomId=" + roomId + ", idCard=" + idCard + ", reserveName=" + reserveName + ", reserveLastname=" + reserveLastname + ", remark=" + remark + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", status=" + status + '}';
     }
-
+    
 }

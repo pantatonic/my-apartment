@@ -33,6 +33,8 @@
                     <spring:message code="building.room" />
                     <!--<small></small>-->
                 </h1>
+                
+                <input type="hidden" id="current-date-string" value="${currentDateString}">
             </section>
 
             <section class="content">
