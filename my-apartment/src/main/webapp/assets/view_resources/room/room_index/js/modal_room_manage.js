@@ -47,9 +47,19 @@ var modalRoomManage = (function() {
                         for(var key in data_) {
                             var key_ = app.camelToUnderScore(key);
                             roomReservationForm.find('[name="' + key_ + '"]').val(data_[key]);
-                            
-                            //app.triggerCtrl(modalBody.find('[name="' + key_ + '"]'));
                         }
+                        
+                        jQuery('.input-datepicker').each(function() {
+                            var thisEle = jQuery(this);
+                            
+                            if(thisEle.attr('name') == 'reserve_date') {
+                                thisEle.datepicker('update', app.valueUtils.undefinedToEmpty(data_.reserveDate));
+                            }
+                            
+                            if(thisEle.attr('name') == 'reserve_expired') {
+                                thisEle.datepicker('update', app.valueUtils.undefinedToEmpty(data_.reserveExpired));
+                            }
+                        });
                     }
                 };
                 
