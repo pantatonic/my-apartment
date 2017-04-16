@@ -357,6 +357,18 @@ public class RoomController {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
+            /** validate required field */
+            JSONObject resultValidateRequired = CommonAppUtils.simpleValidateRequire(formData, 
+                    new String[] {"id_card", "reserve_name", "reserve_lastname", "status"});
+            
+            if(resultValidateRequired.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        resultValidateRequired.getString(CommonString.MESSAGE_STRING));
+                
+                return jsonObjectReturn.toString();
+            }
+
+
             RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
             HttpHeaders headers = new HttpHeaders();
@@ -375,6 +387,8 @@ public class RoomController {
             
             jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
+        
+        
         
         return jsonObjectReturn.toString();
     }
