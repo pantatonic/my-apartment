@@ -1,6 +1,6 @@
 
 
-/* global _CONTEXT_PATH_, _DELAY_PROCESS_, app, SUCCESS_STRING, SESSION_EXPIRE_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS */
+/* global _CONTEXT_PATH_, _DELAY_PROCESS_, app, SUCCESS_STRING, SESSION_EXPIRE_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, page */
 
 var modalRoomManage = (function() {
     var _getModal = function() {
@@ -18,6 +18,20 @@ var modalRoomManage = (function() {
         getRoomReservationForm: function() {
             return _getRoomReservationForm();
         },
+        preProcessForNewReservation: function(roomId) {
+            var roomReservationForm = _getRoomReservationForm();
+            var currentDateString = page.getCurrentDateString();
+            var modal = _getModal();
+            
+            roomReservationForm.find('[name="room_id"]').val(roomId);
+            roomReservationForm.find('[name="status"]').val('1');
+            roomReservationForm.find('[name="reserve_date"]').datepicker('update', currentDateString);
+            roomReservationForm.find('#reserve-status-form-group').hide();
+
+            roomReservationForm.hide();
+
+            modal.find('#new-room-reservation').show();
+        },
         getRoomManage: function(roomId) {
             var _setData = function(response) {
                 var modal = _getModal();
@@ -31,13 +45,14 @@ var modalRoomManage = (function() {
                     roomReservationForm.find('[name="id"]').val('');
 
                     if(data.length == 0) {
-                        roomReservationForm.find('[name="room_id"]').val(roomId);
+                        modalRoomManage.preProcessForNewReservation(roomId);
+                        /*roomReservationForm.find('[name="room_id"]').val(roomId);
                         roomReservationForm.find('[name="status"]').val('1');
                         roomReservationForm.find('[name="reserve_date"]').datepicker('update', currentDateString);
                         roomReservationForm.find('#reserve-status-form-group').hide();
                         
                         roomReservationForm.hide();
-                        modal.find('#new-room-reservation').show();
+                        modal.find('#new-room-reservation').show();*/
                     }
                     else {
                         roomReservationForm.show();
@@ -111,6 +126,7 @@ var modalRoomManage = (function() {
         },
         saveRoomReservation: function() {
             var form_ = modalRoomManage.getRoomReservationForm();
+            var formDataStatus = form_.find('[name="status"]');
             var submitButton = form_.find('[type="submit"]');
             var _validate = function() {
                 var validatePass = true;
@@ -156,7 +172,7 @@ var modalRoomManage = (function() {
             }
             
             submitButton.bootstrapBtn('loading');
-            
+
             setTimeout(function() {
                 jQuery.ajax({
                     type: 'post',
@@ -175,6 +191,12 @@ var modalRoomManage = (function() {
                             if(response.id != undefined) {
                                 form_.find('[name="id"]').val(response.id);
                                 latestRoomIdProcess = response.roomId;
+                            }
+                            
+                            if(formDataStatus.val() != '1') {
+                                app.clearFormData(form_);
+                                form_.find('[name="id"]').val('');
+                                modalRoomManage.preProcessForNewReservation(response.roomId);
                             }
                         }
                         else {
