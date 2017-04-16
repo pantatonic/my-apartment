@@ -29,7 +29,7 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
             
             con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
             
-            String stringQuery = "SELECT * FROM room_reservation WHERE room_id = ? ORDER BY reserve_date DESC";
+            String stringQuery = "SELECT * FROM room_reservation WHERE room_id = ? ORDER BY created_date DESC";
 
             ps = con.prepareStatement(stringQuery);
             ps.setInt(1, roomId);
@@ -151,7 +151,7 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
             
             con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
             
-            String stringQuery = "SELECT * FROM room_reservation WHERE room_id = ? AND status = ? ORDER BY reserve_date DESC LIMIT 0,1";
+            String stringQuery = "SELECT * FROM room_reservation WHERE room_id = ? AND status = ? ORDER BY created_date DESC LIMIT 0,1";
 
             ps = con.prepareStatement(stringQuery);
             ps.setInt(1, roomId);

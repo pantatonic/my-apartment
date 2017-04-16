@@ -192,11 +192,14 @@ var modalRoomManage = (function() {
                                 form_.find('[name="id"]').val(response.id);
                                 latestRoomIdProcess = response.roomId;
                             }
-                            
+
                             if(formDataStatus.val() != '1') {
                                 app.clearFormData(form_);
                                 form_.find('[name="id"]').val('');
                                 modalRoomManage.preProcessForNewReservation(response.roomId);
+                            }
+                            else {
+                                form_.find('#reserve-status-form-group').show();
                             }
                         }
                         else {
