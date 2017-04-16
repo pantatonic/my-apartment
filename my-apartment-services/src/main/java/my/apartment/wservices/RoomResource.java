@@ -218,6 +218,28 @@ public class RoomResource {
         
     }
     
+    @Path("get_current_reserve")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getCurrentReserve() {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomReservationDao roomReservationDaoImpl = new RoomReservationDaoImpl();
+            
+            List<RoomReservation> roomReservations = roomReservationDaoImpl.getCurrentReserve();
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomReservations);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
     @Path("get_room_manage/{room_id}")
     @GET
     @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
@@ -231,7 +253,6 @@ public class RoomResource {
             
             List<RoomReservation> roomReservations = roomReservationDaoImpl.getCurrentByRoomId(roomId);
             
-            //jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomReservations);
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             
             JSONObject jsonObjectData = new JSONObject();
@@ -282,6 +303,7 @@ public class RoomResource {
                         CommonString.SAVE_DATA_SUCCESS_STRING);
                 
                 jsonObjectReturn.put("id", resultSave.getId());
+                jsonObjectReturn.put("roomId", resultSave.getRoomId());
             }
             else {
                 jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 

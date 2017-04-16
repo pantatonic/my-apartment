@@ -8,6 +8,8 @@ public interface RoomReservationDao {
     
     public List<RoomReservation> getByRoomId(Integer roomId);
     
+    public List<RoomReservation> getCurrentReserve();
+    
     public List<RoomReservation> getCurrentByRoomId(Integer roomId);
     
     public RoomReservation save(RoomReservation roomReservation);

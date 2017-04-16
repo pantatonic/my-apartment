@@ -92,6 +92,7 @@ var page = (function() {
             });
             
             jQuery('.refresh-room-list').click(function() {
+                latestRoomIdProcess = null;
                 page.getRoom();
             });
             
@@ -123,6 +124,10 @@ var page = (function() {
                 thisElement.hide();
                 
                 modalRoomManage.getRoomReservationForm().show();
+            });
+            
+            modalRoomManage.getModal().on('hidden.bs.modal', function(e) {
+                page.getRoom();
             });
             
             modalRoomManage.getRoomReservationForm().submit(function(e) {
@@ -277,6 +282,8 @@ var page = (function() {
                         app.loadingInElement('remove', contentBox);
                         
                         __setAnimateBoxRoom();
+                        
+                        page.getRoomManageDetailList();
                     };
                     
                     jQuery.ajax({
@@ -305,6 +312,39 @@ var page = (function() {
                     });
                 }, _DELAY_PROCESS_);
             }
+        },
+        getRoomManageDetailList: function() {
+            var _setReserveLabel = function(response) {
+                var reserveData = response.data.reserve;
+                var labelTemplate = '<span class="label label-warning">' + app.translate('room.reserve') + '</span>'
+                    + '<div class="clearfix"></div>';
+                
+                for(var index in reserveData) {
+                    var currentData = reserveData[index];
+                    var boxRoom = jQuery('.box-room[data-id="' + currentData.roomId + '"]');
+                    
+                    boxRoom.find('.room-manage-detail-label').html(labelTemplate);
+                }
+            };
+            
+            jQuery.ajax({
+                type: 'post',
+                url: _CONTEXT_PATH_ + '/room/get_room_manage_detail_list.html',
+                cache: false,
+                success: function(response) {
+                    response = app.convertToJsonObject(response);
+                    
+                    _setReserveLabel(response);
+                },
+                error: function() {
+                    app.showNotice({
+                        type: WARNING_STRING,
+                        message: app.translate('room.cannot_get_room_manage_detail_list'),
+                        addclass: 'notice-get-room-manage-detail'
+                    });
+                }
+                
+            });
         },
         getElement: {
             getAddButton: function() {

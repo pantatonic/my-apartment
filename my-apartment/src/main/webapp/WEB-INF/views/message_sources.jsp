@@ -86,8 +86,11 @@
     "room.reserve_expired":"<spring:message code="room.reserve_expired" />",
     "room.id_card":"<spring:message code="room.id_card" />",
     
+    "room.create_reservation":"<spring:message code="room.create_reservation" />",
     "room.reserve":"<spring:message code="room.reserve" />",
     "room.close_reserve":"<spring:message code="room.close_reserve" />",
-    "room.close_reserve_for_checkin":"<spring:message code="room.close_reserve_for_checkin" />"
+    "room.close_reserve_for_checkin":"<spring:message code="room.close_reserve_for_checkin" />",
+    
+    "room.cannot_get_room_manage_detail_list":"<spring:message code="room.cannot_get_room_manage_detail_list" />"
     }
 </div>

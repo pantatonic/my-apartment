@@ -324,6 +324,54 @@ public class RoomController {
         return jsonObjectReturn;
     }
     
+    @RequestMapping(value = "/room/get_room_manage_detail_list.html")
+    @ResponseBody
+    public String getRoomManageDetailList(
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            /** get current reserve */
+            RestTemplate restTemplate = new RestTemplate();
+            
+            String resultWsGetCurrentReserve = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_current_reserve", String.class);
+            JSONObject jsonObjectGetCurrentReserve = new JSONObject(resultWsGetCurrentReserve);
+
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
+            
+            jsonObjectReturn.put(CommonString.DATA_STRING, 
+                    new JSONObject().put("reserve", jsonObjectGetCurrentReserve.get(CommonString.DATA_STRING)));
+            
+            
+            
+            
+            /*JSONArray jsonArray = new JSONArray();
+            
+            JSONObject jsonObjectReserve = new JSONObject().put("aaa", "AAA").put("bbb", "BBB").put("ccc", "CCC");
+            JSONObject jsonObjectStayed = new JSONObject().put("ddd", "DDD").put("eee", "EEE").put("fff", "FFF");
+            JSONObject jsonObjectNoticeCheckout = new JSONObject().put("ggg", "GGG").put("hhh", "HHH").put("iii", "III");
+            
+            jsonArray.put(jsonObjectReserve);
+            jsonArray.put(jsonObjectStayed);
+            jsonArray.put(jsonObjectNoticeCheckout);
+            
+            jsonObjectReturn.put("reserve", jsonArray);*/
+            
+            
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
     @RequestMapping(value = "/room/get_room_manage.html", method = {RequestMethod.GET})
     @ResponseBody
     public String getRoomManage(

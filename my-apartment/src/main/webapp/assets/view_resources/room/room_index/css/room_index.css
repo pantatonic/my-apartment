@@ -39,6 +39,9 @@ form[name="room_form"] [name="price_per_month"] {
     cursor: pointer;
 }
 
+.room-manage-detail-label {
+    height: 20px;
+}
 .room-icon {
     font-size: 60px;
 }

@@ -33,7 +33,7 @@ var modalRoomManage = (function() {
                     if(data.length == 0) {
                         roomReservationForm.find('[name="room_id"]').val(roomId);
                         roomReservationForm.find('[name="status"]').val('1');
-                        roomReservationForm.find('[name="reserve_date"]').val(currentDateString);
+                        roomReservationForm.find('[name="reserve_date"]').datepicker('update', currentDateString);
                         roomReservationForm.find('#reserve-status-form-group').hide();
                         
                         roomReservationForm.hide();
@@ -67,6 +67,8 @@ var modalRoomManage = (function() {
                 setCurrentReservation();
                 
                 modal.modal('show');
+                
+                app.modalUtils.bodyScrollTop(modalRoomManage.getModal());
                 
                 app.loading('remove');
             };
@@ -169,10 +171,10 @@ var modalRoomManage = (function() {
                                 message: app.translate('common.save_success'),
                                 type: response.result
                             });
-                            
+
                             if(response.id != undefined) {
                                 form_.find('[name="id"]').val(response.id);
-                                latestRoomIdProcess = response.id;
+                                latestRoomIdProcess = response.roomId;
                             }
                         }
                         else {

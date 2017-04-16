@@ -78,6 +78,7 @@
         <textarea id="box-room-template">
             <div class="col-xs-12 col-sm-6 col-md-3 box-room_">
                 <div class="box-room hover-box">
+                    <div class="room-manage-detail-label"></div>
                     <i class="fa fa-bed room-icon"></i>
                     <div class="clearfix"></div>
                     <span class="label label-room-status">Default Label</span>

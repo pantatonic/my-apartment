@@ -78,6 +78,67 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
     }
     
     @Override
+    public List<RoomReservation> getCurrentReserve() {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<RoomReservation> roomReservations = new ArrayList<RoomReservation>();
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+            
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String stringQuery = "SELECT * FROM room_reservation WHERE status = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, 1);
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomReservation roomReservation = new RoomReservation();
+                               
+                roomReservation.setId(rs.getInt("id"));
+                roomReservation.setReserveDate(rs.getDate("reserve_date"));
+                roomReservation.setReserveExpired(rs.getDate("reserve_expired"));
+                roomReservation.setRoomId(rs.getInt("room_id"));
+                roomReservation.setIdCard(rs.getString("id_card"));
+                roomReservation.setReserveName(rs.getString("reserve_name"));
+                roomReservation.setReserveLastname(rs.getString("reserve_lastname"));
+                roomReservation.setRemark(rs.getString("remark"));
+                roomReservation.setCreatedDate(rs.getDate("created_date"));
+                roomReservation.setUpdatedDate(rs.getDate("updated_date"));
+                roomReservation.setStatus(rs.getInt("status"));
+                
+                roomReservations.add(roomReservation);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return roomReservations;
+    }
+    
+    @Override
     public List<RoomReservation> getCurrentByRoomId(Integer roomId) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -211,12 +272,14 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
 
                     if(generatedKeys.next()) {
                         roomReservationReturn.setId(generatedKeys.getInt(1));
+                        roomReservationReturn.setRoomId(roomReservation.getRoomId());
                     }
                 }
                 else {
                     /** update process */
                     
                     roomReservationReturn.setId(roomReservation.getId());
+                    roomReservationReturn.setRoomId(roomReservation.getRoomId());
                 }
             }
         }

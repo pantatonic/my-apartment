@@ -37,7 +37,7 @@
                         
                         <div style="text-align: center;">
                             <button type="button" id="new-room-reservation" class="btn btn-warning btn-flat">
-                                _Create Reservation_
+                                <spring:message code="room.create_reservation" />
                             </button>
                         </div>
                         
