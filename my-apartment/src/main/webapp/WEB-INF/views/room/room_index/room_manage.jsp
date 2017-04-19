@@ -15,7 +15,9 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" id="modal-room-manage-label">
-                    <spring:message code="room.manage" />
+                    <spring:message code="room.manage" /> 
+                    : 
+                    <span class="modal-room-no-label"></span>
                 </h4>
             </div>
             <div class="modal-body">

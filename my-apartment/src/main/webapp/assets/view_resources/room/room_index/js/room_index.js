@@ -127,7 +127,7 @@ var page = (function() {
             });
             
             modalRoomManage.getModal().on('hidden.bs.modal', function(e) {
-                page.getRoom();
+                //page.getRoom();
             });
             
             modalRoomManage.getRoomReservationForm().submit(function(e) {
@@ -167,10 +167,13 @@ var page = (function() {
                 page.getElement.getBoxRoomContainer().html(html);
             }
         },
+        setModalRoomNoLabel: function(roomNoLabel) {
+            page.getElement.getModalRoomNoLabel().html(roomNoLabel);
+        },
         showRoomManage: function(buttonRoomManage) {
             var roomId = buttonRoomManage.attr('data-id');
             
-            modalRoomManage.getRoomManage(roomId);
+            modalRoomManage.getRoomManage(roomId, buttonRoomManage);
         },
         deleteRoom: function(buttonDelete) {
             alertUtil.confirmAlert(app.translate('common.please_confirm_to_process'), function() {
@@ -209,7 +212,9 @@ var page = (function() {
                                 return color[roomStatusId];
                             };
                             var boxRoomElement_ = boxRoomElement.closest('.box-room_');
-                             
+                            
+                            boxRoomElement_.attr('data-room-no', currentData.roomNo);
+                            
                             boxRoomElement.attr('data-id', currentData.id);
                              
                             boxRoomElement.find('.box-room-name').html(
@@ -364,6 +369,9 @@ var page = (function() {
             },
             getModalRoomManage: function() {
                 return modalRoomManage.getModal();
+            },
+            getModalRoomNoLabel: function() {
+                return jQuery('.modal-room-no-label');
             }
         },
         showRoomDetail: function(type, roomId) {

@@ -32,7 +32,7 @@ var modalRoomManage = (function() {
 
             modal.find('#new-room-reservation').show();
         },
-        getRoomManage: function(roomId) {
+        getRoomManage: function(roomId, buttonRoomManage) {
             var _setData = function(response) {
                 var modal = _getModal();
                 var roomReservationForm = _getRoomReservationForm();
@@ -78,7 +78,9 @@ var modalRoomManage = (function() {
                     }
                 };
                 
-                /** begin main process */
+                var roomNoLabel = buttonRoomManage.closest('.box-room_').attr('data-room-no');
+                page.setModalRoomNoLabel(roomNoLabel);
+                                
                 setCurrentReservation();
                 
                 modal.modal('show');
@@ -88,6 +90,7 @@ var modalRoomManage = (function() {
                 app.loading('remove');
             };
             
+            /** begin main process */
             app.loading('show');
             
             setTimeout(function() {
@@ -201,6 +204,8 @@ var modalRoomManage = (function() {
                             else {
                                 form_.find('#reserve-status-form-group').show();
                             }
+                            
+                            page.getRoom();
                         }
                         else {
                             if(response.message == SESSION_EXPIRE_STRING) {
