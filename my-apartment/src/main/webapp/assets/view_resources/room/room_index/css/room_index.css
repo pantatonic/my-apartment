@@ -3,14 +3,19 @@
     margin: auto;
 }
 
-form[name="room_form"] [name="room_no"]/*, 
+form[name="room_form"] [name="room_no"],
+table#reservation-list th:nth-child(1),
+table#reservation-list th:nth-child(2),
+table#reservation-list th:nth-child(3)
+/*, 
 form[name="room_form"] [name="name"]*/
- {
+{
     width: 100px;
 }
 
 form[name="room_form"] [name="floor_seq"],
-form[name="room_form"] [name="room_status_id"] {
+form[name="room_form"] [name="room_status_id"],
+table#reservation-list th:nth-child(6) {
     width: 150px;
 }
 

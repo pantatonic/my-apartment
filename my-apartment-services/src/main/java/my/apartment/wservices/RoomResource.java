@@ -328,14 +328,16 @@ public class RoomResource {
         
         try {
             JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
-            
+
             Integer start = Integer.parseInt(jsonObjectReceive.getString("start"), 10);
             Integer length = Integer.parseInt(jsonObjectReceive.getString("length"), 10);
             String searchString = "";
             
             RoomReservationDao roomReservationDaoImpl = new RoomReservationDaoImpl();
             
-            Object[] resultObject = roomReservationDaoImpl.getReservationList(start, length, searchString);
+            Object[] resultObject = roomReservationDaoImpl.getReservationList(
+                    Integer.parseInt(jsonObjectReceive.getString("room_id"), 10), 
+                    start, length, searchString);
 
             jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, (List<RoomReservation>) resultObject[0]);
             

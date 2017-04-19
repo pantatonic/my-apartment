@@ -91,6 +91,8 @@
     "room.close_reserve":"<spring:message code="room.close_reserve" />",
     "room.close_reserve_for_checkin":"<spring:message code="room.close_reserve_for_checkin" />",
     
-    "room.cannot_get_room_manage_detail_list":"<spring:message code="room.cannot_get_room_manage_detail_list" />"
+    "room.cannot_get_room_manage_detail_list":"<spring:message code="room.cannot_get_room_manage_detail_list" />",
+    
+    "room.reservation_history":"<spring:message code="room.reservation_history" />"
     }
 </div>

@@ -439,6 +439,7 @@ public class RoomController {
     @RequestMapping(value = "/get_reservation_list.html", method = {RequestMethod.GET})
     @ResponseBody
     public String getReservationList(
+            @RequestParam(value = "room_id", required = true) String roomId,
             @RequestParam(value = "draw", required = true) String draw,
             @RequestParam(value = "start", required = true) String start,
             @RequestParam(value = "length", required = true) String length,
@@ -450,7 +451,7 @@ public class RoomController {
         
         try {
             JSONObject requestJsonObject = new JSONObject();
-            requestJsonObject.put("start", start).put("length", length);
+            requestJsonObject.put("room_id", roomId).put("start", start).put("length", length);
             
             RestTemplate restTemplate = new RestTemplate();
             String requestJson = requestJsonObject.toString();

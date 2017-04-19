@@ -308,11 +308,11 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
     }
     
     @Override
-    public Object[] getReservationList(Integer start,Integer length,String searchString) {
+    public Object[] getReservationList(Integer roomId, Integer start,Integer length,String searchString) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         Object[] objectsReturn = new Object[2];
         
         List<RoomReservation> roomReservations = new ArrayList<RoomReservation>();
@@ -323,15 +323,18 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
             
             con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
             
-            String stringQuery = "SELECT * FROM room_reservation WHERE 1=1 ";
-            String stringQueryNumRow = "SELECT COUNT(id) AS count_row FROM room_reservation WHERE 1=1 ";
+            String stringQuery = "SELECT * FROM room_reservation WHERE 1=1 AND room_reservation.room_id=? ";
+            String stringQueryNumRow = "SELECT COUNT(id) AS count_row FROM room_reservation WHERE 1=1 AND room_reservation.room_id=? ";
             
             if(!searchString.equals("")) {
                 
             }
             
             /** get total records */
+            stringQueryNumRow += "ORDER BY created_date DESC";
+            
             ps = con.prepareStatement(stringQueryNumRow);
+            ps.setInt(1, roomId);
             rs = ps.executeQuery();
             
             rs.first();
@@ -341,9 +344,11 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
             /** ---------------- */
             
             /** get data records */
+            stringQuery += "ORDER BY created_date DESC ";
             stringQuery += "LIMIT " + start.toString() + "," + length.toString();
             
             ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
             rs = ps.executeQuery();
             
             while(rs.next()) {

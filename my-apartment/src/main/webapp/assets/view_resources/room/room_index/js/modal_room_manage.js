@@ -11,17 +11,18 @@ var modalRoomManage = (function() {
         return jQuery('[name="room_reservation_form"]');
     };
     
-    var _getReservationList = function() {
+    var _getReservationList = function(roomId) {
         jQuery('#reservation-list').dataTable({
             destroy: true,
             autoWidth: false,
             processing: true,
-            serverSide: true,
-            displayLength: 1,
+            serverSide: true,            
             ajax: {
                 url: _CONTEXT_PATH_ + '/get_reservation_list.html',
-                type: 'get'/*,
-                data: app.create_form_object_data(jQuery('form[name="search_form"]'))*/
+                type: 'get',
+                data: {
+                    room_id: roomId
+                }
             },
             columns: [
                 {data: 'reserveDate'},
@@ -111,7 +112,7 @@ var modalRoomManage = (function() {
 
                 /** begin reservation */
                 setCurrentReservation();
-                _getReservationList();
+                _getReservationList(roomId);
                 /** end reservation */
                 
                 modal.modal('show');
@@ -157,6 +158,9 @@ var modalRoomManage = (function() {
                     }
                 }); 
             }, _DELAY_PROCESS_);
+        },
+        getReservationList: function(roomId) {
+            return _getReservationList(roomId);
         },
         saveRoomReservation: function() {
             var form_ = modalRoomManage.getRoomReservationForm();
@@ -237,6 +241,7 @@ var modalRoomManage = (function() {
                             }
                             
                             page.getRoom();
+                            modalRoomManage.getReservationList(response.roomId);
                         }
                         else {
                             if(response.message == SESSION_EXPIRE_STRING) {

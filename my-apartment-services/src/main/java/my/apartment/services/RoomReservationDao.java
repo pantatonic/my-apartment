@@ -14,6 +14,6 @@ public interface RoomReservationDao {
     
     public RoomReservation save(RoomReservation roomReservation);
     
-    public Object[] getReservationList(Integer start, Integer length, String searString);
+    public Object[] getReservationList(Integer roomId, Integer start, Integer length, String searString);
     
 }
