@@ -323,8 +323,8 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
             
             con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
             
-            String stringQuery = "SELECT * FROM room_reservation WHERE 1=1 AND room_reservation.room_id=? ";
-            String stringQueryNumRow = "SELECT COUNT(id) AS count_row FROM room_reservation WHERE 1=1 AND room_reservation.room_id=? ";
+            String stringQuery = "SELECT room_reservation.*, room.room_no FROM room_reservation JOIN room ON room_reservation.room_id = room.id WHERE 1=1 AND room_reservation.room_id=? ";
+            String stringQueryNumRow = "SELECT COUNT(room_reservation.id) AS count_row FROM room_reservation room_reservation JOIN room ON room_reservation.room_id = room.id WHERE 1=1 AND room_reservation.room_id=? ";
             
             if(!searchString.equals("")) {
                 
@@ -365,6 +365,7 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
                 roomReservation.setCreatedDate(rs.getDate("created_date"));
                 roomReservation.setUpdatedDate(rs.getDate("updated_date"));
                 roomReservation.setStatus(rs.getInt("status"));
+                roomReservation.setRoomNo(rs.getString("room_no"));
                 
                 roomReservations.add(roomReservation);
             }

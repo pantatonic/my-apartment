@@ -21,11 +21,13 @@ public class RoomReservation implements Serializable {
     private Date createdDate;
     private Date updatedDate;
     private Integer status;
+    
+    private String roomNo;
 
     public RoomReservation() {
     }
 
-    public RoomReservation(Integer id, Date reserveDate, String reserveDateString, Date reserveExpired, String reserveExpiredString, Integer roomId, String idCard, String reserveName, String reserveLastname, String remark, Date createdDate, Date updatedDate, Integer status) {
+    public RoomReservation(Integer id, Date reserveDate, String reserveDateString, Date reserveExpired, String reserveExpiredString, Integer roomId, String idCard, String reserveName, String reserveLastname, String remark, Date createdDate, Date updatedDate, Integer status, String roomNo) {
         this.id = id;
         this.reserveDate = reserveDate;
         this.reserveDateString = reserveDateString;
@@ -39,6 +41,7 @@ public class RoomReservation implements Serializable {
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.status = status;
+        this.roomNo = roomNo;
     }
 
     public Integer getId() {
@@ -145,9 +148,17 @@ public class RoomReservation implements Serializable {
         this.status = status;
     }
 
+    public String getRoomNo() {
+        return roomNo;
+    }
+
+    public void setRoomNo(String roomNo) {
+        this.roomNo = roomNo;
+    }
+
     @Override
     public String toString() {
-        return "RoomReservation{" + "id=" + id + ", reserveDate=" + reserveDate + ", reserveDateString=" + reserveDateString + ", reserveExpired=" + reserveExpired + ", reserveExpiredString=" + reserveExpiredString + ", roomId=" + roomId + ", idCard=" + idCard + ", reserveName=" + reserveName + ", reserveLastname=" + reserveLastname + ", remark=" + remark + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", status=" + status + '}';
+        return "RoomReservation{" + "id=" + id + ", reserveDate=" + reserveDate + ", reserveDateString=" + reserveDateString + ", reserveExpired=" + reserveExpired + ", reserveExpiredString=" + reserveExpiredString + ", roomId=" + roomId + ", idCard=" + idCard + ", reserveName=" + reserveName + ", reserveLastname=" + reserveLastname + ", remark=" + remark + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", status=" + status + ", roomNo=" + roomNo + '}';
     }
     
 }

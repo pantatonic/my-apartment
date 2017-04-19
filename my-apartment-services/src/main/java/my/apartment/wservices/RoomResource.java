@@ -331,7 +331,7 @@ public class RoomResource {
 
             Integer start = Integer.parseInt(jsonObjectReceive.getString("start"), 10);
             Integer length = Integer.parseInt(jsonObjectReceive.getString("length"), 10);
-            String searchString = "";
+            String searchString = jsonObjectReceive.getString("search");
             
             RoomReservationDao roomReservationDaoImpl = new RoomReservationDaoImpl();
             
@@ -340,7 +340,7 @@ public class RoomResource {
                     start, length, searchString);
 
             jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, (List<RoomReservation>) resultObject[0]);
-            
+
             jsonObjectReturn.put("totalRecords", resultObject[1]);
         }
         catch(Exception e) {

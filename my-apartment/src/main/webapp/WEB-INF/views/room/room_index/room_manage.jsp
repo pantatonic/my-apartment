@@ -161,7 +161,6 @@
                                 <tr>
                                     <th><spring:message code="room.reserve_date" /></th>
                                     <th><spring:message code="room.reserve_expired" /></th>
-                                    <th><spring:message code="room.room_no" /></th>
                                     <th><spring:message code="room.id_card" /></th>
                                     <th><spring:message code="common.person_name" /> <spring:message code="common.person_lastname" /></th>
                                     <th><spring:message code="common.status" /></th>

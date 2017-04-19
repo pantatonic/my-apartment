@@ -1,6 +1,7 @@
 package my.apartment.controllers;
 
 import java.util.Date;
+import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonString;
 
@@ -10,6 +11,9 @@ import my.apartment.common.JsonObjectUtils;
 import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -27,6 +31,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class RoomController {
+    
+    @Autowired  
+    private MessageSource messageSource;
     
     /**
      * 
@@ -443,15 +450,17 @@ public class RoomController {
             @RequestParam(value = "draw", required = true) String draw,
             @RequestParam(value = "start", required = true) String start,
             @RequestParam(value = "length", required = true) String length,
+            @RequestParam(value = "search[value]", required = false) String search,
             HttpServletResponse response
     ) {
         JSONObject jsonObjectReturn = new JSONObject();
-        
+
         CommonAppUtils.setResponseHeader(response);
         
         try {
             JSONObject requestJsonObject = new JSONObject();
-            requestJsonObject.put("room_id", roomId).put("start", start).put("length", length);
+            requestJsonObject.put("room_id", roomId).put("start", start)
+                    .put("length", length).put("search", search.trim());
             
             RestTemplate restTemplate = new RestTemplate();
             String requestJson = requestJsonObject.toString();
@@ -470,14 +479,15 @@ public class RoomController {
             for(Integer i = 0; i <= jsonArrayData.length() - 1; i++) {
                 JSONObject j = jsonArrayData.getJSONObject(i);
                 JSONObject tempJsonObject = new JSONObject();
+                
+                String reserveStatus = this.getReserveStatusString(Integer.parseInt(JsonObjectUtils.getDataStringWithEmpty("status", j), 10));
 
                 tempJsonObject.put("reserveDate", JsonObjectUtils.getDataStringWithEmpty("reserveDate", j));
                 tempJsonObject.put("reserveExpired", JsonObjectUtils.getDataStringWithEmpty("reserveExpired", j));
-                tempJsonObject.put("roomNo", JsonObjectUtils.getDataStringWithEmpty("roomId", j));
                 tempJsonObject.put("idCard", JsonObjectUtils.getDataStringWithEmpty("idCard", j));
                 tempJsonObject.put("name", JsonObjectUtils.getDataStringWithEmpty("reserveName", j) 
                         + " " + JsonObjectUtils.getDataStringWithEmpty("reserveLastname", j));
-                tempJsonObject.put("status", JsonObjectUtils.getDataStringWithEmpty("status", j));
+                tempJsonObject.put("status", reserveStatus);
                 
                 jsonArrayReturn.put(tempJsonObject);
             }
@@ -494,6 +504,23 @@ public class RoomController {
         }
         
         return jsonObjectReturn.toString();
+    }
+    
+    private String getReserveStatusString(Integer status) {
+        String statusString;
+       
+        switch(status) {
+            case 1: statusString = messageSource.getMessage("room.reserve",null, LocaleContextHolder.getLocale());
+                break;
+            case 2: statusString = messageSource.getMessage("room.close_reserve",null, LocaleContextHolder.getLocale());;
+                break;
+            case 3: statusString = messageSource.getMessage("room.close_reserve_for_checkin",null, LocaleContextHolder.getLocale());;
+                break;
+            default: statusString = "";
+                break;
+        }
+        
+        return statusString;
     }
     
 }

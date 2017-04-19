@@ -16,7 +16,8 @@ var modalRoomManage = (function() {
             destroy: true,
             autoWidth: false,
             processing: true,
-            serverSide: true,            
+            serverSide: true,  
+            bFilter: true,
             ajax: {
                 url: _CONTEXT_PATH_ + '/get_reservation_list.html',
                 type: 'get',
@@ -27,7 +28,6 @@ var modalRoomManage = (function() {
             columns: [
                 {data: 'reserveDate'},
                 {data: 'reserveExpired'},
-                {data: 'roomNo'},
                 {data: 'idCard'},
                 {data: 'name'},
                 {data: 'status'}
