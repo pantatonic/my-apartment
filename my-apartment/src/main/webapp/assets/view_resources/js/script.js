@@ -1,4 +1,4 @@
-/* global app */
+/* global app, _CONTEXT_PATH_, _LOCALE_ */
 
 var _DELAY_PROCESS_ = 500;
 
@@ -43,4 +43,20 @@ jQuery(document).ready(function() {
 
         }
     });
+    
+
+    if(typeof _LOCALE_ !== 'undefined') {
+        jQuery.extend($.fn.dataTable.defaults, {
+            /*lengthMenu: [[15, 25, 50, 100], [15, 25, 50, 100]],*/
+            bLengthChange: false,
+            displayLength: 10,
+            language: {
+                url: _CONTEXT_PATH_ + '/assets/data_table/languages/' + _LOCALE_ + '.json'
+            },
+            ordering: false,
+            bFilter: false,
+            pagingType: 'full_numbers'
+        });
+    }
+    
 });

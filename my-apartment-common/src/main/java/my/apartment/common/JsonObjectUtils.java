@@ -54,4 +54,54 @@ public class JsonObjectUtils {
                 .put(CommonString.DATA_STRING, dataList);
     }
     
+    public static String getStringData(String key, JSONObject jsonObject) {
+        if(!jsonObject.has(key)) {
+            return null;
+        }
+        else {
+            return jsonObject.getString(key);
+        }
+    }
+    
+    public static Integer getIntData(String key, JSONObject jsonObject) {
+        if(!jsonObject.has(key)) {
+            return null;
+        }
+        else {
+            return jsonObject.getInt(key);
+        }
+    }
+    
+    public static Boolean getBooleanData(String key, JSONObject jsonObject) {
+        if(!jsonObject.has(key)) {
+            return null;
+        }
+        else {
+            return jsonObject.getBoolean(key);
+        }
+    }
+    
+    public static String getDataStringWithEmpty(String key, JSONObject jsonObject) {
+        if(!jsonObject.has(key)) {
+            return "";
+        }
+        else {
+            if(jsonObject.get(key) instanceof String) {
+                return jsonObject.getString(key);
+            }
+            else
+            if(jsonObject.get(key) instanceof Integer) {
+                return Integer.toString(jsonObject.getInt(key));
+            }
+            else
+            if(jsonObject.get(key) instanceof Boolean) {
+                return Boolean.toString(jsonObject.getBoolean(key));
+            }
+            else {
+                return "";
+            }
+        }
+        
+    }
+    
 }

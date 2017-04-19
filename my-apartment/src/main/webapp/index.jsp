@@ -61,6 +61,12 @@
         <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="<c:url value="/assets/dist/css/skins/_all-skins.css" />">
         
+        <!-- data table -->
+        <link rel="stylesheet" href="<c:url value="/assets/data_table/media/css/dataTables.bootstrap.css" />">
+        <link rel="stylesheet" href="<c:url value="/assets/data_table/extensions/Responsive/css/responsive.bootstrap.css" />">
+        <script type="text/javascript" src="<c:url value="/assets/data_table/media/js/jquery.dataTables.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/assets/data_table/media/js/dataTables.bootstrap.js" />"></script>
+        <script type="text/javascript" src="<c:url value="/assets/data_table/extensions/Responsive/js/dataTables.responsive.js" />"></script>
         
         <!-- pnotify -->
         <link rel="stylesheet" href="<c:url value="/assets/pnotify/pnotify.custom.css" />">

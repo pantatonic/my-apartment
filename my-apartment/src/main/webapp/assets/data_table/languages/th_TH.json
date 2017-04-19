@@ -1,0 +1,24 @@
+{
+    "sEmptyTable": "ไม่มีข้อมูล",
+    "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+    "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 แถว",
+    "sInfoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
+    "sInfoPostFix": "",
+    "sInfoThousands": ",",
+    "sLengthMenu": "แสดง_MENU_ แถว",
+    "sLoadingRecords": "กำลังดึงข้อมูล...",
+    "sProcessing": "กำลังดำเนินการ...",
+    "sSearch": "ค้นหา:",
+    "sZeroRecords": "ไม่พบข้อมูล",
+    "oPaginate": {
+        "sFirst": "เริ่มต้น",
+        "sLast": "สุดท้าย",
+        "sNext": "ถัดไป",
+        "sPrevious": "ก่อนหน้า"
+    },
+    "oAria": {
+        "sSortAscending": ": เรียงจากน้อยไปมาก",
+        "sSortDescending": ": เรียงจากมากไปน้อย"
+    },
+    "sUrl": ""
+}

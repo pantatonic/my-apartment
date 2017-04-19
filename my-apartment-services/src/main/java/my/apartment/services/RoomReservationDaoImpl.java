@@ -307,4 +307,88 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
         return roomReservationReturn;
     }
     
+    @Override
+    public Object[] getReservationList(Integer start,Integer length,String searchString) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Object[] objectsReturn = new Object[2];
+        
+        List<RoomReservation> roomReservations = new ArrayList<RoomReservation>();
+        objectsReturn[0] = roomReservations;
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+            
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String stringQuery = "SELECT * FROM room_reservation WHERE 1=1 ";
+            String stringQueryNumRow = "SELECT COUNT(id) AS count_row FROM room_reservation WHERE 1=1 ";
+            
+            if(!searchString.equals("")) {
+                
+            }
+            
+            /** get total records */
+            ps = con.prepareStatement(stringQueryNumRow);
+            rs = ps.executeQuery();
+            
+            rs.first();
+            Integer totalRecord = rs.getInt("count_row");
+            
+            objectsReturn[1] = totalRecord;
+            /** ---------------- */
+            
+            /** get data records */
+            stringQuery += "LIMIT " + start.toString() + "," + length.toString();
+            
+            ps = con.prepareStatement(stringQuery);
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomReservation roomReservation = new RoomReservation();
+                
+                roomReservation.setId(rs.getInt("id"));
+                roomReservation.setReserveDate(rs.getDate("reserve_date"));
+                roomReservation.setReserveExpired(rs.getDate("reserve_expired"));
+                roomReservation.setRoomId(rs.getInt("room_id"));
+                roomReservation.setIdCard(rs.getString("id_card"));
+                roomReservation.setReserveName(rs.getString("reserve_name"));
+                roomReservation.setReserveLastname(rs.getString("reserve_lastname"));
+                roomReservation.setRemark(rs.getString("remark"));
+                roomReservation.setCreatedDate(rs.getDate("created_date"));
+                roomReservation.setUpdatedDate(rs.getDate("updated_date"));
+                roomReservation.setStatus(rs.getInt("status"));
+                
+                roomReservations.add(roomReservation);
+            }
+            /** --------------- */
+            
+            objectsReturn[0] = roomReservations;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return objectsReturn;
+    }
+    
 }

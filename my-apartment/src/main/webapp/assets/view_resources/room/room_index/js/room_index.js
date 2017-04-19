@@ -74,6 +74,7 @@ var page = (function() {
             }).on('changeDate',function(e) {
                 
             });
+
         },
         addEvent: function() {
             var buildingList = _getBuildingListElement();

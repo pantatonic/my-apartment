@@ -344,9 +344,7 @@ public class RoomController {
             
             jsonObjectReturn.put(CommonString.DATA_STRING, 
                     new JSONObject().put("reserve", jsonObjectGetCurrentReserve.get(CommonString.DATA_STRING)));
-            
-            
-            
+
             
             /*JSONArray jsonArray = new JSONArray();
             
@@ -359,9 +357,6 @@ public class RoomController {
             jsonArray.put(jsonObjectNoticeCheckout);
             
             jsonObjectReturn.put("reserve", jsonArray);*/
-            
-            
-
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -437,6 +432,65 @@ public class RoomController {
         }
         
         
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/get_reservation_list.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String getReservationList(
+            @RequestParam(value = "draw", required = true) String draw,
+            @RequestParam(value = "start", required = true) String start,
+            @RequestParam(value = "length", required = true) String length,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            JSONObject requestJsonObject = new JSONObject();
+            requestJsonObject.put("start", start).put("length", length);
+            
+            RestTemplate restTemplate = new RestTemplate();
+            String requestJson = requestJsonObject.toString();
+            HttpHeaders headers = new HttpHeaders();
+            MediaType mediaType = CommonAppUtils.jsonMediaType();
+            headers.setContentType(mediaType);
+            
+            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/get_reservation_list", entity, String.class, CommonString.UTF8_STRING);
+            
+            JSONObject resultWsJsonObject = new JSONObject(resultWs);
+            
+            JSONArray jsonArrayData = resultWsJsonObject.getJSONArray(CommonString.DATA_STRING);
+            JSONArray jsonArrayReturn = new JSONArray();
+            
+            for(Integer i = 0; i <= jsonArrayData.length() - 1; i++) {
+                JSONObject j = jsonArrayData.getJSONObject(i);
+                JSONObject tempJsonObject = new JSONObject();
+
+                tempJsonObject.put("reserveDate", JsonObjectUtils.getDataStringWithEmpty("reserveDate", j));
+                tempJsonObject.put("reserveExpired", JsonObjectUtils.getDataStringWithEmpty("reserveExpired", j));
+                tempJsonObject.put("roomNo", JsonObjectUtils.getDataStringWithEmpty("roomId", j));
+                tempJsonObject.put("idCard", JsonObjectUtils.getDataStringWithEmpty("idCard", j));
+                tempJsonObject.put("name", JsonObjectUtils.getDataStringWithEmpty("reserveName", j) 
+                        + " " + JsonObjectUtils.getDataStringWithEmpty("reserveLastname", j));
+                tempJsonObject.put("status", JsonObjectUtils.getDataStringWithEmpty("status", j));
+                
+                jsonArrayReturn.put(tempJsonObject);
+            }
+
+            jsonObjectReturn.put("draw", draw)
+                    .put("recordsTotal", resultWsJsonObject.getInt("totalRecords"))
+                    .put("recordsFiltered", resultWsJsonObject.getInt("totalRecords"))
+                    .put(CommonString.DATA_STRING, jsonArrayReturn);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
         
         return jsonObjectReturn.toString();
     }
