@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 12, 2017 at 06:16 PM
+-- Generation Time: Apr 20, 2017 at 02:00 PM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -78,13 +78,29 @@ INSERT INTO `room` (`id`, `building_id`, `floor_seq`, `room_no`, `name`, `price_
 CREATE TABLE IF NOT EXISTS `room_reservation` (
 `id` int(11) NOT NULL,
   `reserve_date` date NOT NULL,
-  `reserve_expire` date DEFAULT NULL,
+  `reserve_expired` date DEFAULT NULL,
   `room_id` int(11) NOT NULL,
   `id_card` varchar(50) NOT NULL,
   `reserve_name` varchar(255) NOT NULL,
   `reserve_lastname` varchar(255) DEFAULT NULL,
+  `remark` text,
+  `created_date` datetime NOT NULL,
+  `updated_date` datetime DEFAULT NULL,
   `status` int(1) NOT NULL COMMENT '1=reserve, 2=cancel, 3=cancel_for_checkin'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `room_reservation`
+--
+
+INSERT INTO `room_reservation` (`id`, `reserve_date`, `reserve_expired`, `room_id`, `id_card`, `reserve_name`, `reserve_lastname`, `remark`, `created_date`, `updated_date`, `status`) VALUES
+(1, '2017-04-16', NULL, 1, '1111', '1', '11', '111', '2017-04-16 17:25:13', '2017-04-16 17:26:28', 2),
+(2, '2017-04-16', NULL, 1, '2222', '2', '22', '222', '2017-04-16 17:26:40', '2017-04-16 17:26:47', 3),
+(3, '2017-04-16', NULL, 1, '3333', '3', '33', '333', '2017-04-16 17:26:56', '2017-04-16 17:27:15', 2),
+(4, '2017-04-16', '2017-04-20', 3, '8', '88', '888', '8888', '2017-04-16 17:28:41', NULL, 1),
+(5, '2017-04-19', NULL, 1, '1x1x1x1x', '1x', '1x1x', '1x1x1x1x', '2017-04-16 17:29:19', '2017-04-19 13:01:12', 2),
+(6, '2017-04-19', NULL, 1, '11111', '1', '11', '111', '2017-04-19 13:01:30', '2017-04-19 21:05:33', 2),
+(7, '2017-04-20', NULL, 1, '1111', '1', '11', '111', '2017-04-19 21:05:55', '2017-04-19 21:46:05', 1);
 
 -- --------------------------------------------------------
 
@@ -207,7 +223,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- AUTO_INCREMENT for table `room_reservation`
 --
 ALTER TABLE `room_reservation`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `room_status`
 --
