@@ -30,7 +30,7 @@
                     </li>
                     <li>
                         <a href="#check-in-tab" data-toggle="tab">
-                            _Check In_
+                            <spring:message code="room.check_in" />
                         </a>
                     </li>
                     <li><a href="#yellow" data-toggle="tab">Yellow</a></li>
@@ -45,11 +45,11 @@
                         <br>
                         
                         <form id="room-check-in-form" name="room_check_in_form" method="post" class="form-horizontal" 
-                              action="<c:url value="room/room_check_in_save.html" />">
+                              action="<c:url value="room_check_in_save.html" />">
                             
                             <div class="form-group col-sm-6 col-md-6">
                                 <label class="col-sm-6 control-label">
-                                    _Check in Date_
+                                    <spring:message code="room.check_in_date" />
                                 </label>
                                 <div class="col-sm-6">
                                     <div class="input-group">
@@ -71,8 +71,7 @@
                                 </label>
                                 <div class="col-sm-6 no-padding">
                                     <div class="col-sm-12">
-                                        <input type="text" name="id" value="">
-                                        <input type="text" name="room_id" value="">
+                                        <input type="hidden" name="room_id" value="">
                                         <input type="text" name="id_card" class="form-control my-required-field" 
                                             value="" autocomplete="off">
                                     </div>
@@ -103,7 +102,7 @@
                             
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
-                                    _Address_
+                                    <spring:message code="building.address" />
                                 </label>
                                 <div class="col-sm-9" style="padding-left: 7px;">
                                     <textarea name="address" class="form-control"></textarea>
@@ -120,6 +119,11 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
+                            
+                            <div class="text-right">
+                                <spring:message code="common.save" var="msgSavebuttonCheckIn" />
+                                ${commonHtml.getSaveButton(msgSavebuttonCheckIn, msgNowProcessing)}
+                            </div>
                             
                         </form>
                     </div>

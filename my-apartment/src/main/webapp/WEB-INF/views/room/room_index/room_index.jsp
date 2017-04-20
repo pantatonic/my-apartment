@@ -22,8 +22,11 @@
             src="<c:url value="/assets/view_resources/room/room_index/js/room_index.js?v=${randomTextVersion}"/>"></script>
         <script type="text/javascript" 
             src="<c:url value="/assets/view_resources/room/room_index/js/modal_room_detail.js?v=${randomTextVersion}"/>"></script>
+            
         <script type="text/javascript" 
-            src="<c:url value="/assets/view_resources/room/room_index/js/modal_room_manage.js?v=${randomTextVersion}"/>"></script>
+            src="<c:url value="/assets/view_resources/room/room_index/js/modal_room_manage_reservation.js?v=${randomTextVersion}"/>"></script>
+        <script type="text/javascript" 
+            src="<c:url value="/assets/view_resources/room/room_index/js/modal_room_manage_check_in.js?v=${randomTextVersion}"/>"></script>
     </tiles:putAttribute>
     <tiles:putAttribute name="body">
 

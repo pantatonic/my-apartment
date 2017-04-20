@@ -1,5 +1,3 @@
-
-
 /* global _CONTEXT_PATH_, _DELAY_PROCESS_, app, SUCCESS_STRING, SESSION_EXPIRE_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, page */
 
 var modalRoomManage = (function() {
@@ -9,6 +7,10 @@ var modalRoomManage = (function() {
     
     var _getRoomReservationForm = function() {
         return jQuery('[name="room_reservation_form"]');
+    };
+    
+    var _getCurrentCheckInForm = function() {
+        return jQuery('[name="room_check_in_form"]');
     };
     
     var _getReservationList = function(roomId) {
@@ -59,6 +61,17 @@ var modalRoomManage = (function() {
 
             modal.find('#new-room-reservation').show();
         },
+        preProcessForNewCurrentCheckIn: function(roomId) {
+            var currentCheckInForm = _getCurrentCheckInForm();
+            var currentDateString = page.getCurrentDateString();
+            var modal = _getModal();
+            
+            currentCheckInForm.find('[name="room_id"]').val(roomId);
+            currentCheckInForm.find('[name="check_in_date"]').datepicker('update', currentDateString);
+            //currentCheckInForm.find('#reserve-status-form-group').hide();
+            
+            //currentCheckInForm.hide();
+        },
         getRoomManage: function(roomId, buttonRoomManage) {
             var _setData = function(response) {
                 var roomNoLabel = buttonRoomManage.closest('.box-room_').attr('data-room-no');
@@ -92,7 +105,7 @@ var modalRoomManage = (function() {
                             roomReservationForm.find('[name="' + key_ + '"]').val(data_[key]);
                         }
                         
-                        jQuery('.input-datepicker').each(function() {
+                        roomReservationForm.find('.input-datepicker').each(function() {
                             var thisEle = jQuery(this);
                             
                             if(thisEle.attr('name') == 'reserve_date') {
@@ -106,12 +119,39 @@ var modalRoomManage = (function() {
                     }
                 };
                 
+                var setCurrentCheckIn = function() {
+                    var data = response.data.currentCheckIn;
+                    var data_ = data[0];
+                    var currentCheckInForm = _getCurrentCheckInForm();
+                    
+                    app.clearFormData(currentCheckInForm);
+                    
+                    if(data.length == 0) {
+                        modalRoomManage.preProcessForNewCurrentCheckIn(roomId);
+                    }
+                    else {
+                        for(var key in data_) {
+                            var key_ = app.camelToUnderScore(key);
+                            currentCheckInForm.find('[name="' + key_ + '"]').val(data_[key]);
+                        }
+                        
+                        currentCheckInForm.find('.input-datepicker').each(function() {
+                            var thisEle = jQuery(this);
+                            
+                            if(thisEle.attr('name') == 'check_in_date') {
+                                thisEle.datepicker('update', app.valueUtils.undefinedToEmpty(data_.checkInDate));
+                            }
+                        });
+                    }
+                };
+                
 
-                /** begin mapin process */
+                /** begin main process */
                 page.setModalRoomNoLabel(roomNoLabel);
 
                 /** begin reservation */
                 setCurrentReservation();
+                setCurrentCheckIn();
                 _getReservationList(roomId);
                 /** end reservation */
                 

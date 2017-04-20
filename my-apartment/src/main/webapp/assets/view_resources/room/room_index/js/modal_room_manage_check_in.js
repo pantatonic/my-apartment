@@ -1,0 +1,7 @@
+
+var roomManageCheckIn = (function() {
+    
+    return {
+        
+    };
+})();

@@ -19,7 +19,9 @@ public class RoomReservation implements Serializable {
     private String reserveLastname;
     private String remark;
     private Date createdDate;
+    private String createdDateString;
     private Date updatedDate;
+    private String updatedDateString;
     private Integer status;
     
     private String roomNo;
@@ -27,7 +29,7 @@ public class RoomReservation implements Serializable {
     public RoomReservation() {
     }
 
-    public RoomReservation(Integer id, Date reserveDate, String reserveDateString, Date reserveExpired, String reserveExpiredString, Integer roomId, String idCard, String reserveName, String reserveLastname, String remark, Date createdDate, Date updatedDate, Integer status, String roomNo) {
+    public RoomReservation(Integer id, Date reserveDate, String reserveDateString, Date reserveExpired, String reserveExpiredString, Integer roomId, String idCard, String reserveName, String reserveLastname, String remark, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString, Integer status, String roomNo) {
         this.id = id;
         this.reserveDate = reserveDate;
         this.reserveDateString = reserveDateString;
@@ -39,7 +41,9 @@ public class RoomReservation implements Serializable {
         this.reserveLastname = reserveLastname;
         this.remark = remark;
         this.createdDate = createdDate;
+        this.createdDateString = createdDateString;
         this.updatedDate = updatedDate;
+        this.updatedDateString = updatedDateString;
         this.status = status;
         this.roomNo = roomNo;
     }
@@ -132,12 +136,28 @@ public class RoomReservation implements Serializable {
         this.createdDate = createdDate;
     }
 
+    public String getCreatedDateString() {
+        return createdDateString;
+    }
+
+    public void setCreatedDateString(String createdDateString) {
+        this.createdDateString = createdDateString;
+    }
+
     public Date getUpdatedDate() {
         return updatedDate;
     }
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public String getUpdatedDateString() {
+        return updatedDateString;
+    }
+
+    public void setUpdatedDateString(String updatedDateString) {
+        this.updatedDateString = updatedDateString;
     }
 
     public Integer getStatus() {
@@ -158,7 +178,7 @@ public class RoomReservation implements Serializable {
 
     @Override
     public String toString() {
-        return "RoomReservation{" + "id=" + id + ", reserveDate=" + reserveDate + ", reserveDateString=" + reserveDateString + ", reserveExpired=" + reserveExpired + ", reserveExpiredString=" + reserveExpiredString + ", roomId=" + roomId + ", idCard=" + idCard + ", reserveName=" + reserveName + ", reserveLastname=" + reserveLastname + ", remark=" + remark + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", status=" + status + ", roomNo=" + roomNo + '}';
+        return "RoomReservation{" + "id=" + id + ", reserveDate=" + reserveDate + ", reserveDateString=" + reserveDateString + ", reserveExpired=" + reserveExpired + ", reserveExpiredString=" + reserveExpiredString + ", roomId=" + roomId + ", idCard=" + idCard + ", reserveName=" + reserveName + ", reserveLastname=" + reserveLastname + ", remark=" + remark + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + ", status=" + status + ", roomNo=" + roomNo + '}';
     }
     
 }

@@ -19,7 +19,10 @@ import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.Room;
+import my.apartment.model.RoomCurrentCheckIn;
 import my.apartment.model.RoomReservation;
+import my.apartment.services.RoomCurrentCheckInDao;
+import my.apartment.services.RoomCurrentCheckInDaoImpl;
 import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
 import my.apartment.services.RoomReservationDao;
@@ -250,14 +253,19 @@ public class RoomResource {
         
         try {
             RoomReservationDao roomReservationDaoImpl = new RoomReservationDaoImpl();
+            RoomCurrentCheckInDao roomCurrentCheckInDaoImpl = new RoomCurrentCheckInDaoImpl();
             
             List<RoomReservation> roomReservations = roomReservationDaoImpl.getCurrentByRoomId(roomId);
-            
+            List<RoomCurrentCheckIn> currentCheckIns = roomCurrentCheckInDaoImpl.getCurrentByRoomId(roomId);
+            System.out.println("---- ws ----");
+            System.out.println(currentCheckIns);
+            System.out.println("---- ws ----");
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             
             JSONObject jsonObjectData = new JSONObject();
             
             jsonObjectData.put("roomReservarion", roomReservations);
+            jsonObjectData.put("currentCheckIn", currentCheckIns);
          
             jsonObjectReturn.put(CommonString.DATA_STRING, jsonObjectData);
         }

@@ -93,6 +93,9 @@
     
     "room.cannot_get_room_manage_detail_list":"<spring:message code="room.cannot_get_room_manage_detail_list" />",
     
-    "room.reservation_history":"<spring:message code="room.reservation_history" />"
+    "room.reservation_history":"<spring:message code="room.reservation_history" />",
+    
+    "room.check_in":"<spring:message code="room.check_in" />",
+    "room.check_in_date":"<spring:message code="room.check_in_date" />"
     }
 </div>
