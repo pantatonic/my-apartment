@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2017 at 02:00 PM
+-- Generation Time: Apr 20, 2017 at 04:21 PM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -42,6 +42,43 @@ CREATE TABLE IF NOT EXISTS `building` (
 INSERT INTO `building` (`id`, `name`, `address`, `tel`, `electricity_meter_digit`, `electricity_charge_per_unit`, `min_electricity_unit`, `min_electricity_charge`, `water_meter_digit`, `water_charge_per_unit`, `min_water_unit`, `min_water_charge`) VALUES
 (1, 'อาคาร 1', 'ที่อยู่ อาคาร 1', '0000000000', 4, '1.00', 2, '3.00', 4, '4.00', 5, '6.00'),
 (2, 'อาคาร 2', 'ที่อยู่ อาคาร 2', '', 4, '7.00', NULL, NULL, 4, '6.00', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `check_in_out_history`
+--
+
+CREATE TABLE IF NOT EXISTS `check_in_out_history` (
+`id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `check_in_date` date NOT NULL,
+  `id_card` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
+  `address` text,
+  `remark` text,
+  `created_date` datetime NOT NULL,
+  `updated_date` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `current_check_in`
+--
+
+CREATE TABLE IF NOT EXISTS `current_check_in` (
+  `room_id` int(11) NOT NULL,
+  `check_in_date` date NOT NULL,
+  `id_card` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
+  `address` text,
+  `remark` text,
+  `created_date` datetime NOT NULL,
+  `updated_date` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -87,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `room_reservation` (
   `created_date` datetime NOT NULL,
   `updated_date` datetime DEFAULT NULL,
   `status` int(1) NOT NULL COMMENT '1=reserve, 2=cancel, 3=cancel_for_checkin'
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `room_reservation`
@@ -100,7 +137,8 @@ INSERT INTO `room_reservation` (`id`, `reserve_date`, `reserve_expired`, `room_i
 (4, '2017-04-16', '2017-04-20', 3, '8', '88', '888', '8888', '2017-04-16 17:28:41', NULL, 1),
 (5, '2017-04-19', NULL, 1, '1x1x1x1x', '1x', '1x1x', '1x1x1x1x', '2017-04-16 17:29:19', '2017-04-19 13:01:12', 2),
 (6, '2017-04-19', NULL, 1, '11111', '1', '11', '111', '2017-04-19 13:01:30', '2017-04-19 21:05:33', 2),
-(7, '2017-04-20', NULL, 1, '1111', '1', '11', '111', '2017-04-19 21:05:55', '2017-04-19 21:46:05', 1);
+(7, '2017-04-20', '2017-04-22', 1, '1111', '1', '11', '111', '2017-04-19 21:05:55', '2017-04-20 15:14:38', 2),
+(8, '2017-04-20', '2017-04-24', 1, '1', '11', '111', '1111', '2017-04-20 15:15:00', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -176,6 +214,12 @@ ALTER TABLE `building`
  ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `check_in_out_history`
+--
+ALTER TABLE `check_in_out_history`
+ ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `room`
 --
 ALTER TABLE `room`
@@ -215,6 +259,11 @@ ALTER TABLE `users`
 ALTER TABLE `building`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
+-- AUTO_INCREMENT for table `check_in_out_history`
+--
+ALTER TABLE `check_in_out_history`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
@@ -223,7 +272,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- AUTO_INCREMENT for table `room_reservation`
 --
 ALTER TABLE `room_reservation`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `room_status`
 --
