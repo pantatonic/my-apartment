@@ -1,4 +1,4 @@
-/* global _CONTEXT_PATH_, _DELAY_PROCESS_, app, SUCCESS_STRING, SESSION_EXPIRE_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, page */
+/* global _CONTEXT_PATH_, _DELAY_PROCESS_, app, SUCCESS_STRING, SESSION_EXPIRE_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, page, roomManageCheckIn */
 
 var modalRoomManage = (function() {
     var _getModal = function() {
@@ -46,6 +46,9 @@ var modalRoomManage = (function() {
         },
         getRoomReservationForm: function() {
             return _getRoomReservationForm();
+        },
+        getCurrentCheckInForm: function() {
+            return _getCurrentCheckInForm();
         },
         preProcessForNewReservation: function(roomId) {
             var roomReservationForm = _getRoomReservationForm();
@@ -304,6 +307,9 @@ var modalRoomManage = (function() {
                     }
                 });
             }, _DELAY_PROCESS_);
+        },
+        saveCurrentCheckIn: function() {
+            roomManageCheckIn.saveCurrentCheckIn();
         }
         
     };

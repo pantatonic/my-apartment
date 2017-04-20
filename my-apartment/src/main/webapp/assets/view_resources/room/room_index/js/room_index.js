@@ -136,6 +136,12 @@ var page = (function() {
                 
                 modalRoomManage.saveRoomReservation();
             });
+            
+            modalRoomManage.getCurrentCheckInForm().submit(function(e) {
+                e.preventDefault();
+                
+                modalRoomManage.saveCurrentCheckIn();
+            });
         },
         getCurrentDateString: function() {
             return jQuery('#current-date-string').val();
