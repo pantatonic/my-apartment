@@ -17,7 +17,7 @@ var modalRoomManage = (function() {
             autoWidth: false,
             processing: true,
             serverSide: true,  
-            bFilter: true,
+            bFilter: false,
             ajax: {
                 url: _CONTEXT_PATH_ + '/get_reservation_list.html',
                 type: 'get',

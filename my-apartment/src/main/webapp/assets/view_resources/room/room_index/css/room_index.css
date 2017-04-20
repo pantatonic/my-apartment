@@ -14,7 +14,7 @@ form[name="room_form"] [name="name"]*/
 
 form[name="room_form"] [name="floor_seq"],
 form[name="room_form"] [name="room_status_id"],
-table#reservation-list th:nth-child(6) {
+table#reservation-list th:nth-child(5) {
     width: 150px;
 }
 

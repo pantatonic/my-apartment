@@ -510,11 +510,14 @@ public class RoomController {
         String statusString;
        
         switch(status) {
-            case 1: statusString = messageSource.getMessage("room.reserve",null, LocaleContextHolder.getLocale());
+            case 1: statusString = "<span class=\"label label-warning\">"
+                    + messageSource.getMessage("room.reserve",null, LocaleContextHolder.getLocale()) + "</span>";
                 break;
-            case 2: statusString = messageSource.getMessage("room.close_reserve",null, LocaleContextHolder.getLocale());;
+            case 2: statusString = "<span class=\"label bg-maroon\">"
+                    + messageSource.getMessage("room.close_reserve",null, LocaleContextHolder.getLocale()) + "</span>";
                 break;
-            case 3: statusString = messageSource.getMessage("room.close_reserve_for_checkin",null, LocaleContextHolder.getLocale());;
+            case 3: statusString = "<span class=\"label bg-maroon\">"
+                    + messageSource.getMessage("room.close_reserve_for_checkin",null, LocaleContextHolder.getLocale()) + "</span>";
                 break;
             default: statusString = "";
                 break;
