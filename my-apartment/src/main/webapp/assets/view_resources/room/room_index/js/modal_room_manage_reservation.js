@@ -152,11 +152,14 @@ var modalRoomManage = (function() {
                 /** begin main process */
                 page.setModalRoomNoLabel(roomNoLabel);
 
-                /** begin reservation */
+
                 setCurrentReservation();
                 setCurrentCheckIn();
                 _getReservationList(roomId);
-                /** end reservation */
+                
+                
+                app.clearAllInputErrorClass(modalRoomManage.getRoomReservationForm());
+                app.clearAllInputErrorClass(modalRoomManage.getCurrentCheckInForm());
                 
                 modal.modal('show');
                 
