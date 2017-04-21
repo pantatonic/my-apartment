@@ -44,6 +44,12 @@
                     <div class="tab-pane fade" id="check-in-tab">
                         <br>
                         
+                        <div style="text-align: center;">
+                            <button type="button" id="new-current-check-in" class="btn btn-warning btn-flat">
+                                <spring:message code="room.create_check_in" />
+                            </button>
+                        </div>
+                        
                         <form id="room-check-in-form" name="room_check_in_form" method="post" class="form-horizontal" 
                               action="<c:url value="room_check_in_save.html" />">
                             

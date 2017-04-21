@@ -127,6 +127,14 @@ var page = (function() {
                 modalRoomManage.getRoomReservationForm().show();
             });
             
+            page.getElement.getModalRoomManage().on('click', '#new-current-check-in', function() {
+                var thisElement = jQuery(this);
+                
+                thisElement.hide();
+                
+                modalRoomManage.getCurrentCheckInForm().show();
+            });
+            
             modalRoomManage.getModal().on('hidden.bs.modal', function(e) {
                 //page.getRoom();
             });

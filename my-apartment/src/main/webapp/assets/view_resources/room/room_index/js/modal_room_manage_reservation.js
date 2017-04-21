@@ -71,9 +71,10 @@ var modalRoomManage = (function() {
             
             currentCheckInForm.find('[name="room_id"]').val(roomId);
             currentCheckInForm.find('[name="check_in_date"]').datepicker('update', currentDateString);
-            //currentCheckInForm.find('#reserve-status-form-group').hide();
             
-            //currentCheckInForm.hide();
+            currentCheckInForm.hide();
+            
+            modal.find('#new-current-check-in').show();
         },
         getRoomManage: function(roomId, buttonRoomManage) {
             var _setData = function(response) {
@@ -133,6 +134,9 @@ var modalRoomManage = (function() {
                         modalRoomManage.preProcessForNewCurrentCheckIn(roomId);
                     }
                     else {
+                        currentCheckInForm.show();
+                        modal.find('#new-current-check-in').hide();
+                        
                         for(var key in data_) {
                             var key_ = app.camelToUnderScore(key);
                             currentCheckInForm.find('[name="' + key_ + '"]').val(data_[key]);
