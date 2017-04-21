@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -102,6 +104,7 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                 roomCurrentCheckIn.setLastname(rs.getString("lastname"));
                 roomCurrentCheckIn.setAddress(rs.getString("address"));
                 roomCurrentCheckIn.setRemark(rs.getString("remark"));
+                roomCurrentCheckIn.setNumberCode(rs.getString("number_code"));
                 roomCurrentCheckIn.setCreatedDate(rs.getDate("created_date"));
                 roomCurrentCheckIn.setUpdatedDate(rs.getDate("updated_date"));
                 
@@ -151,6 +154,8 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
             String insertString = "insert";
             String updateString = "update";
             
+            String numberCode = roomCurrentCheckIn.getRoomId() + Long.toString(new Timestamp(System.currentTimeMillis()).getTime());
+            
             /** begin delete */
             /*querysString = "DELETE FROM current_check_in WHERE room_id = ?";
             
@@ -193,8 +198,9 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                         + "lastname, " //5
                         + "address ," //6
                         + "remark, " //7
+                        + "number_code, " //8
                         + "created_date) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
                 
                 ps = con.prepareStatement(querysString);
             
@@ -205,12 +211,13 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                 ps.setString(5, roomCurrentCheckIn.getLastname());
                 ps.setString(6, roomCurrentCheckIn.getAddress());
                 ps.setString(7, roomCurrentCheckIn.getRemark());
+                ps.setString(8, numberCode);
 
                 effectRowProcess = ps.executeUpdate();
             }
             else {
                 /** update process */
-             
+                
                 querysString = "UPDATE current_check_in SET "
                         + "check_in_date = ?, " //1
                         + "id_card = ?, " //2
@@ -218,8 +225,9 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                         + "lastname = ?, " //4
                         + "address = ?, " //5
                         + "remark = ?, " //6
+                        + "number_code = ?, "//7
                         + "updated_date = NOW() "
-                        + "WHERE room_id = ? " //7
+                        + "WHERE room_id = ? " //8
                         + "";
                 
                 ps = con.prepareStatement(querysString);
@@ -230,7 +238,8 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                 ps.setString(4, roomCurrentCheckIn.getLastname());
                 ps.setString(5, roomCurrentCheckIn.getAddress());
                 ps.setString(6, roomCurrentCheckIn.getRemark());
-                ps.setInt(7, roomCurrentCheckIn.getRoomId());
+                ps.setString(7, roomCurrentCheckIn.getNumberCode());
+                ps.setInt(8, roomCurrentCheckIn.getRoomId());
                 
                 effectRowProcess = ps.executeUpdate();
             }
@@ -239,6 +248,13 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                 roomCurrentCheckInReturn = new RoomCurrentCheckIn();
                 
                 roomCurrentCheckInReturn.setRoomId(roomCurrentCheckIn.getRoomId());
+                
+                if(processType.equalsIgnoreCase(insertString)) {
+                    roomCurrentCheckInReturn.setNumberCode(numberCode);
+                }
+                else {
+                    roomCurrentCheckInReturn.setNumberCode(roomCurrentCheckIn.getNumberCode());
+                }
             }
         }
         catch(Exception e) {

@@ -466,6 +466,7 @@ public class RoomController {
             
             RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
+            
             HttpHeaders headers = new HttpHeaders();
             MediaType mediaType = CommonAppUtils.jsonMediaType();
             headers.setContentType(mediaType);

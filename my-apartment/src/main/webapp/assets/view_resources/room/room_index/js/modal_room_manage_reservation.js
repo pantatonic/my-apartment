@@ -129,6 +129,7 @@ var modalRoomManage = (function() {
                     var currentCheckInForm = _getCurrentCheckInForm();
                     
                     app.clearFormData(currentCheckInForm);
+                    currentCheckInForm.find('[name="number_code"]').val('');
                     
                     if(data.length == 0) {
                         modalRoomManage.preProcessForNewCurrentCheckIn(roomId);

@@ -368,6 +368,7 @@ public class RoomResource {
             roomCurrentCheckIn.setLastname(CommonWsUtils.strToString(jsonObjectReceive.getString("lastname")));
             roomCurrentCheckIn.setAddress(CommonWsUtils.strToString(jsonObjectReceive.getString("address")));
             roomCurrentCheckIn.setRemark(CommonWsUtils.strToString(jsonObjectReceive.getString("remark")));
+            roomCurrentCheckIn.setNumberCode(CommonWsUtils.strToString(jsonObjectReceive.getString("number_code")));
             
             RoomCurrentCheckIn resultSave = roomCurrentCheckInDaoImpl.save(roomCurrentCheckIn);
             
@@ -376,6 +377,7 @@ public class RoomResource {
                         CommonString.SAVE_DATA_SUCCESS_STRING);
                 
                 jsonObjectReturn.put("roomId", resultSave.getRoomId());
+                jsonObjectReturn.put("numberCode", resultSave.getNumberCode());
             }
             else {
                 jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 

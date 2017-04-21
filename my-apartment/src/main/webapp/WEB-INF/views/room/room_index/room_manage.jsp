@@ -78,6 +78,7 @@
                                 <div class="col-sm-6 no-padding">
                                     <div class="col-sm-12">
                                         <input type="hidden" name="room_id" value="">
+                                        <input type="hidden" name="number_code" value="">
                                         <input type="text" name="id_card" class="form-control my-required-field" 
                                             value="" autocomplete="off">
                                     </div>

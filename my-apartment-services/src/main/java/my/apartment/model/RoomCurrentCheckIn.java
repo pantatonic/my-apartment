@@ -16,6 +16,7 @@ public class RoomCurrentCheckIn implements Serializable {
     private String lastname;
     private String address;
     private String remark;
+    private String numberCode;
     private Date createdDate;
     private String createdDateString;
     private Date updatedDate;
@@ -24,7 +25,7 @@ public class RoomCurrentCheckIn implements Serializable {
     public RoomCurrentCheckIn() {
     }
 
-    public RoomCurrentCheckIn(Integer roomId, Date checkInDate, String checkInDateString, String idCard, String name, String lastname, String address, String remark, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString) {
+    public RoomCurrentCheckIn(Integer roomId, Date checkInDate, String checkInDateString, String idCard, String name, String lastname, String address, String remark, String numberCode, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString) {
         this.roomId = roomId;
         this.checkInDate = checkInDate;
         this.checkInDateString = checkInDateString;
@@ -33,6 +34,7 @@ public class RoomCurrentCheckIn implements Serializable {
         this.lastname = lastname;
         this.address = address;
         this.remark = remark;
+        this.numberCode = numberCode;
         this.createdDate = createdDate;
         this.createdDateString = createdDateString;
         this.updatedDate = updatedDate;
@@ -103,6 +105,14 @@ public class RoomCurrentCheckIn implements Serializable {
         this.remark = remark;
     }
 
+    public String getNumberCode() {
+        return numberCode;
+    }
+
+    public void setNumberCode(String numberCode) {
+        this.numberCode = numberCode;
+    }
+
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -137,7 +147,7 @@ public class RoomCurrentCheckIn implements Serializable {
 
     @Override
     public String toString() {
-        return "RoomCurrentCheckIn{" + "roomId=" + roomId + ", checkInDate=" + checkInDate + ", checkInDateString=" + checkInDateString + ", idCard=" + idCard + ", name=" + name + ", lastname=" + lastname + ", address=" + address + ", remark=" + remark + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + '}';
+        return "RoomCurrentCheckIn{" + "roomId=" + roomId + ", checkInDate=" + checkInDate + ", checkInDateString=" + checkInDateString + ", idCard=" + idCard + ", name=" + name + ", lastname=" + lastname + ", address=" + address + ", remark=" + remark + ", numberCode=" + numberCode + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + '}';
     }
     
 }

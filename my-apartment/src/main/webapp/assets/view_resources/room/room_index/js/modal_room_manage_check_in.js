@@ -1,5 +1,5 @@
 
-/* global app, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, SUCCESS_STRING, modalRoomManage, _DELAY_PROCESS_ */
+/* global app, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, SUCCESS_STRING, modalRoomManage, _DELAY_PROCESS_, page */
 
 var roomManageCheckIn = (function() {
     
@@ -67,6 +67,11 @@ var roomManageCheckIn = (function() {
                                 message: app.translate('common.save_success'),
                                 type: response.result
                             });
+                            
+                            if(response.numberCode != undefined) {
+                                form_.find('[name="number_code"]').val(response.numberCode);
+                                latestRoomIdProcess = response.roomId;
+                            }
 
                             page.getRoom();
                         }
