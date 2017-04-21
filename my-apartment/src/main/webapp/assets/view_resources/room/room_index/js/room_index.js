@@ -328,8 +328,7 @@ var page = (function() {
         getRoomManageDetailList: function() {
             var _setReserveLabel = function(response) {
                 var reserveData = response.data.reserve;
-                var labelTemplate = '<span class="label label-warning">' + app.translate('room.reserve') + '</span>'
-                    + '<div class="clearfix"></div>';
+                var labelTemplate = '<span class="label label-warning">' + app.translate('room.reserve') + '</span>';
                 
                 for(var index in reserveData) {
                     var currentData = reserveData[index];
@@ -337,6 +336,27 @@ var page = (function() {
                     
                     boxRoom.find('.room-manage-detail-label').html(labelTemplate);
                 }
+            };
+            
+            var _setCurrentCheckInLabel = function(response) {
+                var currentCheckInData = response.data.currentCheckIn;
+                var labelTemplate = '<span class="label label-info">' + app.translate('room.check_in') + '</span>';
+
+                for(var index in currentCheckInData) {
+                    var currentData =  currentCheckInData[index];
+                    var boxRoom = jQuery('.box-room[data-id="' + currentData.roomId + '"]');
+                    var currentLabelHtml =  boxRoom.find('.room-manage-detail-label').html();
+                    
+                    boxRoom.find('.room-manage-detail-label').html(currentLabelHtml + labelTemplate);
+                }
+            };
+            
+            var _closeWithClearFix = function() {
+                jQuery('.box-room_ .box-room').each(function() {
+                    var thisElement = jQuery(this);
+                    
+                    thisElement.find('.room-manage-detail-label').append('<div class="clearfix"></div>');
+                });
             };
             
             jQuery.ajax({
@@ -347,6 +367,8 @@ var page = (function() {
                     response = app.convertToJsonObject(response);
                     
                     _setReserveLabel(response);
+                    _setCurrentCheckInLabel(response);
+                    _closeWithClearFix();
                 },
                 error: function() {
                     app.showNotice({

@@ -346,11 +346,16 @@ public class RoomController {
             
             String resultWsGetCurrentReserve = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_current_reserve", String.class);
             JSONObject jsonObjectGetCurrentReserve = new JSONObject(resultWsGetCurrentReserve);
+            
+            String resultWsGetCurrentCheckIn = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_current_check_in", String.class);
+            JSONObject jsonObjectGetCurrentCheckIn = new JSONObject(resultWsGetCurrentCheckIn);
 
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             
             jsonObjectReturn.put(CommonString.DATA_STRING, 
-                    new JSONObject().put("reserve", jsonObjectGetCurrentReserve.get(CommonString.DATA_STRING)));
+                    new JSONObject().put("reserve", jsonObjectGetCurrentReserve.get(CommonString.DATA_STRING))
+                            .put("currentCheckIn", jsonObjectGetCurrentCheckIn.get(CommonString.DATA_STRING))
+            );
 
             
             /*JSONArray jsonArray = new JSONArray();
@@ -437,7 +442,34 @@ public class RoomController {
             
             jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
+
+        return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/room_check_in_save.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String roomCheckInSave(@RequestBody MultiValueMap<String, String> formData) {
+        JSONObject jsonObjectReturn = new JSONObject();
         
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
+            HttpHeaders headers = new HttpHeaders();
+            MediaType mediaType = CommonAppUtils.jsonMediaType();
+            headers.setContentType(mediaType);
+
+            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_check_in_save", entity, String.class, CommonString.UTF8_STRING);
+
+            JSONObject resultWsJsonObject = new JSONObject(resultWs);
+
+            jsonObjectReturn = resultWsJsonObject;            
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
         
         
         return jsonObjectReturn.toString();

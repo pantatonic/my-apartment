@@ -243,6 +243,28 @@ public class RoomResource {
         return jsonObjectReturn.toString();
     }
     
+    @Path("get_current_check_in")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getCurrentCheckIn() {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomCurrentCheckInDao roomCurrentCheckInDaoImpl = new RoomCurrentCheckInDaoImpl();
+            
+            List<RoomCurrentCheckIn> roomCurrentCheckIns = roomCurrentCheckInDaoImpl.getCurrentCheckIn();
+
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomCurrentCheckIns);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
     @Path("get_room_manage/{room_id}")
     @GET
     @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
@@ -257,9 +279,7 @@ public class RoomResource {
             
             List<RoomReservation> roomReservations = roomReservationDaoImpl.getCurrentByRoomId(roomId);
             List<RoomCurrentCheckIn> currentCheckIns = roomCurrentCheckInDaoImpl.getCurrentByRoomId(roomId);
-            System.out.println("---- ws ----");
-            System.out.println(currentCheckIns);
-            System.out.println("---- ws ----");
+
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             
             JSONObject jsonObjectData = new JSONObject();
@@ -311,6 +331,50 @@ public class RoomResource {
                         CommonString.SAVE_DATA_SUCCESS_STRING);
                 
                 jsonObjectReturn.put("id", resultSave.getId());
+                jsonObjectReturn.put("roomId", resultSave.getRoomId());
+            }
+            else {
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        CommonString.SAVE_DATA_ERROR_STRING);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @Path("room_check_in_save")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String roomCheckInSave(InputStream incomingData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
+            
+            RoomCurrentCheckInDao roomCurrentCheckInDaoImpl = new RoomCurrentCheckInDaoImpl();
+            
+            RoomCurrentCheckIn roomCurrentCheckIn = new RoomCurrentCheckIn();
+            
+            roomCurrentCheckIn.setRoomId(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("room_id")));
+            roomCurrentCheckIn.setCheckInDateString(jsonObjectReceive.getString("check_in_date"));
+            roomCurrentCheckIn.setIdCard(jsonObjectReceive.getString("id_card"));
+            roomCurrentCheckIn.setName(jsonObjectReceive.getString("name"));
+            roomCurrentCheckIn.setLastname(CommonWsUtils.strToString(jsonObjectReceive.getString("lastname")));
+            roomCurrentCheckIn.setAddress(CommonWsUtils.strToString(jsonObjectReceive.getString("address")));
+            roomCurrentCheckIn.setRemark(CommonWsUtils.strToString(jsonObjectReceive.getString("remark")));
+            
+            RoomCurrentCheckIn resultSave = roomCurrentCheckInDaoImpl.save(roomCurrentCheckIn);
+            
+            if(resultSave != null) {
+                jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                        CommonString.SAVE_DATA_SUCCESS_STRING);
+                
                 jsonObjectReturn.put("roomId", resultSave.getRoomId());
             }
             else {

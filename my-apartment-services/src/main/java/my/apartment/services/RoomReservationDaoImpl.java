@@ -225,7 +225,7 @@ public class RoomReservationDaoImpl implements RoomReservationDao {
                         + "reserve_lastname, " //6
                         + "remark, " //7
                         + "status, " //8
-                        + "created_date)"
+                        + "created_date) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
             }
             else {
