@@ -11,11 +11,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.apartment.common.CommonWsDb;
 import my.apartment.common.Config;
 import my.apartment.model.RoomCurrentCheckIn;
 
 
 public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
+    
+    private final String insertString = "insert";
+    private final String updateString = "update";
     
     @Override
     public List<RoomCurrentCheckIn> getCurrentCheckIn() {
@@ -151,8 +155,7 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
             String querysString = "";
             
             String processType;
-            String insertString = "insert";
-            String updateString = "update";
+
             
             String numberCode = roomCurrentCheckIn.getRoomId() + Long.toString(new Timestamp(System.currentTimeMillis()).getTime());
             
@@ -170,7 +173,10 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
             /*querysString = "OPTIMIZE TABLE current_check_in";
             ps = con.prepareStatement(querysString);
             ps.executeQuery();*/
+            
+            //System.out.println(CommonWsDb.optimizeTable(con, ps, "current_check_in"));
             /** end optimize table*/
+
             
             /** begin check process type */
             querysString = "SELECT COUNT(room_id) AS count_row FROM current_check_in WHERE room_id = ?";
@@ -181,13 +187,17 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
             rs.first();
             Integer totalRecord = rs.getInt("count_row");
             
-            processType = totalRecord == 0 ? insertString : updateString;
+            processType = totalRecord == 0 ? this.insertString : this.updateString;
             /** end check process type */
             
             
             Integer effectRowProcess;
             
-            if(processType.equalsIgnoreCase(insertString)) {
+            RoomCurrentCheckIn toSaveHistory = new RoomCurrentCheckIn();
+            
+            String nowDateString = CommonWsDb.getNowDateString();
+            
+            if(processType.equalsIgnoreCase(this.insertString)) {
                 /** insert process */
                 
                 querysString = "INSERT INTO current_check_in ("
@@ -200,7 +210,7 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                         + "remark, " //7
                         + "number_code, " //8
                         + "created_date) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 
                 ps = con.prepareStatement(querysString);
             
@@ -212,8 +222,19 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                 ps.setString(6, roomCurrentCheckIn.getAddress());
                 ps.setString(7, roomCurrentCheckIn.getRemark());
                 ps.setString(8, numberCode);
+                ps.setString(9, nowDateString);
 
                 effectRowProcess = ps.executeUpdate();
+                
+                toSaveHistory.setRoomId(roomCurrentCheckIn.getRoomId());
+                toSaveHistory.setCheckInDateString(roomCurrentCheckIn.getCheckInDateString());
+                toSaveHistory.setIdCard(roomCurrentCheckIn.getIdCard());
+                toSaveHistory.setName(roomCurrentCheckIn.getName());
+                toSaveHistory.setLastname(roomCurrentCheckIn.getLastname());
+                toSaveHistory.setAddress(roomCurrentCheckIn.getAddress());
+                toSaveHistory.setRemark(roomCurrentCheckIn.getRemark());
+                toSaveHistory.setNumberCode(numberCode);
+                toSaveHistory.setCreatedDateString(nowDateString);
             }
             else {
                 /** update process */
@@ -226,8 +247,8 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                         + "address = ?, " //5
                         + "remark = ?, " //6
                         + "number_code = ?, "//7
-                        + "updated_date = NOW() "
-                        + "WHERE room_id = ? " //8
+                        + "updated_date = ? "//8
+                        + "WHERE room_id = ? " //9
                         + "";
                 
                 ps = con.prepareStatement(querysString);
@@ -239,9 +260,20 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                 ps.setString(5, roomCurrentCheckIn.getAddress());
                 ps.setString(6, roomCurrentCheckIn.getRemark());
                 ps.setString(7, roomCurrentCheckIn.getNumberCode());
-                ps.setInt(8, roomCurrentCheckIn.getRoomId());
+                ps.setString(8, nowDateString);
+                ps.setInt(9, roomCurrentCheckIn.getRoomId());
                 
                 effectRowProcess = ps.executeUpdate();
+                
+                toSaveHistory.setRoomId(roomCurrentCheckIn.getRoomId());
+                toSaveHistory.setCheckInDateString(roomCurrentCheckIn.getCheckInDateString());
+                toSaveHistory.setIdCard(roomCurrentCheckIn.getIdCard());
+                toSaveHistory.setName(roomCurrentCheckIn.getName());
+                toSaveHistory.setLastname(roomCurrentCheckIn.getLastname());
+                toSaveHistory.setAddress(roomCurrentCheckIn.getAddress());
+                toSaveHistory.setRemark(roomCurrentCheckIn.getRemark());
+                toSaveHistory.setNumberCode(roomCurrentCheckIn.getNumberCode());
+                toSaveHistory.setUpdatedDateString(nowDateString);
             }
 
             if(effectRowProcess != 0) {
@@ -249,11 +281,15 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                 
                 roomCurrentCheckInReturn.setRoomId(roomCurrentCheckIn.getRoomId());
                 
-                if(processType.equalsIgnoreCase(insertString)) {
+                if(processType.equalsIgnoreCase(this.insertString)) {
                     roomCurrentCheckInReturn.setNumberCode(numberCode);
                 }
                 else {
                     roomCurrentCheckInReturn.setNumberCode(roomCurrentCheckIn.getNumberCode());
+                }
+                
+                if(!this.saveCheckInOutHistory(con, ps, toSaveHistory, processType)) {
+                    roomCurrentCheckInReturn = null;
                 }
             }
         }
@@ -279,6 +315,89 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
         }
         
         return roomCurrentCheckInReturn;
+    }
+    
+    private Boolean saveCheckInOutHistory(
+            Connection con, 
+            PreparedStatement ps, 
+            RoomCurrentCheckIn toSaveHistory, 
+            String processType
+            ) {
+        
+        String querysString;
+        
+        Integer effectRowProcess;
+        
+        Boolean result = Boolean.TRUE;
+        
+        if(processType.equalsIgnoreCase(this.insertString)) {
+            try {
+                querysString = "INSERT INTO check_in_out_history ("
+                        + "room_id, " //1
+                        + "check_in_date, " //2
+                        + "id_card, " //3
+                        + "name, " //4
+                        + "lastname, " //5
+                        + "address ," //6
+                        + "remark, " //7
+                        + "number_code, " //8
+                        + "created_date) " //9
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                
+                ps = con.prepareStatement(querysString);
+                
+                ps.setInt(1, toSaveHistory.getRoomId());
+                ps.setString(2, toSaveHistory.getCheckInDateString());
+                ps.setString(3, toSaveHistory.getIdCard());
+                ps.setString(4, toSaveHistory.getName());
+                ps.setString(5, toSaveHistory.getLastname());
+                ps.setString(6, toSaveHistory.getAddress());
+                ps.setString(7, toSaveHistory.getRemark());
+                ps.setString(8, toSaveHistory.getNumberCode());
+                ps.setString(9, toSaveHistory.getCreatedDateString());
+                
+                effectRowProcess = ps.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(RoomCurrentCheckInDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                
+                result = Boolean.FALSE;
+            }
+        }
+        else {
+            try {
+                querysString = "UPDATE check_in_out_history SET "
+                        + "check_in_date = ?, " //1
+                        + "id_card = ?, " //2
+                        + "name = ?, " //3
+                        + "lastname = ?, " //4
+                        + "address = ?, " //5
+                        + "remark = ?, " //6
+                        + "number_code = ?, "//7
+                        + "updated_date = ? "//8
+                        + "WHERE room_id = ? " //9
+                        + "";
+                
+                ps = con.prepareStatement(querysString);
+                
+                ps.setString(1, toSaveHistory.getCheckInDateString());
+                ps.setString(2, toSaveHistory.getIdCard());
+                ps.setString(3, toSaveHistory.getName());
+                ps.setString(4, toSaveHistory.getLastname());
+                ps.setString(5, toSaveHistory.getAddress());
+                ps.setString(6, toSaveHistory.getRemark());
+                ps.setString(7, toSaveHistory.getNumberCode());
+                ps.setString(8, toSaveHistory.getUpdatedDateString());
+                ps.setInt(9, toSaveHistory.getRoomId());
+                
+                effectRowProcess = ps.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(RoomCurrentCheckInDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                
+                result = Boolean.FALSE;
+            }
+        }
+        
+        return result;
     }
     
 }
