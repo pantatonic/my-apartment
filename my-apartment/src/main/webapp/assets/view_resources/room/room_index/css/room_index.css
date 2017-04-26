@@ -5,7 +5,10 @@
 
 form[name="room_form"] [name="room_no"],
 table#reservation-list th:nth-child(1),
-table#reservation-list th:nth-child(2) 
+table#reservation-list th:nth-child(2),
+
+table#check-in-out-list th:nth-child(1),
+table#check-in-out-list th:nth-child(2)
 /*, 
 form[name="room_form"] [name="name"]*/
 {

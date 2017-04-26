@@ -160,7 +160,9 @@ var modalRoomManage = (function() {
 
                 setCurrentReservation();
                 setCurrentCheckIn();
+                
                 _getReservationList(roomId);
+                roomManageCheckIn.getCheckInOutList(roomId);
                 
                 
                 app.clearAllInputErrorClass(modalRoomManage.getRoomReservationForm());

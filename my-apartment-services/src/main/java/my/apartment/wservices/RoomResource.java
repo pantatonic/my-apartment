@@ -426,6 +426,39 @@ public class RoomResource {
         return jsonObjectReturn.toString();
     }
     
+    @Path("get_check_in_out_list")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getCheckInOutList(InputStream incomingData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
+            
+            Integer start = Integer.parseInt(jsonObjectReceive.getString("start"), 10);
+            Integer length = Integer.parseInt(jsonObjectReceive.getString("length"), 10);
+            String searchString = jsonObjectReceive.getString("search");
+            
+            RoomCurrentCheckInDao roomCurrentCheckInDaoImpl = new RoomCurrentCheckInDaoImpl();
+            
+            Object[] resultObject = roomCurrentCheckInDaoImpl.getCheckInOutList(
+                    Integer.parseInt(jsonObjectReceive.getString("room_id"), 10), 
+                    start, length, searchString);
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, (List<RoomReservation>) resultObject[0]);
+            
+            jsonObjectReturn.put("totalRecords", resultObject[1]);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
 
     /**
      * PUT method for updating or creating an instance of RoomResource

@@ -12,6 +12,8 @@ public class RoomCheckInOutHistory implements Serializable {
     private Integer roomId;
     private Date checkInDate;
     private String checkInDateString;
+    private Date checkOutDate;
+    private String checkOutDateString;
     private String idCard;
     private String name;
     private String lastname;
@@ -26,11 +28,13 @@ public class RoomCheckInOutHistory implements Serializable {
     public RoomCheckInOutHistory() {
     }
 
-    public RoomCheckInOutHistory(Integer id, Integer roomId, Date checkInDate, String checkInDateString, String idCard, String name, String lastname, String address, String remark, String numberCode, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString) {
+    public RoomCheckInOutHistory(Integer id, Integer roomId, Date checkInDate, String checkInDateString, Date checkOutDate, String checkOutDateString, String idCard, String name, String lastname, String address, String remark, String numberCode, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString) {
         this.id = id;
         this.roomId = roomId;
         this.checkInDate = checkInDate;
         this.checkInDateString = checkInDateString;
+        this.checkOutDate = checkOutDate;
+        this.checkOutDateString = checkOutDateString;
         this.idCard = idCard;
         this.name = name;
         this.lastname = lastname;
@@ -73,6 +77,22 @@ public class RoomCheckInOutHistory implements Serializable {
 
     public void setCheckInDateString(String checkInDateString) {
         this.checkInDateString = checkInDateString;
+    }
+
+    public Date getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public void setCheckOutDate(Date checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
+    public String getCheckOutDateString() {
+        return checkOutDateString;
+    }
+
+    public void setCheckOutDateString(String checkOutDateString) {
+        this.checkOutDateString = checkOutDateString;
     }
 
     public String getIdCard() {
@@ -157,7 +177,7 @@ public class RoomCheckInOutHistory implements Serializable {
 
     @Override
     public String toString() {
-        return "RoomCheckInOutHistory{" + "id=" + id + ", roomId=" + roomId + ", checkInDate=" + checkInDate + ", checkInDateString=" + checkInDateString + ", idCard=" + idCard + ", name=" + name + ", lastname=" + lastname + ", address=" + address + ", remark=" + remark + ", numberCode=" + numberCode + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + '}';
+        return "RoomCheckInOutHistory{" + "id=" + id + ", roomId=" + roomId + ", checkInDate=" + checkInDate + ", checkInDateString=" + checkInDateString + ", checkOutDate=" + checkOutDate + ", checkOutDateString=" + checkOutDateString + ", idCard=" + idCard + ", name=" + name + ", lastname=" + lastname + ", address=" + address + ", remark=" + remark + ", numberCode=" + numberCode + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + '}';
     }
 
 }

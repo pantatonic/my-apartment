@@ -2,6 +2,32 @@
 /* global app, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, SUCCESS_STRING, modalRoomManage, _DELAY_PROCESS_, page */
 
 var roomManageCheckIn = (function() {
+    var _getCheckInOutList = function(roomId) {
+        jQuery('#check-in-out-list').dataTable({
+            destroy: true,
+            autoWidth: false,
+            processing: true,
+            serverSide: true,  
+            bFilter: false,
+            ajax: {
+                url: _CONTEXT_PATH_ + '/get_check_in_out_list.html',
+                type: 'get',
+                data: {
+                    room_id: roomId
+                }
+            },
+            columns: [
+                {data: 'checkInDate'},
+                {data: 'checkOutDate'},
+                {data: 'idCard'},
+                {data: 'name'},
+                {data: 'type'}
+            ],
+            drawCallback: function(settings) {
+                //app.data_table.set_full_width();
+            }
+        });
+    };
     
     return {
         saveCurrentCheckIn: function() {
@@ -74,6 +100,7 @@ var roomManageCheckIn = (function() {
                             }
 
                             page.getRoom();
+                            roomManageCheckIn.getCheckInOutList(response.roomId);
                         }
                         else {
                             if(response.message == SESSION_EXPIRE_STRING) {
@@ -96,6 +123,9 @@ var roomManageCheckIn = (function() {
                     }
                 });
             }, _DELAY_PROCESS_);
+        },
+        getCheckInOutList: function(roomId) {
+            return _getCheckInOutList(roomId);
         }
     };
 })();

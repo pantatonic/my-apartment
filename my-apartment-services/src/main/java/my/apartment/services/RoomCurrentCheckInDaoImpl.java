@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import my.apartment.common.CommonWsDb;
 import my.apartment.common.Config;
+import my.apartment.model.RoomCheckInOutHistory;
 import my.apartment.model.RoomCurrentCheckIn;
 
 
@@ -398,6 +399,96 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
         }
         
         return result;
+    }
+    
+    @Override
+    public Object[] getCheckInOutList(Integer roomId, Integer start, Integer length,String searchString) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Object[] objectsReturn = new Object[2];
+        
+        List<RoomCheckInOutHistory> roomCheckInOutHistorys = new ArrayList<RoomCheckInOutHistory>();
+        objectsReturn[0] = roomCheckInOutHistorys;
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+        
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String stringQuery = "SELECT check_in_out_history.*, room.room_no FROM check_in_out_history JOIN room ON check_in_out_history.room_id = room.id WHERE 1=1 AND check_in_out_history.room_id=? ";
+            String stringQueryNumRow = "SELECT COUNT(check_in_out_history.id) AS count_row FROM check_in_out_history JOIN room ON check_in_out_history.room_id = room.id WHERE 1=1 AND check_in_out_history.room_id=? ";
+            
+            if(!searchString.equals("")) {
+            
+            }
+            
+            /** get total records */
+            stringQueryNumRow += "ORDER BY created_date DESC";
+            
+            ps = con.prepareStatement(stringQueryNumRow);
+            ps.setInt(1, roomId);
+            rs = ps.executeQuery();
+            
+            rs.first();
+            Integer totalRecord = rs.getInt("count_row");
+            
+            objectsReturn[1] = totalRecord;
+            /** ---------------- */
+            
+            /** get data records */
+            stringQuery += "ORDER BY created_date DESC ";
+            stringQuery += "LIMIT " + start.toString() + "," + length.toString();
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomCheckInOutHistory roomCheckInOutHistory = new RoomCheckInOutHistory();
+                
+                roomCheckInOutHistory.setId(rs.getInt("id"));
+                roomCheckInOutHistory.setRoomId(rs.getInt("room_id"));
+                roomCheckInOutHistory.setCheckInDate(rs.getDate("check_in_date"));
+                roomCheckInOutHistory.setCheckOutDate(rs.getDate("check_out_date"));
+                roomCheckInOutHistory.setIdCard(rs.getString("id_card"));
+                roomCheckInOutHistory.setName(rs.getString("name"));
+                roomCheckInOutHistory.setLastname(rs.getString("lastname"));
+                roomCheckInOutHistory.setAddress(rs.getString("address"));
+                roomCheckInOutHistory.setRemark(rs.getString("remark"));
+                roomCheckInOutHistory.setNumberCode(rs.getString("number_code"));
+                roomCheckInOutHistory.setCreatedDate(rs.getDate("created_date"));
+                roomCheckInOutHistory.setUpdatedDate(rs.getDate("updated_date"));
+             
+                roomCheckInOutHistorys.add(roomCheckInOutHistory);
+            }
+            /** --------------- */
+            
+            objectsReturn[0] = roomCheckInOutHistorys;
+        }
+        catch(Exception e) {
+           e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return objectsReturn;
     }
     
 }

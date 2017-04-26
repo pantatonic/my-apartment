@@ -198,6 +198,12 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param id
+     * @param response
+     * @return 
+     */
     @RequestMapping(value = "/room_delete_by_id.html", method = {RequestMethod.POST})
     @ResponseBody
     public String roomDeleteById(
@@ -293,7 +299,10 @@ public class RoomController {
         return jsonObjectReturn;
     }
     
-    
+    /**
+     * 
+     * @return 
+     */
     private JSONObject getRoomStatus() {
         JSONObject jsonObjectReturn = new JSONObject();
         
@@ -313,6 +322,10 @@ public class RoomController {
         return jsonObjectReturn;
     }
     
+    /**
+     * 
+     * @return 
+     */
     private JSONObject getBuilding() {
         JSONObject jsonObjectReturn = new JSONObject();
         
@@ -331,6 +344,11 @@ public class RoomController {
         return jsonObjectReturn;
     }
     
+    /**
+     * 
+     * @param response
+     * @return 
+     */
     @RequestMapping(value = "/room/get_room_manage_detail_list.html")
     @ResponseBody
     public String getRoomManageDetailList(
@@ -379,6 +397,12 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param roomId
+     * @param response
+     * @return 
+     */
     @RequestMapping(value = "/room/get_room_manage.html", method = {RequestMethod.GET})
     @ResponseBody
     public String getRoomManage(
@@ -406,6 +430,11 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param formData
+     * @return 
+     */
     @RequestMapping(value = "/room_reservation_save.html", method = {RequestMethod.POST})
     @ResponseBody
     public String roomReservationSave(@RequestBody MultiValueMap<String, String> formData) {
@@ -446,6 +475,11 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param formData
+     * @return 
+     */
     @RequestMapping(value = "/room_check_in_save.html", method = {RequestMethod.POST})
     @ResponseBody
     public String roomCheckInSave(@RequestBody MultiValueMap<String, String> formData) {
@@ -488,6 +522,16 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param roomId
+     * @param draw
+     * @param start
+     * @param length
+     * @param search
+     * @param response
+     * @return 
+     */
     @RequestMapping(value = "/get_reservation_list.html", method = {RequestMethod.GET})
     @ResponseBody
     public String getReservationList(
@@ -551,6 +595,11 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param status
+     * @return 
+     */
     private String getReserveStatusString(Integer status) {
         String statusString;
        
@@ -569,6 +618,94 @@ public class RoomController {
         }
         
         return statusString;
+    }
+    
+    /**
+     * 
+     * @param roomId
+     * @param draw
+     * @param start
+     * @param length
+     * @param search
+     * @param response
+     * @return 
+     */
+    @RequestMapping(value = "/get_check_in_out_list.html")
+    @ResponseBody
+    public String getCheckInOutList(
+            @RequestParam(value = "room_id", required = true) String roomId,
+            @RequestParam(value = "draw", required = true) String draw,
+            @RequestParam(value = "start", required = true) String start,
+            @RequestParam(value = "length", required = true) String length,
+            @RequestParam(value = "search[value]", required = false) String search,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            JSONObject requestJsonObject = new JSONObject();
+            requestJsonObject.put("room_id", roomId).put("start", start)
+                    .put("length", length).put("search", search.trim());
+            
+            RestTemplate restTemplate = new RestTemplate();
+            String requestJson = requestJsonObject.toString();
+            HttpHeaders headers = new HttpHeaders();
+            MediaType mediaType = CommonAppUtils.jsonMediaType();
+            headers.setContentType(mediaType);
+            
+            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/get_check_in_out_list", entity, String.class, CommonString.UTF8_STRING);
+            
+            JSONObject resultWsJsonObject = new JSONObject(resultWs);
+            
+            JSONArray jsonArrayData = resultWsJsonObject.getJSONArray(CommonString.DATA_STRING);
+            JSONArray jsonArrayReturn = new JSONArray();
+            
+            for(Integer i = 0; i <= jsonArrayData.length() - 1; i++) {
+                JSONObject j = jsonArrayData.getJSONObject(i);
+                JSONObject tempJsonObject = new JSONObject();
+                
+                tempJsonObject.put("checkInDate", JsonObjectUtils.getDataStringWithEmpty("checkInDate", j));
+                tempJsonObject.put("checkOutDate", JsonObjectUtils.getDataStringWithEmpty("checkOutDate", j));
+                tempJsonObject.put("idCard", JsonObjectUtils.getDataStringWithEmpty("idCard", j));
+                tempJsonObject.put("name", JsonObjectUtils.getDataStringWithEmpty("name", j) 
+                    + " " + JsonObjectUtils.getDataStringWithEmpty("lastname", j));
+                tempJsonObject.put("type", 
+                        this.getCheckInOutTypeLabel(JsonObjectUtils.getDataStringWithEmpty("checkOutDate", j)));
+
+                jsonArrayReturn.put(tempJsonObject);
+            }
+            
+            jsonObjectReturn.put("draw", draw)
+                .put("recordsTotal", resultWsJsonObject.getInt("totalRecords"))
+                .put("recordsFiltered", resultWsJsonObject.getInt("totalRecords"))
+                .put(CommonString.DATA_STRING, jsonArrayReturn);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    /**
+     * 
+     * @param checkOutDateString
+     * @return 
+     */
+    private String getCheckInOutTypeLabel(String checkOutDateString) {
+        if(checkOutDateString.isEmpty()) {
+            return "<span class=\"label label-info\">"
+                    + messageSource.getMessage("room.check_in", null, LocaleContextHolder.getLocale()) + "</span>";
+        }
+        else {
+            return "<span class=\"label label-primary\">"
+                    + messageSource.getMessage("room.check_out", null, LocaleContextHolder.getLocale()) + "</span>";
+        }
     }
     
 }

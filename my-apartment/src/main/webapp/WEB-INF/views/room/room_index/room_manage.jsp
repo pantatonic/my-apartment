@@ -133,6 +133,28 @@
                             </div>
                             
                         </form>
+                            
+                        <hr>
+                        
+                        <table id="check-in-out-list" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" colspan="5">
+                                        <spring:message code="room.check_in_out_history" />
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th><spring:message code="room.check_in_date" /></th>
+                                    <th><spring:message code="room.check_out_date" /></th>
+                                    <th><spring:message code="room.id_card" /></th>
+                                    <th><spring:message code="common.person_name" /> <spring:message code="common.person_lastname" /></th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
                     </div>
                     <div class="tab-pane fade" id="yellow">
                         <h1>Yellow</h1>

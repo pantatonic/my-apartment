@@ -94,9 +94,12 @@
     "room.cannot_get_room_manage_detail_list":"<spring:message code="room.cannot_get_room_manage_detail_list" />",
     
     "room.reservation_history":"<spring:message code="room.reservation_history" />",
+    "room.check_in_out_history":"<spring:message code="room.check_in_out_history" />",
     
     "room.check_in":"<spring:message code="room.check_in" />",
     "room.check_in_date":"<spring:message code="room.check_in_date" />",
-    "room.create_check_in":"<spring:message code="room.create_check_in" />"
+    "room.create_check_in":"<spring:message code="room.create_check_in" />",
+    "room.check_out":"<spring:message code="room.check_out" />",
+    "room.check_out_date":"<spring:message code="room.check_out_date" />"
     }
 </div>
