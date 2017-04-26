@@ -137,8 +137,8 @@ var page = (function() {
                 roomManageCheckIn.checkOutRoomButton.hide();
             });
             
-            modalRoomManage.getModal().on('hidden.bs.modal', function(e) {
-                //page.getRoom();
+            modalRoomManage.getModal().on('show.bs.modal', function(e) {
+                page.getElement.getModalRoomManageTabs().find('a:first').tab('show');
             });
             
             modalRoomManage.getRoomReservationForm().submit(function(e) {
@@ -418,6 +418,9 @@ var page = (function() {
             },
             getModalRoomNoLabel: function() {
                 return jQuery('.modal-room-no-label');
+            },
+            getModalRoomManageTabs: function() {
+                return page.getElement.getModalRoomManage().find('#tabs');
             }
         },
         showRoomDetail: function(type, roomId) {
