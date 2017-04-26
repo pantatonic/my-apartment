@@ -33,7 +33,11 @@
                             <spring:message code="room.check_in" />
                         </a>
                     </li>
-                    <li><a href="#yellow" data-toggle="tab">Yellow</a></li>
+                    <li>
+                        <a href="#notice-check-out-tab" data-toggle="tab">
+                            <spring:message code="room.notice_check_out" />
+                        </a>
+                    </li>
                     <li><a href="#green" data-toggle="tab">Green</a></li>
                     <li><a href="#blue" data-toggle="tab">Blue</a></li>
                 </ul>
@@ -44,9 +48,8 @@
                     <div class="tab-pane fade" id="check-in-tab">
                         <jsp:include page="room_manage_check_in_tab.jsp" flush="true" />
                     </div>
-                    <div class="tab-pane fade" id="yellow">
-                        <h1>Yellow</h1>
-                        <p>yellow yellow yellow yellow yellow</p>
+                    <div class="tab-pane fade" id="notice-check-out-tab">
+                        <jsp:include page="room_notice_check_out_tab.jsp" flush="true" />
                     </div>
                     <div class="tab-pane fade" id="green">
                         <h1>Green</h1>
