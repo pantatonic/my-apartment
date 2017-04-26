@@ -1,4 +1,4 @@
-/* global _CONTEXT_PATH_, _DELAY_PROCESS_, app, SUCCESS_STRING, SESSION_EXPIRE_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, page, roomManageCheckIn */
+/* global _CONTEXT_PATH_, _DELAY_PROCESS_, app, SUCCESS_STRING, SESSION_EXPIRE_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, page, roomManageCheckIn, INPUT_ERROR_CLASS, WARNING_STRING */
 
 var modalRoomManage = (function() {
     var _getModal = function() {
@@ -219,7 +219,8 @@ var modalRoomManage = (function() {
         },
         saveRoomReservation: function() {
             var form_ = modalRoomManage.getRoomReservationForm();
-            var formDataStatus = form_.find('[name="status"]');
+            var formDataStatusVal = form_.find('[name="status"]').val();
+            
             var submitButton = form_.find('[type="submit"]');
             var _validate = function() {
                 var validatePass = true;
@@ -286,7 +287,7 @@ var modalRoomManage = (function() {
                                 latestRoomIdProcess = response.roomId;
                             }
 
-                            if(formDataStatus.val() != '1') {
+                            if(formDataStatusVal != '1') {
                                 app.clearFormData(form_);
                                 form_.find('[name="id"]').val('');
                                 modalRoomManage.preProcessForNewReservation(response.roomId);

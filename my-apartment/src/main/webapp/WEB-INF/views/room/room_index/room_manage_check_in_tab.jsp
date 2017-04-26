@@ -82,7 +82,7 @@
             <spring:message code="building.address" />
         </label>
         <div class="col-sm-9" style="padding-left: 7px;">
-            <textarea name="address" class="form-control"></textarea>
+            <textarea name="address" class="form-control" autocomplete="off"></textarea>
         </div>
     </div>
     <div class="clearfix"></div>
@@ -92,7 +92,7 @@
             <spring:message code="common.remark" />
         </label>
         <div class="col-sm-9" style="padding-left: 7px;">
-            <textarea name="remark" class="form-control"></textarea>
+            <textarea name="remark" class="form-control" autocomplete="off"></textarea>
         </div>
     </div>
     <div class="clearfix"></div>
