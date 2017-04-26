@@ -708,4 +708,34 @@ public class RoomController {
         }
     }
     
+    @RequestMapping(value = "/room_check_out.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String roomCheckOut(
+            @RequestParam(value = "room_id", required = true) String roomId,
+            @RequestParam(value = "number_code", required = true) String numberCode,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
+            parametersMap.add("room_id", roomId);
+            parametersMap.add("number_code", numberCode);
+            
+            RestTemplate restTemplate = new RestTemplate();
+            
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_check_out", parametersMap, String.class);
+            
+            jsonObjectReturn = new JSONObject(resultWs);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
 }

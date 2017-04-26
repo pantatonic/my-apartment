@@ -1,5 +1,5 @@
 
-/* global app, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, SUCCESS_STRING, modalRoomManage, _DELAY_PROCESS_, page */
+/* global app, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, SUCCESS_STRING, modalRoomManage, _DELAY_PROCESS_, page, alertUtil */
 
 var roomManageCheckIn = (function() {
     var _getCheckInOutList = function(roomId) {
@@ -30,6 +30,14 @@ var roomManageCheckIn = (function() {
     };
     
     return {
+        checkOutRoomButton: {
+            show: function() {
+                page.getElement.getCheckOutRoomButton().closest('div.form-group').show();
+            },
+            hide: function() {
+                page.getElement.getCheckOutRoomButton().closest('div.form-group').hide();
+            }
+        },
         saveCurrentCheckIn: function() {
             var form_ = modalRoomManage.getCurrentCheckInForm();
             var submitButton = form_.find('[type="submit"]');
@@ -101,6 +109,8 @@ var roomManageCheckIn = (function() {
 
                             page.getRoom();
                             roomManageCheckIn.getCheckInOutList(response.roomId);
+                            
+                            roomManageCheckIn.checkOutRoomButton.show();
                         }
                         else {
                             if(response.message == SESSION_EXPIRE_STRING) {
@@ -126,6 +136,64 @@ var roomManageCheckIn = (function() {
         },
         getCheckInOutList: function(roomId) {
             return _getCheckInOutList(roomId);
+        },
+        checkOut: function() {
+            var form_ = modalRoomManage.getCurrentCheckInForm();
+            var roomId = form_.find('[name="room_id"]').val();
+            var numberCode = form_.find('[name="number_code"]').val();
+
+            
+            alertUtil.confirmAlert(app.translate('common.please_confirm_to_process'), function() {
+                jQuery.ajax({
+                    type: 'post',
+                    url: _CONTEXT_PATH_ + '/room_check_out.html',
+                    data: {
+                        room_id: roomId,
+                        number_code: numberCode
+                    },
+                    cache: false,
+                    success: function(response) {
+                        response = app.convertToJsonObject(response);
+                        
+                        if(response.result == SUCCESS_STRING) {
+                            app.showNotice({
+                                message: app.translate('common.save_success'),
+                                type: response.result
+                            });
+
+                            app.clearFormData(form_);
+                            form_.find('[name="number_code"]').val('');
+                            
+                            modalRoomManage.preProcessForNewCurrentCheckIn(roomId);
+                            roomManageCheckIn.getCheckInOutList(roomId);
+                            
+                            latestRoomIdProcess = roomId;
+                            page.getRoom();
+                        }
+                        else {
+                            if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                            }
+                            else {
+                                app.showNotice({
+                                    message: app.translate('common.processing_failed'),
+                                    type: response.result
+                                });
+                            }
+                        }
+                    },
+                    error: function() {
+                        app.alertSomethingError();
+
+                        //buttonDelete.bootstrapBtn('reset');
+                    }
+                });
+            }, function() {
+                
+            },{
+                animation: false,
+                type: null
+            });
         }
     };
 })();

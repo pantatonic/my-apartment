@@ -16,4 +16,6 @@ public interface RoomDao {
     
     public Boolean deleteById(Integer roomId);
     
+    public Boolean checkOut(Integer roomId, String numberCode);
+    
 }

@@ -1,4 +1,4 @@
-/* global INPUT_ERROR_CLASS, app, WARNING_STRING, modalRoomDetail, _DELAY_PROCESS_, _CONTEXT_PATH_, EDIT_ANIMATED_CLASS, alertUtil, buildingIdString, HAS_ANY_DATA_STRING, SUCCESS_STRING, modalRoomManage */
+/* global INPUT_ERROR_CLASS, app, WARNING_STRING, modalRoomDetail, _DELAY_PROCESS_, _CONTEXT_PATH_, EDIT_ANIMATED_CLASS, alertUtil, buildingIdString, HAS_ANY_DATA_STRING, SUCCESS_STRING, modalRoomManage, roomManageCheckIn */
 
 var latestRoomIdProcess = null;
 
@@ -133,6 +133,8 @@ var page = (function() {
                 thisElement.hide();
                 
                 modalRoomManage.getCurrentCheckInForm().show();
+                
+                roomManageCheckIn.checkOutRoomButton.hide();
             });
             
             modalRoomManage.getModal().on('hidden.bs.modal', function(e) {
@@ -149,6 +151,10 @@ var page = (function() {
                 e.preventDefault();
                 
                 modalRoomManage.saveCurrentCheckIn();
+            });
+            
+            page.getElement.getCheckOutRoomButton().click(function() {
+                roomManageCheckIn.checkOut();
             });
         },
         getCurrentDateString: function() {
@@ -389,6 +395,9 @@ var page = (function() {
             });
         },
         getElement: {
+            getCheckOutRoomButton: function() {
+                return jQuery('#check-out-current-check-in');
+            },
             getAddButton: function() {
                 return jQuery('.add-button');
             },

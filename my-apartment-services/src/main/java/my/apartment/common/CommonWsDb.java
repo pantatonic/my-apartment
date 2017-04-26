@@ -26,8 +26,14 @@ public class CommonWsDb {
         return result;
     }
     
-    public static String getNowDateString() {
+    public static String getNowDateTimeString() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        return dateFormat.format(new Date());
+    }
+    
+    public static String getNowDateString() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         
         return dateFormat.format(new Date());
     }

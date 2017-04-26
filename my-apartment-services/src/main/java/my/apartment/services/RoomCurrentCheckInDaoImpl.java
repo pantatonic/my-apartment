@@ -196,7 +196,7 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
             
             RoomCurrentCheckIn toSaveHistory = new RoomCurrentCheckIn();
             
-            String nowDateString = CommonWsDb.getNowDateString();
+            String nowDateString = CommonWsDb.getNowDateTimeString();
             
             if(processType.equalsIgnoreCase(this.insertString)) {
                 /** insert process */
@@ -210,7 +210,7 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                         + "address ," //6
                         + "remark, " //7
                         + "number_code, " //8
-                        + "created_date) "
+                        + "created_date) " //9
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 
                 ps = con.prepareStatement(querysString);
@@ -373,9 +373,10 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                         + "lastname = ?, " //4
                         + "address = ?, " //5
                         + "remark = ?, " //6
-                        + "number_code = ?, "//7
-                        + "updated_date = ? "//8
-                        + "WHERE room_id = ? " //9
+                        + "number_code = ?, " //7
+                        + "updated_date = ? " //8
+                        + "WHERE room_id = ? "  //9
+                        + "AND number_code = ?" //10
                         + "";
                 
                 ps = con.prepareStatement(querysString);
@@ -389,6 +390,7 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
                 ps.setString(7, toSaveHistory.getNumberCode());
                 ps.setString(8, toSaveHistory.getUpdatedDateString());
                 ps.setInt(9, toSaveHistory.getRoomId());
+                ps.setString(10, toSaveHistory.getNumberCode());
                 
                 effectRowProcess = ps.executeUpdate();
             } catch (SQLException ex) {

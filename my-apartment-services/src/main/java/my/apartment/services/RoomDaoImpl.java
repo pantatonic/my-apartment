@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.apartment.common.CommonWsDb;
 import my.apartment.common.Config;
 import my.apartment.model.Room;
+import my.apartment.model.RoomCheckInOutHistory;
 
 
 public class RoomDaoImpl implements RoomDao {
@@ -344,6 +346,130 @@ public class RoomDaoImpl implements RoomDao {
         }
         
         return resultDelete;
+    }
+    
+    @Override
+    public Boolean checkOut(Integer roomId, String numberCode) {
+        Boolean resultCheckOut = Boolean.TRUE;
+        
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String querysString;
+            
+            /** begin remove from current_check_in */
+            querysString = "DELETE FROM current_check_in WHERE room_id = ?";
+            
+            ps = con.prepareStatement(querysString);
+            ps.setInt(1, roomId);
+            
+            ps.executeUpdate();
+            
+            CommonWsDb.optimizeTable(con, ps, "current_check_in");
+            /** end remove from current_check_in */
+            
+            
+            /** begin get data from check in out history */
+            querysString = "SELECT * FROM check_in_out_history WHERE room_id = ? AND number_code = ?";
+            
+            ps = con.prepareStatement(querysString);
+            ps.setInt(1, roomId);
+            ps.setString(2, numberCode);
+            
+            rs = ps.executeQuery();
+            
+            if(rs.next()) {
+                RoomCheckInOutHistory rcioh = new RoomCheckInOutHistory();
+                
+                rcioh.setRoomId(rs.getInt("room_id"));
+                rcioh.setCheckInDateString(rs.getDate("check_in_date").toString());
+                rcioh.setCheckOutDateString(CommonWsDb.getNowDateString());
+                rcioh.setIdCard(rs.getString("id_card"));
+                rcioh.setName(rs.getString("name"));
+                rcioh.setLastname(rs.getString("lastname"));
+                rcioh.setAddress(rs.getString("address"));
+                rcioh.setRemark(rs.getString("remark"));
+                rcioh.setNumberCode(rs.getString("number_code"));
+                rcioh.setCreatedDateString(CommonWsDb.getNowDateTimeString());
+                
+                Boolean resultCreateCheckOutRecord = this.createCheckOutRecord(con, ps, rcioh);
+                
+                if(resultCreateCheckOutRecord == Boolean.FALSE) {
+                    resultCheckOut = Boolean.FALSE;
+                }
+            }
+            /** end get data from check in out history */
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            resultCheckOut = Boolean.FALSE;
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+                
+        return resultCheckOut;
+    }
+    
+    private Boolean createCheckOutRecord(Connection con, PreparedStatement ps, RoomCheckInOutHistory rcioh) throws SQLException {
+        String queryString = "INSERT INTO check_in_out_history ("
+                + "room_id, " //1
+                + "check_in_date, " //2
+                + "check_out_date, " //3
+                + "id_card, " //4
+                + "name, " //5
+                + "lastname, " //6
+                + "address, " //7
+                + "remark, " //8
+                + "number_code, " //9
+                + "created_date) " //10
+                + "VALUES ("
+                + "?, ?, ?, ?, ?, "
+                + "?, ?, ?, ?, ?"
+                + ")";
+        
+        ps = con.prepareStatement(queryString);
+        
+        ps.setInt(1, rcioh.getRoomId());
+        ps.setString(2, rcioh.getCheckInDateString());
+        ps.setString(3, rcioh.getCheckOutDateString());
+        ps.setString(4, rcioh.getIdCard());
+        ps.setString(5, rcioh.getName());
+        ps.setString(6, rcioh.getLastname());
+        ps.setString(7, rcioh.getAddress());
+        ps.setString(8, rcioh.getRemark());
+        ps.setString(9, rcioh.getNumberCode());
+        ps.setString(10, rcioh.getCreatedDateString());
+        
+        Integer effectRow = ps.executeUpdate();
+        
+        if(effectRow > 0) {
+            return Boolean.TRUE;
+        }
+        else {
+            return Boolean.FALSE;
+        }
     }
     
 }

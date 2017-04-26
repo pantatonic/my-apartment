@@ -459,6 +459,36 @@ public class RoomResource {
         return jsonObjectReturn.toString();
     }
     
+    @Path("room_check_out")
+    @POST
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String roomCheckOut(
+            @FormParam("room_id") Integer roomId,
+            @FormParam("number_code") String numberCode
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            Boolean resultCheckOut = roomDaoImpl.checkOut(roomId, numberCode);
+            
+            if(resultCheckOut == Boolean.TRUE) {
+                jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
+            }
+            else {
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, "");
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
 
     /**
      * PUT method for updating or creating an instance of RoomResource

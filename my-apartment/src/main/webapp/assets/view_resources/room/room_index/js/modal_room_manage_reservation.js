@@ -135,6 +135,8 @@ var modalRoomManage = (function() {
                         modalRoomManage.preProcessForNewCurrentCheckIn(roomId);
                     }
                     else {
+                        roomManageCheckIn.checkOutRoomButton.show();
+
                         currentCheckInForm.show();
                         modal.find('#new-current-check-in').hide();
                         
