@@ -488,7 +488,7 @@ public class RoomController {
         try {
             /** validate required field */
             JSONObject resultValidateRequired = CommonAppUtils.simpleValidateRequire(formData, 
-                    new String[] {"check_in_date", "id_card", "name", "lastname"});
+                    new String[] {"room_id", "check_in_date", "id_card", "name", "lastname"});
             
             if(resultValidateRequired.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
                 jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
@@ -729,6 +729,46 @@ public class RoomController {
             String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_check_out", parametersMap, String.class);
             
             jsonObjectReturn = new JSONObject(resultWs);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/notice_check_out_save.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String noticeCheckOutSave(@RequestBody MultiValueMap<String, String> formData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            /** validate required field */
+            JSONObject resultValidateRequired = CommonAppUtils.simpleValidateRequire(formData, 
+                    new String[] {"room_id", "notice_check_out"});
+            
+            if(resultValidateRequired.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        resultValidateRequired.getString(CommonString.MESSAGE_STRING));
+                
+                return jsonObjectReturn.toString();
+            }
+            
+            RestTemplate restTemplate = new RestTemplate();
+            String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
+            
+            HttpHeaders headers = new HttpHeaders();
+            MediaType mediaType = CommonAppUtils.jsonMediaType();
+            headers.setContentType(mediaType);
+            
+            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/notice_check_out_save", entity, String.class, CommonString.UTF8_STRING);
+            
+            JSONObject resultWsJsonObject = new JSONObject(resultWs);
+
+            jsonObjectReturn = resultWsJsonObject;
         }
         catch(Exception e) {
             e.printStackTrace();

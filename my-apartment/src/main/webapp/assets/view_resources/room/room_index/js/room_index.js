@@ -74,7 +74,7 @@ var page = (function() {
             }).on('changeDate',function(e) {
                 
             });
-
+            
         },
         addEvent: function() {
             var buildingList = _getBuildingListElement();
@@ -118,7 +118,13 @@ var page = (function() {
                 
                 modalRoomDetail.save();
             });
+
+            modalRoomManage.getModal().on('shown.bs.modal', function(e) {
+                page.getElement.getModalRoomManageTabs().find('a:first').tab('show');
+            });
             
+            
+            /* begin room reservation tab */
             page.getElement.getModalRoomManage().on('click', '#new-room-reservation', function() {
                 var thisElement = jQuery(this);
                 
@@ -127,6 +133,15 @@ var page = (function() {
                 modalRoomManage.getRoomReservationForm().show();
             });
             
+            modalRoomManage.getRoomReservationForm().submit(function(e) {
+                e.preventDefault();
+                
+                modalRoomManage.saveRoomReservation();
+            });
+            /* end room reservation tab */
+            
+            
+            /* begin current check in tab */
             page.getElement.getModalRoomManage().on('click', '#new-current-check-in', function() {
                 var thisElement = jQuery(this);
                 
@@ -135,16 +150,6 @@ var page = (function() {
                 modalRoomManage.getCurrentCheckInForm().show();
                 
                 roomManageCheckIn.checkOutRoomButton.hide();
-            });
-            
-            modalRoomManage.getModal().on('show.bs.modal', function(e) {
-                page.getElement.getModalRoomManageTabs().find('a:first').tab('show');
-            });
-            
-            modalRoomManage.getRoomReservationForm().submit(function(e) {
-                e.preventDefault();
-                
-                modalRoomManage.saveRoomReservation();
             });
             
             modalRoomManage.getCurrentCheckInForm().submit(function(e) {
@@ -156,6 +161,24 @@ var page = (function() {
             page.getElement.getCheckOutRoomButton().click(function() {
                 roomManageCheckIn.checkOut();
             });
+            /* end current check in tab */
+
+
+            /* begin notice check out tab */
+            page.getElement.getModalRoomManage().on('click', '#new-notice-check-out', function() {
+                var thisElement = jQuery(this);
+                
+                thisElement.hide();
+                
+                modalRoomManage.getNoticeCheckOutForm().show();
+            });
+            
+            modalRoomManage.getNoticeCheckOutForm().submit(function(e) {
+                e.preventDefault();
+                
+                modalRoomManage.saveNoticeCheckOut();
+            });
+            /* end notice check out tab */
         },
         getCurrentDateString: function() {
             return jQuery('#current-date-string').val();
@@ -397,6 +420,9 @@ var page = (function() {
         getElement: {
             getCheckOutRoomButton: function() {
                 return jQuery('#check-out-current-check-in');
+            },
+            getNewNoticeCheckOutButton: function() {
+                return jQuery('#new-notice-check-out');
             },
             getAddButton: function() {
                 return jQuery('.add-button');

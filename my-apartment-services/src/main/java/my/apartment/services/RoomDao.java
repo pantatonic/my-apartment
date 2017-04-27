@@ -2,6 +2,7 @@ package my.apartment.services;
 
 import java.util.List;
 import my.apartment.model.Room;
+import my.apartment.model.RoomNoticeCheckOut;
 
 
 public interface RoomDao {
@@ -17,5 +18,11 @@ public interface RoomDao {
     public Boolean deleteById(Integer roomId);
     
     public Boolean checkOut(Integer roomId, String numberCode);
+    
+    public List<RoomNoticeCheckOut> getCurrentNoticeCheckOutByRoomId(Integer roomId);
+    
+    public RoomNoticeCheckOut saveNoticeCheckOut(RoomNoticeCheckOut roomNoticeCheckOut);
+    
+    
     
 }

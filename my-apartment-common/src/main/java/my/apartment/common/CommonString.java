@@ -3,7 +3,7 @@ package my.apartment.common;
 
 public class CommonString {
     
-    public static final String VERSION = "201704151915";
+    public static final String VERSION = "20170427181100";
     
     public static final String UTF8_STRING = "UTF8";
     
@@ -33,5 +33,8 @@ public class CommonString {
     public static final String DATA_DUPLICATED_STRING = "DATA_DUPLICATED";
     
     public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
+    
+    public static final String INSERT_TYPE_STRING = "insert";
+    public static final String UPDATE_TYPE_STRING = "update";
     
 }

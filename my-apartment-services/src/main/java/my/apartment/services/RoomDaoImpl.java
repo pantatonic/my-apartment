@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsDb;
 import my.apartment.common.Config;
 import my.apartment.model.Room;
 import my.apartment.model.RoomCheckInOutHistory;
+import my.apartment.model.RoomNoticeCheckOut;
 
 
 public class RoomDaoImpl implements RoomDao {
@@ -470,6 +472,149 @@ public class RoomDaoImpl implements RoomDao {
         else {
             return Boolean.FALSE;
         }
+    }
+    
+    @Override
+    public List<RoomNoticeCheckOut> getCurrentNoticeCheckOutByRoomId(Integer roomId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<RoomNoticeCheckOut> roomNoticeCheckOuts = new ArrayList<RoomNoticeCheckOut>();
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+            
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String stringQuery = "SELECT  * FROM notice_check_out WHERE room_id = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomNoticeCheckOut roomNoticeCheckOut = new RoomNoticeCheckOut();
+                
+                roomNoticeCheckOut.setRoomId(rs.getInt("room_id"));
+                roomNoticeCheckOut.setNoticeCheckOutDate(rs.getDate("notice_check_out_date"));
+                roomNoticeCheckOut.setRemark(rs.getString("remark"));
+                roomNoticeCheckOut.setCreatedDate(rs.getDate("created_date"));
+                roomNoticeCheckOut.setUpdatedDate(rs.getDate("updated_date"));
+                
+                roomNoticeCheckOuts.add(roomNoticeCheckOut);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return roomNoticeCheckOuts;
+    }
+    
+    @Override
+    public RoomNoticeCheckOut saveNoticeCheckOut(RoomNoticeCheckOut roomNoticeCheckOut) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        RoomNoticeCheckOut roomNoticeCheckOutReturn = new RoomNoticeCheckOut();
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String querysString = "";
+            
+            String processType;
+            
+            /** begin check process type */
+            querysString = "SELECT COUNT(room_id) AS count_row FROM notice_check_out WHERE room_id = ?";
+            ps = con.prepareStatement(querysString);
+            ps.setInt(1, roomNoticeCheckOut.getRoomId());
+            rs = ps.executeQuery();
+            
+            rs.first();
+            Integer totalRecord = rs.getInt("count_row");
+            
+            processType = totalRecord == 0 ? CommonString.INSERT_TYPE_STRING : CommonString.UPDATE_TYPE_STRING;
+            /** end check process type */
+            
+            Integer effectRowProcess;
+            
+            String nowDateString = CommonWsDb.getNowDateTimeString();
+            
+            if(processType.equalsIgnoreCase(CommonString.INSERT_TYPE_STRING)) {
+                /** insert process */
+                
+                querysString = "INSERT INTO notice_check_out ("
+                        + "room_id, " //1
+                        + "notice_check_out_date, " //2
+                        + "remark, " //3
+                        + "created_date) " //4
+                        + "VALUES (?, ?, ?, ?)";
+                
+                ps = con.prepareStatement(querysString);
+                
+                ps.setInt(1, roomNoticeCheckOut.getRoomId());
+                ps.setString(2, roomNoticeCheckOut.getNoticeCheckOutDateString());
+                ps.setString(3, roomNoticeCheckOut.getRemark());
+                ps.setString(4, nowDateString);
+                
+                effectRowProcess = ps.executeUpdate();
+            }
+            else {
+                /** update process */
+                
+                querysString = "UPDATE notice_check_out SET "
+                        + "notice_check_out_date = ?, " //1
+                        + "remark = ?, " //2
+                        + "updated_date = ? "//3
+                        + "WHERE room_id = ? " //4
+                        + "";
+                
+                ps = con.prepareStatement(querysString);
+                
+                ps.setString(1, roomNoticeCheckOut.getNoticeCheckOutDateString());
+                ps.setString(2, roomNoticeCheckOut.getRemark());
+                ps.setString(3, nowDateString);
+                ps.setInt(4, roomNoticeCheckOut.getRoomId());
+                
+                effectRowProcess = ps.executeUpdate();
+            }
+            
+            if(effectRowProcess != 0) {
+                roomNoticeCheckOutReturn = new RoomNoticeCheckOut();
+                
+                roomNoticeCheckOutReturn.setRoomId(roomNoticeCheckOut.getRoomId());
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            
+        }
+        
+        return roomNoticeCheckOutReturn;
     }
     
 }

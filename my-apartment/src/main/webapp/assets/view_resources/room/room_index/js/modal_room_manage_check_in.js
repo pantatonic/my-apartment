@@ -1,5 +1,5 @@
 
-/* global app, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, SUCCESS_STRING, modalRoomManage, _DELAY_PROCESS_, page, alertUtil */
+/* global app, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, SUCCESS_STRING, modalRoomManage, _DELAY_PROCESS_, page, alertUtil, INPUT_ERROR_CLASS */
 
 var roomManageCheckIn = (function() {
     var _getCheckInOutList = function(roomId) {

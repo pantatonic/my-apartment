@@ -20,6 +20,7 @@ import my.apartment.common.CommonWsUtils;
 import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.Room;
 import my.apartment.model.RoomCurrentCheckIn;
+import my.apartment.model.RoomNoticeCheckOut;
 import my.apartment.model.RoomReservation;
 import my.apartment.services.RoomCurrentCheckInDao;
 import my.apartment.services.RoomCurrentCheckInDaoImpl;
@@ -276,16 +277,19 @@ public class RoomResource {
         try {
             RoomReservationDao roomReservationDaoImpl = new RoomReservationDaoImpl();
             RoomCurrentCheckInDao roomCurrentCheckInDaoImpl = new RoomCurrentCheckInDaoImpl();
+            RoomDao roomDaoImpl = new RoomDaoImpl();
             
             List<RoomReservation> roomReservations = roomReservationDaoImpl.getCurrentByRoomId(roomId);
             List<RoomCurrentCheckIn> currentCheckIns = roomCurrentCheckInDaoImpl.getCurrentByRoomId(roomId);
-
+            List<RoomNoticeCheckOut> noticeCheckOuts = roomDaoImpl.getCurrentNoticeCheckOutByRoomId(roomId);
+            
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             
             JSONObject jsonObjectData = new JSONObject();
             
             jsonObjectData.put("roomReservarion", roomReservations);
             jsonObjectData.put("currentCheckIn", currentCheckIns);
+            jsonObjectData.put("noticeCheckOut", noticeCheckOuts);
          
             jsonObjectReturn.put(CommonString.DATA_STRING, jsonObjectData);
         }
@@ -478,6 +482,44 @@ public class RoomResource {
             }
             else {
                 jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, "");
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @Path("notice_check_out_save")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String noticeCheckOutSave(InputStream incomingData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
+            
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            RoomNoticeCheckOut roomNoticeCheckOut = new RoomNoticeCheckOut();
+            
+            roomNoticeCheckOut.setRoomId(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("room_id")));
+            roomNoticeCheckOut.setNoticeCheckOutDateString(jsonObjectReceive.getString("notice_check_out_date"));
+            roomNoticeCheckOut.setRemark(CommonWsUtils.strToString(jsonObjectReceive.getString("remark")));
+
+            RoomNoticeCheckOut resultSave = roomDaoImpl.saveNoticeCheckOut(roomNoticeCheckOut);
+            
+            if(resultSave != null) {
+                jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                        CommonString.SAVE_DATA_SUCCESS_STRING);
+            }
+            else {
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        CommonString.SAVE_DATA_ERROR_STRING);
             }
         }
         catch(Exception e) {

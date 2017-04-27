@@ -1,4 +1,4 @@
-/* global _CONTEXT_PATH_, _DELAY_PROCESS_, app, SUCCESS_STRING, SESSION_EXPIRE_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, page, roomManageCheckIn, INPUT_ERROR_CLASS, WARNING_STRING */
+/* global _CONTEXT_PATH_, _DELAY_PROCESS_, app, SUCCESS_STRING, SESSION_EXPIRE_STRING, DATA_NOT_FOUND_STRING, REQUIRED_CLASS, page, roomManageCheckIn, INPUT_ERROR_CLASS, WARNING_STRING, noticeCheckOut */
 
 var modalRoomManage = (function() {
     var _getModal = function() {
@@ -11,6 +11,10 @@ var modalRoomManage = (function() {
     
     var _getCurrentCheckInForm = function() {
         return jQuery('[name="room_check_in_form"]');
+    };
+    
+    var _getNoticeCheckOutForm = function() {
+        return jQuery('[name="notice_check_out_form"]');
     };
     
     var _getReservationList = function(roomId) {
@@ -50,6 +54,9 @@ var modalRoomManage = (function() {
         getCurrentCheckInForm: function() {
             return _getCurrentCheckInForm();
         },
+        getNoticeCheckOutForm: function() {
+            return _getNoticeCheckOutForm();
+        },
         preProcessForNewReservation: function(roomId) {
             var roomReservationForm = _getRoomReservationForm();
             var currentDateString = page.getCurrentDateString();
@@ -75,6 +82,18 @@ var modalRoomManage = (function() {
             currentCheckInForm.hide();
             
             modal.find('#new-current-check-in').show();
+        },
+        preProcessForNoticeCheckOut: function(roomId) {
+            var noticeCheckOutForm = _getNoticeCheckOutForm();
+            var currentDateString = page.getCurrentDateString();
+            var modal = _getModal();
+            
+            noticeCheckOutForm.find('[name="room_id"]').val(roomId);
+            noticeCheckOutForm.find('[name="notice_check_out_date"]').datepicker('update', currentDateString);
+            
+            noticeCheckOutForm.hide();
+            
+            modal.find('#new-notice-check-out').show();
         },
         getRoomManage: function(roomId, buttonRoomManage) {
             var _setData = function(response) {
@@ -155,6 +174,35 @@ var modalRoomManage = (function() {
                     }
                 };
                 
+                var setNoticeCheckOut = function() {
+                    var data = response.data.noticeCheckOut;
+                    var data_ = data[0];
+                    var noticeCheckOutForm = _getNoticeCheckOutForm();
+                    
+                    app.clearFormData(noticeCheckOutForm);
+
+                    if(data.length == 0) {
+                        modalRoomManage.preProcessForNoticeCheckOut(roomId);
+                    }
+                    else {
+                        noticeCheckOutForm.show();
+                        modal.find('#new-notice-check-out').hide();
+
+                        for(var key in data_) {
+                            var key_ = app.camelToUnderScore(key);
+                            noticeCheckOutForm.find('[name="' + key_ + '"]').val(data_[key]);
+                        }
+                        
+                        noticeCheckOutForm.find('.input-datepicker').each(function() {
+                            var thisEle = jQuery(this);
+                            
+                            if(thisEle.attr('name') == 'notice_check_out_date') {
+                                thisEle.datepicker('update', app.valueUtils.undefinedToEmpty(data_.noticeCheckOutDate));
+                            }
+                        });
+                    }
+                };
+                
 
                 /** begin main process */
                 page.setModalRoomNoLabel(roomNoLabel);
@@ -162,6 +210,7 @@ var modalRoomManage = (function() {
 
                 setCurrentReservation();
                 setCurrentCheckIn();
+                setNoticeCheckOut();
                 
                 _getReservationList(roomId);
                 roomManageCheckIn.getCheckInOutList(roomId);
@@ -323,6 +372,9 @@ var modalRoomManage = (function() {
         },
         saveCurrentCheckIn: function() {
             roomManageCheckIn.saveCurrentCheckIn();
+        },
+        saveNoticeCheckOut: function() {
+            noticeCheckOut.saveNoticeCheckOut();
         }
         
     };
