@@ -388,6 +388,19 @@ var page = (function() {
                 }
             };
             
+            var _setCurrentNoticeCheckOut = function(response) {
+                var currentNoticeCheckOutData = response.data.noticeCheckOut;
+                var labelTemplate = '<span class="label label-danger">' + app.translate('room.notice_check_out') + '</span>';
+                
+                for(var index in currentNoticeCheckOutData) {
+                    var currentData =  currentNoticeCheckOutData[index];
+                    var boxRoom = jQuery('.box-room[data-id="' + currentData.roomId + '"]');
+                    var currentLabelHtml =  boxRoom.find('.room-manage-detail-label').html();
+                    
+                    boxRoom.find('.room-manage-detail-label').html(currentLabelHtml + labelTemplate);
+                }
+            };
+            
             var _closeWithClearFix = function() {
                 jQuery('.box-room_ .box-room').each(function() {
                     var thisElement = jQuery(this);
@@ -405,6 +418,7 @@ var page = (function() {
                     
                     _setReserveLabel(response);
                     _setCurrentCheckInLabel(response);
+                    _setCurrentNoticeCheckOut(response);
                     _closeWithClearFix();
                 },
                 error: function() {

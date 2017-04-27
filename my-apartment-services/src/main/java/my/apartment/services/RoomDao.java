@@ -19,6 +19,8 @@ public interface RoomDao {
     
     public Boolean checkOut(Integer roomId, String numberCode);
     
+    public List<RoomNoticeCheckOut> getCurrentNoticeCheckOut();
+    
     public List<RoomNoticeCheckOut> getCurrentNoticeCheckOutByRoomId(Integer roomId);
     
     public RoomNoticeCheckOut saveNoticeCheckOut(RoomNoticeCheckOut roomNoticeCheckOut);

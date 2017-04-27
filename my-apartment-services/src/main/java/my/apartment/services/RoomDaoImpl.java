@@ -475,6 +475,61 @@ public class RoomDaoImpl implements RoomDao {
     }
     
     @Override
+    public List<RoomNoticeCheckOut> getCurrentNoticeCheckOut() {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<RoomNoticeCheckOut> roomNoticeCheckOuts = new ArrayList<RoomNoticeCheckOut>();
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+            
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String stringQuery = "SELECT * FROM notice_check_out";
+            
+            ps = con.prepareStatement(stringQuery);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomNoticeCheckOut roomNoticeCheckOut = new RoomNoticeCheckOut();
+                
+                roomNoticeCheckOut.setRoomId(rs.getInt("room_id"));
+                roomNoticeCheckOut.setNoticeCheckOutDate(rs.getDate("notice_check_out_date"));
+                roomNoticeCheckOut.setRemark(rs.getString("remark"));
+                roomNoticeCheckOut.setCreatedDate(rs.getDate("created_date"));
+                roomNoticeCheckOut.setUpdatedDate(rs.getDate("updated_date"));
+                
+                roomNoticeCheckOuts.add(roomNoticeCheckOut);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return roomNoticeCheckOuts;
+    }
+    
+    @Override
     public List<RoomNoticeCheckOut> getCurrentNoticeCheckOutByRoomId(Integer roomId) {
         Connection con = null;
         PreparedStatement ps = null;

@@ -266,6 +266,28 @@ public class RoomResource {
         return jsonObjectReturn.toString();
     }
     
+    @Path("get_current_notice_check_out")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getCurrentNoticeCheckOut() {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            List<RoomNoticeCheckOut> roomNoticeCheckOuts = roomDaoImpl.getCurrentNoticeCheckOut();
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomNoticeCheckOuts);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
     @Path("get_room_manage/{room_id}")
     @GET
     @Produces(CommonWsUtils.MEDIA_TYPE_JSON)

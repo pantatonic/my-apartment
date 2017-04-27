@@ -367,12 +367,16 @@ public class RoomController {
             
             String resultWsGetCurrentCheckIn = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_current_check_in", String.class);
             JSONObject jsonObjectGetCurrentCheckIn = new JSONObject(resultWsGetCurrentCheckIn);
+            
+            String resultWsGetNoticeCheckOut = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_current_notice_check_out", String.class);
+            JSONObject jsonObjectGetNoticeCheckOut = new JSONObject(resultWsGetNoticeCheckOut);
 
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             
             jsonObjectReturn.put(CommonString.DATA_STRING, 
                     new JSONObject().put("reserve", jsonObjectGetCurrentReserve.get(CommonString.DATA_STRING))
                             .put("currentCheckIn", jsonObjectGetCurrentCheckIn.get(CommonString.DATA_STRING))
+                            .put("noticeCheckOut", jsonObjectGetNoticeCheckOut.get(CommonString.DATA_STRING))
             );
 
             
