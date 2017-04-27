@@ -1,4 +1,4 @@
-/* global INPUT_ERROR_CLASS, app, WARNING_STRING, modalRoomDetail, _DELAY_PROCESS_, _CONTEXT_PATH_, EDIT_ANIMATED_CLASS, alertUtil, buildingIdString, HAS_ANY_DATA_STRING, SUCCESS_STRING, modalRoomManage, roomManageCheckIn */
+/* global INPUT_ERROR_CLASS, app, WARNING_STRING, modalRoomDetail, _DELAY_PROCESS_, _CONTEXT_PATH_, EDIT_ANIMATED_CLASS, alertUtil, buildingIdString, HAS_ANY_DATA_STRING, SUCCESS_STRING, modalRoomManage, roomManageCheckIn, noticeCheckOut */
 
 var latestRoomIdProcess = null;
 
@@ -171,12 +171,18 @@ var page = (function() {
                 thisElement.hide();
                 
                 modalRoomManage.getNoticeCheckOutForm().show();
+                
+                noticeCheckOut.removeNoticeCheckOutButton.hide();
             });
             
             modalRoomManage.getNoticeCheckOutForm().submit(function(e) {
                 e.preventDefault();
                 
                 modalRoomManage.saveNoticeCheckOut();
+            });
+            
+            page.getElement.getRemoveNoticeCheckOutButton().click(function() {
+                noticeCheckOut.removeNoticeCheckOut();
             });
             /* end notice check out tab */
         },
@@ -437,6 +443,9 @@ var page = (function() {
             },
             getNewNoticeCheckOutButton: function() {
                 return jQuery('#new-notice-check-out');
+            },
+            getRemoveNoticeCheckOutButton: function() {
+                return jQuery('#remove-notice-check-out');
             },
             getAddButton: function() {
                 return jQuery('.add-button');

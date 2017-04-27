@@ -672,4 +672,51 @@ public class RoomDaoImpl implements RoomDao {
         return roomNoticeCheckOutReturn;
     }
     
+    @Override
+    public Boolean removeNoticeCheckOut(Integer roomId) {
+        Boolean resultRemove = Boolean.TRUE;
+        
+        Connection con = null;
+        PreparedStatement ps = null;
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            String querysString = "DELETE FROM notice_check_out WHERE room_id = ?";
+            
+            ps = con.prepareStatement(querysString);
+            ps.setInt(1, roomId);
+            
+            ps.executeUpdate();
+            
+            CommonWsDb.optimizeTable(con, ps, "notice_check_out");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            resultRemove = Boolean.FALSE;
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return resultRemove;
+    }
+    
 }

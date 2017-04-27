@@ -25,6 +25,6 @@ public interface RoomDao {
     
     public RoomNoticeCheckOut saveNoticeCheckOut(RoomNoticeCheckOut roomNoticeCheckOut);
     
-    
+    public Boolean removeNoticeCheckOut(Integer roomId);
     
 }

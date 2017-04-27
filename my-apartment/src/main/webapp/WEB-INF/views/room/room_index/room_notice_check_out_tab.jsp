@@ -8,16 +8,25 @@
                         
 <div style="text-align: center;">
     <button type="button" id="new-notice-check-out" class="btn btn-warning btn-flat">
-        _Create Notice Check Out_
+        <spring:message code="room.notice_check_out_date" />
     </button>
 </div>
 
 <form id="notice-check-out-form" name="notice_check_out_form" method="post" class="form-horizontal" 
       action="<c:url value="notice_check_out_save.html" />">
     
+    <div class="form-group col-xs-12 text-center">
+        <button type="button" id="remove-notice-check-out" class="btn btn-warning btn-flat" 
+                data-loading-text="<spring:message code="common.now_processing" />">
+            <i class="fa fa-times"></i>
+            <spring:message code="room.remove_notice" />
+        </button>
+    </div>
+    <div class="clearfix"></div>
+    
     <div class="form-group col-sm-6 col-md-6">
         <label class="col-sm-6 control-label">
-            _Notice Check Out Date_
+            <spring:message code="room.notice_check_out_date" />
         </label>
         <div class="col-sm-6">
             <div class="input-group">

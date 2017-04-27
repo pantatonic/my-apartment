@@ -712,6 +712,13 @@ public class RoomController {
         }
     }
     
+    /**
+     * 
+     * @param roomId
+     * @param numberCode
+     * @param response
+     * @return 
+     */
     @RequestMapping(value = "/room_check_out.html", method = {RequestMethod.POST})
     @ResponseBody
     public String roomCheckOut(
@@ -743,6 +750,11 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param formData
+     * @return 
+     */
     @RequestMapping(value = "/notice_check_out_save.html", method = {RequestMethod.POST})
     @ResponseBody
     public String noticeCheckOutSave(@RequestBody MultiValueMap<String, String> formData) {
@@ -773,6 +785,35 @@ public class RoomController {
             JSONObject resultWsJsonObject = new JSONObject(resultWs);
 
             jsonObjectReturn = resultWsJsonObject;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @RequestMapping(value = "/remove_notice_check_out.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String removeNoticeCheckOut(
+            @RequestParam(value = "room_id") String roomId,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
+            parametersMap.add("room_id", roomId);
+            
+            RestTemplate restTemplate = new RestTemplate();
+            
+            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/remove_notice_check_out", parametersMap, String.class);
+            
+            jsonObjectReturn = new JSONObject(resultWs);
         }
         catch(Exception e) {
             e.printStackTrace();

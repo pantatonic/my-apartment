@@ -102,6 +102,9 @@
     "room.check_out":"<spring:message code="room.check_out" />",
     "room.check_out_date":"<spring:message code="room.check_out_date" />",
     
-    "room.notice_check_out":"<spring:message code="room.notice_check_out" />"
+    "room.notice_check_out":"<spring:message code="room.notice_check_out" />",
+    "room.notice_check_out_date":"<spring:message code="room.notice_check_out_date" />",
+    "room.create_notice_check_out":"<spring:message code="room.create_notice_check_out" />",
+    "room.remove_notice":"<spring:message code="room.remove_notice" />"
     }
 </div>
