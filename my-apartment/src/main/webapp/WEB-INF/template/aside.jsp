@@ -6,15 +6,15 @@
     <section class="sidebar">
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="" 
+                <img src="<c:url value="assets/dist/img/user_160.png" />" 
                     class="img-circle user_profile_image" 
                     alt="User Image" id="aside_user_profile_image" 
                     style="width:45px;height:45px;">
             </div>
             <div class="pull-left info">
                 <p>
-                    <span class="session-user-firstname">Firstname</span> 
-                    <span class="session_user_lastname">Lastname</span>
+                    <span class="session-user-firstname">${sessionScope.userFirstname}</span> 
+                    <span class="session_user_lastname">${sessionScope.userLastname}</span>
                 </p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>

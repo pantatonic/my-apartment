@@ -70,7 +70,7 @@
                                    
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
-                            _Startup Electricity Meter_
+                            <spring:message code="room.startup_electricity_meter_digit" />
                         </label>
                         <div class="col-sm-9">
                             <input type="text" name="startup_electricity_meter" class="form-control my-required-field number-int" 
@@ -81,7 +81,7 @@
                                    
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
-                            _Startup Water Meter_
+                            <spring:message code="room.startup_water_meter_digit" />
                         </label>
                         <div class="col-sm-9">
                             <input type="text" name="startup_water_meter" class="form-control my-required-field number-int" 

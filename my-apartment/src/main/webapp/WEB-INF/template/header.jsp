@@ -1,8 +1,9 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <header class="main-header">
-    <a href="#" class="logo">
+    <a href="<c:url value="/dashboard.html" />" class="logo">
         <span class="logo-mini"><b></b></span>
         
         <span class="logo-lg">
@@ -12,7 +13,7 @@
     </a>
 
     <nav class="navbar navbar-static-top" role="navigation">
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a href="<c:url value="/dashboard.html" />" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -95,6 +96,57 @@
                         </li>
                         <li class="footer">
                             <a href="#">View all tasks</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="<c:url value="assets/dist/img/user_160.png" />" class="img-circle user_profile_image user-image" alt="">
+                        <span class="hidden-xs">
+                            <span class="session_user_firstname">
+                                ${sessionScope.userFirstname}
+                            </span> 
+                            <span class="session_user_lastname">
+                                ${sessionScope.userLastname}
+                            </span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!-- User image -->
+                        <li class="user-header">
+                            <img src="<c:url value="assets/dist/img/user_160.png" />" class="img-circle user_profile_image" alt="" style="width:90px;height:90px;">
+                            <p>
+                                <span class="session_user_firstname">
+                                    ${sessionScope.userFirstname}
+                                </span> 
+                                <span class="session_user_lastname">
+                                    ${sessionScope.userLastname}
+                                </span>
+                                <!--<small>Member since Nov. 2012</small>-->
+                            </p>
+                        </li>
+                        <!-- Menu Body -->
+                        <!--<li class="user-body">
+                            <div class="col-xs-4 text-center">
+                                <a href="#">Followers</a>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <a href="#">Sales</a>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <a href="#">Friends</a>
+                            </div>
+                        </li>-->
+                        <!-- Menu Footer-->
+                        <li class="user-footer">
+                            <%--<div class="pull-left">
+                                <a href="http://my-spend.tk/users/profile" class="btn btn-default btn-flat">
+                                    <i class="fa fa-user"></i> <span>Profile</span>                                        </a>
+                            </div>--%>
+                            <div class="pull-right">
+                                <a href="<c:url value="logout_process.html" />" class="btn btn-default btn-flat">Logout</a>
+                            </div>
                         </li>
                     </ul>
                 </li>

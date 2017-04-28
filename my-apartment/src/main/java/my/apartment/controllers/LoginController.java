@@ -1,5 +1,8 @@
 package my.apartment.controllers;
 
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import my.apartment.common.CommonString;
 import my.apartment.common.JsonObjectUtils;
@@ -72,19 +75,23 @@ public class LoginController {
     }
     
     @RequestMapping(value = "/logout_process.html", method = {RequestMethod.GET})
-    @ResponseBody
-    public String logoutProcess(
+    //@ResponseBody
+    public void logoutProcess(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse response,
             HttpSession session
-    ) {
+    ) throws IOException {
         if(session.getAttribute("userId") != null) {
-            String sessionFullName = session.getAttribute("userFirstname").toString() + session.getAttribute("userLastname").toString();
-            
+            //String sessionFullName = session.getAttribute("userFirstname").toString() + session.getAttribute("userLastname").toString();
             session.invalidate();
-            
-            return "Logout account : " + sessionFullName;
+
+            String url = httpServletRequest.getScheme()
+                        + "://" + httpServletRequest.getServerName()
+                        + ":" + httpServletRequest.getServerPort()
+                        + httpServletRequest.getContextPath();
+      
+            response.sendRedirect(url);
         }
-        
-        return "...";
     }
     
 }

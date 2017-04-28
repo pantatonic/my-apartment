@@ -38,8 +38,6 @@
                             <spring:message code="room.notice_check_out" />
                         </a>
                     </li>
-                    <li><a href="#green" data-toggle="tab">Green</a></li>
-                    <li><a href="#blue" data-toggle="tab">Blue</a></li>
                 </ul>
                 <div id="my-tab-content" class="tab-content">
                     <div class="tab-pane fade in active" id="reservation-tab">
@@ -50,14 +48,6 @@
                     </div>
                     <div class="tab-pane fade" id="notice-check-out-tab">
                         <jsp:include page="room_notice_check_out_tab.jsp" flush="true" />
-                    </div>
-                    <div class="tab-pane fade" id="green">
-                        <h1>Green</h1>
-                        <p>green green green green green</p>
-                    </div>
-                    <div class="tab-pane fade" id="blue">
-                        <h1>Blue</h1>
-                        <p>blue blue blue blue blue</p>
                     </div>
                 </div>
 

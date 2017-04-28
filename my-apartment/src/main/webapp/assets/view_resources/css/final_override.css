@@ -106,3 +106,7 @@ header.main-header .navbar .sidebar-toggle:hover {
 .btn-primary:focus, .btn-primary:active, .btn-primary:active:focus {
     background-color: #325658;
 }
+
+.main-header li.user-header {
+    background-color: #38888e !important;
+}
