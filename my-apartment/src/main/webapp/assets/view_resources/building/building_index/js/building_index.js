@@ -15,6 +15,7 @@ var page = (function() {
         },
         addEvent: function() {
             jQuery('.refresh-building-list').click(function() {
+                latestBuildingIdProcess = null;
                 page.getBuilding();
             });
             

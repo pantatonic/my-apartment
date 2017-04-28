@@ -63,7 +63,9 @@
                         <select id="building-list" class="form-control">
                             <option value=""> -- <spring:message code="building.select_building" /> -- </option>
                             <c:forEach begin="0" end="${buildingList.length() - 1}" var="index">
-                                <option value="${buildingList.getJSONObject(index).getInt("id")}">
+                                <option value="${buildingList.getJSONObject(index).getInt("id")}" 
+                                        data-electricity-meter-digit="${buildingList.getJSONObject(index).getInt("electricityMeterDigit")}" 
+                                        data-water-meter-digit="${buildingList.getJSONObject(index).getInt("waterMeterDigit")}">
                                     ${buildingList.getJSONObject(index).getString("name")}
                                 </option>
                             </c:forEach>

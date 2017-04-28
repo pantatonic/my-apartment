@@ -67,6 +67,29 @@
                                    autocomplete="off">
                         </div>
                     </div>
+                                   
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            _Startup Electricity Meter_
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" name="startup_electricity_meter" class="form-control my-required-field number-int" 
+                                   placeholder="" 
+                                   autocomplete="off">
+                        </div>
+                    </div>
+                                   
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            _Startup Water Meter_
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" name="startup_water_meter" class="form-control my-required-field number-int" 
+                                   placeholder="" 
+                                   autocomplete="off">
+                        </div>
+                    </div>
+                                   
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
                             <spring:message code="room.status" />

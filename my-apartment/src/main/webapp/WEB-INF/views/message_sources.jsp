@@ -27,6 +27,7 @@
     "common.please_confirm_to_process":"<spring:message code="common.please_confirm_to_process" />",
     "common.please_select_data":"<spring:message code="common.please_select_data" />",
     "common.data_not_found":"<spring:message code="common.data_not_found" />",
+    "common.confirm_change_important_data":"<spring:message code="common.confirm_change_important_data" />",
     
     "common.person_name":"<spring:message code="common.person_name" />",
     "common.person_lastname":"<spring:message code="common.person_lastname" />",
@@ -75,6 +76,8 @@
     "room.name":"<spring:message code="room.name" />",
     "room.price_per_month":"<spring:message code="room.price_per_month" />",
     "room.status":"<spring:message code="room.status" />",
+    "room.startup_electricity_meter_digit":"<spring:message code="room.startup_electricity_meter_digit" />",
+    "room.startup_water_meter_digit":"<spring:message code="room.startup_water_meter_digit" />",
     
     "room.select_floor":"<spring:message code="room.select_floor" />",
     "room.room_no_is_duplicated":"<spring:message code="room.room_no_is_duplicated" />",

@@ -54,7 +54,7 @@ public class RoomController {
         /*for(Integer i = 0; i < ja.length(); i ++) {
             System.out.println(ja.getJSONObject(i));
         }*/
-
+        
         modelAndView.addObject("buildingList", jsonArrayBuilding);
         modelAndView.addObject("buildingIdString", CommonAppUtils.nullToStringEmpty(buildingId));
         modelAndView.addObject("roomStatusList", jsonArrayRoomStatus);
@@ -240,7 +240,9 @@ public class RoomController {
      */
     private JSONObject validateRequiredRoomSave(MultiValueMap<String, String> formData) {
         String[] keyToValidate = {
-            "room_no", "floor_seq", "price_per_month", "room_status_id"
+            "room_no", "floor_seq", "price_per_month", 
+            "startup_electricity_meter", "startup_water_meter",
+            "room_status_id"
         };
         
         JSONObject result = CommonAppUtils.simpleValidateRequire(formData, keyToValidate);

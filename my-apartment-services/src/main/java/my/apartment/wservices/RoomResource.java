@@ -149,10 +149,14 @@ public class RoomResource {
             room.setFloorSeq(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("floor_seq")));
             room.setRoomNo(jsonObjectReceive.getString("room_no"));
             room.setName(jsonObjectReceive.getString("name"));
-            room.setPricePerMonth(CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("price_per_month"))
+            room.setPricePerMonth(
+                    CommonWsUtils.stringToBigDecimal(jsonObjectReceive.getString("price_per_month"))
             );
-            room.setRoomStatusId(CommonWsUtils.stringToInteger(jsonObjectReceive.getString("room_status_id"))
+            room.setRoomStatusId(
+                    CommonWsUtils.stringToInteger(jsonObjectReceive.getString("room_status_id"))
             );
+            room.setStartupElectricityMeter(jsonObjectReceive.getString("startup_electricity_meter"));
+            room.setStartupWaterMeter(jsonObjectReceive.getString("startup_water_meter"));
             
             Room resultSave = roomDaoImpl.save(room);
             

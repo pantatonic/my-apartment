@@ -8,9 +8,13 @@ table#reservation-list th:nth-child(1),
 table#reservation-list th:nth-child(2),
 
 table#check-in-out-list th:nth-child(1),
-table#check-in-out-list th:nth-child(2)
+table#check-in-out-list th:nth-child(2),
 /*, 
 form[name="room_form"] [name="name"]*/
+
+form[name="room_form"] [name="startup_electricity_meter"], 
+form[name="room_form"] [name="startup_water_meter"]
+
 {
     width: 100px;
 }

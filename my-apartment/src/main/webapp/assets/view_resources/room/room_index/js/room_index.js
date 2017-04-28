@@ -84,6 +84,7 @@ var page = (function() {
                     page.boxRoomContainer.empty();
                 }
                 else {
+                    latestRoomIdProcess = null;
                     page.getRoom();
                 }
             });
@@ -474,7 +475,22 @@ var page = (function() {
         },
         showRoomDetail: function(type, roomId) {
             var buildingList = page.getElement.getBuildingListElement();
-            
+            var _setMaxlengthMeterDigit = function() {
+                var __getElectricityMeterDigit = function() {
+                    return _getBuildingListElement().find('option:selected').attr('data-electricity-meter-digit');
+                };
+                var __getWaterMeterDigit = function() {
+                    return _getBuildingListElement().find('option:selected').attr('data-water-meter-digit');
+                };
+                
+                modalRoomDetail.getForm().find('[name="startup_electricity_meter"]')
+                        .attr('maxlength', __getElectricityMeterDigit());
+                
+                modalRoomDetail.getForm().find('[name="startup_water_meter"]')
+                        .attr('maxlength', __getWaterMeterDigit());
+            };
+
+            /** begin main process */
             if(type == undefined) {
                 type = 'add';
             }
@@ -493,6 +509,8 @@ var page = (function() {
                     app.modalUtils.bodyScrollTop(modalRoomDetail.getModal());
                     
                     modalRoomDetail.setFocusAfterOpenModal();
+                    
+                    _setMaxlengthMeterDigit();
                 }
                 else {
                     modalRoomDetail.getRoomDetail(roomId);

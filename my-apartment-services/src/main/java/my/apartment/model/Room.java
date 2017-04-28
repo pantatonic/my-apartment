@@ -15,13 +15,17 @@ public class Room implements Serializable {
     private String name;
     private BigDecimal pricePerMonth;
     private Integer roomStatusId;
+    private String startupElectricityMeter;
+    private String startupWaterMeter;
     
     private String roomStatusText;
+    private Integer electricityMeterDigit;
+    private Integer waterMeterDigit;
 
     public Room() {
     }
 
-    public Room(Integer id, Integer buildingId, Integer floorSeq, String roomNo, String name, BigDecimal pricePerMonth, Integer roomStatusId, String roomStatusText) {
+    public Room(Integer id, Integer buildingId, Integer floorSeq, String roomNo, String name, BigDecimal pricePerMonth, Integer roomStatusId, String startupElectricityMeter, String startupWaterMeter, String roomStatusText, Integer electricityMeterDigit, Integer waterMeterDigit) {
         this.id = id;
         this.buildingId = buildingId;
         this.floorSeq = floorSeq;
@@ -29,7 +33,11 @@ public class Room implements Serializable {
         this.name = name;
         this.pricePerMonth = pricePerMonth;
         this.roomStatusId = roomStatusId;
+        this.startupElectricityMeter = startupElectricityMeter;
+        this.startupWaterMeter = startupWaterMeter;
         this.roomStatusText = roomStatusText;
+        this.electricityMeterDigit = electricityMeterDigit;
+        this.waterMeterDigit = waterMeterDigit;
     }
 
     public Integer getId() {
@@ -88,6 +96,22 @@ public class Room implements Serializable {
         this.roomStatusId = roomStatusId;
     }
 
+    public String getStartupElectricityMeter() {
+        return startupElectricityMeter;
+    }
+
+    public void setStartupElectricityMeter(String startupElectricityMeter) {
+        this.startupElectricityMeter = startupElectricityMeter;
+    }
+
+    public String getStartupWaterMeter() {
+        return startupWaterMeter;
+    }
+
+    public void setStartupWaterMeter(String startupWaterMeter) {
+        this.startupWaterMeter = startupWaterMeter;
+    }
+
     public String getRoomStatusText() {
         return roomStatusText;
     }
@@ -96,9 +120,25 @@ public class Room implements Serializable {
         this.roomStatusText = roomStatusText;
     }
 
-    @Override
-    public String toString() {
-        return "Room{" + "id=" + id + ", buildingId=" + buildingId + ", floorSeq=" + floorSeq + ", roomNo=" + roomNo + ", name=" + name + ", pricePerMonth=" + pricePerMonth + ", roomStatusId=" + roomStatusId + ", roomStatusText=" + roomStatusText + '}';
+    public Integer getElectricityMeterDigit() {
+        return electricityMeterDigit;
     }
 
+    public void setElectricityMeterDigit(Integer electricityMeterDigit) {
+        this.electricityMeterDigit = electricityMeterDigit;
+    }
+
+    public Integer getWaterMeterDigit() {
+        return waterMeterDigit;
+    }
+
+    public void setWaterMeterDigit(Integer waterMeterDigit) {
+        this.waterMeterDigit = waterMeterDigit;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" + "id=" + id + ", buildingId=" + buildingId + ", floorSeq=" + floorSeq + ", roomNo=" + roomNo + ", name=" + name + ", pricePerMonth=" + pricePerMonth + ", roomStatusId=" + roomStatusId + ", startupElectricityMeter=" + startupElectricityMeter + ", startupWaterMeter=" + startupWaterMeter + ", roomStatusText=" + roomStatusText + ", electricityMeterDigit=" + electricityMeterDigit + ", waterMeterDigit=" + waterMeterDigit + '}';
+    }
+    
 }

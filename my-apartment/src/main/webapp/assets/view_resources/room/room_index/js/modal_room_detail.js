@@ -40,7 +40,16 @@ var modalRoomDetail = (function() {
                 var data = response.data[0];
                 var modal = _getModal();
                 var modalBody = modal.find('.modal-body');
-                
+                var __setMaxlengthMeterDigit = function(element) {
+                    if(element.attr('name') == 'startup_electricity_meter') {
+                        element.attr('maxlength', data.electricityMeterDigit);
+                    }
+                    
+                    if(element.attr('name') == 'startup_water_meter') {
+                        element.attr('maxlength', data.waterMeterDigit);
+                    }
+                };
+
                 app.clearAllInputErrorClass(modalBody);
                 app.clearFormData(modalRoomDetail.getForm());
                 modalRoomDetail.clearInputId();
@@ -50,6 +59,10 @@ var modalRoomDetail = (function() {
                     modalBody.find('[name="' + key_ + '"]').val(data[key]);
 
                     app.triggerCtrl(modalBody.find('[name="' + key_ + '"]'));
+                    
+                    if(jQuery.inArray(key_, ['startup_electricity_meter', 'startup_water_meter']) != -1) {
+                        __setMaxlengthMeterDigit(modalBody.find('[name="' + key_ + '"]'));
+                    }
                 }
                 
                 modal.modal('show');

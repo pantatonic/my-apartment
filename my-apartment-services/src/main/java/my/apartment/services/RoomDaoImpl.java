@@ -96,7 +96,9 @@ public class RoomDaoImpl implements RoomDao {
             
             con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
             
-            String stringQuery = "SELECT * FROM room WHERE id = ?";
+            String stringQuery = "SELECT room.*, building.electricity_meter_digit, building.water_meter_digit "
+                    + "FROM room JOIN building ON room.building_id = building.id "
+                    + "WHERE room.id = ?";
 
             ps = con.prepareStatement(stringQuery);
             ps.setInt(1, id);
@@ -112,6 +114,11 @@ public class RoomDaoImpl implements RoomDao {
                 room.setName(rs.getString("name"));
                 room.setPricePerMonth(rs.getBigDecimal("price_per_month"));
                 room.setRoomStatusId(rs.getInt("room_status_id"));
+                room.setStartupElectricityMeter(rs.getString("startup_electricity_meter"));
+                room.setStartupWaterMeter(rs.getString("startup_water_meter"));
+                
+                room.setElectricityMeterDigit(rs.getInt("electricity_meter_digit"));
+                room.setWaterMeterDigit(rs.getInt("water_meter_digit"));
                 
                 rooms.add(room);
             }
@@ -163,8 +170,20 @@ public class RoomDaoImpl implements RoomDao {
                         + "room_no, " //3
                         + "name, " //4
                         + "price_per_month, " //5
-                        + "room_status_id) " //6
-                        + "VALUES (?, ?, ?, ?, ?, ?)";
+                        + "room_status_id, " //6
+                        + "startup_electricity_meter, " //7
+                        + "startup_water_meter) " //8
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                
+                ps = con.prepareStatement(querysString, Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, room.getBuildingId());
+                ps.setInt(2, room.getFloorSeq());
+                ps.setString(3, room.getRoomNo());
+                ps.setString(4, room.getName());
+                ps.setBigDecimal(5, room.getPricePerMonth());
+                ps.setInt(6, room.getRoomStatusId());
+                ps.setString(7, room.getStartupElectricityMeter());
+                ps.setString(8, room.getStartupWaterMeter());
             }
             else {
                 /** update process */
@@ -177,19 +196,14 @@ public class RoomDaoImpl implements RoomDao {
                         + "price_per_month = ?, " //5
                         + "room_status_id = ? " //6
                         + "WHERE id = ?"; //7
-            }
-            
-            ps = con.prepareStatement(querysString, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, room.getBuildingId());
-            ps.setInt(2, room.getFloorSeq());
-            ps.setString(3, room.getRoomNo());
-            ps.setString(4, room.getName());
-            ps.setBigDecimal(5, room.getPricePerMonth());
-            ps.setInt(6, room.getRoomStatusId());
-            
-            if(room.getId() != null) {
-                /** update process */
                 
+                ps = con.prepareStatement(querysString, Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, room.getBuildingId());
+                ps.setInt(2, room.getFloorSeq());
+                ps.setString(3, room.getRoomNo());
+                ps.setString(4, room.getName());
+                ps.setBigDecimal(5, room.getPricePerMonth());
+                ps.setInt(6, room.getRoomStatusId());
                 ps.setInt(7, room.getId());
             }
             
