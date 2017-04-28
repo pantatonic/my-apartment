@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2017 at 04:21 PM
+-- Generation Time: Apr 28, 2017 at 05:36 PM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -53,11 +53,13 @@ CREATE TABLE IF NOT EXISTS `check_in_out_history` (
 `id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL,
   `check_in_date` date NOT NULL,
+  `check_out_date` date DEFAULT NULL,
   `id_card` varchar(50) NOT NULL,
   `name` varchar(255) NOT NULL,
   `lastname` varchar(255) DEFAULT NULL,
   `address` text,
   `remark` text,
+  `number_code` varchar(50) NOT NULL,
   `created_date` datetime NOT NULL,
   `updated_date` datetime DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -76,6 +78,21 @@ CREATE TABLE IF NOT EXISTS `current_check_in` (
   `lastname` varchar(255) DEFAULT NULL,
   `address` text,
   `remark` text,
+  `number_code` varchar(50) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_date` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notice_check_out`
+--
+
+CREATE TABLE IF NOT EXISTS `notice_check_out` (
+  `room_id` int(11) NOT NULL,
+  `notice_check_out_date` date NOT NULL,
+  `remark` text,
   `created_date` datetime NOT NULL,
   `updated_date` datetime DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -93,18 +110,19 @@ CREATE TABLE IF NOT EXISTS `room` (
   `room_no` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `price_per_month` decimal(20,2) NOT NULL,
-  `room_status_id` int(11) NOT NULL
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  `room_status_id` int(11) NOT NULL,
+  `startup_electricity_meter` varchar(11) NOT NULL,
+  `startup_water_meter` varchar(11) NOT NULL
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `room`
 --
 
-INSERT INTO `room` (`id`, `building_id`, `floor_seq`, `room_no`, `name`, `price_per_month`, `room_status_id`) VALUES
-(1, 1, 1, '1/1', '', '1500.00', 1),
-(2, 2, 1, '1/1', '', '1500.00', 1),
-(3, 1, 1, '1/2', '', '1501.00', 1),
-(4, 1, 1, '1/3', '', '1550.00', 1);
+INSERT INTO `room` (`id`, `building_id`, `floor_seq`, `room_no`, `name`, `price_per_month`, `room_status_id`, `startup_electricity_meter`, `startup_water_meter`) VALUES
+(1, 1, 1, '1-1/1', '', '1500.00', 1, '0001', '0002'),
+(2, 1, 1, '1-1/2', '', '1600.00', 1, '7785', '0885'),
+(3, 2, 1, '2-1/1', '', '1550.00', 1, '2222', '3333');
 
 -- --------------------------------------------------------
 
@@ -124,21 +142,7 @@ CREATE TABLE IF NOT EXISTS `room_reservation` (
   `created_date` datetime NOT NULL,
   `updated_date` datetime DEFAULT NULL,
   `status` int(1) NOT NULL COMMENT '1=reserve, 2=cancel, 3=cancel_for_checkin'
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
-
---
--- Dumping data for table `room_reservation`
---
-
-INSERT INTO `room_reservation` (`id`, `reserve_date`, `reserve_expired`, `room_id`, `id_card`, `reserve_name`, `reserve_lastname`, `remark`, `created_date`, `updated_date`, `status`) VALUES
-(1, '2017-04-16', NULL, 1, '1111', '1', '11', '111', '2017-04-16 17:25:13', '2017-04-16 17:26:28', 2),
-(2, '2017-04-16', NULL, 1, '2222', '2', '22', '222', '2017-04-16 17:26:40', '2017-04-16 17:26:47', 3),
-(3, '2017-04-16', NULL, 1, '3333', '3', '33', '333', '2017-04-16 17:26:56', '2017-04-16 17:27:15', 2),
-(4, '2017-04-16', '2017-04-20', 3, '8', '88', '888', '8888', '2017-04-16 17:28:41', NULL, 1),
-(5, '2017-04-19', NULL, 1, '1x1x1x1x', '1x', '1x1x', '1x1x1x1x', '2017-04-16 17:29:19', '2017-04-19 13:01:12', 2),
-(6, '2017-04-19', NULL, 1, '11111', '1', '11', '111', '2017-04-19 13:01:30', '2017-04-19 21:05:33', 2),
-(7, '2017-04-20', '2017-04-22', 1, '1111', '1', '11', '111', '2017-04-19 21:05:55', '2017-04-20 15:14:38', 2),
-(8, '2017-04-20', '2017-04-24', 1, '1', '11', '111', '1111', '2017-04-20 15:15:00', NULL, 1);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -267,12 +271,12 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `room_reservation`
 --
 ALTER TABLE `room_reservation`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `room_status`
 --
