@@ -16,7 +16,8 @@
       action="<c:url value="room_check_in_save.html" />">
 
     <div class="form-group col-xs-12 text-center">
-        <button type="button" id="check-out-current-check-in" class="btn btn-warning btn-flat">
+        <button type="button" id="check-out-current-check-in" class="btn btn-warning btn-flat" 
+                data-loading-text="<spring:message code="common.now_processing" />">
             <i class="fa fa-sign-out"></i>
             <spring:message code="room.check_out" />
         </button>

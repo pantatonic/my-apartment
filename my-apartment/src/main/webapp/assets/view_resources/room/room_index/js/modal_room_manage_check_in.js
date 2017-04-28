@@ -141,53 +141,60 @@ var roomManageCheckIn = (function() {
             var form_ = modalRoomManage.getCurrentCheckInForm();
             var roomId = form_.find('[name="room_id"]').val();
             var numberCode = form_.find('[name="number_code"]').val();
+            var button = page.getElement.getCheckOutRoomButton();
 
             
             alertUtil.confirmAlert(app.translate('common.please_confirm_to_process'), function() {
-                jQuery.ajax({
-                    type: 'post',
-                    url: _CONTEXT_PATH_ + '/room_check_out.html',
-                    data: {
-                        room_id: roomId,
-                        number_code: numberCode
-                    },
-                    cache: false,
-                    success: function(response) {
-                        response = app.convertToJsonObject(response);
-                        
-                        if(response.result == SUCCESS_STRING) {
-                            app.showNotice({
-                                message: app.translate('common.save_success'),
-                                type: response.result
-                            });
+                button.bootstrapBtn('loading');
+                
+                setTimeout(function() {
+                    jQuery.ajax({
+                        type: 'post',
+                        url: _CONTEXT_PATH_ + '/room_check_out.html',
+                        data: {
+                            room_id: roomId,
+                            number_code: numberCode
+                        },
+                        cache: false,
+                        success: function(response) {
+                            response = app.convertToJsonObject(response);
 
-                            app.clearFormData(form_);
-                            form_.find('[name="number_code"]').val('');
-                            
-                            modalRoomManage.preProcessForNewCurrentCheckIn(roomId);
-                            roomManageCheckIn.getCheckInOutList(roomId);
-                            
-                            latestRoomIdProcess = roomId;
-                            page.getRoom();
-                        }
-                        else {
-                            if(response.message == SESSION_EXPIRE_STRING) {
-                                app.alertSessionExpired();
-                            }
-                            else {
+                            if(response.result == SUCCESS_STRING) {
                                 app.showNotice({
-                                    message: app.translate('common.processing_failed'),
+                                    message: app.translate('common.save_success'),
                                     type: response.result
                                 });
-                            }
-                        }
-                    },
-                    error: function() {
-                        app.alertSomethingError();
 
-                        //buttonDelete.bootstrapBtn('reset');
-                    }
-                });
+                                app.clearFormData(form_);
+                                form_.find('[name="number_code"]').val('');
+
+                                modalRoomManage.preProcessForNewCurrentCheckIn(roomId);
+                                roomManageCheckIn.getCheckInOutList(roomId);
+
+                                latestRoomIdProcess = roomId;
+                                page.getRoom();
+                            }
+                            else {
+                                if(response.message == SESSION_EXPIRE_STRING) {
+                                    app.alertSessionExpired();
+                                }
+                                else {
+                                    app.showNotice({
+                                        message: app.translate('common.processing_failed'),
+                                        type: response.result
+                                    });
+                                }
+                            }
+                            
+                            button.bootstrapBtn('reset');
+                        },
+                        error: function() {
+                            app.alertSomethingError();
+
+                            button.bootstrapBtn('reset');
+                        }
+                    });
+                }, _DELAY_PROCESS_);
             }, function() {
                 
             },{
