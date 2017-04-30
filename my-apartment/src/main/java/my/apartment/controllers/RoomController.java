@@ -7,6 +7,7 @@ import my.apartment.common.CommonString;
 
 
 import my.apartment.common.CommonAppUtils;
+import my.apartment.common.CommonAppWsUtils;
 import my.apartment.common.JsonObjectUtils;
 import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
@@ -80,10 +81,7 @@ public class RoomController {
         CommonAppUtils.setResponseHeader(response);
         
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "room/room_get_by_building_id/" + buildingId, String.class);
-            
-            jsonObjectReturn = new JSONObject(resultWs);
+            jsonObjectReturn = CommonAppWsUtils.get("room/room_get_by_building_id/" + buildingId);
 
             /*if(CommonUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
                 jsonObjectReturn = JsonObjectUtils.setDataNotFound(jsonObjectReturn);
@@ -115,10 +113,7 @@ public class RoomController {
         CommonAppUtils.setResponseHeader(response);
         
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "room/room_get_by_id/" + id, String.class);
-            
-            jsonObjectReturn = new JSONObject(resultWs);
+            jsonObjectReturn = CommonAppWsUtils.get("room/room_get_by_id/" + id);
             
             if(CommonAppUtils.countJsonArrayDataFromWS(jsonObjectReturn) == 0) {
                 jsonObjectReturn = JsonObjectUtils.setDataNotFound(jsonObjectReturn);
@@ -176,18 +171,9 @@ public class RoomController {
                 return jsonObjectReturn.toString();
             }
             
-            RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData,keyToCleanValue).toString();
-            HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonAppUtils.jsonMediaType();
-            headers.setContentType(mediaType);
-            
-            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_save", entity, String.class, CommonString.UTF8_STRING);
-            
-            JSONObject resultWsJsonObject = new JSONObject(resultWs);
-            
-            jsonObjectReturn = resultWsJsonObject;            
+
+            jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room/room_save");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -274,16 +260,10 @@ public class RoomController {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
-            RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
-            HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonAppUtils.jsonMediaType();
-            headers.setContentType(mediaType);
             
-            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/check_room_no_duplicated", entity, String.class, CommonString.UTF8_STRING);
-            JSONObject jsonObjectesult = new JSONObject(resultWs);
-            
+            JSONObject jsonObjectesult = CommonAppWsUtils.postWithJsonDataString(requestJson, "room/check_room_no_duplicated");
+
             /** if it equal "error" */
             if(jsonObjectesult.getString(CommonString.RESULT_STRING).equals(CommonString.ERROR_STRING)) {
                 jsonObjectReturn.put(CommonString.RESULT_VALIDATE_STRING, Boolean.FALSE)
@@ -309,11 +289,7 @@ public class RoomController {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            
-            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "room_status/get_all", String.class);
-            
-            jsonObjectReturn = new JSONObject(resultWs);
+            jsonObjectReturn = CommonAppWsUtils.get("room_status/get_all");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -332,10 +308,7 @@ public class RoomController {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "building/building_get", String.class);
-            
-            jsonObjectReturn = new JSONObject(resultWs);
+            jsonObjectReturn = CommonAppWsUtils.get("building/building_get");
         }
         catch(Exception e) {
             e.printStackTrace();
