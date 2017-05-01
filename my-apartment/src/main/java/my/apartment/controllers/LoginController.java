@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import my.apartment.common.CommonAppWsUtils;
 import my.apartment.common.CommonString;
 import my.apartment.common.JsonObjectUtils;
 import my.apartment.common.ServiceDomain;
@@ -37,9 +38,7 @@ public class LoginController {
             parametersMap.add("email", email);
             parametersMap.add("password", password);
             
-            RestTemplate restTemplate = new RestTemplate();
-            String resultWs = restTemplate.postForObject(LoginController.WS_URI + "login", parametersMap, String.class);
-            JSONObject resultWsJsonObject = new JSONObject(resultWs);
+            JSONObject resultWsJsonObject = CommonAppWsUtils.postWithMultiValueMap(parametersMap, "login");
 
             if(resultWsJsonObject.get(CommonString.RESULT_STRING).equals(CommonString.SUCCESS_STRING)) {
                 JSONArray jsonArrayData = resultWsJsonObject.getJSONArray(CommonString.DATA_STRING);
