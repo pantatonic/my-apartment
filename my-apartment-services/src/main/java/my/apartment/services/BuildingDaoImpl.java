@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import my.apartment.common.CommonWsDb;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.common.Config;
 import my.apartment.model.Building;
@@ -160,6 +161,8 @@ public class BuildingDaoImpl implements BuildingDao {
             ps.setInt(1, id);
             
             Integer effectRow = ps.executeUpdate();
+            
+            CommonWsDb.optimizeTable(con, ps, "building");
 
             if (effectRow == 0) {
                 resultDelete = Boolean.FALSE;

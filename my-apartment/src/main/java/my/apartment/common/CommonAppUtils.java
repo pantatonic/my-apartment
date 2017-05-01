@@ -83,7 +83,7 @@ public class CommonAppUtils {
         return new SimpleDateFormat(CommonString.DATE_FORMAT_STRING).format(date);
     }
     
-    public static JSONObject simpleValidateRequire(
+    public static JSONObject simpleValidateRequired(
             MultiValueMap<String, String> formData,
             String[] keyToValidate
     ) {

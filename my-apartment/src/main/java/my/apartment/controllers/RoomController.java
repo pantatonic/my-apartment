@@ -203,12 +203,8 @@ public class RoomController {
         try {
             MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
             parametersMap.add("room_id", id);
-            
-            RestTemplate restTemplate = new RestTemplate();
-             
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_delete_by_id", parametersMap, String.class);
-            
-            jsonObjectReturn = new JSONObject(resultWs);
+
+            jsonObjectReturn = CommonAppWsUtils.postWithMultiValueMap(parametersMap, "room/room_delete_by_id");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -231,7 +227,7 @@ public class RoomController {
             "room_status_id"
         };
         
-        JSONObject result = CommonAppUtils.simpleValidateRequire(formData, keyToValidate);
+        JSONObject result = CommonAppUtils.simpleValidateRequired(formData, keyToValidate);
         
         return result;
     }
@@ -335,16 +331,11 @@ public class RoomController {
         
         try {
             /** get current reserve */
-            RestTemplate restTemplate = new RestTemplate();
+            JSONObject jsonObjectGetCurrentReserve = CommonAppWsUtils.get("room/get_current_reserve");
             
-            String resultWsGetCurrentReserve = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_current_reserve", String.class);
-            JSONObject jsonObjectGetCurrentReserve = new JSONObject(resultWsGetCurrentReserve);
+            JSONObject jsonObjectGetCurrentCheckIn = CommonAppWsUtils.get("room/get_current_check_in");
             
-            String resultWsGetCurrentCheckIn = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_current_check_in", String.class);
-            JSONObject jsonObjectGetCurrentCheckIn = new JSONObject(resultWsGetCurrentCheckIn);
-            
-            String resultWsGetNoticeCheckOut = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_current_notice_check_out", String.class);
-            JSONObject jsonObjectGetNoticeCheckOut = new JSONObject(resultWsGetNoticeCheckOut);
+            JSONObject jsonObjectGetNoticeCheckOut = CommonAppWsUtils.get("room/get_current_notice_check_out");
 
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             
@@ -353,19 +344,6 @@ public class RoomController {
                             .put("currentCheckIn", jsonObjectGetCurrentCheckIn.get(CommonString.DATA_STRING))
                             .put("noticeCheckOut", jsonObjectGetNoticeCheckOut.get(CommonString.DATA_STRING))
             );
-
-            
-            /*JSONArray jsonArray = new JSONArray();
-            
-            JSONObject jsonObjectReserve = new JSONObject().put("aaa", "AAA").put("bbb", "BBB").put("ccc", "CCC");
-            JSONObject jsonObjectStayed = new JSONObject().put("ddd", "DDD").put("eee", "EEE").put("fff", "FFF");
-            JSONObject jsonObjectNoticeCheckout = new JSONObject().put("ggg", "GGG").put("hhh", "HHH").put("iii", "III");
-            
-            jsonArray.put(jsonObjectReserve);
-            jsonArray.put(jsonObjectStayed);
-            jsonArray.put(jsonObjectNoticeCheckout);
-            
-            jsonObjectReturn.put("reserve", jsonArray);*/
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -393,11 +371,7 @@ public class RoomController {
         CommonAppUtils.setResponseHeader(response);
 
         try {
-            RestTemplate restTemplate = new RestTemplate();
-
-            String resultWs = restTemplate.getForObject(ServiceDomain.WS_URL + "room/get_room_manage/" + roomId, String.class);
-            
-            jsonObjectReturn = new JSONObject(resultWs);
+            jsonObjectReturn = CommonAppWsUtils.get("room/get_room_manage/" + roomId);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -421,7 +395,7 @@ public class RoomController {
         
         try {
             /** validate required field */
-            JSONObject resultValidateRequired = CommonAppUtils.simpleValidateRequire(formData, 
+            JSONObject resultValidateRequired = CommonAppUtils.simpleValidateRequired(formData, 
                     new String[] {"id_card", "reserve_name", "reserve_lastname", "status"});
             
             if(resultValidateRequired.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
@@ -431,17 +405,9 @@ public class RoomController {
                 return jsonObjectReturn.toString();
             }
 
-
-            RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
-            HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonAppUtils.jsonMediaType();
-            headers.setContentType(mediaType);
-            
-            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_reservation_save", entity, String.class, CommonString.UTF8_STRING);
-            
-            JSONObject resultWsJsonObject = new JSONObject(resultWs);
+
+            JSONObject resultWsJsonObject = CommonAppWsUtils.postWithJsonDataString(requestJson, "room/room_reservation_save");
 
             jsonObjectReturn = resultWsJsonObject;            
         }
@@ -466,7 +432,7 @@ public class RoomController {
         
         try {
             /** validate required field */
-            JSONObject resultValidateRequired = CommonAppUtils.simpleValidateRequire(formData, 
+            JSONObject resultValidateRequired = CommonAppUtils.simpleValidateRequired(formData, 
                     new String[] {"room_id", "check_in_date", "id_card", "name", "lastname"});
             
             if(resultValidateRequired.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
@@ -475,21 +441,10 @@ public class RoomController {
                 
                 return jsonObjectReturn.toString();
             }
-            
-            
-            RestTemplate restTemplate = new RestTemplate();
+
             String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
-            
-            HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonAppUtils.jsonMediaType();
-            headers.setContentType(mediaType);
 
-            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_check_in_save", entity, String.class, CommonString.UTF8_STRING);
-
-            JSONObject resultWsJsonObject = new JSONObject(resultWs);
-
-            jsonObjectReturn = resultWsJsonObject;            
+            jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room/room_check_in_save");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -530,16 +485,10 @@ public class RoomController {
             requestJsonObject.put("room_id", roomId).put("start", start)
                     .put("length", length).put("search", search.trim());
             
-            RestTemplate restTemplate = new RestTemplate();
+            
             String requestJson = requestJsonObject.toString();
-            HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonAppUtils.jsonMediaType();
-            headers.setContentType(mediaType);
-            
-            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/get_reservation_list", entity, String.class, CommonString.UTF8_STRING);
-            
-            JSONObject resultWsJsonObject = new JSONObject(resultWs);
+
+            JSONObject resultWsJsonObject = CommonAppWsUtils.postWithJsonDataString(requestJson, "room/get_reservation_list");
             
             JSONArray jsonArrayData = resultWsJsonObject.getJSONArray(CommonString.DATA_STRING);
             JSONArray jsonArrayReturn = new JSONArray();
@@ -628,17 +577,10 @@ public class RoomController {
             requestJsonObject.put("room_id", roomId).put("start", start)
                     .put("length", length).put("search", search.trim());
             
-            RestTemplate restTemplate = new RestTemplate();
             String requestJson = requestJsonObject.toString();
-            HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonAppUtils.jsonMediaType();
-            headers.setContentType(mediaType);
-            
-            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/get_check_in_out_list", entity, String.class, CommonString.UTF8_STRING);
-            
-            JSONObject resultWsJsonObject = new JSONObject(resultWs);
-            
+
+            JSONObject resultWsJsonObject = CommonAppWsUtils.postWithJsonDataString(requestJson, "room/get_check_in_out_list");
+
             JSONArray jsonArrayData = resultWsJsonObject.getJSONArray(CommonString.DATA_STRING);
             JSONArray jsonArrayReturn = new JSONArray();
             
@@ -709,12 +651,8 @@ public class RoomController {
             MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
             parametersMap.add("room_id", roomId);
             parametersMap.add("number_code", numberCode);
-            
-            RestTemplate restTemplate = new RestTemplate();
-            
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/room_check_out", parametersMap, String.class);
-            
-            jsonObjectReturn = new JSONObject(resultWs);
+
+            jsonObjectReturn = CommonAppWsUtils.postWithMultiValueMap(parametersMap, "room/room_check_out");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -737,7 +675,7 @@ public class RoomController {
         
         try {
             /** validate required field */
-            JSONObject resultValidateRequired = CommonAppUtils.simpleValidateRequire(formData, 
+            JSONObject resultValidateRequired = CommonAppUtils.simpleValidateRequired(formData, 
                     new String[] {"room_id", "notice_check_out"});
             
             if(resultValidateRequired.getBoolean(CommonString.RESULT_VALIDATE_STRING) == Boolean.FALSE) {
@@ -747,19 +685,9 @@ public class RoomController {
                 return jsonObjectReturn.toString();
             }
             
-            RestTemplate restTemplate = new RestTemplate();
             String requestJson = CommonAppUtils.simpleConvertFormDataToJSONObject(formData).toString();
-            
-            HttpHeaders headers = new HttpHeaders();
-            MediaType mediaType = CommonAppUtils.jsonMediaType();
-            headers.setContentType(mediaType);
-            
-            HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/notice_check_out_save", entity, String.class, CommonString.UTF8_STRING);
-            
-            JSONObject resultWsJsonObject = new JSONObject(resultWs);
 
-            jsonObjectReturn = resultWsJsonObject;
+            jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room/notice_check_out_save");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -783,12 +711,8 @@ public class RoomController {
         try {
             MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
             parametersMap.add("room_id", roomId);
-            
-            RestTemplate restTemplate = new RestTemplate();
-            
-            String resultWs = restTemplate.postForObject(ServiceDomain.WS_URL + "room/remove_notice_check_out", parametersMap, String.class);
-            
-            jsonObjectReturn = new JSONObject(resultWs);
+
+            jsonObjectReturn = CommonAppWsUtils.postWithMultiValueMap(parametersMap, "room/remove_notice_check_out");
         }
         catch(Exception e) {
             e.printStackTrace();

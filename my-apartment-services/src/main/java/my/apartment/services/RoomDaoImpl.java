@@ -333,6 +333,8 @@ public class RoomDaoImpl implements RoomDao {
             ps.setInt(1, roomId);
             
             Integer effectRow = ps.executeUpdate();
+            
+            CommonWsDb.optimizeTable(con, ps, "room");
 
             if (effectRow == 0) {
                 resultDelete = Boolean.FALSE;

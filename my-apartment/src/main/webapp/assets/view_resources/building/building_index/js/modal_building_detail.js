@@ -342,14 +342,22 @@ var modalBuildingDetail = (function() {
             }
         },
         save: function() {
-            alertUtil.confirmAlert(app.translate('common.confirm_change_important_data'), function() {
+            var form_ = modalBuildingDetail.getForm();
+            var idInput = form_.find('[name="id"]');
+            
+            if(!app.valueUtils.isEmptyValue(idInput.val())) {
+                alertUtil.confirmAlert(app.translate('common.confirm_change_important_data'), function() {
+                    _save();
+                }, function() {
+
+                },{
+                    animation: false,
+                    type: null
+                });
+            }
+            else {
                 _save();
-            }, function() {
-                
-            },{
-                animation: false,
-                type: null
-            });
+            }
         }
     };
 })();
