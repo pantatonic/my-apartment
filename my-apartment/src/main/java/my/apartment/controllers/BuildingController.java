@@ -127,7 +127,7 @@ public class BuildingController {
         CommonAppUtils.setResponseHeader(response);
         
         try {
-            MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
+            MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>(); 
             parametersMap.add("building_id", id);
 
             jsonObjectReturn = CommonAppWsUtils.postWithMultiValueMap(parametersMap, "building/building_delete_by_id");

@@ -44,6 +44,10 @@ jQuery(document).ready(function() {
         }
     });
     
+    jQuery('#project-simple-structure').click(function() {
+        jQuery('#modal-project-simple-structure').modal('show');
+    });
+    
 
     if(typeof _LOCALE_ !== 'undefined') {
         jQuery.extend($.fn.dataTable.defaults, {

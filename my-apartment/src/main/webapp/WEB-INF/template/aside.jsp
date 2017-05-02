@@ -34,6 +34,11 @@
             <li class="header">
                 &nbsp;
             </li>
+            <li class="treeview ">
+                <a href="<c:url value="/dashboard.html" />">
+                    <i class="fa fa-circle-o"></i> <span><spring:message code="dashboard.dashboard.page_title" /></span>
+                </a>
+            </li>
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-bars"></i>

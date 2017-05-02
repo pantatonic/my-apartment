@@ -87,3 +87,7 @@ textarea {
 .hover-box:hover {
     border: 1px solid #43a3aa;
 }
+
+#image-project-simple-structure {
+    margin: auto;
+}

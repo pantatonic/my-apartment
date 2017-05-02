@@ -21,6 +21,12 @@
         </a>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+                
+                <li id="project-simple-structure">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-info-circle"></i>
+                    </a>
+                </li>
 
                 <li class="dropdown messages-menu" style="display: none;">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
