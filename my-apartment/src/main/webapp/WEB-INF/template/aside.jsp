@@ -53,11 +53,17 @@
                 </ul>
             </li>
             <li class="treeview ">
+                <a href="<c:url value="/electricity_water_meter.html" />">
+                    <i class="fa fa-circle-o"></i> <span><spring:message code="electricity_water_meter.electricity_water_meter" /></span>
+                </a>
+            </li>
+            
+            <%--<li class="treeview ">
                 <a href="#">
                     <i class="fa fa-file-o"></i> <span>Test 2</span>
                 </a>
-            </li>
-            <li class="treeview">
+            </li>--%>
+            <%--<li class="treeview">
                 <a href="#">
                     <i class="fa fa-gears"></i>
                     <span>Setting</span> <i class="fa fa-angle-left pull-right"></i>
@@ -69,7 +75,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li>--%>
         </ul>
     </section>
 </aside>

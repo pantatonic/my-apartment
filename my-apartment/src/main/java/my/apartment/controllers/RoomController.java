@@ -48,10 +48,10 @@ public class RoomController {
         ModelAndView modelAndView = new ModelAndView("room/room_index/room_index");
         
         JSONObject resultGetBuilding = this.getBuilding();
-        JSONArray jsonArrayBuilding = new JSONArray(resultGetBuilding.get("data").toString());
+        JSONArray jsonArrayBuilding = new JSONArray(resultGetBuilding.get(CommonString.DATA_STRING).toString());
         
         JSONObject resultGetRoomStatus = this.getRoomStatus();
-        JSONArray jsonArrayRoomStatus = new JSONArray(resultGetRoomStatus.get("data").toString());
+        JSONArray jsonArrayRoomStatus = new JSONArray(resultGetRoomStatus.get(CommonString.DATA_STRING).toString());
         /*for(Integer i = 0; i < ja.length(); i ++) {
             System.out.println(ja.getJSONObject(i));
         }*/

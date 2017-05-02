@@ -1,0 +1,21 @@
+#building-list {
+    width: 200px;
+    margin: auto;
+}
+
+#box-room-container {
+    min-height: 300px;
+}
+
+#box-room-container-no-data, #box-room-container-select-data {
+    position: absolute;
+    font-size: 20px;
+    width: 400px;
+    padding: 20px;
+    text-align: center;
+    top: 40%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}

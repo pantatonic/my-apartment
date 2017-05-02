@@ -108,6 +108,8 @@
     "room.notice_check_out":"<spring:message code="room.notice_check_out" />",
     "room.notice_check_out_date":"<spring:message code="room.notice_check_out_date" />",
     "room.create_notice_check_out":"<spring:message code="room.create_notice_check_out" />",
-    "room.remove_notice":"<spring:message code="room.remove_notice" />"
+    "room.remove_notice":"<spring:message code="room.remove_notice" />",
+    
+    "electricity_water_meter.electricity_water_meter":"<spring:message code="electricity_water_meter.electricity_water_meter" />"
     }
 </div>

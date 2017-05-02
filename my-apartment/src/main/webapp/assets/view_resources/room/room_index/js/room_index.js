@@ -458,7 +458,7 @@ var page = (function() {
                 return jQuery('.box-primary');
             },
             getBoxRoomContainer: function() {
-                return jQuery('#box-room-container');;
+                return jQuery('#box-room-container');
             },
             getModalRoomNo: function() {
                 return modalRoomDetail.getForm().find('[name="room_no"]');
