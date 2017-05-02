@@ -39,6 +39,10 @@
     
     "dashboard.dashboard.page_title":"<spring:message code="dashboard.dashboard.page_title" />",
     "dashboard.dashboard.page_sub_title":"<spring:message code="dashboard.dashboard.page_sub_title" />",
+    "dashboard.chart.room_by_building":"<spring:message code="dashboard.chart.room_by_building" />",
+    "dashboard.chart.room_in_building":"<spring:message code="dashboard.chart.room_in_building" />",
+    "dashboard.chart.number_of_room":"<spring:message code="dashboard.chart.number_of_room" />",
+    "dashboard.chart.building_name":"<spring:message code="dashboard.chart.building_name" />",
     
     "apartment":"<spring:message code="apartment" />",
     
@@ -65,6 +69,7 @@
     "building.cannot_delete_building_has_any_data":"<spring:message code="building.cannot_delete_building_has_any_data" />",
     
     "building.room":"<spring:message code="building.room" />",
+    "building.rooms":"<spring:message code="building.rooms" />",
     
     "room.add_room":"<spring:message code="room.add_room" />",
     "room.status.enabled":"<spring:message code="room.status.enabled" />",

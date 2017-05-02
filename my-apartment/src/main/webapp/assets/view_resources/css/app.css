@@ -72,6 +72,10 @@ textarea {
     text-align: left !important;
 }
 
+.force-none-padding {
+    padding: 0 !Important;
+}
+
 .swal2-modal, .swal2-modal button {
     border-radius: 0px !important;
 }
