@@ -42,6 +42,26 @@ public class RoomResource {
      */
     public RoomResource() {
     }
+    
+    @Path("get_room_electric_water_meter_by_building_id/{building_id}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getRoomElectricWaterMeterByBuildingId(
+            @PathParam("building_id") Integer BuildingId
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "Test 123");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
 
     /**
      * Retrieves representation of an instance of my.apartment.wservices.RoomResource

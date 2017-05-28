@@ -30,6 +30,9 @@ var page = (function() {
             },
             getBoxRoomContainer: function() {
                 return jQuery('#box-room-container');
+            },
+            getBoxRoom_: function() {
+                return jQuery('.box-room_');
             }
         },
         boxRoomContainer: {
@@ -108,9 +111,7 @@ var page = (function() {
 
                         app.loadingInElement('remove', contentBox);
                         
-                        setTimeout(function() {
-                            alert('Get meter data coming soon');
-                        }, 1000);
+                        page.getElectricWaterMeter();
                     };
                     
                     jQuery.ajax({
@@ -139,10 +140,34 @@ var page = (function() {
                     });
                 }, _DELAY_PROCESS_);
             }
+        },
+        getElectricWaterMeter: function() {
+            var buildingList = page.getElement.getBuildingList();
             
-            
-            
-            
+            if(!app.valueUtils.isEmptyValue(buildingList.val())) {
+                jQuery.ajax({
+                    type: 'get',
+                    url: _CONTEXT_PATH_ + '/get_room_electric_water_meter_by_building_id.html',
+                    data: {
+                        building_id: buildingList.val()
+                    },
+                    cache: false,
+                    success: function(response) {
+                        response = app.convertToJsonObject(response);
+                        
+                        if(response.message == SESSION_EXPIRE_STRING) {
+                            app.alertSessionExpired();
+                            app.loadingInElement('remove', contentBox);
+                        }
+                        else {
+                            console.log(response);
+                        }
+                    },
+                    error: function() {
+                        app.alertSomethingError();
+                    }
+                });
+            }
         }
     };
 })();
