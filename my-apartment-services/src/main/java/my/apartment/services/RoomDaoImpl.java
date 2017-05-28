@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsDb;
 import my.apartment.common.Config;
@@ -69,21 +67,7 @@ public class RoomDaoImpl implements RoomDao {
             e.printStackTrace();
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
         return rooms;
@@ -138,21 +122,7 @@ public class RoomDaoImpl implements RoomDao {
             e.printStackTrace();
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
         return rooms;
@@ -247,21 +217,7 @@ public class RoomDaoImpl implements RoomDao {
             e.printStackTrace();
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
         return roomReturn;
@@ -316,21 +272,7 @@ public class RoomDaoImpl implements RoomDao {
             e.printStackTrace();
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
         return isDuplicated;
@@ -372,21 +314,7 @@ public class RoomDaoImpl implements RoomDao {
             resultDelete = Boolean.FALSE;
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
         return resultDelete;
@@ -462,21 +390,7 @@ public class RoomDaoImpl implements RoomDao {
             resultCheckOut = Boolean.FALSE;
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
                 
         return resultCheckOut;
@@ -569,21 +483,7 @@ public class RoomDaoImpl implements RoomDao {
             e.printStackTrace();
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
         return roomNoticeCheckOuts;
@@ -630,21 +530,7 @@ public class RoomDaoImpl implements RoomDao {
             e.printStackTrace();
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         return roomNoticeCheckOuts;
     }
@@ -736,7 +622,7 @@ public class RoomDaoImpl implements RoomDao {
             e.printStackTrace();
         }
         finally {
-            
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
         return roomNoticeCheckOutReturn;
@@ -774,21 +660,7 @@ public class RoomDaoImpl implements RoomDao {
             resultRemove = Boolean.FALSE;
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
         return resultRemove;
@@ -820,21 +692,7 @@ public class RoomDaoImpl implements RoomDao {
             e.printStackTrace();
         }
         finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
         return true;

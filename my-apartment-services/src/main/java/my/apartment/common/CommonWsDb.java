@@ -38,4 +38,22 @@ public class CommonWsDb {
         return dateFormat.format(new Date());
     }
     
+    public static void closeFinally(PreparedStatement ps, Connection con, String className) {
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(className).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(className).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
 }
