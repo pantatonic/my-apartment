@@ -1,6 +1,5 @@
 package my.apartment.services;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -58,6 +57,8 @@ public class RoomDaoImpl implements RoomDao {
                 room.setName(rs.getString("name"));
                 room.setPricePerMonth(rs.getBigDecimal("price_per_month"));
                 room.setRoomStatusId(rs.getInt("room_status_id"));
+                room.setStartupElectricityMeter(rs.getString("startup_electricity_meter"));
+                room.setStartupWaterMeter(rs.getString("startup_water_meter"));
                 
                 room.setRoomStatusText(rs.getString("status"));
                 
@@ -791,6 +792,52 @@ public class RoomDaoImpl implements RoomDao {
         }
         
         return resultRemove;
+    }
+    
+    @Override
+    public Boolean getElectricityMeterByBuildingId(Integer buildingId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        /** TODO Declare list of model */
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+            
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            List<Room> roomsByBuildingId = this.getByBuildingId(buildingId);
+            
+            System.out.println("--WS--");
+            for(Room room : roomsByBuildingId) {
+                System.out.println("startupElectricityMeter : " +room.getStartupElectricityMeter());
+                System.out.println("startupWaterMeter : " +room.getStartupWaterMeter());
+            }
+            System.out.println("--WS--");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return true;
     }
     
 }

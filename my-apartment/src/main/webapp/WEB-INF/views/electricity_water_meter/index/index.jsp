@@ -72,8 +72,9 @@
                     <div class="box-room-name"></div>
                     <input type="hidden" name="id" value="">
                     <div class="separator-10"></div>
-                    <div><i class="fa fa-bolt"></i> <b><spring:message code="electricity_water_meter.electricity_meter" /></b></div>
-                    <div><spring:message code="electricity_water_meter.previous_meter" /> 
+                    <div><i class="fa fa-bolt icon-electtricity-color"></i> <b><spring:message code="electricity_water_meter.electricity_meter" /></b></div>
+                    <div>
+                        <spring:message code="electricity_water_meter.previous_meter" /> 
                         : <span class="previous-electric"></span>
                     </div>
                     <div>
@@ -81,7 +82,7 @@
                                name="present_electric_meter" value="">
                     </div>
                     <div class="separator-10"></div>
-                    <div><i class="fa fa-tint"></i> <b><spring:message code="electricity_water_meter.water_meter" /></b></div>
+                    <div><i class="fa fa-tint icon-water-color"></i> <b><spring:message code="electricity_water_meter.water_meter" /></b></div>
                     <div><spring:message code="electricity_water_meter.previous_meter" /> 
                         : <span class="previous-water"></span>
                     </div>

@@ -54,6 +54,8 @@ public class RoomResource {
         try {
             RoomDao roomDaoImpl = new RoomDaoImpl();
             
+            roomDaoImpl.getElectricityMeterByBuildingId(BuildingId);
+            
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "Test ok");
             
         }

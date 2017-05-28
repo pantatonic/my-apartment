@@ -27,4 +27,6 @@ public interface RoomDao {
     
     public Boolean removeNoticeCheckOut(Integer roomId);
     
+    public Boolean getElectricityMeterByBuildingId(Integer buildingId);
+    
 }

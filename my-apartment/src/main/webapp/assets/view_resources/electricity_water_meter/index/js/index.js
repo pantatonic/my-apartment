@@ -73,9 +73,10 @@ var page = (function() {
                             boxRoomElement.find('[name="id"]').val(currentData.id);
                             
                             boxRoomElement.find('.box-room-name').html(
-                                app.translate('building.room')
+                                '<i class="fa fa-bed"></i> '
+                                + app.translate('building.room')
                                 + ' : '
-                                + currentData.roomNo  
+                                + currentData.roomNo
                             );
                         };
                         
