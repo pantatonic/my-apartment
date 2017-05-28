@@ -52,7 +52,10 @@ public class RoomResource {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
-            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "Test 123");
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "Test ok");
+            
         }
         catch(Exception e) {
             e.printStackTrace();

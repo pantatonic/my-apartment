@@ -21,6 +21,11 @@ import my.apartment.model.RoomNoticeCheckOut;
 
 public class RoomDaoImpl implements RoomDao {
     
+    /**
+     * 
+     * @param buildingId
+     * @return 
+     */
     @Override
     public List<Room> getByBuildingId(Integer buildingId) {
         Connection con = null;
@@ -83,6 +88,11 @@ public class RoomDaoImpl implements RoomDao {
         return rooms;
     }
     
+    /**
+     * 
+     * @param id
+     * @return 
+     */
     @Override
     public List<Room> getById(Integer id) {
         Connection con = null;
@@ -147,6 +157,11 @@ public class RoomDaoImpl implements RoomDao {
         return rooms;
     }
     
+    /**
+     * 
+     * @param room
+     * @return 
+     */
     @Override
     public Room save(Room room) {
         Connection con = null;
@@ -251,6 +266,11 @@ public class RoomDaoImpl implements RoomDao {
         return roomReturn;
     }
     
+    /**
+     * 
+     * @param room
+     * @return 
+     */
     @Override
     public Boolean checkRoomNoDuplicated(Room room) {
         Connection con = null;
@@ -315,6 +335,11 @@ public class RoomDaoImpl implements RoomDao {
         return isDuplicated;
     }
     
+    /**
+     * 
+     * @param roomId
+     * @return 
+     */
     @Override
     public Boolean deleteById(Integer roomId) {
         Boolean resultDelete = Boolean.TRUE;
@@ -366,6 +391,12 @@ public class RoomDaoImpl implements RoomDao {
         return resultDelete;
     }
     
+    /**
+     * 
+     * @param roomId
+     * @param numberCode
+     * @return 
+     */
     @Override
     public Boolean checkOut(Integer roomId, String numberCode) {
         Boolean resultCheckOut = Boolean.TRUE;
@@ -450,6 +481,14 @@ public class RoomDaoImpl implements RoomDao {
         return resultCheckOut;
     }
     
+    /**
+     * 
+     * @param con
+     * @param ps
+     * @param rcioh
+     * @return
+     * @throws SQLException 
+     */
     private Boolean createCheckOutRecord(Connection con, PreparedStatement ps, RoomCheckInOutHistory rcioh) throws SQLException {
         String queryString = "INSERT INTO check_in_out_history ("
                 + "room_id, " //1
@@ -490,6 +529,10 @@ public class RoomDaoImpl implements RoomDao {
         }
     }
     
+    /**
+     * 
+     * @return 
+     */
     @Override
     public List<RoomNoticeCheckOut> getCurrentNoticeCheckOut() {
         Connection con = null;
@@ -545,6 +588,11 @@ public class RoomDaoImpl implements RoomDao {
         return roomNoticeCheckOuts;
     }
     
+    /**
+     * 
+     * @param roomId
+     * @return 
+     */
     @Override
     public List<RoomNoticeCheckOut> getCurrentNoticeCheckOutByRoomId(Integer roomId) {
         Connection con = null;
@@ -600,6 +648,11 @@ public class RoomDaoImpl implements RoomDao {
         return roomNoticeCheckOuts;
     }
     
+    /**
+     * 
+     * @param roomNoticeCheckOut
+     * @return 
+     */
     @Override
     public RoomNoticeCheckOut saveNoticeCheckOut(RoomNoticeCheckOut roomNoticeCheckOut) {
         Connection con = null;
@@ -688,6 +741,11 @@ public class RoomDaoImpl implements RoomDao {
         return roomNoticeCheckOutReturn;
     }
     
+    /**
+     * 
+     * @param roomId
+     * @return 
+     */
     @Override
     public Boolean removeNoticeCheckOut(Integer roomId) {
         Boolean resultRemove = Boolean.TRUE;
