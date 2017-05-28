@@ -115,6 +115,9 @@
     "room.create_notice_check_out":"<spring:message code="room.create_notice_check_out" />",
     "room.remove_notice":"<spring:message code="room.remove_notice" />",
     
-    "electricity_water_meter.electricity_water_meter":"<spring:message code="electricity_water_meter.electricity_water_meter" />"
+    "electricity_water_meter.electricity_water_meter":"<spring:message code="electricity_water_meter.electricity_water_meter" />",
+    "electricity_water_meter.electricity_meter":"<spring:message code="electricity_water_meter.electricity_meter" />",
+    "electricity_water_meter.water_meter":"<spring:message code="electricity_water_meter.water_meter" />",
+    "electricity_water_meter.previous_meter":"<spring:message code="electricity_water_meter.previous_meter" />"
     }
 </div>

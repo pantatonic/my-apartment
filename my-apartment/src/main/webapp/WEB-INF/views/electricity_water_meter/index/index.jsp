@@ -65,5 +65,34 @@
             </section>
         </div>     
 
+                            
+        <textarea id="box-room-template">
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 box-room_">
+                <div class="box-room hover-box">
+                    <div class="box-room-name"></div>
+                    <input type="hidden" name="id" value="">
+                    <div class="separator-10"></div>
+                    <div><i class="fa fa-bolt"></i> <b><spring:message code="electricity_water_meter.electricity_meter" /></b></div>
+                    <div><spring:message code="electricity_water_meter.previous_meter" /> 
+                        : <span class="previous-electric"></span>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control input-meter" 
+                               name="present_electric_meter" value="">
+                    </div>
+                    <div class="separator-10"></div>
+                    <div><i class="fa fa-tint"></i> <b><spring:message code="electricity_water_meter.water_meter" /></b></div>
+                    <div><spring:message code="electricity_water_meter.previous_meter" /> 
+                        : <span class="previous-water"></span>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control input-meter" 
+                               name="present_water_meter" value="">
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </textarea>
     </tiles:putAttribute>
 </tiles:insertDefinition>

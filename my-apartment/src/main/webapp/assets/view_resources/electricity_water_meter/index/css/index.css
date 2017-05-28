@@ -19,3 +19,40 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.box-room_ {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.box-room {
+    border: 1px solid #ffffff;
+    text-align: center;
+    margin-left: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#box-room-template {
+    display: none;
+}
+
+.input-meter {
+    text-align: center;
+}
+
+.separator-10 {
+    margin-top: 10px;
+}
+
+.floor-separate {
+    clear: both;
+    text-align: center;
+    background-color: #f5f5f5;
+    margin-top: 20px;
+}
+
+.box-room-name {
+    background-color: #F9F9F9;
+}

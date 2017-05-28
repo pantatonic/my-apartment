@@ -10,7 +10,7 @@ var page = (function() {
     
     return {
         initialProcess: function() {
-            
+
         },
         addEvent: function() {
             page.getElement.getBuildingList().change(function() {
@@ -59,10 +59,58 @@ var page = (function() {
                 setTimeout(function() {
                     var _renderBoxRoom = function(response) {
                         var roomData = response.data;
+                        var html = '';
+                        var __getTemplate = function() {
+                            return jQuery('#box-room-template').val();
+                        };
+                        var boxRoomContainer = page.getElement.getBoxRoomContainer();
+                        var __setData = function(boxRoomElement, currentData) {
+                            var boxRoomElement_ = boxRoomElement.closest('.box-room_');
+                            
+                            boxRoomElement.find('[name="id"]').val(currentData.id);
+                            
+                            boxRoomElement.find('.box-room-name').html(
+                                app.translate('building.room')
+                                + ' : '
+                                + currentData.roomNo  
+                            );
+                        };
                         
-                        alert('To do : List of room for enter meter');
+                        boxRoomContainer.html(html);
                         
+                        var latestFloorSeq = 0;
+                        var htmlFloorSeq = '';
+                        var htmlFloorSeqTemplate = function(floorSeq) {
+                            return '<div style="clear: both;"></div>'
+                                    + '<div class="floor-separate"> ' 
+                                        + app.translate('room.floor') 
+                                        + ' : ' + floorSeq +
+                                    '</div>';
+                        };
+                        
+                        for(var index in roomData) {
+                            var currentData = roomData[index];
+                            
+                            if(latestFloorSeq != currentData.floorSeq) {
+                                htmlFloorSeq = htmlFloorSeqTemplate(currentData.floorSeq);
+                                latestFloorSeq = currentData.floorSeq;
+                            }
+                            else {
+                                htmlFloorSeq = '';
+                            }
+                            
+                            html = htmlFloorSeq + __getTemplate();
+                            boxRoomContainer.append(html);
+                            var currentBoxRoom = boxRoomContainer.find('.box-room').last();
+                            
+                            __setData(currentBoxRoom, currentData);
+                        }
+
                         app.loadingInElement('remove', contentBox);
+                        
+                        setTimeout(function() {
+                            alert('Get meter data coming soon');
+                        }, 1000);
                     };
                     
                     jQuery.ajax({
