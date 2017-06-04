@@ -11,6 +11,7 @@ import java.util.List;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsDb;
 import my.apartment.common.Config;
+import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomCheckInOutHistory;
 import my.apartment.model.RoomNoticeCheckOut;
@@ -532,6 +533,7 @@ public class RoomDaoImpl implements RoomDao {
         finally {
             CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
+        
         return roomNoticeCheckOuts;
     }
     
@@ -666,11 +668,20 @@ public class RoomDaoImpl implements RoomDao {
         return resultRemove;
     }
     
+    /**
+     * 
+     * @param buildingId
+     * @param month
+     * @param year
+     * @return 
+     */
     @Override
-    public Boolean getElectricityMeterByBuildingId(Integer buildingId) {
+    public Boolean getElectricityMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        
+        List<ElectricityMeter> electricityMeters = new ArrayList<ElectricityMeter>();
         
         /** TODO Declare list of model */
         
@@ -683,9 +694,19 @@ public class RoomDaoImpl implements RoomDao {
             
             System.out.println("--WS--");
             for(Room room : roomsByBuildingId) {
-                System.out.println("startupElectricityMeter : " +room.getStartupElectricityMeter());
-                System.out.println("startupWaterMeter : " +room.getStartupWaterMeter());
+                /*System.out.println("startupElectricityMeter : " +room.getStartupElectricityMeter());
+                System.out.println("startupWaterMeter : " +room.getStartupWaterMeter());*/
+                
+                List<ElectricityMeter> electricityEachRooms = this.getElectricityMeterByRoomIdMonthYear(room.getId(), month, year);
+
+                System.out.println("roomId : " + room.getId());
+                System.out.println(electricityEachRooms);
+                System.out.println(electricityEachRooms.size());
+                System.out.println("");
+                
             }
+            
+            this.getElectricityMeterByRoomIdMonthYear(99, month, year);
             System.out.println("--WS--");
         }
         catch(Exception e) {
@@ -696,6 +717,47 @@ public class RoomDaoImpl implements RoomDao {
         }
         
         return true;
+    }
+    
+    @Override
+    public List<ElectricityMeter> getElectricityMeterByRoomIdMonthYear(Integer roomId, Integer month, Integer year) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<ElectricityMeter> electricityMeters = new ArrayList<ElectricityMeter>();
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT * FROM electricity_meter WHERE room_id = ? AND month = ? AND year = ? LIMIT 0, 1";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
+            ps.setInt(2, month);
+            ps.setInt(3, year);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                ElectricityMeter electricityMeter = new ElectricityMeter();
+                
+                electricityMeter.setRoomId(rs.getInt("room_id"));
+                electricityMeter.setMonth(rs.getInt("month"));
+                electricityMeter.setPreviousMeter(rs.getString("previous_meter"));
+                electricityMeter.setPresentMeter(rs.getString("present_meter"));
+                
+                electricityMeters.add(electricityMeter);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
+        }
+
+        return electricityMeters;
     }
     
 }

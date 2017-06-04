@@ -47,14 +47,17 @@ public class RoomResource {
     @GET
     @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String getRoomElectricWaterMeterByBuildingId(
-            @PathParam("building_id") Integer BuildingId
+            @PathParam("building_id") Integer BuildingId,
+            @PathParam("year") Integer year,
+            @PathParam("month") Integer month
     ) {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
             RoomDao roomDaoImpl = new RoomDaoImpl();
             
-            roomDaoImpl.getElectricityMeterByBuildingId(BuildingId);
+            //roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(BuildingId, month, year);
+            roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(BuildingId, 2, 2017);
             
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "Test ok");
             

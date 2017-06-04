@@ -1,6 +1,7 @@
 package my.apartment.services;
 
 import java.util.List;
+import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomNoticeCheckOut;
 
@@ -27,6 +28,8 @@ public interface RoomDao {
     
     public Boolean removeNoticeCheckOut(Integer roomId);
     
-    public Boolean getElectricityMeterByBuildingId(Integer buildingId);
+    public Boolean getElectricityMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year);
+    
+    public List<ElectricityMeter> getElectricityMeterByRoomIdMonthYear(Integer roomId, Integer month, Integer year);
     
 }

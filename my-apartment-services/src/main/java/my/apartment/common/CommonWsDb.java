@@ -1,6 +1,7 @@
 package my.apartment.common;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -54,6 +55,14 @@ public class CommonWsDb {
                 Logger.getLogger(className).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    public static Connection getDbConnection() throws ClassNotFoundException, SQLException {
+        Class.forName(Config.JDBC_DRIVER);
+        
+        Connection con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+        
+        return con;
     }
     
 }
