@@ -676,12 +676,12 @@ public class RoomDaoImpl implements RoomDao {
      * @return 
      */
     @Override
-    public Boolean getElectricityMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year) {
+    public List<ElectricityMeter> getElectricityMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         
-        List<ElectricityMeter> electricityMeters = new ArrayList<ElectricityMeter>();
+        List<ElectricityMeter> electricityMeterListReturn = new ArrayList<ElectricityMeter>();
         
         /** TODO Declare list of model */
         
@@ -694,19 +694,46 @@ public class RoomDaoImpl implements RoomDao {
             
             System.out.println("--WS--");
             for(Room room : roomsByBuildingId) {
+                ElectricityMeter electricityMeterReturn = new ElectricityMeter();
+                
+                
                 /*System.out.println("startupElectricityMeter : " +room.getStartupElectricityMeter());
                 System.out.println("startupWaterMeter : " +room.getStartupWaterMeter());*/
                 
                 List<ElectricityMeter> electricityEachRooms = this.getElectricityMeterByRoomIdMonthYear(room.getId(), month, year);
-
-                System.out.println("roomId : " + room.getId());
-                System.out.println(electricityEachRooms);
-                System.out.println(electricityEachRooms.size());
-                System.out.println("");
                 
+                /** 
+                 * if size is zero that mean the specify month doesn't has data  
+                 * then call getPreviousElectricityMeterByRoomIdMonthYear to get previous electricity meter
+                 */
+                if(electricityEachRooms.isEmpty()) {
+                    //TODO : getPreviousElectricityMeterByRoomIdMonthYear
+                }
+                else {
+                    /** this scope mean already have data in electricity_meter of this month and year */
+                    
+                    electricityMeterReturn.setRoomId(room.getId());
+                    electricityMeterReturn.setMonth(month);
+                    electricityMeterReturn.setYear(year);
+                    electricityMeterReturn.setPreviousMeter(electricityEachRooms.get(0).getPreviousMeter());
+                    electricityMeterReturn.setPresentMeter(electricityEachRooms.get(0).getPresentMeter());
+                    electricityMeterReturn.setChargePerUnit(electricityEachRooms.get(0).getChargePerUnit());
+                    electricityMeterReturn.setUsageUnit(electricityEachRooms.get(0).getUsageUnit());
+                    electricityMeterReturn.setValue(electricityEachRooms.get(0).getValue());
+                    electricityMeterReturn.setUseMinimunUnitCalculate(electricityEachRooms.get(0).getUseMinimunUnitCalculate());
+                    electricityMeterReturn.setCreatedDate(electricityEachRooms.get(0).getCreatedDate());
+                    electricityMeterReturn.setUpdatedDate(electricityEachRooms.get(0).getUpdatedDate());
+                }
+                
+                electricityMeterListReturn.add(electricityMeterReturn);
             }
             
-            this.getElectricityMeterByRoomIdMonthYear(99, month, year);
+            for(ElectricityMeter e : electricityMeterListReturn) {
+                System.out.println(e);
+                System.out.println("");
+            }
+
+            
             System.out.println("--WS--");
         }
         catch(Exception e) {
@@ -716,7 +743,7 @@ public class RoomDaoImpl implements RoomDao {
             CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
         
-        return true;
+        return electricityMeterListReturn;
     }
     
     @Override
@@ -744,8 +771,15 @@ public class RoomDaoImpl implements RoomDao {
                 
                 electricityMeter.setRoomId(rs.getInt("room_id"));
                 electricityMeter.setMonth(rs.getInt("month"));
+                electricityMeter.setYear(rs.getInt("year"));
                 electricityMeter.setPreviousMeter(rs.getString("previous_meter"));
                 electricityMeter.setPresentMeter(rs.getString("present_meter"));
+                electricityMeter.setChargePerUnit(rs.getBigDecimal("charge_per_unit"));
+                electricityMeter.setUsageUnit(rs.getInt("usage_unit"));
+                electricityMeter.setValue(rs.getBigDecimal("value"));
+                electricityMeter.setUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("use_minimun_unit_calculate")));
+                electricityMeter.setCreatedDate(rs.getDate("created_date"));
+                electricityMeter.setUpdatedDate(rs.getDate("updated_date"));
                 
                 electricityMeters.add(electricityMeter);
             }

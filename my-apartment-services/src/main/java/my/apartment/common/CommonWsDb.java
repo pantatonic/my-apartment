@@ -39,6 +39,19 @@ public class CommonWsDb {
         return dateFormat.format(new Date());
     }
     
+    public static Boolean getBooleanFromInt(Integer integer) throws Exception {
+        if(null != integer) switch (integer) {
+            case 0:
+                return Boolean.FALSE;
+            case 1:
+                return Boolean.TRUE;
+            default:
+                throw new Exception("Input must 0 or 1 only");
+        }
+        
+        return null;
+    }
+    
     public static void closeFinally(PreparedStatement ps, Connection con, String className) {
         if (ps != null) {
             try {

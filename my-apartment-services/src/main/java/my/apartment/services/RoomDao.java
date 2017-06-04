@@ -28,7 +28,7 @@ public interface RoomDao {
     
     public Boolean removeNoticeCheckOut(Integer roomId);
     
-    public Boolean getElectricityMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year);
+    public List<ElectricityMeter> getElectricityMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year);
     
     public List<ElectricityMeter> getElectricityMeterByRoomIdMonthYear(Integer roomId, Integer month, Integer year);
     
