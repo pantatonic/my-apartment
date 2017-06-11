@@ -3,14 +3,22 @@
 jQuery(document).ready(function() {
     page.initialProcess();
     page.addEvent();
-    
 });
 
 var page = (function() {
     
     return {
         initialProcess: function() {
-
+            jQuery('#electriccity-water-month-year').datepicker({
+                format:'yyyy-mm',
+                minViewMode: 'months',
+                autoclose: true
+            }).on('changeDate',function(e) {
+                page.getRoom();
+                /*setTimeout(function() {
+                    render_chart_3();
+                },500);*/
+            });
         },
         addEvent: function() {
             page.getElement.getBuildingList().change(function() {
@@ -33,6 +41,9 @@ var page = (function() {
             },
             getBoxRoom_: function() {
                 return jQuery('.box-room_');
+            },
+            getElectricityWaterMonthYear: function() {
+                return jQuery('#electriccity-water-month-year');
             }
         },
         boxRoomContainer: {
@@ -49,6 +60,20 @@ var page = (function() {
                     + '</div>';
             
                 page.getElement.getBoxRoomContainer().html(html);
+            }
+        },
+        electTricityWaterMonthYear: {
+            getMonth: function() {
+                var monthYear = page.getElement.getElectricityWaterMonthYear().val();
+                var splitText = monthYear.split('-');
+                
+                return splitText[1];
+            },
+            getYear: function() {
+                var monthYear = page.getElement.getElectricityWaterMonthYear().val();
+                var splitText = monthYear.split('-');
+                
+                return splitText[0];
             }
         },
         getRoom: function() {
@@ -143,14 +168,36 @@ var page = (function() {
             }
         },
         getElectricWaterMeter: function() {
+            var contentBox = page.getElement.getBuildingList().closest('.box-primary');
             var buildingList = page.getElement.getBuildingList();
+            var boxRoom_ = page.getElement.getBoxRoom_();
+            
+            var _setData = function(response) {
+                var dataElectricity = response.data.electricityMeter;
+                
+                /** set electricity meter data */
+                for(var index in dataElectricity) {
+                    var dataElectricityEachRoom = dataElectricity[index];
+                    
+                    if(Object.keys(dataElectricityEachRoom).length) {
+                        var currentBoxRoom_ = boxRoom_.find('.box-room').find('input[name="id"][value="' + dataElectricityEachRoom.roomId + '"]').closest('.box-room_');
+                        var previousElectricityMeter = app.valueUtils.undefinedToEmpty(dataElectricityEachRoom.previousMeter);
+                        var presentElectricityMeter = app.valueUtils.undefinedToEmpty(dataElectricityEachRoom.presentMeter);
+                        
+                        currentBoxRoom_.find('.previous-electric').html(previousElectricityMeter);
+                        currentBoxRoom_.find('[name="present_electric_meter"]').val(presentElectricityMeter);
+                    }
+                }
+            };
             
             if(!app.valueUtils.isEmptyValue(buildingList.val())) {
                 jQuery.ajax({
                     type: 'get',
                     url: _CONTEXT_PATH_ + '/get_room_electric_water_meter_by_building_id.html',
                     data: {
-                        building_id: buildingList.val()
+                        building_id: buildingList.val(),
+                        year: page.electTricityWaterMonthYear.getYear(),
+                        month: page.electTricityWaterMonthYear.getMonth()
                     },
                     cache: false,
                     success: function(response) {
@@ -161,11 +208,12 @@ var page = (function() {
                             app.loadingInElement('remove', contentBox);
                         }
                         else {
-                            console.log(response);
+                            _setData(response);
                         }
                     },
                     error: function() {
                         app.alertSomethingError();
+                        app.loadingInElement('remove', contentBox);
                     }
                 });
             }

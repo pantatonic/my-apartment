@@ -33,7 +33,11 @@ public class ElectricityWaterMeterController {
         JSONObject resultGetBuilding = this.getBuilding();
         JSONArray jsonArrayBuilding = new JSONArray(resultGetBuilding.get(CommonString.DATA_STRING).toString());
         
+        String currentMonth = CommonAppUtils.getCurrentMonthString();
+        String currentYear = CommonAppUtils.getCurrentYearString();
+        
         modelAndView.addObject("buildingList", jsonArrayBuilding);
+        modelAndView.addObject("currentYearMonth", currentYear + "-" + currentMonth);
         
         return modelAndView;
     }
@@ -60,6 +64,8 @@ public class ElectricityWaterMeterController {
     /**
      * 
      * @param buildingId
+     * @param month
+     * @param year
      * @param response
      * @return 
      */
@@ -67,18 +73,16 @@ public class ElectricityWaterMeterController {
     @ResponseBody
     public String getRoomElectricWaterMeterByBuildingId(
             @RequestParam(value = "building_id", required = true) String buildingId,
+            @RequestParam(value = "month", required = true) String month,
+            @RequestParam(value = "year", required = true) String year,
             HttpServletResponse response
     ) {
         JSONObject jsonObjectReturn = new JSONObject();
         
         CommonAppUtils.setResponseHeader(response);
-        System.out.println("buildingId : " + buildingId);
+
         try {
-            jsonObjectReturn = CommonAppWsUtils.get("room/get_room_electric_water_meter_by_building_id/" + buildingId);
-            
-            System.out.println("---- C ----");
-            System.out.println(jsonObjectReturn);
-            System.out.println("---- C ----");
+            jsonObjectReturn = CommonAppWsUtils.get("room/get_room_electric_water_meter_by_building_id/" + buildingId + "/" + year + "/" + month);
         }
         catch(Exception e) {
             e.printStackTrace();

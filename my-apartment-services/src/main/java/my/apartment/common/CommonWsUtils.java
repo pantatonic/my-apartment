@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.MediaType;
@@ -79,6 +80,23 @@ public class CommonWsUtils {
         else {
             return str;
         }
+    }
+    
+    public static HashMap<String, Integer> getPreviousMonthYear(Integer month, Integer year) {
+        HashMap<String, Integer> hashMapReturn  = new HashMap<String, Integer>();
+        
+        if(month == 1) {
+            month = 12;
+            year = year - 1;
+        }
+        else {
+            month = month - 1;
+        }
+        
+        hashMapReturn.put("month", month);
+        hashMapReturn.put("year", year);
+        
+        return hashMapReturn;
     }
     
 

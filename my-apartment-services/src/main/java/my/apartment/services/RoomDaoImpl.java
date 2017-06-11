@@ -7,9 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsDb;
+import my.apartment.common.CommonWsUtils;
 import my.apartment.common.Config;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
@@ -682,9 +684,7 @@ public class RoomDaoImpl implements RoomDao {
         ResultSet rs = null;
         
         List<ElectricityMeter> electricityMeterListReturn = new ArrayList<ElectricityMeter>();
-        
-        /** TODO Declare list of model */
-        
+
         try {
             Class.forName(Config.JDBC_DRIVER);
             
@@ -692,29 +692,54 @@ public class RoomDaoImpl implements RoomDao {
             
             List<Room> roomsByBuildingId = this.getByBuildingId(buildingId);
             
-            System.out.println("--WS--");
             for(Room room : roomsByBuildingId) {
                 ElectricityMeter electricityMeterReturn = new ElectricityMeter();
                 
-                
-                /*System.out.println("startupElectricityMeter : " +room.getStartupElectricityMeter());
-                System.out.println("startupWaterMeter : " +room.getStartupWaterMeter());*/
-                
                 List<ElectricityMeter> electricityEachRooms = this.getElectricityMeterByRoomIdMonthYear(room.getId(), month, year);
+                
+                
+                electricityMeterReturn.setRoomId(room.getId());
+                electricityMeterReturn.setMonth(month);
+                electricityMeterReturn.setYear(year);
                 
                 /** 
                  * if size is zero that mean the specify month doesn't has data  
                  * then call getPreviousElectricityMeterByRoomIdMonthYear to get previous electricity meter
                  */
                 if(electricityEachRooms.isEmpty()) {
-                    //TODO : getPreviousElectricityMeterByRoomIdMonthYear
+                    HashMap previousMonthYear = CommonWsUtils.getPreviousMonthYear(month, year);
+
+                    List<ElectricityMeter> electricityEachRoomsFromPrevious 
+                            = this.getElectricityMeterByRoomIdMonthYear(room.getId(), 
+                                    (Integer) previousMonthYear.get("month"), 
+                                    (Integer) previousMonthYear.get("year"));
+
+                    if(electricityEachRoomsFromPrevious.isEmpty()) {
+                        /** this scope mean not have all of data for this room, get default meter from table : room */
+                        
+                        /** put default data into previous of present */
+                        electricityMeterReturn.setPreviousMeter(room.getStartupElectricityMeter());
+                        
+                    }
+                    else {
+                        /** this scope mean already have data in previous month but not have data in present month  */
+                        
+                        /** put present of before into previous of present */
+                        electricityMeterReturn.setPreviousMeter(electricityEachRoomsFromPrevious.get(0).getPresentMeter());
+                    }
+                    
+                    /** because of this scope not have present data so force null to presetMeter */
+                    electricityMeterReturn.setPresentMeter(null);
+                    electricityMeterReturn.setChargePerUnit(null);
+                    electricityMeterReturn.setUsageUnit(null);
+                    electricityMeterReturn.setValue(null);
+                    electricityMeterReturn.setUseMinimunUnitCalculate(null);
+                    electricityMeterReturn.setCreatedDate(null);
+                    electricityMeterReturn.setUpdatedDate(null);                    
                 }
                 else {
-                    /** this scope mean already have data in electricity_meter of this month and year */
-                    
-                    electricityMeterReturn.setRoomId(room.getId());
-                    electricityMeterReturn.setMonth(month);
-                    electricityMeterReturn.setYear(year);
+                    /** this scope mean already have data in table "electricity_meter" of this month and year */
+
                     electricityMeterReturn.setPreviousMeter(electricityEachRooms.get(0).getPreviousMeter());
                     electricityMeterReturn.setPresentMeter(electricityEachRooms.get(0).getPresentMeter());
                     electricityMeterReturn.setChargePerUnit(electricityEachRooms.get(0).getChargePerUnit());
@@ -727,14 +752,6 @@ public class RoomDaoImpl implements RoomDao {
                 
                 electricityMeterListReturn.add(electricityMeterReturn);
             }
-            
-            for(ElectricityMeter e : electricityMeterListReturn) {
-                System.out.println(e);
-                System.out.println("");
-            }
-
-            
-            System.out.println("--WS--");
         }
         catch(Exception e) {
             e.printStackTrace();

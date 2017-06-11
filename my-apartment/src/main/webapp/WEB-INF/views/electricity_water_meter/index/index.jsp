@@ -30,9 +30,9 @@
             <section class="content">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
+                        <%-- <h3 class="box-title">
                             &nbsp;
-                        </h3>
+                        </h3> --%>
 
                         <%--<div class="box-tools pull-right">
                             <button class="btn btn-box-tool refresh-room-list"
@@ -40,6 +40,11 @@
                                 <i class="fa fa-refresh"></i>
                             </button>
                         </div>--%>
+                        <div class="input-group" id="input-group-month-year">
+                            <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
+                            <input type="text" id="electriccity-water-month-year"  value="${currentYearMonth}"
+                                    autocomplete="off" class="form-control text-center" readonly="readonly">
+                        </div>
                     </div>
 
                     <div class="box-body">

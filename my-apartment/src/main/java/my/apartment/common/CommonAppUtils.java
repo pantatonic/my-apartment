@@ -1,7 +1,6 @@
 package my.apartment.common;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,6 +80,18 @@ public class CommonAppUtils {
         Date date = new Date();
 
         return new SimpleDateFormat(CommonString.DATE_FORMAT_STRING).format(date);
+    }
+    
+    public static String getCurrentYearString() {
+        Date date = new Date();
+        
+        return new SimpleDateFormat(CommonString.YEAR_FORMAT_STRING).format(date);
+    }
+    
+    public static String getCurrentMonthString() {
+        Date date = new Date();
+        
+        return new SimpleDateFormat(CommonString.MONTH_FORMAT_STRING).format(date);
     }
     
     public static JSONObject simpleValidateRequired(

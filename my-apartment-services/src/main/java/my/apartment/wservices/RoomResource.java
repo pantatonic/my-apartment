@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.common.JsonObjectUtils;
+import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomCurrentCheckIn;
 import my.apartment.model.RoomNoticeCheckOut;
@@ -28,6 +29,7 @@ import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
 import my.apartment.services.RoomReservationDao;
 import my.apartment.services.RoomReservationDaoImpl;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -43,7 +45,7 @@ public class RoomResource {
     public RoomResource() {
     }
     
-    @Path("get_room_electric_water_meter_by_building_id/{building_id}")
+    @Path("get_room_electric_water_meter_by_building_id/{building_id}/{year}/{month}")
     @GET
     @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String getRoomElectricWaterMeterByBuildingId(
@@ -56,10 +58,17 @@ public class RoomResource {
         try {
             RoomDao roomDaoImpl = new RoomDaoImpl();
             
-            //roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(BuildingId, month, year);
-            roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(BuildingId, 2, 2017);
+            List<ElectricityMeter> electricityMeters = roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(BuildingId, month, year);
+
             
-            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "Test ok");
+            JSONObject subJsonObject = new JSONObject();
+            
+            subJsonObject.put("electricityMeter", electricityMeters);
+            subJsonObject.put("waterMeter", "Coming soon");
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
+            jsonObjectReturn.put(CommonString.DATA_STRING, subJsonObject);
+
             
         }
         catch(Exception e) {

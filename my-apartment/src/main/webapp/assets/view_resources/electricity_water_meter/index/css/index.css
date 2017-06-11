@@ -57,3 +57,7 @@
     background-color: #f39c12;
     color: #ffffff;
 }
+
+#input-group-month-year { 
+    width: 130px; margin: auto;
+}
