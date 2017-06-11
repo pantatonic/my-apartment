@@ -4,6 +4,7 @@ import java.util.List;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomNoticeCheckOut;
+import my.apartment.model.WaterMeter;
 
 
 public interface RoomDao {
@@ -31,5 +32,9 @@ public interface RoomDao {
     public List<ElectricityMeter> getElectricityMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year);
     
     public List<ElectricityMeter> getElectricityMeterByRoomIdMonthYear(Integer roomId, Integer month, Integer year);
+    
+    public List<WaterMeter> getWaterMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year);
+    
+    public List<WaterMeter> getWaterMeterByRoomIdMonthYear(Integer roomId, Integer month, Integer year);
     
 }

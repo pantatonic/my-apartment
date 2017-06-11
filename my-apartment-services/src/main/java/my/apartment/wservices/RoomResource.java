@@ -23,6 +23,7 @@ import my.apartment.model.Room;
 import my.apartment.model.RoomCurrentCheckIn;
 import my.apartment.model.RoomNoticeCheckOut;
 import my.apartment.model.RoomReservation;
+import my.apartment.model.WaterMeter;
 import my.apartment.services.RoomCurrentCheckInDao;
 import my.apartment.services.RoomCurrentCheckInDaoImpl;
 import my.apartment.services.RoomDao;
@@ -49,7 +50,7 @@ public class RoomResource {
     @GET
     @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
     public String getRoomElectricWaterMeterByBuildingId(
-            @PathParam("building_id") Integer BuildingId,
+            @PathParam("building_id") Integer buildingId,
             @PathParam("year") Integer year,
             @PathParam("month") Integer month
     ) {
@@ -58,13 +59,14 @@ public class RoomResource {
         try {
             RoomDao roomDaoImpl = new RoomDaoImpl();
             
-            List<ElectricityMeter> electricityMeters = roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(BuildingId, month, year);
+            List<ElectricityMeter> electricityMeters = roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(buildingId, month, year);
+            List<WaterMeter> waterMeters = roomDaoImpl.getWaterMeterByBuildingIdMonthYear(buildingId, month, year);
 
             
             JSONObject subJsonObject = new JSONObject();
             
             subJsonObject.put("electricityMeter", electricityMeters);
-            subJsonObject.put("waterMeter", "Coming soon");
+            subJsonObject.put("waterMeter", waterMeters);
             
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             jsonObjectReturn.put(CommonString.DATA_STRING, subJsonObject);

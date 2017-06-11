@@ -17,6 +17,7 @@ import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomCheckInOutHistory;
 import my.apartment.model.RoomNoticeCheckOut;
+import my.apartment.model.WaterMeter;
 
 
 public class RoomDaoImpl implements RoomDao {
@@ -763,6 +764,13 @@ public class RoomDaoImpl implements RoomDao {
         return electricityMeterListReturn;
     }
     
+    /**
+     * 
+     * @param roomId
+     * @param month
+     * @param year
+     * @return 
+     */
     @Override
     public List<ElectricityMeter> getElectricityMeterByRoomIdMonthYear(Integer roomId, Integer month, Integer year) {
         Connection con = null;
@@ -809,6 +817,71 @@ public class RoomDaoImpl implements RoomDao {
         }
 
         return electricityMeters;
+    }
+    
+    /**
+     * 
+     * @param buildingId
+     * @param month
+     * @param year
+     * @return 
+     */
+    @Override
+    public List<WaterMeter> getWaterMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<WaterMeter> waterMeterListReturn = new ArrayList<WaterMeter>();
+        
+        try {
+            Class.forName(Config.JDBC_DRIVER);
+            
+            con = DriverManager.getConnection(Config.DB_URL, Config.DB_USER, Config.DB_PASSWORD);
+            
+            List<Room> roomsByBuildingId = this.getByBuildingId(buildingId);
+            
+            for(Room room : roomsByBuildingId) {
+                //TODO : hear
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
+        }
+        
+        return waterMeterListReturn;
+    }
+    
+    /**
+     * 
+     * @param roomId
+     * @param month
+     * @param year
+     * @return 
+     */
+    @Override
+    public List<WaterMeter> getWaterMeterByRoomIdMonthYear(Integer roomId, Integer month, Integer year) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<WaterMeter> waterMeters = new ArrayList<WaterMeter>();
+        
+        try {
+            //TOSO : hear
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
+        }
+        
+        
+        return waterMeters;
     }
     
 }
