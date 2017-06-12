@@ -174,12 +174,13 @@ var page = (function() {
             
             var _setData = function(response) {
                 var dataElectricity = response.data.electricityMeter;
-                
+                var dataWater = response.data.waterMeter;
+
                 /** set electricity meter data */
                 for(var index in dataElectricity) {
                     var dataElectricityEachRoom = dataElectricity[index];
                     
-                    if(Object.keys(dataElectricityEachRoom).length) {
+                    if(Object.keys(dataElectricityEachRoom).length > 0) {
                         var currentBoxRoom_ = boxRoom_.find('.box-room').find('input[name="id"][value="' + dataElectricityEachRoom.roomId + '"]').closest('.box-room_');
                         var previousElectricityMeter = app.valueUtils.undefinedToEmpty(dataElectricityEachRoom.previousMeter);
                         var presentElectricityMeter = app.valueUtils.undefinedToEmpty(dataElectricityEachRoom.presentMeter);
@@ -188,6 +189,21 @@ var page = (function() {
                         currentBoxRoom_.find('[name="present_electric_meter"]').val(presentElectricityMeter);
                     }
                 }
+                
+                /** set water meter data */
+                for(var indexWater in dataWater) {
+                    var dataWaterEachRoom = dataWater[indexWater];
+                    
+                    if(Object.keys(dataWaterEachRoom).length > 0) {
+                        var currentBoxRoom_ = boxRoom_.find('.box-room').find('input[name="id"][value="' + dataWaterEachRoom.roomId + '"]').closest('.box-room_');
+                        var previousWaterMeter = app.valueUtils.undefinedToEmpty(dataWaterEachRoom.previousMeter);
+                        var presentWaterMeter = app.valueUtils.undefinedToEmpty(dataWaterEachRoom.presentMeter);
+                        
+                        currentBoxRoom_.find('.previous-water').html(previousWaterMeter);
+                        currentBoxRoom_.find('[name="present_water_meter"]').val(presentWaterMeter);
+                    }
+                }
+                
             };
             
             if(!app.valueUtils.isEmptyValue(buildingList.val())) {

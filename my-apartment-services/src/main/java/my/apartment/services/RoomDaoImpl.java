@@ -842,8 +842,54 @@ public class RoomDaoImpl implements RoomDao {
             List<Room> roomsByBuildingId = this.getByBuildingId(buildingId);
             
             for(Room room : roomsByBuildingId) {
-                //TODO : hear
-            }
+                WaterMeter waterMeterReturn = new WaterMeter();
+                
+                List<WaterMeter> waterEachRooms = this.getWaterMeterByRoomIdMonthYear(room.getId(), month, year);
+                
+                waterMeterReturn.setRoomId(room.getId());
+                waterMeterReturn.setMonth(month);
+                waterMeterReturn.setYear(year);
+                
+                /** 
+                * if size is zero that mean the specify month doesn't has data  
+                * then call getPreviousElectricityMeterByRoomIdMonthYear to get previous electricity meter
+                */
+                if(waterEachRooms.isEmpty()) {
+                    HashMap previousMonthYear = CommonWsUtils.getPreviousMonthYear(month, year);
+                    
+                    List<WaterMeter> waterEachRoomsFromPrevious 
+                            = this.getWaterMeterByRoomIdMonthYear(room.getId(), 
+                                    (Integer) previousMonthYear.get("month"), 
+                                    (Integer) previousMonthYear.get("year"));
+                    
+                    if(waterEachRoomsFromPrevious.isEmpty()) {
+                        /** this scope mean not have all of data for this room, get default meter from table : room */
+                        
+                        /** put default data into previous of present */
+                        waterMeterReturn.setPreviousMeter(room.getStartupWaterMeter());
+                    }
+                    else {
+                        /** this scope mean already have data in previous month but not have data in present month  */
+                        
+                        /** put present of before into previous of present */
+                        waterMeterReturn.setPreviousMeter(waterEachRoomsFromPrevious.get(0).getPresentMeter());
+                    }
+                }
+                else {
+                    /** this scope mean already have data in table "electricity_meter" of this month and year */
+                    
+                    waterMeterReturn.setPreviousMeter(waterEachRooms.get(0).getPreviousMeter());
+                    waterMeterReturn.setPresentMeter(waterEachRooms.get(0).getPresentMeter());
+                    waterMeterReturn.setChargePerUnit(waterEachRooms.get(0).getChargePerUnit());
+                    waterMeterReturn.setUsageUnit(waterEachRooms.get(0).getUsageUnit());
+                    waterMeterReturn.setValue(waterEachRooms.get(0).getValue());
+                    waterMeterReturn.setUseMinimunUnitCalculate(waterEachRooms.get(0).getUseMinimunUnitCalculate());
+                    waterMeterReturn.setCreatedDate(waterEachRooms.get(0).getCreatedDate());
+                    waterMeterReturn.setUpdatedDate(waterEachRooms.get(0).getUpdatedDate());
+                }
+                
+                waterMeterListReturn.add(waterMeterReturn);
+           }
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -871,7 +917,34 @@ public class RoomDaoImpl implements RoomDao {
         List<WaterMeter> waterMeters = new ArrayList<WaterMeter>();
         
         try {
-            //TOSO : hear
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT * FROM water_meter WHERE room_id = ? AND month = ? AND year = ? LIMIT 0, 1";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
+            ps.setInt(2, month);
+            ps.setInt(3, year);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                WaterMeter waterMeter = new WaterMeter();
+
+                waterMeter.setRoomId(rs.getInt("room_id"));
+                waterMeter.setMonth(rs.getInt("month"));
+                waterMeter.setYear(rs.getInt("year"));
+                waterMeter.setPreviousMeter(rs.getString("previous_meter"));
+                waterMeter.setPresentMeter(rs.getString("present_meter"));
+                waterMeter.setChargePerUnit(rs.getBigDecimal("charge_per_unit"));
+                waterMeter.setUsageUnit(rs.getInt("usage_unit"));
+                waterMeter.setValue(rs.getBigDecimal("value"));
+                waterMeter.setUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("use_minimun_unit_calculate")));
+                waterMeter.setCreatedDate(rs.getDate("created_date"));
+                waterMeter.setUpdatedDate(rs.getDate("updated_date"));
+
+                waterMeters.add(waterMeter);
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -879,7 +952,6 @@ public class RoomDaoImpl implements RoomDao {
         finally {
             CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
         }
-        
         
         return waterMeters;
     }
