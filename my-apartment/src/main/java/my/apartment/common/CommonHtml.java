@@ -43,6 +43,13 @@ public class CommonHtml {
                 + "</button>";
     }
     
+    public String getSaveButton(String textHtml, String loadingText, String idString) {
+        return "<button type=\"submit\" id=\"" + idString + "\" class=\"btn btn-primary btn-flat\" data-loading-text=\"" + loadingText + "\">" 
+                    + this.fontSaveClass + " "
+                    + textHtml
+                + "</button>";
+    }
+    
     public String getDeleteButton(String textHtml) {
         return "<button type=\"button\" class=\"btn btn-danger btn-flat button-delete\">"
                     + this.fontDeleteClass + " "

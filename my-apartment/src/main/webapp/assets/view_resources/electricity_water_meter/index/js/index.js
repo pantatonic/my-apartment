@@ -1,4 +1,4 @@
-/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_ */
+/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -15,9 +15,6 @@ var page = (function() {
                 autoclose: true
             }).on('changeDate',function(e) {
                 page.getRoom();
-                /*setTimeout(function() {
-                    render_chart_3();
-                },500);*/
             });
         },
         addEvent: function() {
@@ -29,6 +26,23 @@ var page = (function() {
                 }
                 else {
                     page.getRoom();
+                }
+            });
+            
+            page.getElement.getElectricityWaterMeterSaveButton().click(function() {
+                var boxRoomContainer = page.getElement.getBoxRoomContainer();
+                
+                if(boxRoomContainer.find('[name="id"]').length === 0) {
+                    if(!app.checkNoticeExist('notice-select-data')) {
+                        app.showNotice({
+                            type: WARNING_STRING,
+                            message: app.translate('common.please_select_data'),
+                            addclass: 'notice-select-data'
+                        });
+                    }
+                }
+                else {
+                    page.electricityWaterMeterSave();
                 }
             });
         },
@@ -44,6 +58,12 @@ var page = (function() {
             },
             getElectricityWaterMonthYear: function() {
                 return jQuery('#electriccity-water-month-year');
+            },
+            getElectricityWaterMeterSaveButton: function() {
+                return jQuery('#electricity-water-meter-save-button');
+            },
+            getElectricityWaterMeterForm: function() {
+                return jQuery('#electricity-water-meter-form');
             }
         },
         boxRoomContainer: {
@@ -136,6 +156,8 @@ var page = (function() {
                         }
 
                         app.loadingInElement('remove', contentBox);
+                        
+                        boxRoomContainer.append('<div class="clearfix"></div>');
                         
                         page.getElectricWaterMeter();
                     };
@@ -232,6 +254,51 @@ var page = (function() {
                         app.loadingInElement('remove', contentBox);
                     }
                 });
+            }
+        },
+        electricityWaterMeterSave: function() {
+            var form_ = page.getElement.getElectricityWaterMeterForm();
+            var formData = form_.serialize();
+            var validate = function() {
+                var validatePass = true;
+                var allPresentElectricMeter = jQuery('[name="present_electric_meter"]');
+                var allPresentWater = jQuery('[name="present_water_meter"]');
+                
+                allPresentElectricMeter.removeClass(INPUT_ERROR_CLASS);
+                allPresentWater.removeClass(INPUT_ERROR_CLASS);
+                
+                allPresentElectricMeter.each(function() {
+                    var thisElement = jQuery(this);
+                    
+                    if(app.valueUtils.isEmptyValue(thisElement.val())) {
+                        thisElement.addClass(INPUT_ERROR_CLASS);
+                        validatePass = false;
+                    }
+                });
+                
+                allPresentWater.each(function() {
+                    var thisElement = jQuery(this);
+                    
+                    if(app.valueUtils.isEmptyValue(thisElement.val())) {
+                        thisElement.addClass(INPUT_ERROR_CLASS);
+                        validatePass = false;
+                    }
+                });
+                
+                return validatePass;
+            };
+            
+            if(!validate()) {
+                if(!app.checkNoticeExist('notice-enter-data')) {
+                    app.showNotice({
+                        type: WARNING_STRING,
+                        message: app.translate('common.please_enter_data'),
+                        addclass: 'notice-enter-data'
+                    });
+                }
+            }
+            else {
+                alert('Go to save');
             }
         }
     };

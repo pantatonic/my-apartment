@@ -61,3 +61,7 @@
 #input-group-month-year { 
     width: 130px; margin: auto;
 }
+
+#electricity-water-meter-save-button {
+    float: right;
+}

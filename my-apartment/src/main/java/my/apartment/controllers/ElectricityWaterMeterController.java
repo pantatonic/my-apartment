@@ -44,7 +44,7 @@ public class ElectricityWaterMeterController {
     
     /**
      * 
-     * @return 
+     * @return JSONObject
      */
     private JSONObject getBuilding() {
         JSONObject jsonObjectReturn = new JSONObject();
@@ -67,7 +67,7 @@ public class ElectricityWaterMeterController {
      * @param month
      * @param year
      * @param response
-     * @return 
+     * @return String
      */
     @RequestMapping(value = "/get_room_electric_water_meter_by_building_id.html", method = {RequestMethod.GET})
     @ResponseBody

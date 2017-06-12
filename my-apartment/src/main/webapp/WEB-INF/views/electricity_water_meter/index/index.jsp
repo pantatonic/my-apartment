@@ -58,12 +58,16 @@
                                 </option>
                             </c:forEach>
                         </select>
-
-                        <div id="box-room-container"></div>
+                            
+                        <form id="electricity-water-meter-form" name="electricity_water_meter_form" 
+                              method="post" class="" action="electricity_water_meter_save.html">
+                            <div id="box-room-container"></div>
+                        </form>
                     </div>
 
                     <div class="box-footer">
-                        &nbsp;
+                        <spring:message code="common.save" var="msgSavebutton" />
+                        ${commonHtml.getSaveButton(msgSavebutton, msgNowProcessing, "electricity-water-meter-save-button")}
                     </div>
                 </div>
 

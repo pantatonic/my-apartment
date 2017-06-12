@@ -824,7 +824,7 @@ public class RoomDaoImpl implements RoomDao {
      * @param buildingId
      * @param month
      * @param year
-     * @return 
+     * @return list of model WaterMeter
      */
     @Override
     public List<WaterMeter> getWaterMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year) {
@@ -906,7 +906,7 @@ public class RoomDaoImpl implements RoomDao {
      * @param roomId
      * @param month
      * @param year
-     * @return 
+     * @return List of model WaterMeter
      */
     @Override
     public List<WaterMeter> getWaterMeterByRoomIdMonthYear(Integer roomId, Integer month, Integer year) {
