@@ -79,7 +79,9 @@ public class ElectricityWaterMeterResource {
 
             /** prepare data for electricity meter */
             electricityMeters = this.prepareElectricityMeterToSave(electricityMeters);
-
+            
+            /** prepare data for water meter */
+            waterMeters = this.prepareWaterMeterToSave(waterMeters);
             
         }
         catch(Exception e) {
@@ -94,7 +96,7 @@ public class ElectricityWaterMeterResource {
     /**
      * 
      * @param electricityMeters
-     * @return 
+     * @return List
      */
     private List<ElectricityMeter> prepareElectricityMeterToSave(List<ElectricityMeter> electricityMeters) {
         RoomDao roomDaoImpl = new RoomDaoImpl();
@@ -102,7 +104,7 @@ public class ElectricityWaterMeterResource {
         for(ElectricityMeter e : electricityMeters) {
             BigDecimal electricityChargePerUnit = roomDaoImpl.getElectricityChargePerUnitByRoomId(e.getRoomId());
 
-            Integer usageUnit = this.calculateUsageUnit(e.getPreviousMeter(), e.getPresentMeter());
+            Integer usageUnit = this.calculateElectricityUsageUnit(e.getRoomId(), e.getPreviousMeter(), e.getPresentMeter());
             
             BigDecimal valueUsage = this.calculateElectricityValueUsage(e.getRoomId(), electricityChargePerUnit, usageUnit);
             
@@ -123,7 +125,7 @@ public class ElectricityWaterMeterResource {
      * @param presentMeter
      * @return Integer
      */
-    private Integer calculateUsageUnit(String previousMeter, String presentMeter) {
+    private Integer calculateElectricityUsageUnit(Integer roomId, String previousMeter, String presentMeter) {
         Integer previousMeterInteger = Integer.parseInt(previousMeter, 10);
         Integer presentMeterInteger = Integer.parseInt(presentMeter, 10);
         Integer usageUnitReturn = null;
@@ -132,10 +134,36 @@ public class ElectricityWaterMeterResource {
             usageUnitReturn = presentMeterInteger - previousMeterInteger;
         }
         else {
+            /** this scope is revers meter */
             
+            BuildingDao buildingDaoImpl = new BuildingDaoImpl();
+            
+            Building building = buildingDaoImpl.getByRoomId(roomId).get(0);
+            
+            Integer electricityMeterDigit = building.getElectricityMeterDigit();
+            
+            Integer maxMeterValue = this.getMaxMeterValue(electricityMeterDigit);
+            
+            Integer diffMax = (maxMeterValue - previousMeterInteger);
+            usageUnitReturn = (diffMax + presentMeterInteger) + 1;
         }
 
         return usageUnitReturn;
+    }
+    
+    /**
+     * 
+     * @param meterDigit
+     * @return Integer
+     */
+    private Integer getMaxMeterValue(Integer meterDigit) {
+        String maxMeterValueString = "";
+        
+        for(Integer i = 0; i < meterDigit; i++) {
+            maxMeterValueString += "9";
+        }
+        
+        return Integer.parseInt(maxMeterValueString, 10);
     }
     
     /**
@@ -177,6 +205,112 @@ public class ElectricityWaterMeterResource {
 
         return valueUsageReturn;
     }
+    
+    
+    
+    /**
+     * 
+     * @param waterMeters
+     * @return List
+     */
+    private List<WaterMeter> prepareWaterMeterToSave(List<WaterMeter> waterMeters) {
+        RoomDao roomDaoImpl = new RoomDaoImpl();
+        
+        for(WaterMeter w : waterMeters) {
+            BigDecimal waterChargePerUnit = roomDaoImpl.getWaterChargePerUnitByRoomId(w.getRoomId());
+
+            Integer usageUnit = this.calculateWaterUsageUnit(w.getRoomId(), w.getPreviousMeter(), w.getPresentMeter());
+            
+            BigDecimal valueUsage = this.calculateWaterValueUsage(w.getRoomId(), waterChargePerUnit, usageUnit);
+            
+            Boolean useMinimunUnitCalculate = roomDaoImpl.getIsUseWaterMinimunUnitCalculateByRoomId(w.getRoomId());
+            
+            w.setChargePerUnit(waterChargePerUnit);
+            w.setUsageUnit(usageUnit);
+            w.setValue(valueUsage);
+            w.setUseMinimunUnitCalculate(useMinimunUnitCalculate);
+        }
+        
+        return waterMeters;
+    }
+    
+    /**
+     * 
+     * @param roomId
+     * @param previousMeter
+     * @param presentMeter
+     * @return Integer
+     */
+    private Integer calculateWaterUsageUnit(Integer roomId, String previousMeter, String presentMeter) {
+        Integer previousMeterInteger = Integer.parseInt(previousMeter, 10);
+        Integer presentMeterInteger = Integer.parseInt(presentMeter, 10);
+        Integer usageUnitReturn = null;
+        
+        if(previousMeterInteger <= presentMeterInteger) {
+            usageUnitReturn = presentMeterInteger - previousMeterInteger;
+        }
+        else {
+            /** this scope is revers meter */
+            
+            BuildingDao buildingDaoImpl = new BuildingDaoImpl();
+            
+            Building building = buildingDaoImpl.getByRoomId(roomId).get(0);
+            
+            Integer waterMeterDigit = building.getWaterMeterDigit();
+            
+            Integer maxMeterValue = this.getMaxMeterValue(waterMeterDigit);
+            
+            Integer diffMax = (maxMeterValue - previousMeterInteger);
+            usageUnitReturn = (diffMax + presentMeterInteger) + 1;
+        }
+        
+        return usageUnitReturn;
+    }
+    
+    /**
+     * 
+     * @param roomId
+     * @param waterChargePerUnit
+     * @param usageUnit
+     * @return BigDecimal
+     */
+    private BigDecimal calculateWaterValueUsage(Integer roomId,BigDecimal waterChargePerUnit, Integer usageUnit) {
+        BigDecimal valueUsageReturn = new BigDecimal("0");
+        
+        RoomDao roomDaoImpl = new RoomDaoImpl();
+        
+        Boolean useMinimunUnitCalculate = roomDaoImpl.getIsUseWaterMinimunUnitCalculateByRoomId(roomId);
+        
+        if(useMinimunUnitCalculate == Boolean.TRUE) {
+            /** to get min_water_unit and min_electricity_charge of table : building to calculate */
+            BuildingDao buildingDaoImpl = new BuildingDaoImpl();
+            
+            Building building = buildingDaoImpl.getByRoomId(roomId).get(0);
+            
+            Integer minWaterUnit = building.getMinWaterUnit();
+            BigDecimal minWaterCharge = building.getMinWaterCharge();
+            
+            if(usageUnit < minWaterUnit) {
+                /** set minWaterCharge to valueUsage*/
+                valueUsageReturn = minWaterCharge;
+            }
+            else {
+                /** normal calculate */
+                valueUsageReturn = waterChargePerUnit.multiply(new BigDecimal(usageUnit));
+            }
+        }
+        else {
+            /** normal calculate */
+            valueUsageReturn = waterChargePerUnit.multiply(new BigDecimal(usageUnit));
+        }
+        
+        return valueUsageReturn;
+    }
+    
+    
+    
+    
+    
     
     /**
      * 

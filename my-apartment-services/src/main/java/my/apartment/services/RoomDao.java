@@ -42,4 +42,8 @@ public interface RoomDao {
     
     public Boolean getIsUseElectricityMinimunUnitCalculateByRoomId(Integer roomId);
     
+    public BigDecimal getWaterChargePerUnitByRoomId(Integer roomId);
+    
+    public Boolean getIsUseWaterMinimunUnitCalculateByRoomId(Integer roomId);
+    
 }
