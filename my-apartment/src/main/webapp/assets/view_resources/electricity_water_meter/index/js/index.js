@@ -1,4 +1,4 @@
-/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS */
+/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS, REQUIRED_CLASS */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -43,6 +43,15 @@ var page = (function() {
                 }
                 else {
                     page.electricityWaterMeterSave();
+                }
+            });
+        },
+        initNumberInt: function() {
+            jQuery('.number-int').numberOnly({
+                useDecimal: false,
+                thousandSeparate: false,
+                callBackFunction: function(el) {
+
                 }
             });
         },
@@ -159,6 +168,8 @@ var page = (function() {
                         
                         boxRoomContainer.append('<div class="clearfix"></div>');
                         
+                        page.initNumberInt();
+                        
                         page.getElectricWaterMeter();
                     };
                     
@@ -208,6 +219,7 @@ var page = (function() {
                         var presentElectricityMeter = app.valueUtils.undefinedToEmpty(dataElectricityEachRoom.presentMeter);
                         
                         currentBoxRoom_.find('.previous-electric').html(previousElectricityMeter);
+                        currentBoxRoom_.find('[name="previous_electric"]').val(previousElectricityMeter);
                         currentBoxRoom_.find('[name="present_electric_meter"]').val(presentElectricityMeter);
                     }
                 }
@@ -222,6 +234,7 @@ var page = (function() {
                         var presentWaterMeter = app.valueUtils.undefinedToEmpty(dataWaterEachRoom.presentMeter);
                         
                         currentBoxRoom_.find('.previous-water').html(previousWaterMeter);
+                        currentBoxRoom_.find('[name="previous_water"]').val(previousWaterMeter);
                         currentBoxRoom_.find('[name="present_water_meter"]').val(presentWaterMeter);
                     }
                 }
@@ -259,29 +272,21 @@ var page = (function() {
         electricityWaterMeterSave: function() {
             var form_ = page.getElement.getElectricityWaterMeterForm();
             var formData = form_.serialize();
+            var submitButton = page.getElement.getElectricityWaterMeterSaveButton();
+            var month = page.electTricityWaterMonthYear.getMonth();
+            var year = page.electTricityWaterMonthYear.getYear();
             var validate = function() {
                 var validatePass = true;
-                var allPresentElectricMeter = jQuery('[name="present_electric_meter"]');
-                var allPresentWater = jQuery('[name="present_water_meter"]');
                 
-                allPresentElectricMeter.removeClass(INPUT_ERROR_CLASS);
-                allPresentWater.removeClass(INPUT_ERROR_CLASS);
-                
-                allPresentElectricMeter.each(function() {
+                form_.find('.' + REQUIRED_CLASS).each(function() {
                     var thisElement = jQuery(this);
                     
                     if(app.valueUtils.isEmptyValue(thisElement.val())) {
                         thisElement.addClass(INPUT_ERROR_CLASS);
                         validatePass = false;
                     }
-                });
-                
-                allPresentWater.each(function() {
-                    var thisElement = jQuery(this);
-                    
-                    if(app.valueUtils.isEmptyValue(thisElement.val())) {
-                        thisElement.addClass(INPUT_ERROR_CLASS);
-                        validatePass = false;
+                    else {
+                        thisElement.removeClass(INPUT_ERROR_CLASS);
                     }
                 });
                 
@@ -298,7 +303,26 @@ var page = (function() {
                 }
             }
             else {
-                alert('Go to save');
+                submitButton.bootstrapBtn('loading');
+
+                setTimeout(function() {
+                    jQuery.ajax({
+                        type: 'post',
+                        url: _CONTEXT_PATH_ + '/' + form_.attr('action'),
+                        data: formData + '&month=' + month + '&year=' + year,
+                        cache: false,
+                        success: function(response) {
+                            
+                            
+                            submitButton.bootstrapBtn('reset');
+                        },
+                        error: function() {
+                            app.alertSomethingError();
+
+                            submitButton.bootstrapBtn('reset');
+                        }
+                    });
+                }, _DELAY_PROCESS_);
             }
         }
     };

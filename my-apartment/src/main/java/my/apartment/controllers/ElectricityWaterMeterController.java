@@ -1,5 +1,6 @@
 package my.apartment.controllers;
 
+import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonAppUtils;
 import my.apartment.common.CommonAppWsUtils;
@@ -10,6 +11,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -91,6 +94,50 @@ public class ElectricityWaterMeterController {
         }
         
         return jsonObjectReturn.toString();
+    }
+    
+    /**
+     * 
+     * @param formData
+     * @return String
+     */
+    @RequestMapping(value = "/electricity_water_meter_save.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String electricityWaterMeterSave(@RequestBody MultiValueMap<String, String> formData) {
+        List<String> roomIdList = formData.get("id");
+        
+        List<String> previousElectricList = formData.get("previous_electric");
+        List<String> presentElectricMeterList = formData.get("present_electric_meter");
+        
+        List<String> previousWater = formData.get("previous_water");
+        List<String> presentWaterMeterList = formData.get("present_water_meter");
+
+        String month = formData.getFirst("month");
+        String year = formData.getFirst("year");
+      
+
+        JSONArray jsonArray = new JSONArray();
+        for(Integer i = 0; i < roomIdList.size(); i++) {
+            JSONObject jsonObject = new JSONObject();
+            
+            jsonObject.put("id", roomIdList.get(i));
+            jsonObject.put("previous_electric", previousElectricList.get(i));
+            jsonObject.put("present_electric_meter", presentElectricMeterList.get(i));
+            jsonObject.put("previous_water", previousWater.get(i));
+            jsonObject.put("present_water_meter", presentWaterMeterList.get(i));
+            
+            jsonArray.put(jsonObject);
+        }
+
+        String requestJson = new JSONObject()
+                .put(CommonString.DATA_STRING, jsonArray)
+                .put("month", month)
+                .put("year", year)
+                .toString();
+        
+        JSONObject jsonObjectesult = CommonAppWsUtils.postWithJsonDataString(requestJson, "electricity_water_meter/save");
+
+        return "Ok save";
     }
     
 }

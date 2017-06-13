@@ -85,18 +85,20 @@
                     <div>
                         <spring:message code="electricity_water_meter.previous_meter" /> 
                         : <span class="previous-electric"></span>
+                        <input type="hidden" name="previous_electric" value="">
                     </div>
                     <div>
-                        <input type="text" class="form-control input-meter" 
+                        <input type="text" class="form-control input-meter number-int my-required-field" 
                                name="present_electric_meter" value="">
                     </div>
                     <div class="separator-10"></div>
                     <div><i class="fa fa-tint icon-water-color"></i> <b><spring:message code="electricity_water_meter.water_meter" /></b></div>
                     <div><spring:message code="electricity_water_meter.previous_meter" /> 
                         : <span class="previous-water"></span>
+                        <input type="hidden" name="previous_water" value="">
                     </div>
                     <div>
-                        <input type="text" class="form-control input-meter" 
+                        <input type="text" class="form-control input-meter number-int my-required-field" 
                                name="present_water_meter" value="">
                     </div>
                 </div>
