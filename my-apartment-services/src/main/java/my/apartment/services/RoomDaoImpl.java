@@ -1,5 +1,6 @@
 package my.apartment.services;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -954,6 +955,89 @@ public class RoomDaoImpl implements RoomDao {
         }
         
         return waterMeters;
+    }
+    
+    /**
+     * 
+     * @param roomId
+     * @return BigDecimal
+     */
+    @Override
+    public BigDecimal getElectricityChargePerUnitByRoomId(Integer roomId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        BigDecimal electricityChargePerUnitReturn = null;
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT building.electricity_charge_per_unit AS electricity_charge_per_unit " +
+                "FROM room JOIN building ON room.building_id = building.id " +
+                "WHERE room.id = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                electricityChargePerUnitReturn = rs.getBigDecimal("electricity_charge_per_unit");
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
+        }
+        
+        return electricityChargePerUnitReturn;
+    }
+    
+    /**
+     * 
+     * @param roomId
+     * @return Boolean
+     */
+    @Override
+    public Boolean getIsUseElectricityMinimunUnitCalculateByRoomId(Integer roomId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Boolean resultReturn = null;
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT building.min_electricity_unit AS min_electricity_unit " +
+                "FROM room JOIN building ON room.building_id = building.id " +
+                "WHERE room.id = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                if(rs.getInt("min_electricity_unit") == 0) {
+                    resultReturn = Boolean.FALSE;
+                }
+                else {
+                    resultReturn = Boolean.TRUE;
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
+        }
+        
+        return resultReturn;
     }
     
 }

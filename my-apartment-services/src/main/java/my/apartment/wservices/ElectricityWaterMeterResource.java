@@ -6,6 +6,7 @@
 package my.apartment.wservices;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
@@ -20,8 +21,13 @@ import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.common.JsonObjectUtils;
+import my.apartment.model.Building;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.WaterMeter;
+import my.apartment.services.BuildingDao;
+import my.apartment.services.BuildingDaoImpl;
+import my.apartment.services.RoomDao;
+import my.apartment.services.RoomDaoImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -70,6 +76,10 @@ public class ElectricityWaterMeterResource {
             
             /** list of model WaterMeter for collect mode to save */
             List<WaterMeter> waterMeters = this.getWaterMeterListFromJsonObjectReceive(jsonObjectReceive);
+
+            /** prepare data for electricity meter */
+            electricityMeters = this.prepareElectricityMeterToSave(electricityMeters);
+
             
         }
         catch(Exception e) {
@@ -79,6 +89,93 @@ public class ElectricityWaterMeterResource {
         }
         
         return jsonObjectReturn.toString();
+    }
+    
+    /**
+     * 
+     * @param electricityMeters
+     * @return 
+     */
+    private List<ElectricityMeter> prepareElectricityMeterToSave(List<ElectricityMeter> electricityMeters) {
+        RoomDao roomDaoImpl = new RoomDaoImpl();
+        
+        for(ElectricityMeter e : electricityMeters) {
+            BigDecimal electricityChargePerUnit = roomDaoImpl.getElectricityChargePerUnitByRoomId(e.getRoomId());
+
+            Integer usageUnit = this.calculateUsageUnit(e.getPreviousMeter(), e.getPresentMeter());
+            
+            BigDecimal valueUsage = this.calculateElectricityValueUsage(e.getRoomId(), electricityChargePerUnit, usageUnit);
+            
+            Boolean useMinimunUnitCalculate = roomDaoImpl.getIsUseElectricityMinimunUnitCalculateByRoomId(e.getRoomId());
+            
+            e.setChargePerUnit(electricityChargePerUnit);
+            e.setUsageUnit(usageUnit);
+            e.setValue(valueUsage);
+            e.setUseMinimunUnitCalculate(useMinimunUnitCalculate);
+        }
+
+        return electricityMeters;
+    }
+    
+    /**
+     * 
+     * @param previousMeter
+     * @param presentMeter
+     * @return Integer
+     */
+    private Integer calculateUsageUnit(String previousMeter, String presentMeter) {
+        Integer previousMeterInteger = Integer.parseInt(previousMeter, 10);
+        Integer presentMeterInteger = Integer.parseInt(presentMeter, 10);
+        Integer usageUnitReturn = null;
+
+        if(previousMeterInteger <= presentMeterInteger) {
+            usageUnitReturn = presentMeterInteger - previousMeterInteger;
+        }
+        else {
+            
+        }
+
+        return usageUnitReturn;
+    }
+    
+    /**
+     * 
+     * @param roomId
+     * @param electricityChargePerUnit
+     * @param usageUnit
+     * @return BigDecimal
+     */
+    private BigDecimal calculateElectricityValueUsage(Integer roomId,BigDecimal electricityChargePerUnit, Integer usageUnit) {
+        BigDecimal valueUsageReturn = new BigDecimal("0");
+        
+        RoomDao roomDaoImpl = new RoomDaoImpl();
+        
+        Boolean useMinimunUnitCalculate = roomDaoImpl.getIsUseElectricityMinimunUnitCalculateByRoomId(roomId);
+        
+        if(useMinimunUnitCalculate == Boolean.TRUE) {
+            /** to get min_electricity_unit and min_electricity_charge of table : building to calculate */
+            BuildingDao buildingDaoImpl = new BuildingDaoImpl();
+            
+            Building building = buildingDaoImpl.getByRoomId(roomId).get(0);
+            
+            Integer minElectricityUnit = building.getMinElectricityUnit();
+            BigDecimal minElectricityCharge = building.getMinElectricityCharge();
+
+            if(usageUnit < minElectricityUnit) {
+                /** set minElectricityCharge to valueUsage*/
+                valueUsageReturn = minElectricityCharge;
+            }
+            else {
+                /** normal calculate */
+                valueUsageReturn = electricityChargePerUnit.multiply(new BigDecimal(usageUnit));
+            }
+        }
+        else {
+            /** normal calculate */
+            valueUsageReturn = electricityChargePerUnit.multiply(new BigDecimal(usageUnit));
+        }
+
+        return valueUsageReturn;
     }
     
     /**

@@ -1,5 +1,6 @@
 package my.apartment.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
@@ -36,5 +37,9 @@ public interface RoomDao {
     public List<WaterMeter> getWaterMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year);
     
     public List<WaterMeter> getWaterMeterByRoomIdMonthYear(Integer roomId, Integer month, Integer year);
+    
+    public BigDecimal getElectricityChargePerUnitByRoomId(Integer roomId);
+    
+    public Boolean getIsUseElectricityMinimunUnitCalculateByRoomId(Integer roomId);
     
 }

@@ -317,4 +317,55 @@ public class BuildingDaoImpl implements BuildingDao {
 
         return buildingReturn;
     }
+    
+    @Override
+    public List<Building> getByRoomId(Integer roomId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<Building> buildings = new ArrayList<Building>();
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+        
+            String stringQuery = "SELECT building.* " +
+                "FROM room JOIN building ON room.building_id = building.id " +
+                "WHERE room.id = ? LIMIT 0, 1";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                Building building = new Building();
+                
+                building.setId(rs.getInt("id"));
+                building.setName(rs.getString("name"));
+                building.setAddress(rs.getString("address"));
+                building.setTel(rs.getString("tel"));
+                
+                building.setElectricityMeterDigit(rs.getInt("electricity_meter_digit"));
+                building.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
+                building.setMinElectricityUnit(CommonWsUtils.integerZeroToNull(rs.getInt("min_electricity_unit")));
+                building.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
+
+                building.setWaterMeterDigit(rs.getInt("water_meter_digit"));
+                building.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
+                building.setMinWaterUnit(CommonWsUtils.integerZeroToNull(rs.getInt("min_water_unit")));
+                building.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
+                
+                buildings.add(building);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, BuildingDaoImpl.class.getName());
+        }
+        
+        return buildings;
+    }
 }
