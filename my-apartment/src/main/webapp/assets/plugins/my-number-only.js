@@ -62,6 +62,8 @@
         };
 
         var _initial = function (thisElement, e) {
+            var lastCharacter = thisElement.val().substr(thisElement.val().length - 1);
+
             var arr_allow = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, //1 - 9 keyboard
                 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, //1 - 9 keypad
                 8, //backspace
@@ -111,7 +113,14 @@
                 _settings.callBackFunction(thisElement);
             }
 
-
+            /** */
+            if(lastCharacter != '' && lastCharacter != null && lastCharacter != undefined && isNaN(thisElement.val())) {
+                var tempValue = _removeCommaByString(thisElement.val());
+                
+                if(isNaN(tempValue)) {
+                    thisElement.val( thisElement.val().slice(0, -1) );
+                }
+            }
         };
 
         var _firstInit = function (thisElement) {
