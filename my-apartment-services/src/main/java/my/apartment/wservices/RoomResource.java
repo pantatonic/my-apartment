@@ -45,42 +45,6 @@ public class RoomResource {
      */
     public RoomResource() {
     }
-    
-    @Path("get_room_electric_water_meter_by_building_id/{building_id}/{year}/{month}")
-    @GET
-    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
-    public String getRoomElectricWaterMeterByBuildingId(
-            @PathParam("building_id") Integer buildingId,
-            @PathParam("year") Integer year,
-            @PathParam("month") Integer month
-    ) {
-        JSONObject jsonObjectReturn = new JSONObject();
-        
-        try {
-            RoomDao roomDaoImpl = new RoomDaoImpl();
-            
-            List<ElectricityMeter> electricityMeters = roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(buildingId, month, year);
-            List<WaterMeter> waterMeters = roomDaoImpl.getWaterMeterByBuildingIdMonthYear(buildingId, month, year);
-
-            
-            JSONObject subJsonObject = new JSONObject();
-            
-            subJsonObject.put("electricityMeter", electricityMeters);
-            subJsonObject.put("waterMeter", waterMeters);
-            
-            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
-            jsonObjectReturn.put(CommonString.DATA_STRING, subJsonObject);
-
-            
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            
-            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
-        }
-        
-        return jsonObjectReturn.toString();
-    }
 
     /**
      * Retrieves representation of an instance of my.apartment.wservices.RoomResource
@@ -615,6 +579,42 @@ public class RoomResource {
             else {
                 jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, "");
             }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @Path("get_room_electric_water_meter_by_building_id/{building_id}/{year}/{month}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getRoomElectricWaterMeterByBuildingId(
+            @PathParam("building_id") Integer buildingId,
+            @PathParam("year") Integer year,
+            @PathParam("month") Integer month
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            List<ElectricityMeter> electricityMeters = roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(buildingId, month, year);
+            List<WaterMeter> waterMeters = roomDaoImpl.getWaterMeterByBuildingIdMonthYear(buildingId, month, year);
+
+            
+            JSONObject subJsonObject = new JSONObject();
+            
+            subJsonObject.put("electricityMeter", electricityMeters);
+            subJsonObject.put("waterMeter", waterMeters);
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
+            jsonObjectReturn.put(CommonString.DATA_STRING, subJsonObject);
+
+            
         }
         catch(Exception e) {
             e.printStackTrace();
