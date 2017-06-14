@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 04, 2017 at 12:08 PM
+-- Generation Time: Jun 14, 2017 at 08:46 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -40,8 +40,8 @@ CREATE TABLE `building` (
 --
 
 INSERT INTO `building` (`id`, `name`, `address`, `tel`, `electricity_meter_digit`, `electricity_charge_per_unit`, `min_electricity_unit`, `min_electricity_charge`, `water_meter_digit`, `water_charge_per_unit`, `min_water_unit`, `min_water_charge`) VALUES
-(1, 'อาคาร 1', 'ที่อยู่ อาคาร 1', '0000000000', 4, '7.00', 1, '7.00', 4, '6.00', 1, '50.00'),
-(2, 'อาคาร 2', 'ที่อยู่ อาคาร 2', '', 4, '7.00', NULL, NULL, 4, '6.00', NULL, NULL);
+(1, 'อาคาร 1', 'ที่อยู่ อาคาร 1', '0000000000', 4, '7.00', 2, '14.00', 4, '6.00', 1, '50.00'),
+(2, 'อาคาร 2', 'ที่อยู่ อาคาร 2', '', 4, '7.10', NULL, NULL, 4, '6.00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -108,8 +108,18 @@ CREATE TABLE `electricity_meter` (
 --
 
 INSERT INTO `electricity_meter` (`room_id`, `month`, `year`, `previous_meter`, `present_meter`, `charge_per_unit`, `usage_unit`, `value`, `use_minimun_unit_calculate`, `created_date`, `updated_date`) VALUES
-(99, 2, 2017, '1111', '2222', '0.00', 0, '0.00', 0, '2017-06-04 00:00:00', NULL),
-(99, 3, 2017, '5555', '6666', '0.00', 0, '0.00', 0, '2017-06-04 00:00:00', NULL);
+(9, 6, 2017, '2366', '2366', '7.10', 1, '7.10', 0, '2017-06-14 10:13:02', NULL),
+(10, 6, 2017, '7858', '7858', '7.10', 3, '21.30', 0, '2017-06-14 10:13:02', NULL),
+(11, 6, 2017, '9147', '9147', '7.10', 5, '35.50', 0, '2017-06-14 10:13:02', NULL),
+(12, 6, 2017, '8538', '8538', '7.10', 7, '49.70', 0, '2017-06-14 10:13:02', NULL),
+(1, 6, 2017, '5642', '5643', '7.00', 1, '14.00', 1, '2017-06-14 13:13:43', NULL),
+(2, 6, 2017, '1374', '1400', '7.00', 26, '182.00', 1, '2017-06-14 13:13:43', NULL),
+(3, 6, 2017, '1285', '1300', '7.00', 15, '105.00', 1, '2017-06-14 13:13:43', NULL),
+(4, 6, 2017, '8611', '8700', '7.00', 89, '623.00', 1, '2017-06-14 13:13:43', NULL),
+(5, 6, 2017, '9991', '9999', '7.00', 8, '56.00', 1, '2017-06-14 13:13:43', NULL),
+(6, 6, 2017, '6461', '6500', '7.00', 39, '273.00', 1, '2017-06-14 13:13:43', NULL),
+(7, 6, 2017, '3452', '3500', '7.00', 48, '336.00', 1, '2017-06-14 13:13:43', NULL),
+(8, 6, 2017, '4213', '4300', '7.00', 87, '609.00', 1, '2017-06-14 13:13:43', NULL);
 
 -- --------------------------------------------------------
 
@@ -243,6 +253,40 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `is_admin`, `status`) VALUES
 (1, 'System', 'Admin', 'admin@admin.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `water_meter`
+--
+
+CREATE TABLE `water_meter` (
+  `room_id` int(11) NOT NULL,
+  `month` int(11) NOT NULL,
+  `year` int(11) NOT NULL,
+  `previous_meter` varchar(10) NOT NULL,
+  `present_meter` varchar(10) NOT NULL,
+  `charge_per_unit` decimal(20,2) NOT NULL,
+  `usage_unit` int(11) NOT NULL,
+  `value` decimal(20,2) NOT NULL,
+  `use_minimun_unit_calculate` int(1) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_date` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `water_meter`
+--
+
+INSERT INTO `water_meter` (`room_id`, `month`, `year`, `previous_meter`, `present_meter`, `charge_per_unit`, `usage_unit`, `value`, `use_minimun_unit_calculate`, `created_date`, `updated_date`) VALUES
+(1, 6, 2017, '2464', '2475', '6.00', 11, '66.00', 1, '2017-06-14 13:13:43', NULL),
+(2, 6, 2017, '3221', '3311', '6.00', 90, '540.00', 1, '2017-06-14 13:13:43', NULL),
+(3, 6, 2017, '4165', '4183', '6.00', 18, '108.00', 1, '2017-06-14 13:13:43', NULL),
+(4, 6, 2017, '6112', '6195', '6.00', 83, '498.00', 1, '2017-06-14 13:13:43', NULL),
+(5, 6, 2017, '9992', '9999', '6.00', 7, '42.00', 1, '2017-06-14 13:13:43', NULL),
+(6, 6, 2017, '7635', '7685', '6.00', 50, '300.00', 1, '2017-06-14 13:13:43', NULL),
+(7, 6, 2017, '4544', '4598', '6.00', 54, '324.00', 1, '2017-06-14 13:13:43', NULL),
+(8, 6, 2017, '0121', '0135', '6.00', 14, '84.00', 1, '2017-06-14 13:13:43', NULL);
 
 --
 -- Indexes for dumped tables

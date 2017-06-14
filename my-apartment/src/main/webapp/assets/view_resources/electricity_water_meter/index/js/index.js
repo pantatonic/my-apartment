@@ -1,4 +1,4 @@
-/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS, REQUIRED_CLASS, SUCCESS_STRING */
+/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS, REQUIRED_CLASS, SUCCESS_STRING, alertUtil */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -270,78 +270,91 @@ var page = (function() {
             }
         },
         electricityWaterMeterSave: function() {
-            var form_ = page.getElement.getElectricityWaterMeterForm();
-            var formData = form_.serialize();
-            var submitButton = page.getElement.getElectricityWaterMeterSaveButton();
-            var month = page.electTricityWaterMonthYear.getMonth();
-            var year = page.electTricityWaterMonthYear.getYear();
-            var validate = function() {
-                var validatePass = true;
-                
-                form_.find('.' + REQUIRED_CLASS).each(function() {
-                    var thisElement = jQuery(this);
-                    
-                    if(app.valueUtils.isEmptyValue(thisElement.val())) {
-                        thisElement.addClass(INPUT_ERROR_CLASS);
-                        validatePass = false;
-                    }
-                    else {
-                        thisElement.removeClass(INPUT_ERROR_CLASS);
-                    }
-                });
+            var _save = function() {
+                var form_ = page.getElement.getElectricityWaterMeterForm();
+                var formData = form_.serialize();
+                var submitButton = page.getElement.getElectricityWaterMeterSaveButton();
+                var month = page.electTricityWaterMonthYear.getMonth();
+                var year = page.electTricityWaterMonthYear.getYear();
+                var validate = function() {
+                    var validatePass = true;
 
-                return validatePass;
-            };
-            
-            if(!validate()) {
-                if(!app.checkNoticeExist('notice-enter-data')) {
-                    app.showNotice({
-                        type: WARNING_STRING,
-                        message: app.translate('common.please_enter_data'),
-                        addclass: 'notice-enter-data'
+                    form_.find('.' + REQUIRED_CLASS).each(function() {
+                        var thisElement = jQuery(this);
+
+                        if(app.valueUtils.isEmptyValue(thisElement.val())) {
+                            thisElement.addClass(INPUT_ERROR_CLASS);
+                            validatePass = false;
+                        }
+                        else {
+                            thisElement.removeClass(INPUT_ERROR_CLASS);
+                        }
                     });
-                }
-            }
-            else {
-                submitButton.bootstrapBtn('loading');
 
-                setTimeout(function() {
-                    jQuery.ajax({
-                        type: 'post',
-                        url: _CONTEXT_PATH_ + '/' + form_.attr('action'),
-                        data: formData + '&month=' + month + '&year=' + year,
-                        cache: false,
-                        success: function(response) {
-                            response = app.convertToJsonObject(response);
-                            
-                            if(response.result === SUCCESS_STRING) {
-                                app.showNotice({
-                                    message: app.translate('common.save_success'),
-                                    type: response.result
-                                });
-                            }
-                            else {
-                                if(response.message == SESSION_EXPIRE_STRING) {
-                                    app.alertSessionExpired();
-                                }
-                                else {
+                    return validatePass;
+                };
+
+                if(!validate()) {
+                    if(!app.checkNoticeExist('notice-enter-data')) {
+                        app.showNotice({
+                            type: WARNING_STRING,
+                            message: app.translate('common.please_enter_data'),
+                            addclass: 'notice-enter-data'
+                        });
+                    }
+                }
+                else {
+                    submitButton.bootstrapBtn('loading');
+
+                    setTimeout(function() {
+                        jQuery.ajax({
+                            type: 'post',
+                            url: _CONTEXT_PATH_ + '/' + form_.attr('action'),
+                            data: formData + '&month=' + month + '&year=' + year,
+                            cache: false,
+                            success: function(response) {
+                                response = app.convertToJsonObject(response);
+
+                                if(response.result === SUCCESS_STRING) {
                                     app.showNotice({
-                                        message: app.translate('common.processing_failed'),
+                                        message: app.translate('common.save_success'),
                                         type: response.result
                                     });
                                 }
-                            }
-                            
-                            submitButton.bootstrapBtn('reset');
-                        },
-                        error: function() {
-                            app.alertSomethingError();
+                                else {
+                                    if(response.message == SESSION_EXPIRE_STRING) {
+                                        app.alertSessionExpired();
+                                    }
+                                    else {
+                                        app.showNotice({
+                                            message: app.translate('common.processing_failed'),
+                                            type: response.result
+                                        });
+                                    }
+                                }
 
-                            submitButton.bootstrapBtn('reset');
-                        }
-                    });
-                }, _DELAY_PROCESS_);
-            }
+                                submitButton.bootstrapBtn('reset');
+                            },
+                            error: function() {
+                                app.alertSomethingError();
+
+                                submitButton.bootstrapBtn('reset');
+                            }
+                        });
+                    }, _DELAY_PROCESS_);
+                }
+            };
+            
+            
+            /** main process */
+            alertUtil.confirmAlert(app.translate('common.confirm_change_important_data'), function() {
+                _save();
+            }, function() {
+
+            },{
+                animation: false,
+                type: null
+            });            
         }
     };
 })();
