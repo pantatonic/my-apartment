@@ -64,5 +64,9 @@ public class CommonHtml {
                 + "</button>";
     }
     
+    public String getIconRoom() {
+        return "fa fa-bed";
+    }
+    
     
 }

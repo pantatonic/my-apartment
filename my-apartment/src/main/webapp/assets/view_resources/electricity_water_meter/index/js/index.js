@@ -1,4 +1,4 @@
-/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS, REQUIRED_CLASS, SUCCESS_STRING, alertUtil */
+/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS, REQUIRED_CLASS, SUCCESS_STRING, alertUtil, iconRoom */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -127,7 +127,7 @@ var page = (function() {
                             boxRoomElement.find('[name="id"]').val(currentData.id);
                             
                             boxRoomElement.find('.box-room-name').html(
-                                '<i class="fa fa-bed"></i> '
+                                '<i class="fa ' + iconRoom + '"></i> '
                                 + app.translate('building.room')
                                 + ' : '
                                 + currentData.roomNo

@@ -16,6 +16,9 @@
     <tiles:putAttribute name="js">       
         <script type="text/javascript" 
             src="<c:url value="/assets/view_resources/electricity_water_meter/index/js/index.js?v=${randomTextVersion}"/>"></script>
+        <script type="text/javascript">
+            var iconRoom = '${commonHtml.getIconRoom()}';
+        </script>
     </tiles:putAttribute>
     <tiles:putAttribute name="body">
 
