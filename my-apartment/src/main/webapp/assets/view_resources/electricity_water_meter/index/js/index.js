@@ -289,7 +289,7 @@ var page = (function() {
                         thisElement.removeClass(INPUT_ERROR_CLASS);
                     }
                 });
-                
+
                 return validatePass;
             };
             
@@ -312,7 +312,22 @@ var page = (function() {
                         data: formData + '&month=' + month + '&year=' + year,
                         cache: false,
                         success: function(response) {
+                            response = app.convertToJsonObject(response);
                             
+                            if(response.result === SUCCESS_STRING) {
+                                
+                            }
+                            else {
+                                if(response.message == SESSION_EXPIRE_STRING) {
+                                    app.alertSessionExpired();
+                                }
+                                else {
+                                    app.showNotice({
+                                        message: app.translate('common.processing_failed'),
+                                        type: response.result
+                                    });
+                                }
+                            }
                             
                             submitButton.bootstrapBtn('reset');
                         },

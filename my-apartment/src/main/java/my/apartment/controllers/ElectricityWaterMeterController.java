@@ -1,6 +1,7 @@
 package my.apartment.controllers;
 
 import java.util.List;
+import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonAppUtils;
 import my.apartment.common.CommonAppWsUtils;
@@ -104,40 +105,81 @@ public class ElectricityWaterMeterController {
     @RequestMapping(value = "/electricity_water_meter_save.html", method = {RequestMethod.POST})
     @ResponseBody
     public String electricityWaterMeterSave(@RequestBody MultiValueMap<String, String> formData) {
-        List<String> roomIdList = formData.get("id");
+        JSONObject jsonObjectReturn = new JSONObject();
         
-        List<String> previousElectricList = formData.get("previous_electric");
-        List<String> presentElectricMeterList = formData.get("present_electric_meter");
+        try {
+            List<String> roomIdList = formData.get("id");
         
-        List<String> previousWater = formData.get("previous_water");
-        List<String> presentWaterMeterList = formData.get("present_water_meter");
+            List<String> previousElectricList = formData.get("previous_electric");
+            List<String> presentElectricMeterList = formData.get("present_electric_meter");
 
-        String month = formData.getFirst("month");
-        String year = formData.getFirst("year");
-      
+            List<String> previousWater = formData.get("previous_water");
+            List<String> presentWaterMeterList = formData.get("present_water_meter");
 
-        JSONArray jsonArray = new JSONArray();
-        for(Integer i = 0; i < roomIdList.size(); i++) {
-            JSONObject jsonObject = new JSONObject();
-            
-            jsonObject.put("id", roomIdList.get(i));
-            jsonObject.put("previous_electric", previousElectricList.get(i));
-            jsonObject.put("present_electric_meter", presentElectricMeterList.get(i));
-            jsonObject.put("previous_water", previousWater.get(i));
-            jsonObject.put("present_water_meter", presentWaterMeterList.get(i));
-            
-            jsonArray.put(jsonObject);
+            String month = formData.getFirst("month");
+            String year = formData.getFirst("year");
+
+            Boolean validateEmpty = Boolean.TRUE;
+            Boolean validateNumber = Boolean.TRUE;
+
+            JSONArray jsonArray = new JSONArray();
+            for(Integer i = 0; i < roomIdList.size(); i++) {
+                JSONObject jsonObject = new JSONObject();
+
+                jsonObject.put("id", roomIdList.get(i));
+                jsonObject.put("previous_electric", previousElectricList.get(i));
+                jsonObject.put("present_electric_meter", presentElectricMeterList.get(i));
+                jsonObject.put("previous_water", previousWater.get(i));
+                jsonObject.put("present_water_meter", presentWaterMeterList.get(i));
+
+                /** validate mandatory of each data */
+                if(roomIdList.get(i).isEmpty() 
+                        || previousElectricList.get(i).isEmpty() || presentElectricMeterList.get(i).isEmpty() 
+                        || previousWater.get(i).isEmpty() || presentWaterMeterList.get(i).isEmpty()) {
+                    validateEmpty = Boolean.FALSE;
+                }
+
+                /** validate meter is number of each data */
+                if(!CommonAppUtils.isNumber(roomIdList.get(i)) 
+                        || !CommonAppUtils.isNumber(previousElectricList.get(i)) || !CommonAppUtils.isNumber(presentElectricMeterList.get(i)) 
+                        || !CommonAppUtils.isNumber(previousWater.get(i)) || !CommonAppUtils.isNumber(presentWaterMeterList.get(i))) {
+                    validateNumber = Boolean.FALSE;
+                }
+
+                jsonArray.put(jsonObject);
+            }
+
+            if(Objects.equals(validateEmpty, Boolean.FALSE)) {
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        "Mandatory data is : id, previous_electric, present_electric_meter, previous_water, present_water_meter");
+
+                return jsonObjectReturn.toString();
+            }
+
+            if(Objects.equals(validateNumber, Boolean.FALSE)) {
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        "Data must number only : id, previous_electric, present_electric_meter, previous_water, present_water_meter");
+
+                return jsonObjectReturn.toString();
+            }
+
+            String requestJson = new JSONObject()
+                    .put(CommonString.DATA_STRING, jsonArray)
+                    .put("month", month)
+                    .put("year", year)
+                    .toString();
+
+            jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "electricity_water_meter/save");
+
+            return "Ok save";
         }
-
-        String requestJson = new JSONObject()
-                .put(CommonString.DATA_STRING, jsonArray)
-                .put("month", month)
-                .put("year", year)
-                .toString();
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
         
-        JSONObject jsonObjectesult = CommonAppWsUtils.postWithJsonDataString(requestJson, "electricity_water_meter/save");
-
-        return "Ok save";
+        return jsonObjectReturn.toString();
     }
     
 }

@@ -83,7 +83,7 @@ public class ElectricityWaterMeterResource {
         
         return jsonObjectReturn.toString();
     }
-    
+
     /**
      * 
      * @param electricityMeters

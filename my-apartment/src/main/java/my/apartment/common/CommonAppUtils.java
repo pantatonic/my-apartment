@@ -180,5 +180,18 @@ public class CommonAppUtils {
         
         return jsonObject;
     }
+    
+    public static Boolean isNumber(String stringNumber) {
+        Boolean result = Boolean.TRUE;
+        
+        try {
+            Long.parseLong(stringNumber, 10);
+        }
+        catch(Exception e) {
+            result = Boolean.FALSE;
+        }
+        
+        return result;
+    }
 
 }
