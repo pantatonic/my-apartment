@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2017 at 08:46 AM
+-- Generation Time: Jun 14, 2017 at 10:15 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -174,6 +174,35 @@ INSERT INTO `room` (`id`, `building_id`, `floor_seq`, `room_no`, `name`, `price_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `room_invoice`
+--
+
+CREATE TABLE `room_invoice` (
+  `id` int(11) NOT NULL,
+  `invoice_no` varchar(100) NOT NULL,
+  `invoice_date` int(11) NOT NULL,
+  `month` int(11) NOT NULL,
+  `year` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `electricity_previous_meter` varchar(10) NOT NULL,
+  `electricity_present_meter` varchar(10) NOT NULL,
+  `electricity_charge_per_unit` decimal(20,2) NOT NULL,
+  `electricity_usage_unit` int(11) NOT NULL,
+  `electricity_value` decimal(20,2) NOT NULL,
+  `electricity_use_minimun_unit_calculate` int(1) NOT NULL,
+  `water_previous_meter` varchar(10) NOT NULL,
+  `water_present_meter` varchar(10) NOT NULL,
+  `water_charge_per_unit` decimal(20,2) NOT NULL,
+  `water_usage_unit` int(11) NOT NULL,
+  `water_value` decimal(20,2) NOT NULL,
+  `water_use_minimun_unit_calculate` int(1) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_date` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `room_reservation`
 --
 
@@ -286,7 +315,15 @@ INSERT INTO `water_meter` (`room_id`, `month`, `year`, `previous_meter`, `presen
 (5, 6, 2017, '9992', '9999', '6.00', 7, '42.00', 1, '2017-06-14 13:13:43', NULL),
 (6, 6, 2017, '7635', '7685', '6.00', 50, '300.00', 1, '2017-06-14 13:13:43', NULL),
 (7, 6, 2017, '4544', '4598', '6.00', 54, '324.00', 1, '2017-06-14 13:13:43', NULL),
-(8, 6, 2017, '0121', '0135', '6.00', 14, '84.00', 1, '2017-06-14 13:13:43', NULL);
+(8, 6, 2017, '0121', '0135', '6.00', 14, '84.00', 1, '2017-06-14 13:13:43', NULL),
+(1, 7, 2017, '2475', '2475', '6.00', 0, '50.00', 1, '2017-06-14 14:25:00', NULL),
+(2, 7, 2017, '3311', '3319', '6.00', 8, '48.00', 1, '2017-06-14 14:25:00', NULL),
+(3, 7, 2017, '4183', '4183', '6.00', 0, '50.00', 1, '2017-06-14 14:25:00', NULL),
+(4, 7, 2017, '6195', '6200', '6.00', 5, '30.00', 1, '2017-06-14 14:25:00', NULL),
+(5, 7, 2017, '9999', '12', '6.00', 13, '78.00', 1, '2017-06-14 14:25:00', NULL),
+(6, 7, 2017, '7685', '7712', '6.00', 27, '162.00', 1, '2017-06-14 14:25:00', NULL),
+(7, 7, 2017, '4598', '4603', '6.00', 5, '30.00', 1, '2017-06-14 14:25:00', NULL),
+(8, 7, 2017, '0135', '175', '6.00', 40, '240.00', 1, '2017-06-14 14:25:00', NULL);
 
 --
 -- Indexes for dumped tables
@@ -308,6 +345,12 @@ ALTER TABLE `check_in_out_history`
 -- Indexes for table `room`
 --
 ALTER TABLE `room`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `room_invoice`
+--
+ALTER TABLE `room_invoice`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -353,6 +396,11 @@ ALTER TABLE `check_in_out_history`
 --
 ALTER TABLE `room`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+--
+-- AUTO_INCREMENT for table `room_invoice`
+--
+ALTER TABLE `room_invoice`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `room_reservation`
 --
