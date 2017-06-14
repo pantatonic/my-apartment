@@ -21,8 +21,12 @@ import my.apartment.model.ElectricityMeter;
 import my.apartment.model.WaterMeter;
 import my.apartment.services.BuildingDao;
 import my.apartment.services.BuildingDaoImpl;
+import my.apartment.services.ElectricityMeterDao;
+import my.apartment.services.ElectricityMeterDaoImpl;
 import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
+import my.apartment.services.WaterMeterDao;
+import my.apartment.services.WaterMeterDaoImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -67,13 +71,39 @@ public class ElectricityWaterMeterResource {
             
             /** list of model WaterMeter for collect mode to save */
             List<WaterMeter> waterMeters = this.getWaterMeterListFromJsonObjectReceive(jsonObjectReceive);
-
+            
             /** prepare data for electricity meter */
             electricityMeters = this.prepareElectricityMeterToSave(electricityMeters);
-            
+
             /** prepare data for water meter */
             waterMeters = this.prepareWaterMeterToSave(waterMeters);
             
+            
+            
+            ElectricityMeterDao electricityMeterDaoImpl = new ElectricityMeterDaoImpl();
+            Boolean resultSaveElectricityMeter = electricityMeterDaoImpl.save(electricityMeters);
+            
+            WaterMeterDao waterMeterDaoImpl = new WaterMeterDaoImpl();
+            Boolean resultSaveWaterMeter = waterMeterDaoImpl.save(waterMeters);
+            
+            Boolean processSaveResult = Boolean.TRUE;
+            String errorMessage = "";
+            if(resultSaveElectricityMeter == Boolean.FALSE) {
+                errorMessage += "Electricity meter save error ";
+                processSaveResult = Boolean.FALSE;
+            }
+            if(resultSaveWaterMeter == Boolean.FALSE) {
+                errorMessage += "Water meter save error ";
+                processSaveResult = Boolean.FALSE;
+            }
+            
+            if(processSaveResult == Boolean.FALSE) {
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, errorMessage);
+            }
+            else {
+                jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                        CommonString.SAVE_DATA_SUCCESS_STRING);
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -83,7 +113,7 @@ public class ElectricityWaterMeterResource {
         
         return jsonObjectReturn.toString();
     }
-
+    
     /**
      * 
      * @param electricityMeters

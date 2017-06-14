@@ -170,8 +170,6 @@ public class ElectricityWaterMeterController {
                     .toString();
 
             jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "electricity_water_meter/save");
-
-            return "Ok save";
         }
         catch(Exception e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS, REQUIRED_CLASS */
+/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS, REQUIRED_CLASS, SUCCESS_STRING */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -315,7 +315,10 @@ var page = (function() {
                             response = app.convertToJsonObject(response);
                             
                             if(response.result === SUCCESS_STRING) {
-                                
+                                app.showNotice({
+                                    message: app.translate('common.save_success'),
+                                    type: response.result
+                                });
                             }
                             else {
                                 if(response.message == SESSION_EXPIRE_STRING) {
