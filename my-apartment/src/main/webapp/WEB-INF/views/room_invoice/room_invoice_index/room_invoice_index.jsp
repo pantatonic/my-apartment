@@ -10,12 +10,12 @@
     <spring:message code="room.invoice" var="msgPageTitle" /> 
     <tiles:putAttribute name="title" value="${msgPageTitle}" />
     <tiles:putAttribute name="css">
-        <%-- <link rel="stylesheet" 
-           href="<c:url value="/assets/view_resources/electricity_water_meter/index/css/index.css?v=${randomTextVersion}"/>"> --%>
+        <link rel="stylesheet" 
+           href="<c:url value="/assets/view_resources/room_invoice/room_invoice/css/index.css?v=${randomTextVersion}"/>">
     </tiles:putAttribute>
     <tiles:putAttribute name="js">
-        <%-- <script type="text/javascript" 
-            src="<c:url value="/assets/view_resources/electricity_water_meter/index/js/index.js?v=${randomTextVersion}"/>"></script> --%>
+        <script type="text/javascript" 
+            src="<c:url value="/assets/view_resources/room_invoice/room_invoice/js/index.js?v=${randomTextVersion}"/>"></script>
     </tiles:putAttribute>
     <tiles:putAttribute name="body">
         <div class="content-wrapper">
@@ -32,6 +32,11 @@
                         <%-- <h3 class="box-title">
                             &nbsp;
                         </h3> --%>
+                        <div class="input-group" id="input-group-month-year">
+                            <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
+                            <input type="text" id="electriccity-water-month-year"  value="${currentYearMonth}"
+                                    autocomplete="off" class="form-control text-center" readonly="readonly">
+                        </div>
                     </div>
                     
                     <div class="box-body">

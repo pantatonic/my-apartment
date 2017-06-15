@@ -37,5 +37,20 @@ public class CommonAppWsUtils {
 
         return new JSONObject(resultWs);
     }
+    
+    public static JSONObject getBuildingList() {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            jsonObjectReturn = CommonAppWsUtils.get("building/building_get");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn;
+    }
 
 }

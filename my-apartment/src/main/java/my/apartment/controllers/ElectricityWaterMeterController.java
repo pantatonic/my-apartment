@@ -34,7 +34,7 @@ public class ElectricityWaterMeterController {
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("electricity_water_meter/index/index");
         
-        JSONObject resultGetBuilding = this.getBuilding();
+        JSONObject resultGetBuilding = CommonAppWsUtils.getBuildingList();
         JSONArray jsonArrayBuilding = new JSONArray(resultGetBuilding.get(CommonString.DATA_STRING).toString());
         
         String currentMonth = CommonAppUtils.getCurrentMonthString();
@@ -45,26 +45,7 @@ public class ElectricityWaterMeterController {
         
         return modelAndView;
     }
-    
-    /**
-     * 
-     * @return JSONObject
-     */
-    private JSONObject getBuilding() {
-        JSONObject jsonObjectReturn = new JSONObject();
-        
-        try {
-            jsonObjectReturn = CommonAppWsUtils.get("building/building_get");
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            
-            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
-        }
-        
-        return jsonObjectReturn;
-    }
-    
+
     /**
      * 
      * @param buildingId

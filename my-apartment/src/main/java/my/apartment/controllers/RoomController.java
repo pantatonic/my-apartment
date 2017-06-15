@@ -47,7 +47,7 @@ public class RoomController {
     ) {
         ModelAndView modelAndView = new ModelAndView("room/room_index/room_index");
         
-        JSONObject resultGetBuilding = this.getBuilding();
+        JSONObject resultGetBuilding = CommonAppWsUtils.getBuildingList();
         JSONArray jsonArrayBuilding = new JSONArray(resultGetBuilding.get(CommonString.DATA_STRING).toString());
         
         JSONObject resultGetRoomStatus = this.getRoomStatus();
@@ -286,25 +286,6 @@ public class RoomController {
         
         try {
             jsonObjectReturn = CommonAppWsUtils.get("room_status/get_all");
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            
-            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
-        }
-        
-        return jsonObjectReturn;
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    private JSONObject getBuilding() {
-        JSONObject jsonObjectReturn = new JSONObject();
-        
-        try {
-            jsonObjectReturn = CommonAppWsUtils.get("building/building_get");
         }
         catch(Exception e) {
             e.printStackTrace();

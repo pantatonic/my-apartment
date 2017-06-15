@@ -1,5 +1,7 @@
 package my.apartment.controllers;
 
+import my.apartment.common.CommonAppWsUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,10 @@ public class RoomInvoice {
     @RequestMapping(value = "/room_invoice.html", method = {RequestMethod.GET})
     public ModelAndView roomInvoice() {
         ModelAndView modelAndView = new ModelAndView("room_invoice/room_invoice_index/room_invoice_index");
+        
+        JSONObject resultGetBuilding = CommonAppWsUtils.getBuildingList();
+        
+        System.out.println(resultGetBuilding);
         
         return modelAndView;
     }
