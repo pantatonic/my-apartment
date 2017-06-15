@@ -142,6 +142,10 @@ var page = (function() {
                             
                             __setData(currentBoxRoom, currentData);
                         }
+                        
+                        boxRoomContainer.append('<div class="clearfix"></div>');
+                        
+                        page.getRoomInvoice();
                     };
                     
                      jQuery.ajax({
@@ -170,6 +174,13 @@ var page = (function() {
                         }
                     });
                 }, _DELAY_PROCESS_);
+            }
+        },
+        getRoomInvoice: function() {
+            var buildingList = page.getElement.getBuildingList();
+            
+            if(!app.valueUtils.isEmptyValue(buildingList.val())) {
+                alert('To get Room Invoice');
             }
         }
     };
