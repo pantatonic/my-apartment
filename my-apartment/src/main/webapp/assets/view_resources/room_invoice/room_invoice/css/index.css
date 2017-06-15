@@ -1,3 +1,59 @@
 #input-group-month-year { 
     width: 130px; margin: auto;
 }
+
+#building-list {
+    width: 200px;
+    margin: auto;
+}
+
+#box-room-container {
+    min-height: 300px;
+}
+
+.box-room_ {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.box-room {
+    border: 1px solid #ffffff;
+    text-align: center;
+    margin-left: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.room-icon {
+    font-size: 60px;
+}
+
+#box-room-container-no-data, #box-room-container-select-data {
+    position: absolute;
+    font-size: 20px;
+    width: 400px;
+    padding: 20px;
+    text-align: center;
+    
+    top: 40%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#box-room-template {
+    display: none;
+}
+
+.floor-separate {
+    clear: both;
+    text-align: center;
+    background-color: #f5f5f5;
+    margin-top: 20px;
+}
+
+.room-checkbox {
+    width: 15px;
+    height: 15px;
+}

@@ -28,7 +28,7 @@ public class ElectricityWaterMeterController {
     
     /**
      * 
-     * @return 
+     * @return ModelAndView
      */
     @RequestMapping(value = "/electricity_water_meter.html", method = {RequestMethod.GET})
     public ModelAndView index() {
