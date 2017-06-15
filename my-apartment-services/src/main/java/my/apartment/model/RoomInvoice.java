@@ -29,6 +29,7 @@ public class RoomInvoice implements Serializable {
     private BigDecimal waterValue;
     private Boolean waterUseMinimunUnitCalculate;
     private Integer status;
+    private String description;
     private Integer receiptId;
     private Date createdDate;
     private String createdDateString;
@@ -38,7 +39,7 @@ public class RoomInvoice implements Serializable {
     public RoomInvoice() {
     }
 
-    public RoomInvoice(Integer id, String invoiceNo, Date invoiceDate, String invoiceDateString, Integer month, Integer year, Integer roomId, String electricityPreviousMeter, String electricityPresentMeter, BigDecimal electricityChargePerUnit, Integer electricityUsageUnit, BigDecimal electricityValue, Boolean electricityUseMinimunUnitCalculate, String waterPreviousMeter, String waterPresentMeter, BigDecimal waterChargePerUnit, Integer waterUsageUnit, BigDecimal waterValue, Boolean waterUseMinimunUnitCalculate, Integer status, Integer receiptId, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString) {
+    public RoomInvoice(Integer id, String invoiceNo, Date invoiceDate, String invoiceDateString, Integer month, Integer year, Integer roomId, String electricityPreviousMeter, String electricityPresentMeter, BigDecimal electricityChargePerUnit, Integer electricityUsageUnit, BigDecimal electricityValue, Boolean electricityUseMinimunUnitCalculate, String waterPreviousMeter, String waterPresentMeter, BigDecimal waterChargePerUnit, Integer waterUsageUnit, BigDecimal waterValue, Boolean waterUseMinimunUnitCalculate, Integer status, String description, Integer receiptId, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString) {
         this.id = id;
         this.invoiceNo = invoiceNo;
         this.invoiceDate = invoiceDate;
@@ -59,6 +60,7 @@ public class RoomInvoice implements Serializable {
         this.waterValue = waterValue;
         this.waterUseMinimunUnitCalculate = waterUseMinimunUnitCalculate;
         this.status = status;
+        this.description = description;
         this.receiptId = receiptId;
         this.createdDate = createdDate;
         this.createdDateString = createdDateString;
@@ -226,6 +228,14 @@ public class RoomInvoice implements Serializable {
         this.status = status;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Integer getReceiptId() {
         return receiptId;
     }
@@ -268,7 +278,7 @@ public class RoomInvoice implements Serializable {
 
     @Override
     public String toString() {
-        return "RoomInvoice{" + "id=" + id + ", invoiceNo=" + invoiceNo + ", invoiceDate=" + invoiceDate + ", invoiceDateString=" + invoiceDateString + ", month=" + month + ", year=" + year + ", roomId=" + roomId + ", electricityPreviousMeter=" + electricityPreviousMeter + ", electricityPresentMeter=" + electricityPresentMeter + ", electricityChargePerUnit=" + electricityChargePerUnit + ", electricityUsageUnit=" + electricityUsageUnit + ", electricityValue=" + electricityValue + ", electricityUseMinimunUnitCalculate=" + electricityUseMinimunUnitCalculate + ", waterPreviousMeter=" + waterPreviousMeter + ", waterPresentMeter=" + waterPresentMeter + ", waterChargePerUnit=" + waterChargePerUnit + ", waterUsageUnit=" + waterUsageUnit + ", waterValue=" + waterValue + ", waterUseMinimunUnitCalculate=" + waterUseMinimunUnitCalculate + ", status=" + status + ", receiptId=" + receiptId + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + '}';
+        return "RoomInvoice{" + "id=" + id + ", invoiceNo=" + invoiceNo + ", invoiceDate=" + invoiceDate + ", invoiceDateString=" + invoiceDateString + ", month=" + month + ", year=" + year + ", roomId=" + roomId + ", electricityPreviousMeter=" + electricityPreviousMeter + ", electricityPresentMeter=" + electricityPresentMeter + ", electricityChargePerUnit=" + electricityChargePerUnit + ", electricityUsageUnit=" + electricityUsageUnit + ", electricityValue=" + electricityValue + ", electricityUseMinimunUnitCalculate=" + electricityUseMinimunUnitCalculate + ", waterPreviousMeter=" + waterPreviousMeter + ", waterPresentMeter=" + waterPresentMeter + ", waterChargePerUnit=" + waterChargePerUnit + ", waterUsageUnit=" + waterUsageUnit + ", waterValue=" + waterValue + ", waterUseMinimunUnitCalculate=" + waterUseMinimunUnitCalculate + ", status=" + status + ", description=" + description + ", receiptId=" + receiptId + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + '}';
     }
 
 }

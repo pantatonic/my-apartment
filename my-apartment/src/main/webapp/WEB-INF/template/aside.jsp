@@ -62,6 +62,11 @@
                     <i class="fa fa-circle-o"></i> <span><spring:message code="electricity_water_meter.electricity_water_meter" /></span>
                 </a>
             </li>
+            <li class="treeview">
+                <a href="<c:url value="/room_invoice.html" />">
+                    <i class="fa fa-circle-o"></i> <span><spring:message code="room.invoice" /></span>
+                </a>
+            </li>
             
             <%--<li class="treeview ">
                 <a href="#">
