@@ -119,7 +119,10 @@
     "electricity_water_meter.electricity_meter":"<spring:message code="electricity_water_meter.electricity_meter" />",
     "electricity_water_meter.water_meter":"<spring:message code="electricity_water_meter.water_meter" />",
     "electricity_water_meter.previous_meter":"<spring:message code="electricity_water_meter.previous_meter" />",
+    
     "room.invoice":"<spring:message code="room.invoice" />",
-    "room.invoice.please_checked_room":"<spring:message code="room.invoice.please_checked_room" />"
+    "room.invoice.create_room_invoice":"<spring:message code="room.invoice.create_room_invoice" />",
+    "room.invoice.please_checked_room":"<spring:message code="room.invoice.please_checked_room" />",
+    "room.invoice.create_invoice_for_room":"<spring:message code="room.invoice.create_invoice_for_room" />"
     }
 </div>

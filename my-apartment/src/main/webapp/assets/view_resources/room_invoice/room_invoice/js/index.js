@@ -1,4 +1,4 @@
-/* global app, _DELAY_PROCESS_, _CONTEXT_PATH_, SESSION_EXPIRE_STRING, iconRoom, ERROR_STRING, WARNING_STRING, INPUT_ERROR_CLASS */
+/* global app, _DELAY_PROCESS_, _CONTEXT_PATH_, SESSION_EXPIRE_STRING, iconRoom, ERROR_STRING, WARNING_STRING, INPUT_ERROR_CLASS, SUCCESS_STRING, alertUtil */
 
 jQuery(document).ready(function() {
     facade.initialProcess();
@@ -120,6 +120,20 @@ var page = (function() {
             var buttonCreate = page.getElement.getCreateRoomInvoiceButton();
             var checkboxs = page.getElement.getRoomCheckbox();
             var roomIdSet = [];
+            var _getRoomNoToShow = function(roomIdSet) {
+                var boxRoom_ = page.getElement.getBoxRoom_();
+                var msg = '';
+                
+                for(var index in roomIdSet) {
+                    /*msg  += boxRoom_.find('.box-room[data-id="' + roomIdSet[index] + '"]')
+                            .find('.box-room-name').attr('data-room-name') + ', ';*/
+                    
+                    msg  += boxRoom_.find('.box-room[data-id="' + roomIdSet[index] + '"]')
+                            .find('.box-room-name').attr('data-room-name') + ', ';
+                }
+
+                return msg.slice(0, -2);
+            };
             var _createRoomInvoice = function() {
                 buttonCreate.bootstrapBtn('loading');
                 
@@ -203,7 +217,18 @@ var page = (function() {
                     }
                 }
                 else {
-                    _createRoomInvoice();
+                    var messageToShow = '<div style="text-align: center">' + _getRoomNoToShow(roomIdSet) + '</div>';
+                    
+                    alertUtil.confirmAlert(app.translate('room.invoice.create_invoice_for_room')
+                        + '<br><br>'
+                        + messageToShow, function() {
+                        _createRoomInvoice();
+                    }, function() {
+
+                    },{
+                        animation: false,
+                        type: null
+                    });
                 }
             }
         },
@@ -240,6 +265,9 @@ var page = (function() {
                                 + ' : '
                                 + currentData.roomNo
                             );
+                    
+                            boxRoomElement.find('.box-room-name')
+                                    .attr('data-room-name', currentData.roomNo);
                     
                             boxRoomElement.find('.label-room-status')
                                     .addClass(__getRoomStatusColorClass(currentData.roomStatusId))

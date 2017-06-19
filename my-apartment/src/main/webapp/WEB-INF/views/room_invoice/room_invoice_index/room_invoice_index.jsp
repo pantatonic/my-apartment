@@ -38,7 +38,7 @@
                         <button id="create-room-invoice" class="btn btn-warning btn-flat" 
                                 data-loading-text="<spring:message code="common.now_processing" />">
                             <i class="fa fa-file-text-o"></i> 
-                            _Create Room Invoice_
+                            <spring:message code="room.invoice.create_room_invoice" />
                         </button>
                         
                         <div class="col-xs-12 hidden-sm hidden-md hidden-lg clearfix" style="height: 50px;"><br></div>
