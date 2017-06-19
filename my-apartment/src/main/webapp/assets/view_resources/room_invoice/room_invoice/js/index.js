@@ -1,4 +1,4 @@
-/* global app, _DELAY_PROCESS_, _CONTEXT_PATH_, SESSION_EXPIRE_STRING, iconRoom */
+/* global app, _DELAY_PROCESS_, _CONTEXT_PATH_, SESSION_EXPIRE_STRING, iconRoom, ERROR_STRING, WARNING_STRING, INPUT_ERROR_CLASS */
 
 jQuery(document).ready(function() {
     facade.initialProcess();
@@ -66,6 +66,20 @@ var page = (function() {
                 });
             }
         },
+        roomInvoiceMonthYear: {
+            getMonth: function() {
+                var monthYear = page.getElement.getRoomInvoiceMonthYear().val();
+                var splitText = monthYear.split('-');
+                
+                return splitText[1];
+            },
+            getYear: function() {
+                var monthYear = page.getElement.getRoomInvoiceMonthYear().val();
+                var splitText = monthYear.split('-');
+                
+                return splitText[0];
+            }
+        },
         getElement: {
             getBuildingList: function() {
                 return jQuery('#building-list');
@@ -78,6 +92,12 @@ var page = (function() {
             },
             getCreateRoomInvoiceButton: function() {
                 return jQuery('#create-room-invoice');
+            },
+            getRoomCheckbox: function() {
+                return jQuery('.room-checkbox');
+            },
+            getRoomInvoiceMonthYear: function() {
+                return jQuery('#room-invoice-month-year');
             }
         },
         boxRoomContainer: {
@@ -97,7 +117,95 @@ var page = (function() {
             }
         },
         createRoomInvoiceProcess: function() {
-            alert('To create room invoice');
+            var buttonCreate = page.getElement.getCreateRoomInvoiceButton();
+            var checkboxs = page.getElement.getRoomCheckbox();
+            var roomIdSet = [];
+            var _createRoomInvoice = function() {
+                buttonCreate.bootstrapBtn('loading');
+                
+                setTimeout(function() {
+                    jQuery.ajax({
+                        type: 'post',
+                        url: _CONTEXT_PATH_ + '/create_room_invoice.html',
+                        data: {
+                            id: roomIdSet,
+                            month: page.roomInvoiceMonthYear.getMonth(),
+                            year: page.roomInvoiceMonthYear.getYear()
+                        },
+                        cache: false,
+                        success: function(response) {
+                            response = app.convertToJsonObject(response);
+                            
+                            if(response.result == SUCCESS_STRING) {
+                                
+                            }
+                            else {
+                                if(response.message == SESSION_EXPIRE_STRING) {
+                                    app.alertSessionExpired();
+                                }
+                                else {
+                                    app.showNotice({
+                                        message: app.translate('common.processing_failed'),
+                                        type: response.result
+                                    });
+                                }
+                            }
+                            
+                            buttonCreate.bootstrapBtn('reset');
+                        },
+                        error: function() {
+                            app.alertSomethingError();
+                            
+                            buttonCreate.bootstrapBtn('reset');
+                        }
+                    });
+                }, _DELAY_PROCESS_);
+            };
+
+
+            /** main process */
+            
+            
+            if(checkboxs.length == 0) {
+                if(!app.checkNoticeExist('notice-select-data')) {
+                    app.showNotice({
+                        type: WARNING_STRING,
+                        message: app.translate('common.please_enter_data'),
+                        addclass: 'notice-select-data'
+                    });
+                }
+                
+                page.getElement.getBuildingList().addClass(INPUT_ERROR_CLASS);
+            }
+            else {
+                page.getElement.getBuildingList().removeClass(INPUT_ERROR_CLASS);
+                
+                var countCheckbox = 0;
+                
+                checkboxs.filter(function() {
+                    return jQuery(this).prop('checked');
+                }).each(function() {
+                    var thisCheckbox = jQuery(this);
+                    var id = thisCheckbox.closest('.box-room_').find('[name="id"]').val();
+                    
+                    countCheckbox = countCheckbox + 1;
+                    
+                    roomIdSet.push(id);
+                });
+                
+                if(countCheckbox == 0) {
+                    if(!app.checkNoticeExist('notice-checked-data')) {
+                        app.showNotice({
+                            type: WARNING_STRING,
+                            message: app.translate('room.invoice.please_checked_room'),
+                            addclass: 'notice-checked-data'
+                        });
+                    }
+                }
+                else {
+                    _createRoomInvoice();
+                }
+            }
         },
         getRoom: function() {
             var buildingList = page.getElement.getBuildingList();
@@ -178,7 +286,9 @@ var page = (function() {
                         page.getRoomInvoice();
                     };
                     
-                     jQuery.ajax({
+                    page.getElement.getBuildingList().removeClass(INPUT_ERROR_CLASS);
+                    
+                    jQuery.ajax({
                         type: 'get',
                         url: _CONTEXT_PATH_ + '/room_get_by_building_id.html',
                         data: {
@@ -234,10 +344,8 @@ var page = (function() {
                 cache: false,
                 success: function(response) {
                     response = app.convertToJsonObject(response);
-                    
-                    //_setReserveLabel(response);
+
                     _setCurrentCheckInLabel(response);
-                    //_setCurrentNoticeCheckOut(response);
                     _closeWithClearFix();
                 },
                 error: function() {

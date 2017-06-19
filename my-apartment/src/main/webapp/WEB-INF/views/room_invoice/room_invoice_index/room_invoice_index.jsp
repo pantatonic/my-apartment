@@ -35,7 +35,8 @@
                         <%-- <h3 class="box-title">
                             &nbsp;
                         </h3> --%>
-                        <button id="create-room-invoice" class="btn btn-warning btn-flat">
+                        <button id="create-room-invoice" class="btn btn-warning btn-flat" 
+                                data-loading-text="<spring:message code="common.now_processing" />">
                             <i class="fa fa-file-text-o"></i> 
                             _Create Room Invoice_
                         </button>
