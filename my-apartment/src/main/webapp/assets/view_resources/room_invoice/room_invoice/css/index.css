@@ -24,8 +24,16 @@
     cursor: pointer;
 }
 
+.box-room-name {
+    margin-top: 15px;
+}
+
 .room-icon {
     font-size: 60px;
+}
+
+.room-detail-label {
+    height: 20px;
 }
 
 #box-room-container-no-data, #box-room-container-select-data {

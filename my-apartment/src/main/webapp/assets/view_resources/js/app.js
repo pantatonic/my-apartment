@@ -158,6 +158,18 @@ var app = {
                 modalElement.find('.modal-body').scrollTop(0);
             }, _DELAY_PROCESS_);
         }
+    },
+    
+    system: {
+        getRoomStatusColorClass: function(roomStatusId) {
+            var color = {
+                '1': 'label-success',
+                '2': 'label-danger',
+                '3': 'label-warning'
+            };
+
+            return color[roomStatusId];
+        }
     }
     
 };

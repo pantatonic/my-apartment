@@ -254,13 +254,7 @@ var page = (function() {
                         var boxRoomContainer = page.getElement.getBoxRoomContainer();
                         var __setData = function(boxRoomElement, currentData) {
                             var __getRoomStatusColorClass = function(roomStatusId) {
-                                var color = {
-                                    '1': 'label-success',
-                                    '2': 'label-danger',
-                                    '3': 'label-warning'
-                                };
-
-                                return color[roomStatusId];
+                                return app.system.getRoomStatusColorClass(roomStatusId);
                             };
                             var boxRoomElement_ = boxRoomElement.closest('.box-room_');
                             

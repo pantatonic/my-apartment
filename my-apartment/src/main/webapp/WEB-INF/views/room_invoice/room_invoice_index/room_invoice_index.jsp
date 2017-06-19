@@ -69,11 +69,12 @@
             <div class="col-xs-12 col-sm-6 col-md-3 box-room_">
                 <input type="checkbox" class="room-checkbox">
                 <div class="box-room hover-box">
-                    <div class="room-manage-detail-label"></div>
+                    <div class="room-detail-label"></div>
                     <i class="${commonHtml.getIconRoom()} room-icon"></i>
                     <input type="hidden" name="id" value="">
                     <div class="clearfix"></div>
-                    <span class="label label-invoiced">Default Label</span>
+                    <span class="label label-room-status">Default Label</span>
+                    <%--<span class="label label-invoiced">Default Label</span>--%>
                     <div class="box-room-name"></div>
                 </div>
             </div>

@@ -102,7 +102,14 @@ var page = (function() {
                         };
                         var boxRoomContainer = page.getElement.getBoxRoomContainer();
                         var __setData = function(boxRoomElement, currentData) {
+                            var __getRoomStatusColorClass = function(roomStatusId) {
+                                return app.system.getRoomStatusColorClass(roomStatusId);
+                            };
                             var boxRoomElement_ = boxRoomElement.closest('.box-room_');
+                            
+                            boxRoomElement_.attr('data-room-no', currentData.roomNo);
+                            
+                            boxRoomElement.attr('data-id', currentData.id);
                             
                             boxRoomElement.find('[name="id"]').val(currentData.id);
                             
@@ -111,6 +118,10 @@ var page = (function() {
                                 + ' : '
                                 + currentData.roomNo
                             );
+                    
+                            boxRoomElement.find('.label-room-status')
+                                    .addClass(__getRoomStatusColorClass(currentData.roomStatusId))
+                                    .html(app.translate(currentData.roomStatusText));
                         };
                         
                         boxRoomContainer.html(html);
@@ -127,7 +138,7 @@ var page = (function() {
                         
                         for(var index in roomData) {
                             var currentData = roomData[index];
-                            
+
                             if(latestFloorSeq != currentData.floorSeq) {
                                 htmlFloorSeq = htmlFloorSeqTemplate(currentData.floorSeq);
                                 latestFloorSeq = currentData.floorSeq;
@@ -144,8 +155,13 @@ var page = (function() {
                         }
                         
                         boxRoomContainer.append('<div class="clearfix"></div>');
+
+                        if(roomData.length == 0) {
+                            page.boxRoomContainer.noDataFound();
+                        }
                         
-                        page.getRoomInvoice();
+                        page.getRoomInvoiceRoomDetailList();
+                        //page.getRoomInvoice();
                     };
                     
                      jQuery.ajax({
@@ -175,6 +191,50 @@ var page = (function() {
                     });
                 }, _DELAY_PROCESS_);
             }
+        },
+        getRoomInvoiceRoomDetailList: function () {
+            var _setCurrentCheckInLabel = function(response) {
+                var currentCheckInData = response.data.currentCheckIn;
+                var labelTemplate = '<span class="label label-info">' + app.translate('room.check_in') + '</span>';
+
+                for(var index in currentCheckInData) {
+                    var currentData =  currentCheckInData[index];
+                    var boxRoom = jQuery('.box-room[data-id="' + currentData.roomId + '"]');
+                    var currentLabelHtml =  boxRoom.find('.room-detail-label').html();
+
+                    boxRoom.find('.room-detail-label').html(currentLabelHtml + labelTemplate);
+                }
+            };
+            
+            var _closeWithClearFix = function() {
+                jQuery('.box-room_ .box-room').each(function() {
+                    var thisElement = jQuery(this);
+                    
+                    thisElement.find('.room-detail-label').append('<div class="clearfix"></div>');
+                });
+            };
+          
+            jQuery.ajax({
+                type: 'post',
+                url: _CONTEXT_PATH_ + '/get_room_invoice_room_detail_list.html',
+                cache: false,
+                success: function(response) {
+                    response = app.convertToJsonObject(response);
+                    
+                    //_setReserveLabel(response);
+                    _setCurrentCheckInLabel(response);
+                    //_setCurrentNoticeCheckOut(response);
+                    _closeWithClearFix();
+                },
+                error: function() {
+                    app.showNotice({
+                        type: WARNING_STRING,
+                        message: app.translate('room.cannot_get_room_manage_detail_list'),
+                        addclass: 'notice-get-room-manage-detail'
+                    });
+                }
+                
+            });
         },
         getRoomInvoice: function() {
             var buildingList = page.getElement.getBuildingList();
