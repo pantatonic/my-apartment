@@ -14,6 +14,7 @@ var facade = (function() {
         addEvent: function() {
             page.addEvent.getRoomByChangeBuildingList();
             page.addEvent.checkedRoomCheckbox();
+            page.addEvent.createRoomInvoice();
         }
     };
 })();
@@ -56,6 +57,13 @@ var page = (function() {
                     
                     checkbox.prop("checked", !checkbox.prop("checked"));
                 });
+            },
+            createRoomInvoice: function() {
+                var buttonCreate = page.getElement.getCreateRoomInvoiceButton();
+                
+                buttonCreate.click(function() {
+                    page.createRoomInvoiceProcess();
+                });
             }
         },
         getElement: {
@@ -67,6 +75,9 @@ var page = (function() {
             },
             getBoxRoom_: function() {
                 return jQuery('.box-room_');
+            },
+            getCreateRoomInvoiceButton: function() {
+                return jQuery('#create-room-invoice');
             }
         },
         boxRoomContainer: {
@@ -84,6 +95,9 @@ var page = (function() {
             
                 page.getElement.getBoxRoomContainer().html(html);
             }
+        },
+        createRoomInvoiceProcess: function() {
+            alert('To create room invoice');
         },
         getRoom: function() {
             var buildingList = page.getElement.getBuildingList();
@@ -161,7 +175,7 @@ var page = (function() {
                         }
                         
                         page.getRoomInvoiceRoomDetailList();
-                        //page.getRoomInvoice();
+                        page.getRoomInvoice();
                     };
                     
                      jQuery.ajax({
@@ -240,7 +254,7 @@ var page = (function() {
             var buildingList = page.getElement.getBuildingList();
             
             if(!app.valueUtils.isEmptyValue(buildingList.val())) {
-                alert('To get Room Invoice');
+                alert('To get Room Invoice of this month');
             }
         }
     };

@@ -35,6 +35,13 @@
                         <%-- <h3 class="box-title">
                             &nbsp;
                         </h3> --%>
+                        <button id="create-room-invoice" class="btn btn-warning btn-flat">
+                            <i class="fa fa-file-text-o"></i> 
+                            _Create Room Invoice_
+                        </button>
+                        
+                        <div class="col-xs-12 hidden-sm hidden-md hidden-lg clearfix" style="height: 50px;"><br></div>
+                        
                         <div class="input-group" id="input-group-month-year">
                             <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
                             <input type="text" id="room-invoice-month-year"  value="${currentYearMonth}"
