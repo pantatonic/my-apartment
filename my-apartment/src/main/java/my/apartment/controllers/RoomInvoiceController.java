@@ -62,6 +62,7 @@ public class RoomInvoiceController {
         
         try {
             JSONObject jsonObjectGetCurrentCheckIn = CommonAppWsUtils.get("room/get_current_check_in");
+            //JSONObject jsonObjectGetRoomInvoiceMonthYear = CommonAppWsUtils.get("room_invoice/get_invoice_month_year");
             
             jsonObjectReturn.put(CommonString.DATA_STRING, 
                     new JSONObject()
@@ -115,10 +116,6 @@ public class RoomInvoiceController {
                     .toString();
 
             jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room_invoice/create");
-            
-            System.out.println("-- c --");
-            System.out.println(jsonObjectReturn);
-            System.out.println("-- c --");
         }
         catch(Exception e) {
             e.printStackTrace();
