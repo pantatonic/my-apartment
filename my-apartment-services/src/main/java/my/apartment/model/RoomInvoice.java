@@ -28,7 +28,7 @@ public class RoomInvoice implements Serializable {
     private Integer waterUsageUnit;
     private BigDecimal waterValue;
     private Boolean waterUseMinimunUnitCalculate;
-    private Integer status;
+    private Integer status;  
     private String description;
     private Integer receiptId;
     private Date createdDate;

@@ -35,6 +35,7 @@ public class CommonString {
     public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
     public static final String YEAR_FORMAT_STRING = "yyyy";
     public static final String MONTH_FORMAT_STRING = "MM";
+    public static final String DAY_FORMAT_STRING = "dd";
     
     
     public static final String INSERT_TYPE_STRING = "insert";

@@ -82,18 +82,6 @@ public class CommonAppUtils {
         return new SimpleDateFormat(CommonString.DATE_FORMAT_STRING).format(date);
     }
     
-    public static String getCurrentYearString() {
-        Date date = new Date();
-        
-        return new SimpleDateFormat(CommonString.YEAR_FORMAT_STRING).format(date);
-    }
-    
-    public static String getCurrentMonthString() {
-        Date date = new Date();
-        
-        return new SimpleDateFormat(CommonString.MONTH_FORMAT_STRING).format(date);
-    }
-    
     public static JSONObject simpleValidateRequired(
             MultiValueMap<String, String> formData,
             String[] keyToValidate

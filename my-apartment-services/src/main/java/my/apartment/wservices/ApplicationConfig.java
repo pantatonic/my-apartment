@@ -30,6 +30,7 @@ public class ApplicationConfig extends Application {
         resources.add(my.apartment.wservices.BuildingResource.class);
         resources.add(my.apartment.wservices.ElectricityWaterMeterResource.class);
         resources.add(my.apartment.wservices.LoginResource.class);
+        resources.add(my.apartment.wservices.RoomInvoiceResource.class);
         resources.add(my.apartment.wservices.RoomResource.class);
         resources.add(my.apartment.wservices.RoomStatusResource.class);
         resources.add(my.apartment.wservices.TestResource.class);

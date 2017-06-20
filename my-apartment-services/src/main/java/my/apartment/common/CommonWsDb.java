@@ -52,6 +52,15 @@ public class CommonWsDb {
         return null;
     }
     
+    public static Integer getIntFromBoolean(Boolean b) {
+        if(b) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+    
     public static void closeFinally(PreparedStatement ps, Connection con, String className) {
         if (ps != null) {
             try {

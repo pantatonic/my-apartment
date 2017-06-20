@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonAppUtils;
 import my.apartment.common.CommonAppWsUtils;
 import my.apartment.common.CommonString;
+import my.apartment.common.CommonUtils;
 import my.apartment.common.JsonObjectUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,8 +38,8 @@ public class ElectricityWaterMeterController {
         JSONObject resultGetBuilding = CommonAppWsUtils.getBuildingList();
         JSONArray jsonArrayBuilding = new JSONArray(resultGetBuilding.get(CommonString.DATA_STRING).toString());
         
-        String currentMonth = CommonAppUtils.getCurrentMonthString();
-        String currentYear = CommonAppUtils.getCurrentYearString();
+        String currentMonth = CommonUtils.getCurrentMonthString();
+        String currentYear = CommonUtils.getCurrentYearString();
         
         modelAndView.addObject("buildingList", jsonArrayBuilding);
         modelAndView.addObject("currentYearMonth", currentYear + "-" + currentMonth);

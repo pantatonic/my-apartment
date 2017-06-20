@@ -151,7 +151,12 @@ var page = (function() {
                             response = app.convertToJsonObject(response);
                             
                             if(response.result == SUCCESS_STRING) {
+                                app.showNotice({
+                                    message: app.translate('common.save_success'),
+                                    type: response.result
+                                });
                                 
+                                page.getRoom();
                             }
                             else {
                                 if(response.message == SESSION_EXPIRE_STRING) {
@@ -217,7 +222,7 @@ var page = (function() {
                     }
                 }
                 else {
-                    var messageToShow = '<div style="text-align: center">' + _getRoomNoToShow(roomIdSet) + '</div>';
+                    var messageToShow = '<div style="text-align: center; font-size: 15px;">' + _getRoomNoToShow(roomIdSet) + '</div>';
                     
                     alertUtil.confirmAlert(app.translate('room.invoice.create_invoice_for_room')
                         + '<br><br>'
