@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
@@ -406,6 +407,44 @@ public class ElectricityWaterMeterResource {
         }
         
         return waterMeters;
+    }
+    
+    @Path("get_electricity_water_meter_by_building_id_month_year/{building_id}/{month}/{year}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getElectricityWaterMeterByBuildingIdMonthYear(
+            @PathParam("building_id") Integer building,
+            @PathParam("month") Integer month,
+            @PathParam("year") Integer year
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            ElectricityMeterDao electricityMeterDaoImpl = new ElectricityMeterDaoImpl();
+            
+            List<ElectricityMeter> electricityMeters 
+                    = electricityMeterDaoImpl.getElectricityMeterByBuildingIdMonthYear(building, month, year);
+            
+            WaterMeterDao waterMeterDaoImpl = new WaterMeterDaoImpl();
+            
+            List<WaterMeter> waterMeters 
+                    = waterMeterDaoImpl.getWaterMeterByBuildingIdMonthYear(building, month, year);
+            
+            JSONObject subJsonObject = new JSONObject();
+            
+            subJsonObject.put("electricityMeter", electricityMeters);
+            subJsonObject.put("waterMeter", waterMeters);
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
+            jsonObjectReturn.put(CommonString.DATA_STRING, subJsonObject);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
     }
 
     /**

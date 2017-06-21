@@ -25,7 +25,19 @@
     top: 40%;
     /*background-color: #c9c9c9;*/
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-    opacity: 0.9
+    opacity: 1.0
+}
+
+.not-have-meter {
+    position: absolute;
+    width: 100%;
+    color: #f39c12;
+    font-size: 16px;
+    font-weight: bold;
+    top: 40%;
+    /*background-color: #c9c9c9;*/
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    opacity: 1.0
 }
 
 #building-list {

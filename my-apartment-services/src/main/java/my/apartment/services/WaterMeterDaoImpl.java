@@ -3,6 +3,7 @@ package my.apartment.services;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import my.apartment.common.CommonWsDb;
@@ -84,6 +85,59 @@ public class WaterMeterDaoImpl implements WaterMeterDao {
         }
         
         return resultReturn;
+    }
+
+    @Override
+    public List<WaterMeter> getWaterMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<WaterMeter> waterMetersReturn = new ArrayList<WaterMeter>();
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT water_meter.* " +
+                "FROM water_meter JOIN room ON water_meter.room_id = room.id " +
+                "	JOIN building ON room.building_id = building.id " +
+                "WHERE building.id = ? " +
+                "AND water_meter.month = ? " +
+                "AND water_meter.year = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, buildingId);
+            ps.setInt(2, month);
+            ps.setInt(3, year);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                WaterMeter waterMeter = new WaterMeter();
+                
+                waterMeter.setRoomId(rs.getInt("room_id"));
+                waterMeter.setMonth(rs.getInt("month"));
+                waterMeter.setYear(rs.getInt("year"));
+                waterMeter.setPreviousMeter(rs.getString("previous_meter"));
+                waterMeter.setPresentMeter(rs.getString("present_meter"));
+                waterMeter.setChargePerUnit(rs.getBigDecimal("charge_per_unit"));
+                waterMeter.setUsageUnit(rs.getInt("usage_unit"));
+                waterMeter.setValue(rs.getBigDecimal("value"));
+                waterMeter.setUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("use_minimun_unit_calculate")));
+                waterMeter.setCreatedDate(rs.getDate("created_date"));
+                waterMeter.setUpdatedDate(rs.getDate("updated_date"));
+                
+                waterMetersReturn.add(waterMeter);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, ElectricityMeterDaoImpl.class.getName());
+        }
+        
+        return waterMetersReturn;
     }
     
 }

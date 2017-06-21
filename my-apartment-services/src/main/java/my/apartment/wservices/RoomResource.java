@@ -620,9 +620,7 @@ public class RoomResource {
             subJsonObject.put("roomInvoiced", roomInvoices);
             
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
-            jsonObjectReturn.put(CommonString.DATA_STRING, subJsonObject);
-
-            
+            jsonObjectReturn.put(CommonString.DATA_STRING, subJsonObject);            
         }
         catch(Exception e) {
             e.printStackTrace();

@@ -71,11 +71,14 @@ public class RoomInvoiceController {
             JSONObject jsonObjectGetCurrentCheckIn = CommonAppWsUtils.get("room/get_current_check_in");
             JSONObject jsonObjectGetRoomInvoiceMonthYear 
                     = CommonAppWsUtils.get("room_invoice/get_room_invoice_month_year/" + buildingId + "/" + month + "/" + year);
-                        
+            JSONObject jsonObjectGetRoomElectricityWaterMeterByBuildingId 
+                    = CommonAppWsUtils.get("electricity_water_meter/get_electricity_water_meter_by_building_id_month_year/" + buildingId + "/" + month + "/" + year);
+
             jsonObjectReturn.put(CommonString.DATA_STRING, 
                     new JSONObject()
                             .put("currentCheckIn", jsonObjectGetCurrentCheckIn.get(CommonString.DATA_STRING))
                             .put("roomInvoiceRoomDetailList", jsonObjectGetRoomInvoiceMonthYear.get(CommonString.DATA_STRING))
+                            .put("roomElectricityWaterMeter", jsonObjectGetRoomElectricityWaterMeterByBuildingId.get(CommonString.DATA_STRING))
             );
         }
         catch(Exception e) {

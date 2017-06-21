@@ -8,4 +8,6 @@ public interface WaterMeterDao {
     
     public Boolean save(List<WaterMeter> waterMeters);
     
+    public List<WaterMeter> getWaterMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year);
+    
 }

@@ -3,6 +3,7 @@ package my.apartment.services;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import my.apartment.common.CommonWsDb;
@@ -86,4 +87,63 @@ public class ElectricityMeterDaoImpl implements ElectricityMeterDao {
         return resultReturn;
     }
     
+    /**
+     * 
+     * @param buildingId
+     * @param month
+     * @param year
+     * @return List
+     */
+    @Override
+    public List<ElectricityMeter> getElectricityMeterByBuildingIdMonthYear(Integer buildingId, Integer month, Integer year) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<ElectricityMeter> electricityMetersReturn = new ArrayList<ElectricityMeter>();
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT electricity_meter.* " +
+                "FROM electricity_meter JOIN room ON electricity_meter.room_id = room.id " +
+                "JOIN building ON room.building_id = building.id " +
+                "WHERE building.id = ? " +
+                "AND electricity_meter.month = ? " +
+                "AND electricity_meter.year = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, buildingId);
+            ps.setInt(2, month);
+            ps.setInt(3, year);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                ElectricityMeter electricityMeter = new ElectricityMeter();
+                
+                electricityMeter.setRoomId(rs.getInt("room_id"));
+                electricityMeter.setMonth(rs.getInt("month"));
+                electricityMeter.setYear(rs.getInt("year"));
+                electricityMeter.setPreviousMeter(rs.getString("previous_meter"));
+                electricityMeter.setPresentMeter(rs.getString("present_meter"));
+                electricityMeter.setChargePerUnit(rs.getBigDecimal("charge_per_unit"));
+                electricityMeter.setUsageUnit(rs.getInt("usage_unit"));
+                electricityMeter.setValue(rs.getBigDecimal("value"));
+                electricityMeter.setUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("use_minimun_unit_calculate")));
+                electricityMeter.setCreatedDate(rs.getDate("created_date"));
+                electricityMeter.setUpdatedDate(rs.getDate("updated_date"));
+                
+                electricityMetersReturn.add(electricityMeter);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, ElectricityMeterDaoImpl.class.getName());
+        }
+        
+        return electricityMetersReturn;
+    }
 }

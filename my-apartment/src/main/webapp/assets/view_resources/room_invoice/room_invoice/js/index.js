@@ -1,5 +1,6 @@
 /* global app, _DELAY_PROCESS_, _CONTEXT_PATH_, SESSION_EXPIRE_STRING, iconRoom, ERROR_STRING, WARNING_STRING, INPUT_ERROR_CLASS, SUCCESS_STRING, alertUtil */
-var _ALREADY_INVOICED_ATTR_ = 'already-invoice';
+var _ALREADY_INVOICED_ATTR_ = 'already-invoiced';
+var _NOT_HAVE_METER_ATTR_ = 'not-have-meter';
 
 jQuery(document).ready(function() {
     facade.initialProcess();
@@ -56,7 +57,8 @@ var page = (function() {
                     var thisElement = jQuery(this);
                     var checkbox = thisElement.closest('.box-room_').find('.room-checkbox');
                     
-                    if(checkbox.attr(_ALREADY_INVOICED_ATTR_) == undefined) {
+                    if(checkbox.attr(_ALREADY_INVOICED_ATTR_) == undefined 
+                            && checkbox.attr(_NOT_HAVE_METER_ATTR_) == undefined) {
                         checkbox.prop("checked", !checkbox.prop("checked"));
                     }
                 });
@@ -383,6 +385,33 @@ var page = (function() {
                 }
             };
             
+            var _setNotHaveMeterData = function(response) {
+                var electriccityMeterData = response.data.roomElectricityWaterMeter.electricityMeter;
+                var boxRoom_ = page.getElement.getBoxRoom_();
+                var tempArrayRoomId = [];
+                var labelNotHaveMeter = '<div class="not-have-meter">' 
+                        + app.translate('room.invoice.not_have_meter_of_this_month') + '</div>';
+                
+                
+                for(var indexEW in electriccityMeterData) {
+                    var currentData = electriccityMeterData[indexEW];
+                    
+                    tempArrayRoomId.push(currentData.roomId.toString());
+                }
+
+                boxRoom_.each(function() {
+                    var thisBoxRoom_ = jQuery(this);
+                    var boxRoomId = thisBoxRoom_.find('[name="id"]').val();
+
+                    if(jQuery.inArray(boxRoomId, tempArrayRoomId) == -1) {
+                        thisBoxRoom_.append(labelNotHaveMeter);
+                        thisBoxRoom_.find('.room-checkbox')
+                                .attr('disabled', 'disabled')
+                                .attr(_NOT_HAVE_METER_ATTR_, 'true');
+                    }
+                });
+            };
+            
             var _closeWithClearFix = function() {
                 jQuery('.box-room_ .box-room').each(function() {
                     var thisElement = jQuery(this);
@@ -402,10 +431,16 @@ var page = (function() {
                 cache: false,
                 success: function(response) {
                     response = app.convertToJsonObject(response);
-
-                    _setCurrentCheckInLabel(response);
-                    _setAlreadyInvoiced(response);
-                    _closeWithClearFix();
+                    
+                    if(response.message == SESSION_EXPIRE_STRING) {
+                        app.alertSessionExpired();
+                    }
+                    else {
+                        _setCurrentCheckInLabel(response);
+                        _setAlreadyInvoiced(response);
+                        _setNotHaveMeterData(response);
+                        _closeWithClearFix();
+                    }
                 },
                 error: function() {
                     app.showNotice({
