@@ -7,10 +7,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
@@ -103,14 +105,40 @@ public class RoomInvoiceResource {
             /** if electricityMeterOfRoom or waterMeterOfRoom 
              * null then bypass to create room invoice */
             if(electricityMeterOfRoom != null && waterMeterOfRoom != null) {
-                RoomInvoice roomInvoice = this.prepareRoomInvoiceForCreate(roomIdFromData, month, year, 
+                
+                Boolean alreadyHaveData = this.checkAlreadyHaveData(roomIdFromData, month, year);
+                
+                if(!alreadyHaveData) {
+                    RoomInvoice roomInvoice = this.prepareRoomInvoiceForCreate(roomIdFromData, month, year, 
                     electricityMeterOfRoom, waterMeterOfRoom);
                 
-                roomInvoices.add(roomInvoice);
+                    roomInvoices.add(roomInvoice);
+                }
             }
         }
         
         return roomInvoices;
+    }
+    
+    /**
+     * 
+     * @param roomIdFromData
+     * @param month
+     * @param year
+     * @return Boolean
+     */
+    private Boolean checkAlreadyHaveData(Integer roomIdFromData, Integer month, Integer year) {
+        Boolean alreadyHaveData = Boolean.FALSE;
+        
+        RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
+        
+        List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getRoomInvoiceByRoomIdMonthYear(roomIdFromData, month, year);
+        
+        if(roomInvoices.size() > 0) {
+            alreadyHaveData = Boolean.TRUE;
+        }
+        
+        return alreadyHaveData;
     }
     
     /**
@@ -195,6 +223,34 @@ public class RoomInvoiceResource {
         }
         
         return waterMeter;
+    }
+    
+    
+
+    @Path("get_room_invoice_month_year/{building_id}/{month}/{year}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getRoomInvoiceMonthYear(
+            @PathParam("building_id") Integer buildingId,
+            @PathParam("month") Integer month,
+            @PathParam("year") Integer year
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+
+        try {
+            RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
+            
+            List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getRoomInvoiceMonthYear(buildingId, month, year);
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomInvoices);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
     }
     
 

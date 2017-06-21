@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +20,8 @@ public class CommonWsUtils {
     
     public static final String MEDIA_TYPE_JSON = MediaType.APPLICATION_JSON  + ";charset=utf-8";
     public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
+    
+    public static final String ROOM_INVOICE_ABBREVIATION = "INV";
     
     public static JSONObject receiveJsonObject(InputStream incomingData) {
         JSONObject jsonObject = new JSONObject();
@@ -97,6 +100,10 @@ public class CommonWsUtils {
         hashMapReturn.put("year", year);
         
         return hashMapReturn;
+    }
+    
+    public static String getTimestampString() {
+        return new Timestamp(System.currentTimeMillis()).getTime()+"";
     }
     
 

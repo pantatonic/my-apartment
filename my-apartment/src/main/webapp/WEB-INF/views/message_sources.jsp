@@ -123,6 +123,7 @@
     "room.invoice":"<spring:message code="room.invoice" />",
     "room.invoice.create_room_invoice":"<spring:message code="room.invoice.create_room_invoice" />",
     "room.invoice.please_checked_room":"<spring:message code="room.invoice.please_checked_room" />",
-    "room.invoice.create_invoice_for_room":"<spring:message code="room.invoice.create_invoice_for_room" />"
+    "room.invoice.create_invoice_for_room":"<spring:message code="room.invoice.create_invoice_for_room" />",
+    "room.invoice.already_invoice":"<spring:message code="room.invoice.already_invoice" />"
     }
 </div>

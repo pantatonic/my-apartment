@@ -1,4 +1,5 @@
 /* global app, _DELAY_PROCESS_, _CONTEXT_PATH_, SESSION_EXPIRE_STRING, iconRoom, ERROR_STRING, WARNING_STRING, INPUT_ERROR_CLASS, SUCCESS_STRING, alertUtil */
+var _ALREADY_INVOICED_ATTR_ = 'already-invoice';
 
 jQuery(document).ready(function() {
     facade.initialProcess();
@@ -55,7 +56,9 @@ var page = (function() {
                     var thisElement = jQuery(this);
                     var checkbox = thisElement.closest('.box-room_').find('.room-checkbox');
                     
-                    checkbox.prop("checked", !checkbox.prop("checked"));
+                    if(checkbox.attr(_ALREADY_INVOICED_ATTR_) == undefined) {
+                        checkbox.prop("checked", !checkbox.prop("checked"));
+                    }
                 });
             },
             createRoomInvoice: function() {
@@ -315,8 +318,7 @@ var page = (function() {
                             page.boxRoomContainer.noDataFound();
                         }
                         
-                        page.getRoomInvoiceRoomDetailList();
-                        page.getRoomInvoice();
+                        page.getRoomInvoiceRoomDetailList();                        
                     };
                     
                     page.getElement.getBuildingList().removeClass(INPUT_ERROR_CLASS);
@@ -363,6 +365,24 @@ var page = (function() {
                 }
             };
             
+            var _setAlreadyInvoiced = function(response) {
+                var alreadyInvoicedData = response.data.roomInvoiceRoomDetailList;
+                var labelAlreadyInvoicedTemplate = '<div class="already-invoiced">' 
+                        + app.translate('room.invoice.already_invoice') + '</div>';
+                
+                for(var index in alreadyInvoicedData) {
+                    var currentData = alreadyInvoicedData[index];
+                    var boxRoom = jQuery('.box-room[data-id="' + currentData.roomId + '"]');
+                    var boxRoom_ = boxRoom.closest('.box-room_');
+                    
+                    boxRoom_.append(labelAlreadyInvoicedTemplate);
+                    boxRoom_.find('.already-invoiced').append('<br>' + currentData.invoiceNo);
+                    boxRoom_.find('.room-checkbox')
+                            .attr('disabled', 'disabled')
+                            .attr(_ALREADY_INVOICED_ATTR_, 'true');
+                }
+            };
+            
             var _closeWithClearFix = function() {
                 jQuery('.box-room_ .box-room').each(function() {
                     var thisElement = jQuery(this);
@@ -374,11 +394,17 @@ var page = (function() {
             jQuery.ajax({
                 type: 'post',
                 url: _CONTEXT_PATH_ + '/get_room_invoice_room_detail_list.html',
+                data: {
+                    building_id: page.getElement.getBuildingList().val(),
+                    month: page.roomInvoiceMonthYear.getMonth(),
+                    year: page.roomInvoiceMonthYear.getYear()
+                },
                 cache: false,
                 success: function(response) {
                     response = app.convertToJsonObject(response);
 
                     _setCurrentCheckInLabel(response);
+                    _setAlreadyInvoiced(response);
                     _closeWithClearFix();
                 },
                 error: function() {
@@ -390,13 +416,6 @@ var page = (function() {
                 }
                 
             });
-        },
-        getRoomInvoice: function() {
-            var buildingList = page.getElement.getBuildingList();
-            
-            if(!app.valueUtils.isEmptyValue(buildingList.val())) {
-                alert('To get Room Invoice of this month');
-            }
         }
     };
 })();

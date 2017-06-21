@@ -3,8 +3,11 @@ package my.apartment.services;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import my.apartment.common.CommonUtils;
 import my.apartment.common.CommonWsDb;
+import my.apartment.common.CommonWsUtils;
 import my.apartment.model.RoomInvoice;
 
 
@@ -19,6 +22,10 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
         Boolean resultSave = Boolean.TRUE;
         
         try {
+            System.out.println("-- create --");
+            System.out.println(roomInvoice.getRoomId());
+            System.out.println("");
+            
             con = CommonWsDb.getDbConnection();
             
             String stringQuery = "INSERT INTO room_invoice "
@@ -50,9 +57,8 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
                     + "?, ?, ?, ?, ?, "
                     + "?)"; 
             
-            String invoiceNoString = CommonUtils.getCurrentYearString() 
-                    + CommonUtils.getCurrentMonthString()
-                    + CommonUtils.getCurrentDayString()
+            String invoiceNoString = CommonWsUtils.ROOM_INVOICE_ABBREVIATION 
+                    + CommonWsUtils.getTimestampString()
                     + CommonUtils.getZeroFillWithNumber(roomInvoice.getRoomId(), 4);
             
             ps = con.prepareStatement(stringQuery);
@@ -101,6 +107,134 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
         }
         
         return resultSave;
+    }
+    
+    @Override
+    public List<RoomInvoice> getRoomInvoiceByRoomIdMonthYear(Integer roomId, Integer month, Integer year) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<RoomInvoice> roomInvoicesReturn = new ArrayList<RoomInvoice>();
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT * FROM room_invoice "
+                    + "WHERE room_invoice.room_id = ? "
+                    + "AND room_invoice.month = ? "
+                    + "AND room_invoice.year = ? LIMIT 0, 1";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
+            ps.setInt(2, month);
+            ps.setInt(3, year);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomInvoice roomInvoice = new RoomInvoice();
+             
+                roomInvoice.setId(rs.getInt("id"));
+                roomInvoice.setInvoiceNo(rs.getString("invoice_no"));
+                roomInvoice.setInvoiceDate(rs.getDate("invoice_date"));
+                roomInvoice.setMonth(rs.getInt("month"));
+                roomInvoice.setYear(rs.getInt("year"));
+                roomInvoice.setRoomId(rs.getInt("room_id"));
+                roomInvoice.setElectricityPreviousMeter(rs.getString("electricity_previous_meter"));
+                roomInvoice.setElectricityPresentMeter(rs.getString("electricity_present_meter"));
+                roomInvoice.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
+                roomInvoice.setElectricityUsageUnit(rs.getInt("electricity_usage_unit"));
+                roomInvoice.setElectricityValue(rs.getBigDecimal("electricity_value"));
+                roomInvoice.setElectricityUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("electricity_use_minimun_unit_calculate")));
+                roomInvoice.setWaterPreviousMeter(rs.getString("water_previous_meter"));
+                roomInvoice.setWaterPresentMeter(rs.getString("water_present_meter"));
+                roomInvoice.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
+                roomInvoice.setWaterUsageUnit(rs.getInt("water_usage_unit"));
+                roomInvoice.setWaterValue(rs.getBigDecimal("water_value"));
+                roomInvoice.setWaterUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("water_use_minimun_unit_calculate")));
+                roomInvoice.setStatus(rs.getInt("status"));
+                roomInvoice.setDescription(rs.getString("description"));
+                roomInvoice.setReceiptId(rs.getInt("receipt_id"));
+                roomInvoice.setCreatedDate(rs.getDate("created_date"));
+                roomInvoice.setUpdatedDate(rs.getDate("updated_date"));
+                
+                roomInvoicesReturn.add(roomInvoice);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomInvoiceDaoImpl.class.getName());
+        }
+        
+        return roomInvoicesReturn;
+    }
+    
+    @Override
+    public List<RoomInvoice> getRoomInvoiceMonthYear(Integer buildingId, Integer month, Integer year) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<RoomInvoice> roomInvoicesReturn = new ArrayList<RoomInvoice>();
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT room_invoice.* " +
+                "FROM room_invoice JOIN room ON room_invoice.room_id = room.id " +
+                "JOIN building ON room.building_id = building.id " +
+                "WHERE building.id = ? " +
+                "AND room_invoice.month = ? " +
+                "AND room_invoice.year = ? ";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, buildingId);
+            ps.setInt(2, month);
+            ps.setInt(3, year);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomInvoice roomInvoice = new RoomInvoice();
+             
+                roomInvoice.setId(rs.getInt("id"));
+                roomInvoice.setInvoiceNo(rs.getString("invoice_no"));
+                roomInvoice.setInvoiceDate(rs.getDate("invoice_date"));
+                roomInvoice.setMonth(rs.getInt("month"));
+                roomInvoice.setYear(rs.getInt("year"));
+                roomInvoice.setRoomId(rs.getInt("room_id"));
+                roomInvoice.setElectricityPreviousMeter(rs.getString("electricity_previous_meter"));
+                roomInvoice.setElectricityPresentMeter(rs.getString("electricity_present_meter"));
+                roomInvoice.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
+                roomInvoice.setElectricityUsageUnit(rs.getInt("electricity_usage_unit"));
+                roomInvoice.setElectricityValue(rs.getBigDecimal("electricity_value"));
+                roomInvoice.setElectricityUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("electricity_use_minimun_unit_calculate")));
+                roomInvoice.setWaterPreviousMeter(rs.getString("water_previous_meter"));
+                roomInvoice.setWaterPresentMeter(rs.getString("water_present_meter"));
+                roomInvoice.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
+                roomInvoice.setWaterUsageUnit(rs.getInt("water_usage_unit"));
+                roomInvoice.setWaterValue(rs.getBigDecimal("water_value"));
+                roomInvoice.setWaterUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("water_use_minimun_unit_calculate")));
+                roomInvoice.setStatus(rs.getInt("status"));
+                roomInvoice.setDescription(rs.getString("description"));
+                roomInvoice.setReceiptId(rs.getInt("receipt_id"));
+                roomInvoice.setCreatedDate(rs.getDate("created_date"));
+                roomInvoice.setUpdatedDate(rs.getDate("updated_date"));
+                
+                roomInvoicesReturn.add(roomInvoice);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomInvoiceDaoImpl.class.getName());
+        }
+        
+        return roomInvoicesReturn;
     }
     
 }

@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -48,12 +49,18 @@ public class RoomInvoiceController {
     
     /**
      * 
+     * @param buildingId
+     * @param month
+     * @param year
      * @param response
      * @return String
      */
     @RequestMapping(value = "/get_room_invoice_room_detail_list.html")
     @ResponseBody
     public String getRoomInvoiceRoomDetailList(
+            @RequestParam(value = "building_id", required = true) String buildingId,
+            @RequestParam(value = "month", required = true) String month,
+            @RequestParam(value = "year", required = true) String year,
             HttpServletResponse response
     ) {
         JSONObject jsonObjectReturn = new JSONObject();
@@ -62,11 +69,13 @@ public class RoomInvoiceController {
         
         try {
             JSONObject jsonObjectGetCurrentCheckIn = CommonAppWsUtils.get("room/get_current_check_in");
-            //JSONObject jsonObjectGetRoomInvoiceMonthYear = CommonAppWsUtils.get("room_invoice/get_invoice_month_year");
-            
+            JSONObject jsonObjectGetRoomInvoiceMonthYear 
+                    = CommonAppWsUtils.get("room_invoice/get_room_invoice_month_year/" + buildingId + "/" + month + "/" + year);
+                        
             jsonObjectReturn.put(CommonString.DATA_STRING, 
                     new JSONObject()
                             .put("currentCheckIn", jsonObjectGetCurrentCheckIn.get(CommonString.DATA_STRING))
+                            .put("roomInvoiceRoomDetailList", jsonObjectGetRoomInvoiceMonthYear.get(CommonString.DATA_STRING))
             );
         }
         catch(Exception e) {
