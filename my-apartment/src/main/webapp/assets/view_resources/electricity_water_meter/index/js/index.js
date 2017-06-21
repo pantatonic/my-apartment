@@ -208,6 +208,7 @@ var page = (function() {
             var _setData = function(response) {
                 var dataElectricity = response.data.electricityMeter;
                 var dataWater = response.data.waterMeter;
+                var dataAlreadyInvoiced  = response.data.roomInvoiced
 
                 /** set electricity meter data */
                 for(var index in dataElectricity) {
@@ -239,6 +240,23 @@ var page = (function() {
                     }
                 }
                 
+                /** show already invoiced */
+                var labelAlreadyInvoicedTemplate = '<div class="already-invoiced">' 
+                        + app.translate('room.invoice.already_invoice') + '</div>';
+                
+                for(var indexAlreadyInvoiced in dataAlreadyInvoiced) {
+                    var eachAlreadyInvoiced = dataAlreadyInvoiced[indexAlreadyInvoiced];
+                    
+                    
+                    if(Object.keys(eachAlreadyInvoiced).length > 0) {
+                        var currentBoxRoom_ = boxRoom_.find('.box-room').find('input[name="id"][value="' + eachAlreadyInvoiced.roomId + '"]').closest('.box-room_');
+                        
+                        currentBoxRoom_.append(labelAlreadyInvoicedTemplate);
+                        currentBoxRoom_.find('.already-invoiced').append('<br>' + eachAlreadyInvoiced.invoiceNo);
+                        currentBoxRoom_.find('[name="present_electric_meter"]').attr('readonly', 'readonly');
+                        currentBoxRoom_.find('[name="present_water_meter"]').attr('readonly', 'readonly');
+                    }
+                }
             };
             
             if(!app.valueUtils.isEmptyValue(buildingList.val())) {

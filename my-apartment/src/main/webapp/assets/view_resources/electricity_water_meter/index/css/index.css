@@ -65,3 +65,15 @@
 #electricity-water-meter-save-button {
     float: right;
 }
+
+.already-invoiced {
+    /*position: absolute;*/
+    width: 100%;
+    color: #3c8dbc;
+    font-size: 16px;
+    font-weight: bold;
+    top: 40%;
+    /*background-color: #c9c9c9;*/
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    opacity: 0.9
+}

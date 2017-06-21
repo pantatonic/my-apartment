@@ -21,6 +21,7 @@ import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomCurrentCheckIn;
+import my.apartment.model.RoomInvoice;
 import my.apartment.model.RoomNoticeCheckOut;
 import my.apartment.model.RoomReservation;
 import my.apartment.model.WaterMeter;
@@ -28,6 +29,8 @@ import my.apartment.services.RoomCurrentCheckInDao;
 import my.apartment.services.RoomCurrentCheckInDaoImpl;
 import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
+import my.apartment.services.RoomInvoiceDao;
+import my.apartment.services.RoomInvoiceDaoImpl;
 import my.apartment.services.RoomReservationDao;
 import my.apartment.services.RoomReservationDaoImpl;
 import org.json.JSONArray;
@@ -604,12 +607,17 @@ public class RoomResource {
             
             List<ElectricityMeter> electricityMeters = roomDaoImpl.getElectricityMeterByBuildingIdMonthYear(buildingId, month, year);
             List<WaterMeter> waterMeters = roomDaoImpl.getWaterMeterByBuildingIdMonthYear(buildingId, month, year);
+            
+            RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
+            
+            List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getRoomInvoiceMonthYear(buildingId, month, year);
 
             
             JSONObject subJsonObject = new JSONObject();
             
             subJsonObject.put("electricityMeter", electricityMeters);
             subJsonObject.put("waterMeter", waterMeters);
+            subJsonObject.put("roomInvoiced", roomInvoices);
             
             jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "");
             jsonObjectReturn.put(CommonString.DATA_STRING, subJsonObject);

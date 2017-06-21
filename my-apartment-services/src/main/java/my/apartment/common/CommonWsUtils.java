@@ -10,9 +10,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.MediaType;
+import my.apartment.model.RoomInvoice;
+import my.apartment.services.RoomInvoiceDao;
+import my.apartment.services.RoomInvoiceDaoImpl;
 import org.json.JSONObject;
 
 
@@ -104,6 +108,20 @@ public class CommonWsUtils {
     
     public static String getTimestampString() {
         return new Timestamp(System.currentTimeMillis()).getTime()+"";
+    }
+    
+    public static Boolean checkAlreadyHaveRoomInvoiceData(Integer roomId, Integer month, Integer year) {
+        Boolean alreadyHaveData = Boolean.FALSE;
+        
+        RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
+        
+        List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getRoomInvoiceByRoomIdMonthYear(roomId, month, year);
+        
+        if(roomInvoices.size() > 0) {
+            alreadyHaveData = Boolean.TRUE;
+        }
+        
+        return alreadyHaveData;
     }
     
 

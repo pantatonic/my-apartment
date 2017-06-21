@@ -128,17 +128,7 @@ public class RoomInvoiceResource {
      * @return Boolean
      */
     private Boolean checkAlreadyHaveData(Integer roomIdFromData, Integer month, Integer year) {
-        Boolean alreadyHaveData = Boolean.FALSE;
-        
-        RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
-        
-        List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getRoomInvoiceByRoomIdMonthYear(roomIdFromData, month, year);
-        
-        if(roomInvoices.size() > 0) {
-            alreadyHaveData = Boolean.TRUE;
-        }
-        
-        return alreadyHaveData;
+        return CommonWsUtils.checkAlreadyHaveRoomInvoiceData(roomIdFromData, month, year);
     }
     
     /**

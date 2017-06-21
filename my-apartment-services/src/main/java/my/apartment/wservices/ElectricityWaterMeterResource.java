@@ -114,6 +114,10 @@ public class ElectricityWaterMeterResource {
         return jsonObjectReturn.toString();
     }
     
+    private Boolean checkAlreadyHaveData(Integer roomIdFromData, Integer month, Integer year) {
+        return CommonWsUtils.checkAlreadyHaveRoomInvoiceData(roomIdFromData, month, year);
+    }
+    
     /**
      * 
      * @param electricityMeters
@@ -354,8 +358,16 @@ public class ElectricityWaterMeterResource {
 
             electricityMeter.setMonth(jsonObjectReceive.getInt("month"));
             electricityMeter.setYear(jsonObjectReceive.getInt("year"));
+            
+            Boolean alreadyHaveData 
+                    = this.checkAlreadyHaveData(electricityMeter.getRoomId(), 
+                            jsonObjectReceive.getInt("month"), 
+                            jsonObjectReceive.getInt("year"));
+            
+            if(!alreadyHaveData) {
+                electricityMeters.add(electricityMeter);
+            }
 
-            electricityMeters.add(electricityMeter);
         }
         
         return electricityMeters;
@@ -382,8 +394,15 @@ public class ElectricityWaterMeterResource {
 
             waterMeter.setMonth(jsonObjectReceive.getInt("month"));
             waterMeter.setYear(jsonObjectReceive.getInt("year"));
-
-            waterMeters.add(waterMeter);
+            
+            Boolean alreadyHaveData 
+                = this.checkAlreadyHaveData(waterMeter.getRoomId(), 
+                        jsonObjectReceive.getInt("month"), 
+                        jsonObjectReceive.getInt("year"));
+            
+            if(!alreadyHaveData) {
+                waterMeters.add(waterMeter);
+            }
         }
         
         return waterMeters;
