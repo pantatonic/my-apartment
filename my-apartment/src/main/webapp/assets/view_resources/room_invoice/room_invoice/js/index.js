@@ -1,6 +1,7 @@
 /* global app, _DELAY_PROCESS_, _CONTEXT_PATH_, SESSION_EXPIRE_STRING, iconRoom, ERROR_STRING, WARNING_STRING, INPUT_ERROR_CLASS, SUCCESS_STRING, alertUtil */
 var _ALREADY_INVOICED_ATTR_ = 'already-invoiced';
 var _NOT_HAVE_METER_ATTR_ = 'not-have-meter';
+var _CANCEL_INVOICE_ATTR_ = 'data-invoice-id';
 
 jQuery(document).ready(function() {
     facade.initialProcess();
@@ -17,6 +18,7 @@ var facade = (function() {
             page.addEvent.getRoomByChangeBuildingList();
             page.addEvent.checkedRoomCheckbox();
             page.addEvent.createRoomInvoice();
+            page.addEvent.cancelRoomInvoice();
         }
     };
 })();
@@ -68,6 +70,15 @@ var page = (function() {
                 
                 buttonCreate.click(function() {
                     page.createRoomInvoiceProcess();
+                });
+            },
+            cancelRoomInvoice: function() {
+                var boxRoomContainer = page.getElement.getBoxRoomContainer();
+                
+                boxRoomContainer.on('click', '.cancel-invoice-button', function() {
+                    var thisElement = jQuery(this);
+                    var roomInvoiceId = thisElement.attr(_CANCEL_INVOICE_ATTR_);
+                    alert('Goto cancel room invoice : ' + roomInvoiceId);
                 });
             }
         },
@@ -370,7 +381,11 @@ var page = (function() {
             var _setAlreadyInvoiced = function(response) {
                 var alreadyInvoicedData = response.data.roomInvoiceRoomDetailList;
                 var labelAlreadyInvoicedTemplate = '<div class="already-invoiced">' 
-                        + app.translate('room.invoice.already_invoice') + '</div>';
+                        + app.translate('room.invoice.already_invoice') 
+                        + ' '
+                        + '<button type="button" '
+                            + 'class="btn btn-danger btn-flat btn-sm cancel-invoice-button">Cancel</button>'
+                        + '</div>';
                 
                 for(var index in alreadyInvoicedData) {
                     var currentData = alreadyInvoicedData[index];
@@ -382,6 +397,7 @@ var page = (function() {
                     boxRoom_.find('.room-checkbox')
                             .attr('disabled', 'disabled')
                             .attr(_ALREADY_INVOICED_ATTR_, 'true');
+                    boxRoom_.find('.cancel-invoice-button').attr(_CANCEL_INVOICE_ATTR_, currentData.id);
                 }
             };
             

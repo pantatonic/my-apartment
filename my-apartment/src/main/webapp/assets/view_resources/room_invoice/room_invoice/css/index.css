@@ -103,3 +103,7 @@
     width: 15px;
     height: 15px;
 }
+
+.cancel-invoice-button {
+    padding: 1px 5px 1px 5px;
+}
