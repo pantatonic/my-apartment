@@ -123,7 +123,9 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
             String stringQuery = "SELECT * FROM room_invoice "
                     + "WHERE room_invoice.room_id = ? "
                     + "AND room_invoice.month = ? "
-                    + "AND room_invoice.year = ? LIMIT 0, 1";
+                    + "AND room_invoice.year = ? "
+                    + "AND status IN (1,2) "
+                    + "LIMIT 0, 1";
             
             ps = con.prepareStatement(stringQuery);
             ps.setInt(1, roomId);
@@ -188,7 +190,8 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
                 "JOIN building ON room.building_id = building.id " +
                 "WHERE building.id = ? " +
                 "AND room_invoice.month = ? " +
-                "AND room_invoice.year = ? ";
+                "AND room_invoice.year = ? " +
+                "AND room_invoice.status IN (1,2)";
             
             ps = con.prepareStatement(stringQuery);
             ps.setInt(1, buildingId);
