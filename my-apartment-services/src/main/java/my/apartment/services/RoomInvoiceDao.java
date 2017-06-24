@@ -12,4 +12,6 @@ public interface RoomInvoiceDao {
     
     public List<RoomInvoice> getRoomInvoiceMonthYear(Integer buildingId, Integer month, Integer year);
     
+    public Boolean cancel(RoomInvoice roomInvoice);
+    
 }

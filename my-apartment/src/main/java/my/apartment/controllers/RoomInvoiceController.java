@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -128,6 +129,42 @@ public class RoomInvoiceController {
                     .toString();
 
             jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room_invoice/create");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    /**
+     * 
+     * @param roomInvoiceId
+     * @param description
+     * @param response
+     * @return String
+     */
+    @RequestMapping(value = "/cancel_room_invoice.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String cancelRoomInvoice(
+            @RequestParam("room_invoice_id") String roomInvoiceId,
+            @RequestParam("description") String description,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            //TODO : check receipt before delete
+            
+            MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
+            parametersMap.add("room_invoice_id", roomInvoiceId);
+            parametersMap.add("description", description);
+            
+            jsonObjectReturn = CommonAppWsUtils.postWithMultiValueMap(parametersMap, "room_invoice/cancel");
         }
         catch(Exception e) {
             e.printStackTrace();

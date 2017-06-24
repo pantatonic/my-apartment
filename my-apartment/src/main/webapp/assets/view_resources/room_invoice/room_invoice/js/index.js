@@ -64,6 +64,10 @@ var page = (function() {
                         checkbox.prop("checked", !checkbox.prop("checked"));
                     }
                 });
+                
+                jQuery('#cancel-invoice-process-button').click(function() {
+                    page.cancelRoomInvoiceProcess();
+                });
             },
             createRoomInvoice: function() {
                 var buttonCreate = page.getElement.getCreateRoomInvoiceButton();
@@ -77,8 +81,8 @@ var page = (function() {
                 
                 boxRoomContainer.on('click', '.cancel-invoice-button', function() {
                     var thisElement = jQuery(this);
-                    var roomInvoiceId = thisElement.attr(_CANCEL_INVOICE_ATTR_);
-                    alert('Goto cancel room invoice : ' + roomInvoiceId);
+                    
+                    page.cancelRoomInvoice(thisElement);
                 });
             }
         },
@@ -114,6 +118,9 @@ var page = (function() {
             },
             getRoomInvoiceMonthYear: function() {
                 return jQuery('#room-invoice-month-year');
+            },
+            getModalCancelRoomInvoice: function() {
+                return jQuery('#modal-cancel-room-invoice');
             }
         },
         boxRoomContainer: {
@@ -131,6 +138,76 @@ var page = (function() {
             
                 page.getElement.getBoxRoomContainer().html(html);
             }
+        },
+        cancelRoomInvoice: function(cancelButton) {
+            var roomInvoiceId = cancelButton.attr(_CANCEL_INVOICE_ATTR_);
+            var invoiceNo = cancelButton.closest('.already-invoiced').find('.invoice-no').text();
+            var modal_ = page.getElement.getModalCancelRoomInvoice();
+            
+            modal_.find('#invoice-display').html(invoiceNo);
+            modal_.find('[name="room_invoice_id"]').val(roomInvoiceId);
+            
+            /** clear old data */
+            modal_.find('[name="cancel_description"]').val('');
+            
+            modal_.modal('show');
+        },
+        cancelRoomInvoiceProcess: function() {
+            var modal_ = page.getElement.getModalCancelRoomInvoice();
+            
+            var roomInvoiceId = modal_.find('[name="room_invoice_id"]').val();
+            var description = modal_.find('[name="cancel_description"]').val();
+            
+            var cancelButton = modal_.find('#cancel-invoice-process-button');
+            
+            cancelButton.bootstrapBtn('loading');
+            
+            setTimeout(function() {
+                jQuery.ajax({
+                    type: 'post',
+                    url: _CONTEXT_PATH_ + '/cancel_room_invoice.html',
+                    data: {
+                        room_invoice_id: roomInvoiceId,
+                        description: description
+                    },
+                    cache: false,
+                    success: function(response) {
+                        response = app.convertToJsonObject(response);
+                        
+                        if(response.result == SUCCESS_STRING) {
+                            app.showNotice({
+                                message: app.translate('common.save_success'),
+                                type: response.result
+                            });
+                            
+                            modal_.modal('hide');
+                            
+                            setTimeout(function() {
+                                page.getRoom();
+                            }, _DELAY_PROCESS_);
+                        }
+                        else {
+                            if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                            }
+                            else {
+                                app.showNotice({
+                                    message: app.translate('common.processing_failed'),
+                                    type: response.result
+                                });
+                            }
+                        }
+                        
+                        cancelButton.bootstrapBtn('reset');
+                    },
+                    error: function() {
+                        app.alertSomethingError();
+                        
+                        cancelButton.bootstrapBtn('reset');
+                    }
+                });
+            }, _DELAY_PROCESS_);
+            
         },
         createRoomInvoiceProcess: function() {
             var buttonCreate = page.getElement.getCreateRoomInvoiceButton();
@@ -393,7 +470,7 @@ var page = (function() {
                     var boxRoom_ = boxRoom.closest('.box-room_');
                     
                     boxRoom_.append(labelAlreadyInvoicedTemplate);
-                    boxRoom_.find('.already-invoiced').append('<br>' + currentData.invoiceNo);
+                    boxRoom_.find('.already-invoiced').append('<br>' + '<span class="invoice-no">' + currentData.invoiceNo + '</span>');
                     boxRoom_.find('.room-checkbox')
                             .attr('disabled', 'disabled')
                             .attr(_ALREADY_INVOICED_ATTR_, 'true');

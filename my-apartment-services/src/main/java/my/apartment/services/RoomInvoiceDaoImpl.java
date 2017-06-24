@@ -91,7 +91,7 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
                 ps.setInt(20, roomInvoice.getReceiptId());
             }
 
-            ps.setString(21, CommonWsDb.getNowDateString());
+            ps.setString(21, CommonWsDb.getNowDateTimeString());
             
             Integer effectRow = ps.executeUpdate();
             
@@ -238,6 +238,54 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
         }
         
         return roomInvoicesReturn;
+    }
+    
+    /**
+     * 
+     * @param roomInvoice
+     * @return Boolean
+     */
+    @Override
+    public Boolean cancel(RoomInvoice roomInvoice) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        
+        Boolean resultCancel = Boolean.TRUE;
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String querysString = "UPDATE room_invoice "
+                    + "SET "
+                    + "status = ?, " //1
+                    + "description = ?, " //2
+                    + "updated_date = ? " //3
+                    + "WHERE id = ?"; //4
+            
+            ps = con.prepareStatement(querysString);
+            ps.setInt(1, 0);
+            ps.setString(2, roomInvoice.getDescription());
+            ps.setString(3, CommonWsDb.getNowDateTimeString());
+            ps.setInt(4, roomInvoice.getId());
+            
+            Integer effectRow = ps.executeUpdate();
+        
+            CommonWsDb.optimizeTable(con, ps, "room");
+
+            if (effectRow == 0) {
+                resultCancel = Boolean.FALSE;
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            resultCancel = Boolean.FALSE;
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomInvoiceDaoImpl.class.getName());
+        }
+        
+        return resultCancel;
     }
     
 }

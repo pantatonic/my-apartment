@@ -1,7 +1,5 @@
 package my.apartment.controllers;
 
-import java.util.Date;
-import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonString;
 
@@ -9,15 +7,11 @@ import my.apartment.common.CommonString;
 import my.apartment.common.CommonAppUtils;
 import my.apartment.common.CommonAppWsUtils;
 import my.apartment.common.JsonObjectUtils;
-import my.apartment.common.ServiceDomain;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -26,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 

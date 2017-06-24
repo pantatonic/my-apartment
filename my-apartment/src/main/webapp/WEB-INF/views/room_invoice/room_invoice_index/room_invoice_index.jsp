@@ -87,5 +87,8 @@
                 </div>
             </div>
         </textarea>
+                    
+        <jsp:include page="room_invoice_cancel.jsp" flush="true" />
+        
     </tiles:putAttribute>
 </tiles:insertDefinition>    
