@@ -1,6 +1,5 @@
 package my.apartment.services;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -212,6 +211,7 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
                 roomInvoice.setMonth(rs.getInt("month"));
                 roomInvoice.setYear(rs.getInt("year"));
                 roomInvoice.setRoomId(rs.getInt("room_id"));
+                roomInvoice.setRoomPricePerMonth(rs.getBigDecimal("room_price_per_month"));
                 roomInvoice.setElectricityPreviousMeter(rs.getString("electricity_previous_meter"));
                 roomInvoice.setElectricityPresentMeter(rs.getString("electricity_present_meter"));
                 roomInvoice.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));

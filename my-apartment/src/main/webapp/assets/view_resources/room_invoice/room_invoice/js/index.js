@@ -1,7 +1,8 @@
 /* global app, _DELAY_PROCESS_, _CONTEXT_PATH_, SESSION_EXPIRE_STRING, iconRoom, ERROR_STRING, WARNING_STRING, INPUT_ERROR_CLASS, SUCCESS_STRING, alertUtil */
 var _ALREADY_INVOICED_ATTR_ = 'already-invoiced';
 var _NOT_HAVE_METER_ATTR_ = 'not-have-meter';
-var _CANCEL_INVOICE_ATTR_ = 'data-invoice-id';
+var _INVOICE_ID_ATTR_ = 'data-invoice-id';
+
 
 jQuery(document).ready(function() {
     facade.initialProcess();
@@ -19,6 +20,7 @@ var facade = (function() {
             page.addEvent.checkedRoomCheckbox();
             page.addEvent.createRoomInvoice();
             page.addEvent.cancelRoomInvoice();
+            page.addEvent.showRoomInvoice();
         }
     };
 })();
@@ -84,6 +86,15 @@ var page = (function() {
                     
                     page.cancelRoomInvoice(thisElement);
                 });
+            },
+            showRoomInvoice: function() {
+                var boxRoomContainer = page.getElement.getBoxRoomContainer();
+                
+                boxRoomContainer.on('click', '.invoice-detail', function() {
+                    var thisElement = jQuery(this);
+                    
+                    page.showRoomInvoice(thisElement);
+                });
             }
         },
         roomInvoiceMonthYear: {
@@ -121,6 +132,9 @@ var page = (function() {
             },
             getModalCancelRoomInvoice: function() {
                 return jQuery('#modal-cancel-room-invoice');
+            },
+            getModalRoomInvoiceDetail: function() {
+                return jQuery('#modal-room-invoice-detail');
             }
         },
         boxRoomContainer: {
@@ -139,8 +153,36 @@ var page = (function() {
                 page.getElement.getBoxRoomContainer().html(html);
             }
         },
+        showRoomInvoice: function(invoiceDetailButton) {
+            var roomInvoiceId = invoiceDetailButton.attr(_INVOICE_ID_ATTR_);
+            var roomNo = invoiceDetailButton.closest('.box-room_').attr('data-room-no');
+            var buildingList = page.getElement.getBuildingList();
+            var contentBox = buildingList.closest('.box-primary');
+            var modal_ = page.getElement.getModalRoomInvoiceDetail();
+            var jsonData = invoiceDetailButton.closest('.already-invoiced').find('.invoice-json-data').text();
+            jsonData = JSON.parse(jsonData);
+
+            app.loadingInElement('show', contentBox);
+            
+            setTimeout(function() {
+                for(var index in jsonData) {
+                    modal_.find('[data-key="' + index + '"]').html(jsonData[index]);
+                }
+
+                var grandTotal = jsonData.electricityValue + jsonData.waterValue + jsonData.roomPricePerMonth;
+                
+                modal_.find('#grand-total-display').html(grandTotal);
+                modal_.find('#room-no-display').html(roomNo);
+                
+                modal_.modal('show');
+                
+                app.loadingInElement('remove', contentBox);
+            }, _DELAY_PROCESS_);
+            
+            
+        },
         cancelRoomInvoice: function(cancelButton) {
-            var roomInvoiceId = cancelButton.attr(_CANCEL_INVOICE_ATTR_);
+            var roomInvoiceId = cancelButton.attr(_INVOICE_ID_ATTR_);
             var invoiceNo = cancelButton.closest('.already-invoiced').find('.invoice-no').text();
             var modal_ = page.getElement.getModalCancelRoomInvoice();
             
@@ -470,11 +512,20 @@ var page = (function() {
                     var boxRoom_ = boxRoom.closest('.box-room_');
                     
                     boxRoom_.append(labelAlreadyInvoicedTemplate);
-                    boxRoom_.find('.already-invoiced').append('<br>' + '<span class="invoice-no">' + currentData.invoiceNo + '</span>');
+                    boxRoom_.find('.already-invoiced').append('<br>' 
+                            + '<span class="invoice-no">' 
+                            + currentData.invoiceNo + ' '
+                            + '<i class="fa fa-search invoice-detail"></i>'
+                            + '</span>');
                     boxRoom_.find('.room-checkbox')
                             .attr('disabled', 'disabled')
                             .attr(_ALREADY_INVOICED_ATTR_, 'true');
-                    boxRoom_.find('.cancel-invoice-button').attr(_CANCEL_INVOICE_ATTR_, currentData.id);
+                    boxRoom_.find('.cancel-invoice-button').attr(_INVOICE_ID_ATTR_, currentData.id);
+                    boxRoom_.find('.invoice-detail').attr(_INVOICE_ID_ATTR_, currentData.id);
+                    
+                    boxRoom_.find('.already-invoiced').append('<span class="invoice-json-data">'
+                            + JSON.stringify(currentData)
+                            + '</span>');
                 }
             };
             

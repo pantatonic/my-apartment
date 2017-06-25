@@ -20,12 +20,17 @@
     position: absolute;
     width: 100%;
     color: #3c8dbc;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bold;
-    top: 40%;
+    top: 31%;
     /*background-color: #c9c9c9;*/
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     opacity: 1.0
+}
+
+.invoice-detail {
+    color: #777777;
+    cursor: pointer;
 }
 
 .not-have-meter {
@@ -88,7 +93,7 @@
     margin-right: auto;
 }
 
-#box-room-template {
+#box-room-template, .invoice-json-data {
     display: none;
 }
 
@@ -106,4 +111,22 @@
 
 .cancel-invoice-button {
     padding: 1px 5px 1px 5px;
+}
+
+#modal-room-invoice-detail .modal-body table {
+    min-width: 400px;
+}
+
+#modal-room-invoice-detail .modal-body .data-display {
+    color: #3c8dbc;
+    font-weight: bold;
+}
+
+#modal-room-invoice-detail .modal-body table thead th:nth-child(2) {
+    width: 100px;
+}
+
+#modal-room-invoice-detail .modal-body #grand-total-table thead tr {
+    background-color: #3c8dbc;
+    color: #FFFFFF;
 }

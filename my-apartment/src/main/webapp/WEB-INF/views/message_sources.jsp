@@ -28,6 +28,8 @@
     "common.please_select_data":"<spring:message code="common.please_select_data" />",
     "common.data_not_found":"<spring:message code="common.data_not_found" />",
     "common.confirm_change_important_data":"<spring:message code="common.confirm_change_important_data" />",
+    "common.total":"<spring:message code="common.total" />",
+    "common.grand_total":"<spring:message code="common.grand_total" />",
     
     "common.person_name":"<spring:message code="common.person_name" />",
     "common.person_lastname":"<spring:message code="common.person_lastname" />",
@@ -125,6 +127,11 @@
     "room.invoice.please_checked_room":"<spring:message code="room.invoice.please_checked_room" />",
     "room.invoice.create_invoice_for_room":"<spring:message code="room.invoice.create_invoice_for_room" />",
     "room.invoice.already_invoice":"<spring:message code="room.invoice.already_invoice" />",
-    "room.invoice.not_have_meter_of_this_month":"<spring:message code="room.invoice.not_have_meter_of_this_month" />"
+    "room.invoice.not_have_meter_of_this_month":"<spring:message code="room.invoice.not_have_meter_of_this_month" />",
+    "room.invoice.description":"<spring:message code="room.invoice.description" />",
+    "room.invoice.price_per_unit":"<spring:message code="room.invoice.price_per_unit" />",
+    "room.invoice.usage_unit":"<spring:message code="room.invoice.usage_unit" />",
+    "room.invoice.value":"<spring:message code="room.invoice.value" />",
+    "room.invoice.room_price":"<spring:message code="room.invoice.room_price" />"
     }
 </div>
