@@ -228,7 +228,7 @@ public class RoomInvoiceResource {
         if(!waterMeters.isEmpty()) {
             waterMeter = waterMeters.get(0);
         }
-        
+
         return waterMeter;
     }
     

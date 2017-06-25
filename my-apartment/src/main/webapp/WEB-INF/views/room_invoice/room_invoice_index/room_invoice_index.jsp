@@ -80,6 +80,7 @@
                     <div class="room-detail-label"></div>
                     <i class="${commonHtml.getIconRoom()} room-icon"></i>
                     <input type="hidden" name="id" value="">
+                    <br><br><br>
                     <div class="clearfix"></div>
                     <span class="label label-room-status">Default Label</span>
                     <%--<span class="label label-invoiced">Default Label</span>--%>

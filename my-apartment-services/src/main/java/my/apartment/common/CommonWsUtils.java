@@ -80,7 +80,7 @@ public class CommonWsUtils {
         }
     }
     
-    public static String strToString(String str) {
+    public static String strToString(String str) {      
         if(str.isEmpty()) {
             return null;
         }

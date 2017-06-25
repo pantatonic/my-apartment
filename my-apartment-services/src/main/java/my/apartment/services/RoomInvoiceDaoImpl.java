@@ -22,10 +22,6 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
         Boolean resultSave = Boolean.TRUE;
         
         try {
-            System.out.println("-- create --");
-            System.out.println(roomInvoice.getRoomId());
-            System.out.println("");
-            
             con = CommonWsDb.getDbConnection();
             
             String stringQuery = "INSERT INTO room_invoice "
@@ -267,7 +263,7 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
             
             ps = con.prepareStatement(querysString);
             ps.setInt(1, 0);
-            ps.setString(2, roomInvoice.getDescription());
+            ps.setString(2, CommonWsUtils.strToString(roomInvoice.getDescription()));
             ps.setString(3, CommonWsDb.getNowDateTimeString());
             ps.setInt(4, roomInvoice.getId());
             

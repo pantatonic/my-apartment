@@ -18,6 +18,7 @@
 
 .already-invoiced {
     position: absolute;
+    margin-left: -10px;
     width: 100%;
     color: #3c8dbc;
     font-size: 13px;
@@ -109,7 +110,7 @@
     height: 15px;
 }
 
-.cancel-invoice-button {
+.cancel-invoice-button, .pay-invoice {
     padding: 1px 5px 1px 5px;
 }
 

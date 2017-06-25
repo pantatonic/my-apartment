@@ -512,9 +512,14 @@ var page = (function() {
                     var currentData = alreadyInvoicedData[index];
                     var boxRoom = jQuery('.box-room[data-id="' + currentData.roomId + '"]');
                     var boxRoom_ = boxRoom.closest('.box-room_');
-                    
+
                     boxRoom_.append(labelAlreadyInvoicedTemplate);
-                    boxRoom_.find('.already-invoiced').append('<br>' 
+                    
+                    var alreadyInvoiceElement = boxRoom_.find('.already-invoiced');
+                    
+                    boxRoom_.find('.room-icon').fadeTo('slow', 0.1);
+                    
+                    alreadyInvoiceElement.append('<br>' 
                             + '<span class="invoice-no">' 
                             + currentData.invoiceNo + ' '
                             + '<i class="fa fa-search invoice-detail"></i>'
@@ -525,9 +530,14 @@ var page = (function() {
                     boxRoom_.find('.cancel-invoice-button').attr(_INVOICE_ID_ATTR_, currentData.id);
                     boxRoom_.find('.invoice-detail').attr(_INVOICE_ID_ATTR_, currentData.id);
                     
-                    boxRoom_.find('.already-invoiced').append('<span class="invoice-json-data">'
+                    alreadyInvoiceElement.append('<span class="invoice-json-data">'
                             + JSON.stringify(currentData)
                             + '</span>');
+                    
+                    alreadyInvoiceElement.append('<br>'
+                            + '<button type="button" ' 
+                            + 'class="btn btn-warning btn-sm btn-flat pay-invoice">'
+                            + '<i class="fa fa-money"></i> _Pay_</button>');
                 }
             };
             
