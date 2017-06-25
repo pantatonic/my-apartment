@@ -163,8 +163,10 @@ var page = (function() {
             jsonData = JSON.parse(jsonData);
 
             app.loadingInElement('show', contentBox);
-            
+
             setTimeout(function() {
+                
+                app.modalUtils.bodyScrollTop(modal_);
                 for(var index in jsonData) {
                     modal_.find('[data-key="' + index + '"]').html(jsonData[index]);
                 }
