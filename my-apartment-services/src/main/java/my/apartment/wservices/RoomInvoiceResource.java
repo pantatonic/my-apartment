@@ -18,6 +18,7 @@ import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.ElectricityMeter;
+import my.apartment.model.Room;
 import my.apartment.model.RoomInvoice;
 import my.apartment.model.WaterMeter;
 import my.apartment.services.RoomDao;
@@ -101,6 +102,7 @@ public class RoomInvoiceResource {
             
             ElectricityMeter electricityMeterOfRoom = this.getElectricityDataOfRoom(roomIdFromData, month, year);
             WaterMeter waterMeterOfRoom = this.getWaterMeterDataOfRoom(roomIdFromData, month, year);
+            Room roomDataForRoomPrice = this.getRoomData(roomIdFromData);
             
             /** if electricityMeterOfRoom or waterMeterOfRoom 
              * null then bypass to create room invoice */
@@ -110,7 +112,7 @@ public class RoomInvoiceResource {
                 
                 if(!alreadyHaveData) {
                     RoomInvoice roomInvoice = this.prepareRoomInvoiceForCreate(roomIdFromData, month, year, 
-                    electricityMeterOfRoom, waterMeterOfRoom);
+                    roomDataForRoomPrice, electricityMeterOfRoom, waterMeterOfRoom);
                 
                     roomInvoices.add(roomInvoice);
                 }
@@ -118,6 +120,19 @@ public class RoomInvoiceResource {
         }
         
         return roomInvoices;
+    }
+    
+    /**
+     * 
+     * @param roomIdFromData
+     * @return Room
+     */
+    private Room getRoomData(Integer roomIdFromData) {
+        RoomDao roomDaoImpl = new RoomDaoImpl();
+        
+        List<Room> rooms = roomDaoImpl.getById(roomIdFromData);
+        
+        return rooms.isEmpty() ? null : rooms.get(0);
     }
     
     /**
@@ -142,12 +157,14 @@ public class RoomInvoiceResource {
      */
     private RoomInvoice prepareRoomInvoiceForCreate(
             Integer roomIdFromData, Integer month, Integer year,
+            Room roomDataForRoomPrice,
             ElectricityMeter electricityMeterOfRoom,
             WaterMeter waterMeterOfRoom
     ) {
             RoomInvoice roomInvoice = new RoomInvoice();
         
             roomInvoice.setRoomId(roomIdFromData);
+            roomInvoice.setRoomPricePerMonth(roomDataForRoomPrice.getPricePerMonth());
             roomInvoice.setMonth(month);
             roomInvoice.setYear(year);
             
