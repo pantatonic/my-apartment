@@ -14,4 +14,6 @@ public interface RoomInvoiceDao {
     
     public Boolean cancel(RoomInvoice roomInvoice);
     
+    public List<RoomInvoice> getById(Integer roomInvoiceId);
+    
 }

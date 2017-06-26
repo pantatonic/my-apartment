@@ -102,6 +102,7 @@ var page = (function() {
                 
                 boxRoomContainer.on('click', '.pay-invoice', function() {
                     var thisElement = jQuery(this);
+                    var roomInvoiceId = thisElement.attr(_INVOICE_ID_ATTR_);
                     var jsonData = thisElement.closest('.already-invoiced').find('.invoice-json-data').text();
                     jsonData = JSON.parse(jsonData);
                     
@@ -133,7 +134,7 @@ var page = (function() {
                         
                     
                     alertUtil.confirmAlert(html_, function() {
-                        alert('Go to receipt');
+                        page.createRoomReceiptProcess(roomInvoiceId);
                     }, function() {
 
                     },{
@@ -198,6 +199,32 @@ var page = (function() {
             
                 page.getElement.getBoxRoomContainer().html(html);
             }
+        },
+        createRoomReceiptProcess: function(roomInvoiceId) {
+            var buildingList = page.getElement.getBuildingList();
+            var contentBox = buildingList.closest('.box-primary');
+            
+            app.loadingInElement('show', contentBox);
+            
+            setTimeout(function() {
+                jQuery.ajax({
+                    type: 'post',
+                    url: _CONTEXT_PATH_ + '/create_room_receipt.html',
+                    data: {
+                        room_invoice_id: roomInvoiceId
+                    },
+                    cache: false,
+                    success: function(response) {
+                        
+                        app.loadingInElement('remove', contentBox);
+                    },
+                    error: function() {
+                        app.alertSomethingError();
+                        
+                        app.loadingInElement('remove', contentBox);
+                    }
+                });
+            }, _DELAY_PROCESS_);
         },
         showRoomInvoice: function(invoiceDetailButton) {
             var roomInvoiceId = invoiceDetailButton.attr(_INVOICE_ID_ATTR_);
