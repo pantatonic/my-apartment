@@ -30,8 +30,7 @@ public class RoomReceiptController {
         JSONObject jsonObjectReturn = new JSONObject();
         
         CommonAppUtils.setResponseHeader(response);
-        System.out.println("-- C");
-        System.out.println(roomInvoiceId);
+
         try {
             MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
             parametersMap.add("room_invoice_id", roomInvoiceId);

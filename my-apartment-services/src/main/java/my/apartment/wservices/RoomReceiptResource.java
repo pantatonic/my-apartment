@@ -15,9 +15,15 @@ import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.common.JsonObjectUtils;
+import my.apartment.model.RoomCurrentCheckIn;
 import my.apartment.model.RoomInvoice;
+import my.apartment.model.RoomReceipt;
+import my.apartment.services.RoomCurrentCheckInDao;
+import my.apartment.services.RoomCurrentCheckInDaoImpl;
 import my.apartment.services.RoomInvoiceDao;
 import my.apartment.services.RoomInvoiceDaoImpl;
+import my.apartment.services.RoomReceiptDao;
+import my.apartment.services.RoomReceiptDaoImpl;
 import org.json.JSONObject;
 
 
@@ -51,14 +57,39 @@ public class RoomReceiptResource {
                         "Not found this invoice id");
             }
             else {
-                //ทำถึงตรงนี้
+                /** roomInvoice data */
+                RoomInvoice roomInvoice = roomInvoices.get(0);
+
+                /** roomReceipt object to save */
+                RoomReceipt roomReceipt = new RoomReceipt();
+
+                
+                RoomCurrentCheckInDao rccid = new RoomCurrentCheckInDaoImpl();
+                
+                List<RoomCurrentCheckIn> roomCurrentCheckIns = rccid.getCurrentByRoomId(roomInvoice.getRoomId());
+                if(roomCurrentCheckIns.isEmpty()) {
+                    roomReceipt.setPayer("");
+                }
+                else {
+                    roomReceipt.setPayer(roomCurrentCheckIns.get(0).getName() + " " + roomCurrentCheckIns.get(0).getLastname());
+                }
+                
+                roomReceipt.setInvoiceId(roomInvoice.getId());
+                roomReceipt.setStatus(1); //force status 1 when create
+                
+                RoomReceiptDao roomReceiptDaoImpl = new RoomReceiptDaoImpl();
+                
+                Boolean resultSave = roomReceiptDaoImpl.create(roomReceipt);
+                
+                if(resultSave == Boolean.TRUE) {
+                    jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                            CommonString.SAVE_DATA_SUCCESS_STRING);
+                }
+                else {
+                    jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                            CommonString.PROCESSING_FAILED_STRING);
+                }
             }
-            
-            
-            
-            System.out.println("-- ws --");
-            System.out.println(roomInvoices.size());
-            System.out.println(roomInvoices);
         }
         catch(Exception e) {
             e.printStackTrace();
