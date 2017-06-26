@@ -131,3 +131,16 @@
     background-color: #3c8dbc;
     color: #FFFFFF;
 }
+
+#table-pay-invoice {
+    font-size: 14px;
+}
+#table-pay-invoice tbody td:nth-child(1) {
+    text-align: left;
+}
+#table-pay-invoice tbody td:nth-child(2) {
+    text-align: right;
+}
+#table-pay-invoice tbody tr:last-child  {
+    font-weight: bold;
+}

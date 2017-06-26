@@ -149,6 +149,9 @@ var app = {
         },
         nullToEmpty: function(data) {
             return data == null ? '':data;
+        },
+        numberFormat: function(number) {
+            return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
     },
     
@@ -156,6 +159,15 @@ var app = {
         bodyScrollTop: function(modalElement) {
             setTimeout(function() {
                 modalElement.find('.modal-body').scrollTop(0);
+            }, _DELAY_PROCESS_);
+        },
+        animateScrollDown: function(modalElement, durationTime) {
+            durationTime = durationTime == undefined ? _DELAY_PROCESS_ : durationTime;
+            
+            setTimeout(function() {
+                modalElement.find('.modal-body').animate({
+                    scrollTop: modalElement.height()
+                }, durationTime);
             }, _DELAY_PROCESS_);
         }
     },

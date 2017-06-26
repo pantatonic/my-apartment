@@ -30,6 +30,8 @@
     "common.confirm_change_important_data":"<spring:message code="common.confirm_change_important_data" />",
     "common.total":"<spring:message code="common.total" />",
     "common.grand_total":"<spring:message code="common.grand_total" />",
+    "common.baht":"<spring:message code="common.baht" />",
+    "common.pay":"<spring:message code="common.pay" />",
     
     "common.person_name":"<spring:message code="common.person_name" />",
     "common.person_lastname":"<spring:message code="common.person_lastname" />",

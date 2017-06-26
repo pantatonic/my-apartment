@@ -21,6 +21,7 @@ var facade = (function() {
             page.addEvent.createRoomInvoice();
             page.addEvent.cancelRoomInvoice();
             page.addEvent.showRoomInvoice();
+            page.addEvent.payInvoice();
         }
     };
 })();
@@ -95,6 +96,51 @@ var page = (function() {
                     
                     page.showRoomInvoice(thisElement);
                 });
+            },
+            payInvoice: function() {
+                var boxRoomContainer = page.getElement.getBoxRoomContainer();
+                
+                boxRoomContainer.on('click', '.pay-invoice', function() {
+                    var thisElement = jQuery(this);
+                    var jsonData = thisElement.closest('.already-invoiced').find('.invoice-json-data').text();
+                    jsonData = JSON.parse(jsonData);
+                    
+                    var roomNo = thisElement.closest('.box-room_').attr('data-room-no');
+                    var grandTotal = jsonData.electricityValue + jsonData.waterValue + jsonData.roomPricePerMonth;
+                    var html_ = app.translate('building.room') + ' : ' + roomNo
+                        + '<br><br>'
+                        + '<table id="table-pay-invoice" class="table table-bordered">'
+                            + '<thead><tr><th colspan="2" style="text-align: center;">' + app.translate('common.pay') + '</th></tr></thead>'
+                            + '<tbody>'
+                                + '<tr>'
+                                    + '<td>' + app.translate('electricity_water_meter.electricity_meter') + '</td>'
+                                    + '<td>' + app.valueUtils.numberFormat(jsonData.electricityValue) + ' ' + app.translate('common.baht') + '</td>'
+                                + '</tr>'
+                                + '<tr>'
+                                    + '<td>' + app.translate('electricity_water_meter.water_meter') + '</td>'
+                                    + '<td>' + app.valueUtils.numberFormat(jsonData.waterValue) + ' ' + app.translate('common.baht') + '</td>'
+                                + '</tr>'
+                                + '<tr>'
+                                    + '<td>' + app.translate('room.invoice.room_price') + '</td>'
+                                + '<td>' + app.valueUtils.numberFormat(jsonData.roomPricePerMonth) + ' ' + app.translate('common.baht') + '</td>'
+                                + '</tr>'
+                                + '<tr>'
+                                    + '<td>' + app.translate('common.grand_total') + '</td>'
+                                    + '<td>' + app.valueUtils.numberFormat(grandTotal) + ' ' + app.translate('common.baht') + '</td>'
+                                + '</tr>'
+                            + '</tbody>'
+                        + '</table>';
+                        
+                    
+                    alertUtil.confirmAlert(html_, function() {
+                        alert('Go to receipt');
+                    }, function() {
+
+                    },{
+                        animation: false,
+                        type: null
+                    });
+                });
             }
         },
         roomInvoiceMonthYear: {
@@ -168,16 +214,20 @@ var page = (function() {
                 
                 app.modalUtils.bodyScrollTop(modal_);
                 for(var index in jsonData) {
-                    modal_.find('[data-key="' + index + '"]').html(jsonData[index]);
+                    if(modal_.find('[data-key="' + index + '"]').length > 0) {
+                        if(typeof jsonData[index] == 'number') {
+                            modal_.find('[data-key="' + index + '"]').html(app.valueUtils.numberFormat(jsonData[index]));
+                        }
+                    }
                 }
 
                 var grandTotal = jsonData.electricityValue + jsonData.waterValue + jsonData.roomPricePerMonth;
                 
-                modal_.find('#grand-total-display').html(grandTotal);
+                modal_.find('#grand-total-display').html(app.valueUtils.numberFormat(grandTotal));
                 modal_.find('#room-no-display').html(roomNo);
                 
                 modal_.modal('show');
-                
+
                 app.loadingInElement('remove', contentBox);
             }, _DELAY_PROCESS_);
             
@@ -536,8 +586,9 @@ var page = (function() {
                     
                     alreadyInvoiceElement.append('<br>'
                             + '<button type="button" ' 
-                            + 'class="btn btn-warning btn-sm btn-flat pay-invoice">'
-                            + '<i class="fa fa-money"></i> _Pay_</button>');
+                            + 'class="btn btn-warning btn-sm btn-flat pay-invoice" '
+                            + _INVOICE_ID_ATTR_ + '="' + currentData.id + '">'
+                            + '<i class="fa fa-money"></i> ' + app.translate('common.pay') + '</button>');
                 }
             };
             
