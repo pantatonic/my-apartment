@@ -678,6 +678,7 @@ var page = (function() {
                         var alreadyReceiptElement = boxRoom_.find('.already-receipt');
                         
                         boxRoom_.find('.pay-invoice').remove();
+                        boxRoom_.find('.cancel-invoice-button').remove();
                         
                         alreadyReceiptElement.append('<br>' 
                             + '<span class="receipt-no">' 

@@ -30,6 +30,8 @@ public class CommonString {
     public static final String BUILDING_HAS_ANY_DATA_STRING = "BUILDING_HAS_ANY_DATA";
     public static final String HAS_ANY_DATA_STRING = "HAS_ANY_DATA";
     
+    public static final String INVOICE_HAS_RECEIPT_DATA_STRING = "INVOICE HAS RECEIPT DATA";
+    
     public static final String DATA_DUPLICATED_STRING = "DATA_DUPLICATED";
     
     public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";

@@ -25,6 +25,8 @@ import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
 import my.apartment.services.RoomInvoiceDao;
 import my.apartment.services.RoomInvoiceDaoImpl;
+import my.apartment.services.RoomReceiptDao;
+import my.apartment.services.RoomReceiptDaoImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -270,21 +272,29 @@ public class RoomInvoiceResource {
         JSONObject jsonObjectReturn = new JSONObject();
         
         try {
+            RoomReceiptDao roomReceiptDaoImpl = new RoomReceiptDaoImpl();
+             
             RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
             
             RoomInvoice roomInvoice = new RoomInvoice();
             roomInvoice.setId(roomInvoiceId);
             roomInvoice.setDescription(description);
             
-            Boolean result = roomInvoiceDaoImpl.cancel(roomInvoice);
-            
-            if(result == Boolean.TRUE) {
-                jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
-                        CommonString.DELETE_DATA_SUCCESS_STRING);
+            if(roomReceiptDaoImpl.isAreadyReceiptOfInvoice(roomInvoiceId)) {
+                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                            CommonString.INVOICE_HAS_RECEIPT_DATA_STRING);
             }
             else {
-                jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
-                        CommonString.PROCESSING_FAILED_STRING);
+                Boolean result = roomInvoiceDaoImpl.cancel(roomInvoice);
+            
+                if(result == Boolean.TRUE) {
+                    jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                            CommonString.DELETE_DATA_SUCCESS_STRING);
+                }
+                else {
+                    jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                            CommonString.PROCESSING_FAILED_STRING);
+                }
             }
         }
         catch(Exception e) {
