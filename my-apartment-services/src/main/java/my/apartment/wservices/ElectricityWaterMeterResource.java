@@ -3,6 +3,7 @@ package my.apartment.wservices;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -15,6 +16,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
+import my.apartment.common.CommonUtils;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.Building;
@@ -56,6 +58,34 @@ public class ElectricityWaterMeterResource {
         return new JSONObject().toString();
     }
     
+    /**
+     * 
+     * @param jsonObject
+     * @return Boolean
+     */
+    private Boolean allowMonthYear(JSONObject jsonObject) {
+        Integer requestMonth = jsonObject.getInt("month");
+        Integer requestYear = jsonObject.getInt("year");
+
+        Integer nowMonth = Integer.parseInt(CommonUtils.getCurrentMonthString(), 10);
+        Integer nowYear = Integer.parseInt(CommonUtils.getCurrentYearString(), 10);
+        
+        HashMap<String, Integer> dataPreviousMonthYear = CommonWsUtils.getPreviousMonthYear(nowMonth, nowYear);
+        Integer previousMonth = dataPreviousMonthYear.get("month");
+        Integer previousYear = dataPreviousMonthYear.get("year");
+
+        if(requestMonth.intValue() == nowMonth.intValue() && requestYear.intValue() == nowYear.intValue()) {
+            return Boolean.TRUE;
+        }
+        else 
+        if(requestMonth.intValue() == previousMonth.intValue() && requestYear.intValue() == previousYear.intValue()) {
+            return Boolean.TRUE;
+        }
+        else {
+            return Boolean.FALSE;
+        }
+    }
+    
     
     @Path("save")
     @POST
@@ -66,7 +96,13 @@ public class ElectricityWaterMeterResource {
         
         try {
             JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
-            
+
+            /** allow previous month and present month only */
+            if(!this.allowMonthYear(jsonObjectReceive)) {
+                return JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                        "Allow previous month and present month only").toString();
+            } 
+
             /** list of model ElectricityMeter for collect model to save */
             List<ElectricityMeter> electricityMeters = this.getElectricityMeterListFromJsonObjectReceive(jsonObjectReceive);
             
