@@ -183,9 +183,10 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
         try {
             con = CommonWsDb.getDbConnection();
             
-            String stringQuery = "SELECT room_invoice.* " +
+            String stringQuery = "SELECT room_invoice.*, room_receipt.receipt_no  " +
                 "FROM room_invoice JOIN room ON room_invoice.room_id = room.id " +
                 "JOIN building ON room.building_id = building.id " +
+                "LEFT JOIN room_receipt ON room_invoice.receipt_id = room_receipt.id "+
                 "WHERE building.id = ? " +
                 "AND room_invoice.month = ? " +
                 "AND room_invoice.year = ? " +
@@ -225,6 +226,8 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
                 roomInvoice.setReceiptId(rs.getInt("receipt_id"));
                 roomInvoice.setCreatedDate(rs.getDate("created_date"));
                 roomInvoice.setUpdatedDate(rs.getDate("updated_date"));
+                
+                roomInvoice.setReceiptNo(rs.getString("receipt_no"));
                 
                 roomInvoicesReturn.add(roomInvoice);
             }

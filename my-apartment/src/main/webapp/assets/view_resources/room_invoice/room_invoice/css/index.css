@@ -23,13 +23,26 @@
     color: #3c8dbc;
     font-size: 13px;
     font-weight: bold;
-    top: 31%;
+    top: 26%;
     /*background-color: #c9c9c9;*/
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     opacity: 1.0
 }
 
-.invoice-detail {
+.already-receipt {
+    position: absolute;
+    margin-left: -10px;
+    width: 100%;
+    color: #008200;
+    font-size: 13px;
+    font-weight: bold;
+    top: 48%;
+    /*background-color: #c9c9c9;*/
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    opacity: 1.0
+}
+
+.invoice-detail, .receipt-detail {
     color: #777777;
     cursor: pointer;
 }
@@ -110,7 +123,7 @@
     height: 15px;
 }
 
-.cancel-invoice-button, .pay-invoice {
+.cancel-invoice-button, .pay-invoice, .cancel-receipt-button {
     padding: 1px 5px 1px 5px;
 }
 

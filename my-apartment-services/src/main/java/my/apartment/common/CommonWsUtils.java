@@ -26,6 +26,7 @@ public class CommonWsUtils {
     public static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
     
     public static final String ROOM_INVOICE_ABBREVIATION = "INV";
+    public static final String ROOM_RECEIPT_ABBREVIATION = "RE";
     
     public static JSONObject receiveJsonObject(InputStream incomingData) {
         JSONObject jsonObject = new JSONObject();

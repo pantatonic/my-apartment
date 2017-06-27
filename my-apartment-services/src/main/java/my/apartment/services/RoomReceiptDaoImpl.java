@@ -3,7 +3,10 @@ package my.apartment.services;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import my.apartment.common.CommonUtils;
 import my.apartment.common.CommonWsDb;
+import my.apartment.common.CommonWsUtils;
 import my.apartment.model.RoomReceipt;
 
 
@@ -21,24 +24,47 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
             con = CommonWsDb.getDbConnection();
 
             String stringQuery = "INSERT INTO room_receipt "
-                    + "(invoice_id, " //1
-                    + "payer, " //2
-                    + "status, " //3
-                    + "created_date) " //4
+                    + "(receipt_no, " //1
+                    + "invoice_id, " //2
+                    + "payer, " //3
+                    + "status, " //4
+                    + "created_date) " //5
                     + "VALUES "
-                    + "(?, ?, ?, ?)";
+                    + "(?, ?, ?, ?, ?)";
             
-            ps = con.prepareStatement(stringQuery);
-            ps.setInt(1, roomReceipt.getInvoiceId());
-            ps.setString(2, roomReceipt.getPayer());
-            ps.setInt(3, roomReceipt.getStatus());
-            ps.setString(4, CommonWsDb.getNowDateTimeString());
+            String receiptNoString = CommonWsUtils.ROOM_RECEIPT_ABBREVIATION
+                    + CommonWsUtils.getTimestampString()
+                    + CommonUtils.getZeroFillWithNumber(roomReceipt.getInvoiceId(), 4);
             
-            Integer effectRowProcess = null;
+            ps = con.prepareStatement(stringQuery, Statement.RETURN_GENERATED_KEYS);
             
-            effectRowProcess = ps.executeUpdate();
+            ps.setString(1, receiptNoString);            
+            ps.setInt(2, roomReceipt.getInvoiceId());
+            ps.setString(3, roomReceipt.getPayer());
+            ps.setInt(4, roomReceipt.getStatus());
+            ps.setString(5, CommonWsDb.getNowDateTimeString());
             
-            if(effectRowProcess < 0) {
+            Integer effectRowProcess = ps.executeUpdate();
+            
+            if(effectRowProcess != 0) {
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+                
+                if(generatedKeys.next()) {
+                    stringQuery = "UPDATE room_invoice "
+                            + "SET receipt_id = ?, " //1
+                            + "status = ? " //2
+                            + "WHERE id = ?"; //3
+                    
+                    ps = con.prepareStatement(stringQuery);
+                    
+                    ps.setInt(1, generatedKeys.getInt(1));
+                    ps.setInt(2, 2); //status is 2 that mean already receipt
+                    ps.setInt(3, roomReceipt.getInvoiceId());
+                    
+                    ps.executeUpdate();
+                }
+            }
+            else {
                 resultSave = Boolean.FALSE;
             }
         }

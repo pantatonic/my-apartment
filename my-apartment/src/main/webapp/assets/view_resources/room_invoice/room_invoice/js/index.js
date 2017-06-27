@@ -22,6 +22,8 @@ var facade = (function() {
             page.addEvent.cancelRoomInvoice();
             page.addEvent.showRoomInvoice();
             page.addEvent.payInvoice();
+            page.addEvent.showRoomReceipt();
+            page.addEvent.cancelRoomReceipt();
         }
     };
 })();
@@ -142,6 +144,26 @@ var page = (function() {
                         type: null
                     });
                 });
+            },
+            showRoomReceipt: function() {
+                var boxRoomContainer = page.getElement.getBoxRoomContainer();
+                
+                boxRoomContainer.on('click', '.receipt-detail', function() {
+                    var thisElement = jQuery(this);
+                    
+                    //page.showRoomReceipt(thisElement);
+                    alert('Goto show room receipt');
+                });
+            },
+            cancelRoomReceipt: function() {
+                var boxRoomContainer = page.getElement.getBoxRoomContainer();
+                
+                boxRoomContainer.on('click', '.cancel-receipt-button', function() {
+                    var thisElement = jQuery(this);
+                    
+                    //page.cancelRoomReceipt(thisElement);
+                    alert('Goto cancel room receipt');
+                });
             }
         },
         roomInvoiceMonthYear: {
@@ -215,8 +237,31 @@ var page = (function() {
                     },
                     cache: false,
                     success: function(response) {
+                        response = app.convertToJsonObject(response);
                         
-                        app.loadingInElement('remove', contentBox);
+                        if(response.result == SUCCESS_STRING) {
+                            app.showNotice({
+                                message: app.translate('common.save_success'),
+                                type: response.result
+                            });
+                            
+                            setTimeout(function() {
+                                page.getRoom();
+                            }, _DELAY_PROCESS_);
+                        }
+                        else {
+                            if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                            }
+                            else {
+                                app.showNotice({
+                                    message: app.translate('common.processing_failed'),
+                                    type: response.result
+                                });
+                            }
+                            
+                            app.loadingInElement('remove', contentBox);
+                        }
                     },
                     error: function() {
                         app.alertSomethingError();
@@ -582,19 +627,29 @@ var page = (function() {
                         + app.translate('room.invoice.already_invoice') 
                         + ' '
                         + '<button type="button" '
-                            + 'class="btn btn-danger btn-flat btn-sm cancel-invoice-button">Cancel</button>'
+                            + 'class="btn btn-danger btn-flat btn-sm cancel-invoice-button">' + app.translate('common.cancel') + '</button>'
                         + '</div>';
+                var labelAlreadyReceiptTemplate = '<div class="already-receipt">'
+                    + app.translate('room.invoice.already_receipt')
+                    + ' '
+                    + '<button type="button" '
+                        + 'class="btn btn-danger btn-flat btn-sm cancel-receipt-button">' + app.translate('common.cancel') + '</button>'
+                    + '</div>';
+                    
                 
                 for(var index in alreadyInvoicedData) {
                     var currentData = alreadyInvoicedData[index];
                     var boxRoom = jQuery('.box-room[data-id="' + currentData.roomId + '"]');
                     var boxRoom_ = boxRoom.closest('.box-room_');
+                    var receiptNo = app.valueUtils.undefinedToEmpty(currentData.receiptNo);
 
                     boxRoom_.append(labelAlreadyInvoicedTemplate);
                     
                     var alreadyInvoiceElement = boxRoom_.find('.already-invoiced');
                     
                     boxRoom_.find('.room-icon').fadeTo('slow', 0.1);
+                    
+                    alreadyInvoiceElement.attr(_INVOICE_ID_ATTR_, currentData.id);
                     
                     alreadyInvoiceElement.append('<br>' 
                             + '<span class="invoice-no">' 
@@ -616,6 +671,22 @@ var page = (function() {
                             + 'class="btn btn-warning btn-sm btn-flat pay-invoice" '
                             + _INVOICE_ID_ATTR_ + '="' + currentData.id + '">'
                             + '<i class="fa fa-money"></i> ' + app.translate('common.pay') + '</button>');
+                    
+                    if(!app.valueUtils.isEmptyValue(receiptNo)) {
+                        boxRoom_.append(labelAlreadyReceiptTemplate);
+                        
+                        var alreadyReceiptElement = boxRoom_.find('.already-receipt');
+                        
+                        boxRoom_.find('.pay-invoice').remove();
+                        
+                        alreadyReceiptElement.append('<br>' 
+                            + '<span class="receipt-no">' 
+                            + receiptNo + ' '
+                            + '<i class="fa fa-search receipt-detail"></i>'
+                            + '</span>');
+                    
+                        boxRoom_.find('.cancel-receipt-button').attr(_INVOICE_ID_ATTR_, currentData.id);
+                    }
                 }
             };
             

@@ -134,6 +134,7 @@
     "room.invoice.price_per_unit":"<spring:message code="room.invoice.price_per_unit" />",
     "room.invoice.usage_unit":"<spring:message code="room.invoice.usage_unit" />",
     "room.invoice.value":"<spring:message code="room.invoice.value" />",
-    "room.invoice.room_price":"<spring:message code="room.invoice.room_price" />"
+    "room.invoice.room_price":"<spring:message code="room.invoice.room_price" />",
+    "room.invoice.already_receipt":"<spring:message code="room.invoice.already_receipt" />"
     }
 </div>
