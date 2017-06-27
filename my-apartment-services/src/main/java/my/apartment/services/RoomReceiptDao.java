@@ -7,4 +7,6 @@ public interface RoomReceiptDao {
     
     public Boolean create(RoomReceipt roomReceipt);
     
+    public Boolean isAreadyReceiptOfInvoice(Integer roomInvoiceId);
+    
 }

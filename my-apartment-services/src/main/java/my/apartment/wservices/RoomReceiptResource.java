@@ -50,6 +50,8 @@ public class RoomReceiptResource {
         try {
             RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
             
+            RoomReceiptDao roomReceiptDaoImpl = new RoomReceiptDaoImpl();
+            
             List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getById(roomInvoiceId);
             
             if(roomInvoices.isEmpty()) {
@@ -59,36 +61,43 @@ public class RoomReceiptResource {
             else {
                 /** roomInvoice data */
                 RoomInvoice roomInvoice = roomInvoices.get(0);
-
-                /** roomReceipt object to save */
-                RoomReceipt roomReceipt = new RoomReceipt();
-
                 
-                RoomCurrentCheckInDao rccid = new RoomCurrentCheckInDaoImpl();
-                
-                List<RoomCurrentCheckIn> roomCurrentCheckIns = rccid.getCurrentByRoomId(roomInvoice.getRoomId());
-                if(roomCurrentCheckIns.isEmpty()) {
-                    roomReceipt.setPayer("");
-                }
-                else {
-                    roomReceipt.setPayer(roomCurrentCheckIns.get(0).getName() + " " + roomCurrentCheckIns.get(0).getLastname());
-                }
-                
-                roomReceipt.setInvoiceId(roomInvoice.getId());
-                roomReceipt.setStatus(1); //force status 1 when create
-                
-                RoomReceiptDao roomReceiptDaoImpl = new RoomReceiptDaoImpl();
-                
-                Boolean resultSave = roomReceiptDaoImpl.create(roomReceipt);
-                
-                if(resultSave == Boolean.TRUE) {
-                    jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
-                            CommonString.SAVE_DATA_SUCCESS_STRING);
-                }
-                else {
+                /** check invoice id already receipt */
+                if(roomReceiptDaoImpl.isAreadyReceiptOfInvoice(roomInvoiceId)) {
                     jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
-                            CommonString.PROCESSING_FAILED_STRING);
+                        "This invoice already receipt");
                 }
+                else {
+                    /** this scope is create receipt process */
+                    
+                    /** roomReceipt object to save */
+                    RoomReceipt roomReceipt = new RoomReceipt();
+
+
+                    RoomCurrentCheckInDao rccid = new RoomCurrentCheckInDaoImpl();
+
+                    List<RoomCurrentCheckIn> roomCurrentCheckIns = rccid.getCurrentByRoomId(roomInvoice.getRoomId());
+                    if(roomCurrentCheckIns.isEmpty()) {
+                        roomReceipt.setPayer("");
+                    }
+                    else {
+                        roomReceipt.setPayer(roomCurrentCheckIns.get(0).getName() + " " + roomCurrentCheckIns.get(0).getLastname());
+                    }
+
+                    roomReceipt.setInvoiceId(roomInvoice.getId());
+                    roomReceipt.setStatus(1); //force status 1 when create
+
+                    Boolean resultSave = roomReceiptDaoImpl.create(roomReceipt);
+
+                    if(resultSave == Boolean.TRUE) {
+                        jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                                CommonString.SAVE_DATA_SUCCESS_STRING);
+                    }
+                    else {
+                        jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                                CommonString.PROCESSING_FAILED_STRING);
+                    }
+                }                
             }
         }
         catch(Exception e) {

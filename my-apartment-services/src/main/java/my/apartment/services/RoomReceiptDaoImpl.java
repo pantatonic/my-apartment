@@ -54,4 +54,44 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
         return resultSave;
     }
     
+    @Override
+    public Boolean isAreadyReceiptOfInvoice(Integer roomInvoiceId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Boolean resultCheck = Boolean.FALSE;
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT COUNT(id) AS count_row "
+                    + "FROM room_receipt "
+                    + "WHERE invoice_id = ? "
+                    + "AND status = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomInvoiceId);
+            ps.setInt(2, 1);
+            
+            rs = ps.executeQuery();
+            
+            rs.first();
+            
+            Integer totalRecord = rs.getInt("count_row");
+            
+            if(totalRecord > 0) {
+                resultCheck = Boolean.TRUE;
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomReceiptDaoImpl.class.getName());
+        }
+        
+        return resultCheck;
+    }
+    
 }
