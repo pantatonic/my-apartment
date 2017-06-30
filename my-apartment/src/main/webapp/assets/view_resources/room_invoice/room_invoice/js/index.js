@@ -290,6 +290,9 @@ var page = (function() {
                         if(typeof jsonData[index] == 'number') {
                             modal_.find('[data-key="' + index + '"]').html(app.valueUtils.numberFormat(jsonData[index]));
                         }
+                        else {
+                            modal_.find('[data-key="' + index + '"]').html(jsonData[index]);
+                        }
                     }
                 }
 
