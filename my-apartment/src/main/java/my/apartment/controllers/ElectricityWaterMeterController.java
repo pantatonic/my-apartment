@@ -1,5 +1,6 @@
 package my.apartment.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +44,18 @@ public class ElectricityWaterMeterController {
         
         modelAndView.addObject("buildingList", jsonArrayBuilding);
         modelAndView.addObject("currentYearMonth", currentYear + "-" + currentMonth);
+        
+        
+        Integer allowPresentMonth = Integer.parseInt(CommonUtils.getCurrentMonthString(), 10);
+        Integer allowPresentYear = Integer.parseInt(CommonUtils.getCurrentYearString(), 10);
+        
+        modelAndView.addObject("allowPresentYear", allowPresentYear);
+        modelAndView.addObject("allowPresentMonth", allowPresentMonth);
+        
+        
+        HashMap<String, Integer> hashMapPreviousMonthYear = CommonUtils.getPreviousMonthYear(allowPresentMonth, allowPresentYear);
+        modelAndView.addObject("allowPreviousYear", hashMapPreviousMonthYear.get("year"));
+        modelAndView.addObject("allowPreviousMonth", hashMapPreviousMonthYear.get("month"));
         
         return modelAndView;
     }

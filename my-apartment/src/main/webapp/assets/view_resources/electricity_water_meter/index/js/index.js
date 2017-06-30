@@ -1,4 +1,4 @@
-/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS, REQUIRED_CLASS, SUCCESS_STRING, alertUtil, iconRoom */
+/* global app, _DELAY_PROCESS_, SESSION_EXPIRE_STRING, _CONTEXT_PATH_, WARNING_STRING, INPUT_ERROR_CLASS, REQUIRED_CLASS, SUCCESS_STRING, alertUtil, iconRoom, allowPresentYear, allowPresentMonth, allowPreviousMonth, allowPreviousYear */
 
 jQuery(document).ready(function() {
     page.initialProcess();
@@ -15,6 +15,8 @@ var page = (function() {
                 autoclose: true
             }).on('changeDate',function(e) {
                 page.getRoom();
+                
+                page.allowMonthYear();
             });
         },
         addEvent: function() {
@@ -73,6 +75,50 @@ var page = (function() {
             },
             getElectricityWaterMeterForm: function() {
                 return jQuery('#electricity-water-meter-form');
+            }
+        },
+        allowMonthYear: function() {
+            var currentMonth = parseInt(page.electTricityWaterMonthYear.getMonth(), 10);
+            var currentYear = parseInt(page.electTricityWaterMonthYear.getYear(), 10);
+
+            var allowPresentMonth_ = parseInt(allowPresentMonth, 10);
+            var allowPresentYear_ = parseInt(allowPresentYear, 10);
+            
+            var allowPreviousMonth_ = parseInt(allowPreviousMonth, 10);
+            var allowPreviousYear_ = parseInt(allowPreviousYear, 10);
+            
+            var result = null;
+            
+            var msgElement = jQuery('#allow-month-year-message');
+            var message = app.translate('electricity_water_meter.allow_save_previous_and_present_month_only');
+            
+            var saveButton = page.getElement.getElectricityWaterMeterSaveButton();
+            
+            if(currentMonth == allowPresentMonth_ && currentYear == allowPresentYear_) {
+                result = true;
+            }
+            else
+            if(currentMonth == allowPreviousMonth_ && currentYear == allowPreviousYear_) {
+                result = true;
+            }
+            else {
+                result = false;
+            }
+            
+            if(result) {
+                msgElement.html('');
+                saveButton.show();
+            }
+            else {
+                msgElement.html(message);
+                saveButton.hide();
+                
+                alertUtil.basicWarningAlert(message, function() {
+
+                },{
+                    animation: false,
+                    type: null
+                });
             }
         },
         boxRoomContainer: {

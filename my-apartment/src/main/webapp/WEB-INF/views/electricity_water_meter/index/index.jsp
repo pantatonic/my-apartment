@@ -18,6 +18,12 @@
             src="<c:url value="/assets/view_resources/electricity_water_meter/index/js/index.js?v=${randomTextVersion}"/>"></script>
         <script type="text/javascript">
             var iconRoom = '${commonHtml.getIconRoom()}';
+            
+            var allowPresentYear = '${allowPresentYear}';
+            var allowPresentMonth = '${allowPresentMonth}';
+            
+            var allowPreviousYear = '${allowPreviousYear}';
+            var allowPreviousMonth = '${allowPreviousMonth}';
         </script>
     </tiles:putAttribute>
     <tiles:putAttribute name="body">
@@ -71,6 +77,9 @@
                     <div class="box-footer">
                         <spring:message code="common.save" var="msgSavebutton" />
                         ${commonHtml.getSaveButton(msgSavebutton, msgNowProcessing, "electricity-water-meter-save-button")}
+                        
+                        <span id="allow-month-year-message"></span>
+                        <%-- <label id="allow-month-year-message" class="label label-danger"></label> --%>
                     </div>
                 </div>
 

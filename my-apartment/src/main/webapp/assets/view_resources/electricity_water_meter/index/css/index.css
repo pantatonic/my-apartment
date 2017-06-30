@@ -77,3 +77,9 @@
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     opacity: 0.9
 }
+
+#allow-month-year-message {
+    float: right;
+    color: darkred;
+    font-weight: bold;
+}

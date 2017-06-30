@@ -123,6 +123,7 @@
     "electricity_water_meter.electricity_meter":"<spring:message code="electricity_water_meter.electricity_meter" />",
     "electricity_water_meter.water_meter":"<spring:message code="electricity_water_meter.water_meter" />",
     "electricity_water_meter.previous_meter":"<spring:message code="electricity_water_meter.previous_meter" />",
+    "electricity_water_meter.allow_save_previous_and_present_month_only":"<spring:message code="electricity_water_meter.allow_save_previous_and_present_month_only" />",
     
     "room.invoice":"<spring:message code="room.invoice" />",
     "room.invoice.create_room_invoice":"<spring:message code="room.invoice.create_room_invoice" />",
