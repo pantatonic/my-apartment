@@ -53,6 +53,14 @@
                         <tr style="background-color: #f4f4f4;">
                             <td>
                                 <spring:message code="room.invoice.value" />
+                                <span id="electricity-min-calculate-message" class="text-success text-bold">
+                                    (
+                                    <spring:message code="room.invoice.if_electricity_usage_unit_less_than_" /> 
+                                    X.
+                                    <spring:message code="room.invoice.value_is_" /> 
+                                    Y
+                                    )
+                                </span>
                             </td>
                             <td><span id="electricity-value-display" class="data-display" data-key="electricityValue"></span></td>
                         </tr>
@@ -92,6 +100,14 @@
                         <tr style="background-color: #f4f4f4;">
                             <td>
                                 <spring:message code="room.invoice.value" />
+                                <span id="water-min-calculate-message" class="text-success text-bold">
+                                    (
+                                    <spring:message code="room.invoice.if_water_usage_unit_less_than_" /> 
+                                    X.
+                                    <spring:message code="room.invoice.value_is_" /> 
+                                    Y
+                                    )
+                                </span>
                             </td>
                             <td><span id="water-value-display" class="data-display" data-key="waterValue"></span></td>
                         </tr>

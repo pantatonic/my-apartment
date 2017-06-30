@@ -136,6 +136,9 @@
     "room.invoice.usage_unit":"<spring:message code="room.invoice.usage_unit" />",
     "room.invoice.value":"<spring:message code="room.invoice.value" />",
     "room.invoice.room_price":"<spring:message code="room.invoice.room_price" />",
-    "room.invoice.already_receipt":"<spring:message code="room.invoice.already_receipt" />"
+    "room.invoice.already_receipt":"<spring:message code="room.invoice.already_receipt" />",
+    "room.invoice.if_electricity_usage_unit_less_than_":"<spring:message code="room.invoice.if_electricity_usage_unit_less_than_" />",
+    "room.invoice.if_water_usage_unit_less_than_":"<spring:message code="room.invoice.if_water_usage_unit_less_than_" />",
+    "room.invoice.value_is_":"<spring:message code="room.invoice.value_is_" />"
     }
 </div>

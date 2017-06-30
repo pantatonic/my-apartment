@@ -157,3 +157,8 @@
 #table-pay-invoice tbody tr:last-child  {
     font-weight: bold;
 }
+
+#electricity-min-calculate-message, #water-min-calculate-message {
+    font-size: 12px;
+    text-decoration: underline;
+}

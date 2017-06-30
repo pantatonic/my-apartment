@@ -279,6 +279,8 @@ var page = (function() {
             var modal_ = page.getElement.getModalRoomInvoiceDetail();
             var jsonData = invoiceDetailButton.closest('.already-invoiced').find('.invoice-json-data').text();
             jsonData = JSON.parse(jsonData);
+            var electricityMinCalMsgElement = jQuery('#electricity-min-calculate-message');
+            var waterMinCalMsgElement = jQuery('#water-min-calculate-message');
 
             app.loadingInElement('show', contentBox);
 
@@ -292,6 +294,15 @@ var page = (function() {
                         }
                         else {
                             modal_.find('[data-key="' + index + '"]').html(jsonData[index]);
+                        }
+                    }
+                    
+                    if(index == 'electricityUseMinimunUnitCalculate') {
+                        if(jsonData.electricityUseMinimunUnitCalculate) {
+                            electricityMinCalMsgElement.show();
+                        }
+                        else {
+                            electricityMinCalMsgElement.hide();
                         }
                     }
                 }
