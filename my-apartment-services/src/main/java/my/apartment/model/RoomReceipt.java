@@ -13,6 +13,7 @@ public class RoomReceipt implements Serializable {
     private Integer invoiceId;
     private String payer;
     private Integer status;
+    private String description;
     private Date createdDate;
     private String createdDateString;
     private Date updatedDate;
@@ -21,12 +22,13 @@ public class RoomReceipt implements Serializable {
     public RoomReceipt() {
     }
 
-    public RoomReceipt(Integer id, String receiptNo, Integer invoiceId, String payer, Integer status, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString) {
+    public RoomReceipt(Integer id, String receiptNo, Integer invoiceId, String payer, Integer status, String description, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString) {
         this.id = id;
         this.receiptNo = receiptNo;
         this.invoiceId = invoiceId;
         this.payer = payer;
         this.status = status;
+        this.description = description;
         this.createdDate = createdDate;
         this.createdDateString = createdDateString;
         this.updatedDate = updatedDate;
@@ -73,6 +75,14 @@ public class RoomReceipt implements Serializable {
         this.status = status;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -107,7 +117,7 @@ public class RoomReceipt implements Serializable {
 
     @Override
     public String toString() {
-        return "RoomReceipt{" + "id=" + id + ", receiptNo=" + receiptNo + ", invoiceId=" + invoiceId + ", payer=" + payer + ", status=" + status + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + '}';
+        return "RoomReceipt{" + "id=" + id + ", receiptNo=" + receiptNo + ", invoiceId=" + invoiceId + ", payer=" + payer + ", status=" + status + ", description=" + description + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + '}';
     }
 
 }

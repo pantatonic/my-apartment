@@ -90,8 +90,9 @@
         </textarea>
                     
         <jsp:include page="room_invoice_cancel.jsp" flush="true" />
-        
         <jsp:include page="room_invoice_detail.jsp" flush="true" />
+        
+        <jsp:include page="room_receipt_cancel.jsp" flush="true" />
         
     </tiles:putAttribute>
 </tiles:insertDefinition>    

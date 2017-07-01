@@ -46,4 +46,36 @@ public class RoomReceiptController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param roomReceiptId
+     * @param description
+     * @param response
+     * @return String
+     */
+    @RequestMapping(value = "/cancel_room_receipt.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String cancelRoomReceipt(
+            @RequestParam("room_receipt_id") String roomReceiptId,
+            @RequestParam("description") String description,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
+            parametersMap.add("room_receipt_id", roomReceiptId);
+            parametersMap.add("description", description);
+            
+            jsonObjectReturn = CommonAppWsUtils.postWithMultiValueMap(parametersMap, "room_receipt/cancel");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
 }

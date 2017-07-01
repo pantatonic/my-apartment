@@ -2,6 +2,8 @@
 var _ALREADY_INVOICED_ATTR_ = 'already-invoiced';
 var _NOT_HAVE_METER_ATTR_ = 'not-have-meter';
 var _INVOICE_ID_ATTR_ = 'data-invoice-id';
+var _RECEIPT_ID_ATTR_ = 'data-receipt-id';
+var _RECEIPT_NO_ATTR_ = 'data-receipt-no';
 
 
 jQuery(document).ready(function() {
@@ -72,6 +74,10 @@ var page = (function() {
                 
                 jQuery('#cancel-invoice-process-button').click(function() {
                     page.cancelRoomInvoiceProcess();
+                });
+                
+                jQuery('#cancel-receipt-process-button').click(function() {
+                    page.cancelRoomReceiptProcess();
                 });
             },
             createRoomInvoice: function() {
@@ -161,8 +167,7 @@ var page = (function() {
                 boxRoomContainer.on('click', '.cancel-receipt-button', function() {
                     var thisElement = jQuery(this);
                     
-                    //page.cancelRoomReceipt(thisElement);
-                    alert('Goto cancel room receipt');
+                    page.cancelRoomReceipt(thisElement);
                 });
             }
         },
@@ -204,6 +209,9 @@ var page = (function() {
             },
             getModalRoomInvoiceDetail: function() {
                 return jQuery('#modal-room-invoice-detail');
+            },
+            getModalCancelRoomReceipt: function() {
+                return jQuery('#modal-cancel-room-receipt');
             }
         },
         boxRoomContainer: {
@@ -221,6 +229,75 @@ var page = (function() {
             
                 page.getElement.getBoxRoomContainer().html(html);
             }
+        },
+        cancelRoomReceipt: function(cancelButton) {
+            var receiptId = cancelButton.attr(_RECEIPT_ID_ATTR_);
+            var receiptNo = cancelButton.attr(_RECEIPT_NO_ATTR_);
+            var modal_ = page.getElement.getModalCancelRoomReceipt();
+            
+            modal_.find('#receipt-display').html(receiptNo);
+            modal_.find('[name="room_receipt_id"]').val(receiptId);
+            
+            /** clear old data */
+            modal_.find('[name="cancel_description"]').val('');
+            
+            modal_.modal('show');
+        },
+        cancelRoomReceiptProcess: function() {
+            var modal_ = page.getElement.getModalCancelRoomReceipt();
+            
+            var roomReceiptId = modal_.find('[name="room_receipt_id"]').val();
+            var description = modal_.find('[name="cancel_description"]').val();
+            
+            var cancelButton = modal_.find('#cancel-receipt-process-button');
+            
+            cancelButton.bootstrapBtn('loading');
+            
+            setTimeout(function() {
+                jQuery.ajax({
+                    type: 'post',
+                    url: _CONTEXT_PATH_ + '/cancel_room_receipt.html',
+                    data: {
+                        room_receipt_id: roomReceiptId,
+                        description: description
+                    },
+                    cache: false,
+                    success: function(response) {
+                        response = app.convertToJsonObject(response);
+                        
+                        if(response.result == SUCCESS_STRING) {
+                            app.showNotice({
+                                message: app.translate('common.save_success'),
+                                type: response.result
+                            });
+                            
+                            modal_.modal('hide');
+                            
+                            setTimeout(function() {
+                                page.getRoom();
+                            }, _DELAY_PROCESS_);
+                        }
+                        else {
+                            if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                            }
+                            else {
+                                app.showNotice({
+                                    message: app.translate('common.processing_failed'),
+                                    type: response.result
+                                });
+                            }
+                        }
+                        
+                        cancelButton.bootstrapBtn('reset');
+                    },
+                    error: function() {
+                        app.alertSomethingError();
+                        
+                        cancelButton.bootstrapBtn('reset');
+                    }
+                });
+            }, _DELAY_PROCESS_);
         },
         createRoomReceiptProcess: function(roomInvoiceId) {
             var buildingList = page.getElement.getBuildingList();
@@ -712,6 +789,8 @@ var page = (function() {
                             + '</span>');
                     
                         boxRoom_.find('.cancel-receipt-button').attr(_INVOICE_ID_ATTR_, currentData.id);
+                        boxRoom_.find('.cancel-receipt-button').attr(_RECEIPT_ID_ATTR_, currentData.receiptId);
+                        boxRoom_.find('.cancel-receipt-button').attr(_RECEIPT_NO_ATTR_, currentData.receiptNo);
                     }
                 }
             };

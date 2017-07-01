@@ -158,8 +158,6 @@ public class RoomInvoiceController {
         CommonAppUtils.setResponseHeader(response);
         
         try {
-            //TODO : check receipt before delete
-            
             MultiValueMap<String, String> parametersMap = new LinkedMultiValueMap<String, String>();
             parametersMap.add("room_invoice_id", roomInvoiceId);
             parametersMap.add("description", description);

@@ -9,4 +9,6 @@ public interface RoomReceiptDao {
     
     public Boolean isAreadyReceiptOfInvoice(Integer roomInvoiceId);
     
+    public Boolean cancel(RoomReceipt roomInvoice);
+    
 }

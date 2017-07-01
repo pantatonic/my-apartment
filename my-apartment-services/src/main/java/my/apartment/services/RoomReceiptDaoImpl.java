@@ -122,4 +122,64 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
         return resultCheck;
     }
     
+    @Override
+    public Boolean cancel(RoomReceipt roomReceipt) {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        Boolean resultCancel = Boolean.TRUE;
+
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "UPDATE room_receipt "
+                    + "SET "
+                    + "status = ?, " //1
+                    + "description = ?, " //2
+                    + "updated_date = ? " //3
+                    + "WHERE id = ?"; //4
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, 0); //cancel status is zero
+            ps.setString(2, CommonWsUtils.strToString(roomReceipt.getDescription()));
+            ps.setString(3, CommonWsDb.getNowDateTimeString());
+            ps.setInt(4, roomReceipt.getId());
+
+            Integer effectRow = ps.executeUpdate();
+            
+            if (effectRow == 0) {
+                resultCancel = Boolean.FALSE;
+            }
+            else {
+                stringQuery = "UPDATE room_invoice "
+                        + "SET "
+                        + "status = ?, " //1
+                        + "receipt_id = NULL, "
+                        + "updated_date = ? " //2
+                        + "WHERE receipt_id = ?"; //3
+                
+                ps = con.prepareStatement(stringQuery);
+                ps.setInt(1, 1); //set room_invoice.status to 1 (unpaid is 1)
+                ps.setString(2, CommonWsDb.getNowDateTimeString());
+                ps.setInt(3, roomReceipt.getId());
+                
+                Integer effectRowRoomInvoice = ps.executeUpdate();
+                
+                if(effectRowRoomInvoice == 0) {
+                    resultCancel = Boolean.FALSE;
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+
+            resultCancel = Boolean.FALSE;
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomReceiptDaoImpl.class.getName());
+        }
+
+        return resultCancel;
+    }
+    
 }
