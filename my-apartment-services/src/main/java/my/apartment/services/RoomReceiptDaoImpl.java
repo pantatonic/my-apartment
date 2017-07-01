@@ -52,14 +52,16 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
                 if(generatedKeys.next()) {
                     stringQuery = "UPDATE room_invoice "
                             + "SET receipt_id = ?, " //1
-                            + "status = ? " //2
-                            + "WHERE id = ?"; //3
+                            + "status = ?, " //2
+                            + "updated_date = ? " //3
+                            + "WHERE id = ?"; //4
                     
                     ps = con.prepareStatement(stringQuery);
                     
                     ps.setInt(1, generatedKeys.getInt(1));
                     ps.setInt(2, 2); //status is 2 that mean already receipt
-                    ps.setInt(3, roomReceipt.getInvoiceId());
+                    ps.setString(3, CommonWsDb.getNowDateTimeString());
+                    ps.setInt(4, roomReceipt.getInvoiceId());
                     
                     ps.executeUpdate();
                 }

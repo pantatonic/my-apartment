@@ -56,9 +56,9 @@
                                 <span id="electricity-min-calculate-message" class="text-success text-bold">
                                     (
                                     <spring:message code="room.invoice.if_electricity_usage_unit_less_than_" /> 
-                                    X.
+                                    <span id="min-electricity-unit-display"></span>.
                                     <spring:message code="room.invoice.value_is_" /> 
-                                    Y
+                                    <span id="min-electricity-charge-display"></span>
                                     )
                                 </span>
                             </td>
@@ -103,9 +103,9 @@
                                 <span id="water-min-calculate-message" class="text-success text-bold">
                                     (
                                     <spring:message code="room.invoice.if_water_usage_unit_less_than_" /> 
-                                    X.
+                                    <span id="min-water-unit-display"></span>.
                                     <spring:message code="room.invoice.value_is_" /> 
-                                    Y
+                                    <span id="min-water-charge-display"></span>
                                     )
                                 </span>
                             </td>

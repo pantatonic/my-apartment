@@ -183,7 +183,9 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
         try {
             con = CommonWsDb.getDbConnection();
             
-            String stringQuery = "SELECT room_invoice.*, room_receipt.receipt_no  " +
+            String stringQuery = "SELECT room_invoice.*, room_receipt.receipt_no, "
+                    + "building.min_electricity_unit, building.min_electricity_charge,"
+                    + "building.min_water_unit, building.min_water_charge " +
                 "FROM room_invoice JOIN room ON room_invoice.room_id = room.id " +
                 "JOIN building ON room.building_id = building.id " +
                 "LEFT JOIN room_receipt ON room_invoice.receipt_id = room_receipt.id "+
@@ -228,6 +230,12 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
                 roomInvoice.setUpdatedDate(rs.getDate("updated_date"));
                 
                 roomInvoice.setReceiptNo(rs.getString("receipt_no"));
+                
+                roomInvoice.setMinElectricityUnit(CommonWsUtils.integerZeroToNull(rs.getInt("min_electricity_unit")));
+                roomInvoice.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
+                roomInvoice.setMinWaterUnit(CommonWsUtils.integerZeroToNull(rs.getInt("min_water_unit")));
+                roomInvoice.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
+                
                 
                 roomInvoicesReturn.add(roomInvoice);
             }

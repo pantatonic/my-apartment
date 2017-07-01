@@ -299,6 +299,17 @@ var page = (function() {
                     
                     if(index == 'electricityUseMinimunUnitCalculate') {
                         if(jsonData.electricityUseMinimunUnitCalculate) {
+                            modal_.find('#min-electricity-unit-display')
+                                    .html(app.valueUtils.undefinedToEmpty(jsonData.minElectricityUnit));
+                            modal_.find('#min-electricity-charge-display')
+                                    .html(app.valueUtils.undefinedToEmpty(jsonData.minElectricityCharge));
+                            
+                            modal_.find('#min-water-unit-display')
+                                    .html(app.valueUtils.undefinedToEmpty(jsonData.minWaterUnit));
+                            modal_.find('#min-water-charge-display')
+                                    .html(app.valueUtils.undefinedToEmpty(jsonData.minWaterCharge));
+                            
+                            
                             electricityMinCalMsgElement.show();
                         }
                         else {
