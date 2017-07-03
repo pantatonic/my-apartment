@@ -123,6 +123,10 @@
             </table>
         </textarea>
                     
+        <form id="pdf-invoice-form" method="post" target="room_invoice_pdf" action="<c:url value="pdf_room_invoice.html" />">
+            
+        </form>
+                    
         <jsp:include page="room_invoice_cancel.jsp" flush="true" />
         <jsp:include page="room_invoice_detail.jsp" flush="true" />
         <jsp:include page="room_pdf_invoice.jsp" flush="true" />

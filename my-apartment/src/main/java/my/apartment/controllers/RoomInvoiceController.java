@@ -173,4 +173,34 @@ public class RoomInvoiceController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param formData
+     * @return 
+     */
+    @RequestMapping(value = "/pdf_room_invoice.html", method = {RequestMethod.POST})
+    @ResponseBody
+    public String pdfRoomInvoice(
+            @RequestBody MultiValueMap<String, String> formData
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            List<String> roomInvoiceIds = formData.get("pdf_room_invoice_id");
+            
+            String requestJson = new JSONObject()
+                    .put(CommonString.DATA_STRING, roomInvoiceIds)
+                    .toString();
+            
+            jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room_invoice/post_get_room_invoice_by_id");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
 }

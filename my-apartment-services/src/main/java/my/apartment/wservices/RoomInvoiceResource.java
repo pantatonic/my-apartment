@@ -306,6 +306,37 @@ public class RoomInvoiceResource {
         return jsonObjectReturn.toString();
     }
     
+    
+    @Path("post_get_room_invoice_by_id")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String postGetRoomInvoiceById(InputStream incomingData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
+            
+            JSONArray jsonArrayReceive = new JSONArray(jsonObjectReceive.get(CommonString.DATA_STRING).toString());
+            
+            for(Integer i = 0; i < jsonArrayReceive.length(); i++) {
+                Integer roomInvoiceIdFromData = Integer.parseInt(jsonArrayReceive.getString(i), 10);
+                
+                System.out.println("-- ws --");
+                System.out.println(roomInvoiceIdFromData);
+                System.out.println("-- ws --");
+                System.out.println("");
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
 
     /**
      * PUT method for updating or creating an instance of RoomInvoiceResource

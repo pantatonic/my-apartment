@@ -701,12 +701,24 @@ var page = (function() {
                     'fullscreen=yes'
                 ].join(',');
                 
-                var url_ = 'http://my-spend.tk';
+                var url_ = '';
                 var windowName = 'room_invoice_pdf';
 
 
                 setTimeout(function() {
+                    var form_ = jQuery('#pdf-invoice-form');
+                    
+                    form_.html('');
+                    
+                    for(var index in invoiceIdSet) {
+                        form_.append('<input type="hidden" name="pdf_room_invoice_id" value="' + invoiceIdSet[index] + '" >');
+                    }
+
                     window.open(url_, windowName, params);
+                    
+                    setTimeout(function() {
+                        jQuery('#pdf-invoice-form').submit();
+                    }, _DELAY_PROCESS_);
                     
                     buttonPdfProcess.bootstrapBtn('reset');
                 }, _DELAY_PROCESS_);
