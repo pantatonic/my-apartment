@@ -35,13 +35,29 @@
                         <%-- <h3 class="box-title">
                             &nbsp;
                         </h3> --%>
-                        <button id="create-room-invoice" class="btn btn-warning btn-flat" 
+                        <%--<button id="create-room-invoice" class="btn btn-warning btn-flat" 
                                 data-loading-text="<spring:message code="common.now_processing" />">
                             <i class="fa fa-file-text-o"></i> 
                             <spring:message code="room.invoice.create_room_invoice" />
-                        </button>
+                        </button>--%>
                         
-                        <div class="col-xs-12 hidden-sm hidden-md hidden-lg clearfix" style="height: 50px;"><br></div>
+                        <div class="dropdown">
+                            <button class="btn btn-warning btn-flat btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                                <spring:message code="common.process_action" /> &nbsp;
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li id="create-room-invoice"><a href="javascript:void(0);"><i class="fa fa-file-o"></i> <spring:message code="room.invoice.create_room_invoice" /></a></li>
+                                <li id="pdf-room-invoice">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-file-pdf-o"></i> 
+                                        <spring:message code="common.pdf" /> <spring:message code="room.invoice" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-xs-12 hidden-sm hidden-md hidden-lg clearfix" style="height: 20px;"><br></div>
                         
                         <div class="input-group" id="input-group-month-year">
                             <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
@@ -89,8 +105,27 @@
             </div>
         </textarea>
                     
+        <textarea id="table-pdf-invoice-template">
+            <table id="table-pdf-invoice" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 150px;">
+                            <label><input type="checkbox" id="main-pdf-invoice-checkbox"> 
+                                <spring:message code="common.checked_all" />
+                            </label>
+                        </th>
+                        <th><spring:message code="building.room" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </textarea>
+                    
         <jsp:include page="room_invoice_cancel.jsp" flush="true" />
         <jsp:include page="room_invoice_detail.jsp" flush="true" />
+        <jsp:include page="room_pdf_invoice.jsp" flush="true" />
         
         <jsp:include page="room_receipt_cancel.jsp" flush="true" />
         

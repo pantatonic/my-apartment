@@ -23,6 +23,7 @@ var facade = (function() {
             page.addEvent.createRoomInvoice();
             page.addEvent.cancelRoomInvoice();
             page.addEvent.showRoomInvoice();
+            page.addEvent.pdfRoomInvoice();
             page.addEvent.payInvoice();
             page.addEvent.showRoomReceipt();
             page.addEvent.cancelRoomReceipt();
@@ -94,6 +95,73 @@ var page = (function() {
                     var thisElement = jQuery(this);
                     
                     page.cancelRoomInvoice(thisElement);
+                });
+            },
+            pdfRoomInvoice: function() {
+                var buttonPdf = page.getElement.getPdfRoomInvoiceButton();
+                
+                buttonPdf.click(function() {
+                    var modal_ = page.getElement.getModalPdfRoomInvoice();
+                    
+                    var checkboxs = page.getElement.getRoomCheckbox();
+                    
+                    if(checkboxs.length == 0) {
+                        if(!app.checkNoticeExist('notice-select-data')) {
+                            app.showNotice({
+                                type: WARNING_STRING,
+                                message: app.translate('common.please_enter_data'),
+                                addclass: 'notice-select-data'
+                            });
+                        }
+
+                        page.getElement.getBuildingList().addClass(INPUT_ERROR_CLASS);
+                    }
+                    else {
+                        var tableTemplate = jQuery('#table-pdf-invoice-template').val();
+                        var boxRoom_ = page.getElement.getBoxRoom_();
+                        var html_ = '';
+                        
+                        modal_.find('.modal-body').html(tableTemplate);
+                        
+                        boxRoom_.each(function() {
+                            var thisBoxRoom_ = jQuery(this);
+                            var alreadyInvoiced = thisBoxRoom_.find('.already-invoiced');
+                            
+                            if(alreadyInvoiced.length > 0) {
+                                var currentInvoiceId = alreadyInvoiced.attr(_INVOICE_ID_ATTR_);
+                                var labelRoomNo = thisBoxRoom_.attr('data-room-no');
+                                
+                                html_ += '<tr>'
+                                    + '<td class="text-center"><input type="checkbox" value="' + currentInvoiceId + '"></td>'
+                                    + '<td>' + labelRoomNo + '</td>'
+                                    + '</tr>';
+                            }
+                        });
+                        
+                        html_ = html_.length == 0 ? '<tr><td colspan="2" class="text-center">_No Room To Export PDF Invoice_</td></tr>' : html_;
+                        
+                        var table_ = modal_.find('#table-pdf-invoice');
+                        
+                        table_.find('tbody').html(html_);
+                        table_.find('input[type="checkbox"]').prop('checked', true);
+                        
+                        
+                        
+                        modal_.modal('show');
+                    }
+                });
+                
+                page.getElement.getModalPdfRoomInvoice().on('click', '#main-pdf-invoice-checkbox', function() {
+                    var thisElement = jQuery(this);
+                    var modal_ = page.getElement.getModalPdfRoomInvoice();
+                    var checkboxs = modal_.find('#table-pdf-invoice tbody').find('input[type="checkbox"]');
+                    
+                    if(thisElement.is(':checked')) {
+                        checkboxs.prop('checked', true);
+                    }
+                    else {
+                        checkboxs.prop('checked', false);
+                    }
                 });
             },
             showRoomInvoice: function() {
@@ -198,6 +266,9 @@ var page = (function() {
             getCreateRoomInvoiceButton: function() {
                 return jQuery('#create-room-invoice');
             },
+            getPdfRoomInvoiceButton: function() {
+                return jQuery('#pdf-room-invoice');
+            },
             getRoomCheckbox: function() {
                 return jQuery('.room-checkbox');
             },
@@ -212,6 +283,9 @@ var page = (function() {
             },
             getModalCancelRoomReceipt: function() {
                 return jQuery('#modal-cancel-room-receipt');
+            },
+            getModalPdfRoomInvoice: function() {
+                return jQuery('#modal-room-pdf-invoice');
             }
         },
         boxRoomContainer: {

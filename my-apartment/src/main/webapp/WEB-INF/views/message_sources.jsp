@@ -32,6 +32,9 @@
     "common.grand_total":"<spring:message code="common.grand_total" />",
     "common.baht":"<spring:message code="common.baht" />",
     "common.pay":"<spring:message code="common.pay" />",
+    "common.checked_all":"<spring:message code="common.checked_all" />",
+    "common.process_action":"<spring:message code="common.process_action" />",
+    "common.pdf":"<spring:message code="common.pdf" />",
     
     "common.person_name":"<spring:message code="common.person_name" />",
     "common.person_lastname":"<spring:message code="common.person_lastname" />",
