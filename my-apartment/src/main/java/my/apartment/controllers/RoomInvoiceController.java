@@ -187,7 +187,12 @@ public class RoomInvoiceController {
     /**
      * 
      * @param formData
+     * @param response
+     * @param document
+     * @param writer
      * @return 
+     * @throws com.lowagie.text.DocumentException 
+     * @throws java.io.IOException 
      */
     @RequestMapping(value = "/pdf_room_invoice.html", method = {RequestMethod.POST})
     //@ResponseBody
@@ -215,45 +220,15 @@ public class RoomInvoiceController {
             
             //TODO : create PDF from jsonObjectReturn
             
-            PdfPTable table = new PdfPTable(3);
-            table.setWidthPercentage(100.0f);
-            table.setWidths(new float[] {1.0f,2.0f,2.0f});
-            table.setSpacingBefore(10);
+            JSONArray jsonArrayData = new JSONArray(jsonObjectReturn.get(CommonString.DATA_STRING).toString());
             
-            PdfPCell cell = new PdfPCell();
-
-            cell.setPhrase(new Phrase(" "));
-            table.addCell(cell);
-
-            cell.setPhrase(new Phrase("Name"));
-            table.addCell(cell);
-
-            cell.setPhrase(new Phrase("Email"));
-            table.addCell(cell);
-            
-
-            document.open();
-            //document.add(new Chunk(""));
-            Paragraph header = new Paragraph(
-                new Chunk("Generate Pdf Using Spring MVC",
-                        FontFactory.getFont(FontFactory.HELVETICA,30)));
-            document.newPage();
-            document.add(header);
-            document.add(table);
-            
-            
-            Paragraph header2 = new Paragraph(
-                new Chunk("Generate Pdf Using Spring MVC",
-                        FontFactory.getFont(FontFactory.HELVETICA,30)));
-            
-            document.setPageSize(PageSize.A5.rotate());
-            document.newPage();
-            document.add(header2);
-            document.add(table);
-            
-            document.close();
-            
-            
+            for(Integer i = 0; i < jsonArrayData.length(); i++) {
+                JSONObject j = jsonArrayData.getJSONObject(i);
+                
+                String invoiceNo = j.getString("invoiceNo");
+                
+                System.out.println(invoiceNo);
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
