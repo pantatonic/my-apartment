@@ -1,5 +1,16 @@
 package my.apartment.controllers;
 
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import my.apartment.common.CommonAppUtils;
@@ -179,11 +190,19 @@ public class RoomInvoiceController {
      * @return 
      */
     @RequestMapping(value = "/pdf_room_invoice.html", method = {RequestMethod.POST})
-    @ResponseBody
-    public String pdfRoomInvoice(
-            @RequestBody MultiValueMap<String, String> formData
-    ) {
+    //@ResponseBody
+    public void pdfRoomInvoice(
+            @RequestBody MultiValueMap<String, String> formData,
+            HttpServletResponse response,
+            Document document,
+            PdfWriter writer
+    ) throws DocumentException, IOException {
         JSONObject jsonObjectReturn = new JSONObject();
+        
+        response.setContentType("application/pdf");
+        response.setCharacterEncoding("UTF-8");
+
+        PdfWriter.getInstance(document, response.getOutputStream());
         
         try {
             List<String> roomInvoiceIds = formData.get("pdf_room_invoice_id");
@@ -195,6 +214,46 @@ public class RoomInvoiceController {
             jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room_invoice/post_get_room_invoice_by_id");
             
             //TODO : create PDF from jsonObjectReturn
+            
+            PdfPTable table = new PdfPTable(3);
+            table.setWidthPercentage(100.0f);
+            table.setWidths(new float[] {1.0f,2.0f,2.0f});
+            table.setSpacingBefore(10);
+            
+            PdfPCell cell = new PdfPCell();
+
+            cell.setPhrase(new Phrase(" "));
+            table.addCell(cell);
+
+            cell.setPhrase(new Phrase("Name"));
+            table.addCell(cell);
+
+            cell.setPhrase(new Phrase("Email"));
+            table.addCell(cell);
+            
+
+            document.open();
+            //document.add(new Chunk(""));
+            Paragraph header = new Paragraph(
+                new Chunk("Generate Pdf Using Spring MVC",
+                        FontFactory.getFont(FontFactory.HELVETICA,30)));
+            document.newPage();
+            document.add(header);
+            document.add(table);
+            
+            
+            Paragraph header2 = new Paragraph(
+                new Chunk("Generate Pdf Using Spring MVC",
+                        FontFactory.getFont(FontFactory.HELVETICA,30)));
+            
+            document.setPageSize(PageSize.A5.rotate());
+            document.newPage();
+            document.add(header2);
+            document.add(table);
+            
+            document.close();
+            
+            
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -202,7 +261,7 @@ public class RoomInvoiceController {
             jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
         
-        return jsonObjectReturn.toString();
+        
     }
     
 }
