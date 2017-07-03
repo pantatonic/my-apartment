@@ -163,6 +163,10 @@ var page = (function() {
                         checkboxs.prop('checked', false);
                     }
                 });
+                
+                page.getElement.getModalPdfRoomInvoice().find('#pdf-invoice-process-button').click(function() {
+                    page.pdfRoomInvoiceProcess();
+                });
             },
             showRoomInvoice: function() {
                 var boxRoomContainer = page.getElement.getBoxRoomContainer();
@@ -268,6 +272,9 @@ var page = (function() {
             },
             getPdfRoomInvoiceButton: function() {
                 return jQuery('#pdf-room-invoice');
+            },
+            getPdfRoomInvoiceProcessButtin: function() {
+                return jQuery('#pdf-invoice-process-button');
             },
             getRoomCheckbox: function() {
                 return jQuery('.room-checkbox');
@@ -670,6 +677,69 @@ var page = (function() {
                         type: null
                     });
                 }
+            }
+        },
+        pdfRoomInvoiceProcess: function() {
+            var modal_ = page.getElement.getModalPdfRoomInvoice();
+            var buttonPdfProcess = page.getElement.getPdfRoomInvoiceProcessButtin();
+            var invoiceIdSet = [];
+            var table_ = modal_.find('#table-pdf-invoice');
+            var checkboxs = table_.find('tbody').find('input[type="checkbox"]');
+            
+            var _pdfInvoiceProcess = function() {
+                buttonPdfProcess.bootstrapBtn('loading');
+
+                var width_ = (screen.width / 1.3);
+                var height_ = (screen.height - 110);
+
+                var params = [
+                    'width=' + width_,
+                    'height=' + height_,
+                    'left=' + ((screen.width / 2)-(width_ / 2)),
+                    //'top=' + ((screen.height / 2)-(height_ / 2)),
+                    'top=10',
+                    'fullscreen=yes'
+                ].join(',');
+                
+                var url_ = 'http://my-spend.tk';
+                var windowName = 'room_invoice_pdf';
+
+
+                setTimeout(function() {
+                    window.open(url_, windowName, params);
+                    
+                    buttonPdfProcess.bootstrapBtn('reset');
+                }, _DELAY_PROCESS_);
+            };
+            
+            
+            
+            /** main process */
+            
+            var countCheckbox = 0;
+            
+            checkboxs.filter(function() {
+                return jQuery(this).prop('checked');
+            }).each(function() {
+                var thisCheckbox = jQuery(this);
+                var roomInvoiceId = thisCheckbox.val();
+                
+                countCheckbox = countCheckbox + 1;
+                
+                invoiceIdSet.push(roomInvoiceId);
+            });
+            
+            if(countCheckbox == 0) {
+                if(!app.checkNoticeExist('notice-checked-data')) {
+                    app.showNotice({
+                        type: WARNING_STRING,
+                        message: app.translate('room.invoice.please_checked_room'),
+                        addclass: 'notice-checked-data'
+                    });
+                }
+            }
+            else {
+                _pdfInvoiceProcess();
             }
         },
         getRoom: function() {
