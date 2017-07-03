@@ -193,6 +193,8 @@ public class RoomInvoiceController {
                     .toString();
             
             jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room_invoice/post_get_room_invoice_by_id");
+            
+            //TODO : create PDF from jsonObjectReturn
         }
         catch(Exception e) {
             e.printStackTrace();

@@ -306,7 +306,11 @@ public class RoomInvoiceResource {
         return jsonObjectReturn.toString();
     }
     
-    
+    /**
+     * 
+     * @param incomingData
+     * @return String
+     */
     @Path("post_get_room_invoice_by_id")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -319,14 +323,21 @@ public class RoomInvoiceResource {
             
             JSONArray jsonArrayReceive = new JSONArray(jsonObjectReceive.get(CommonString.DATA_STRING).toString());
             
+            RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
+            
+            List<RoomInvoice> roomInvoicesReturn = new ArrayList<RoomInvoice>();
+            
             for(Integer i = 0; i < jsonArrayReceive.length(); i++) {
                 Integer roomInvoiceIdFromData = Integer.parseInt(jsonArrayReceive.getString(i), 10);
+
+                List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getById(roomInvoiceIdFromData);
                 
-                System.out.println("-- ws --");
-                System.out.println(roomInvoiceIdFromData);
-                System.out.println("-- ws --");
-                System.out.println("");
+                if(!roomInvoices.isEmpty()) {
+                    roomInvoicesReturn.add(roomInvoices.get(0));
+                }
             }
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomInvoicesReturn);
         }
         catch(Exception e) {
             e.printStackTrace();
