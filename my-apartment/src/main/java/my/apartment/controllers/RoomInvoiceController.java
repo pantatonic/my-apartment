@@ -3,10 +3,12 @@ package my.apartment.controllers;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -22,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -222,13 +225,39 @@ public class RoomInvoiceController {
             
             JSONArray jsonArrayData = new JSONArray(jsonObjectReturn.get(CommonString.DATA_STRING).toString());
             
+            String useFontResource = "thai_fonts/sarabun/THSarabun.ttf";
+            String useFontResourceBold = "thai_fonts/sarabun/THSarabun Bold.ttf";
+            
+            Font fontx = new Font(BaseFont.createFont(useFontResource,
+                BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 30);
+            
+            document.setPageSize(PageSize.A5.rotate());
+            
+            document.open();
+                        
+            Paragraph headerx = new Paragraph(
+                    new Chunk(messageSource.getMessage("room.reserve", null, LocaleContextHolder.getLocale()),
+                        FontFactory.getFont(FontFactory.HELVETICA, 15))
+            );
+            
+            
+            
             for(Integer i = 0; i < jsonArrayData.length(); i++) {
                 JSONObject j = jsonArrayData.getJSONObject(i);
                 
                 String invoiceNo = j.getString("invoiceNo");
                 
-                System.out.println(invoiceNo);
+                Paragraph header = new Paragraph(
+                        new Chunk(invoiceNo, fontx)
+                );
+
+                document.add(headerx);
+                document.add(header);
+                
+                document.newPage();
             }
+            
+            document.close();
         }
         catch(Exception e) {
             e.printStackTrace();
