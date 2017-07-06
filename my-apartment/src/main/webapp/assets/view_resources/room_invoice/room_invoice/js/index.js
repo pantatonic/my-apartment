@@ -469,9 +469,11 @@ var page = (function() {
                             
                             
                             electricityMinCalMsgElement.show();
+                            waterMinCalMsgElement.show();
                         }
                         else {
                             electricityMinCalMsgElement.hide();
+                            waterMinCalMsgElement.hide();
                         }
                     }
                 }

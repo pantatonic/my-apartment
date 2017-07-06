@@ -312,6 +312,8 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
             
             String stringQuery = "SELECT room_invoice.*, building.id AS building_id, "
                     + "building.name AS building_name, building.address AS building_address, building.tel AS building_tel, "
+                    + "building.min_electricity_unit AS min_electricity_unit, building.min_electricity_charge AS min_electricity_charge, "
+                    + "building.min_water_unit AS min_water_unit, building.min_water_charge AS min_water_charge, "
                     + "room.room_no AS room_no, "
                     + "current_check_in.name AS check_in_name, current_check_in.lastname AS check_in_lastname "
                     
@@ -363,6 +365,12 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
                 
                 roomInvoicePdf.setCheckInName(rs.getString("check_in_name"));
                 roomInvoicePdf.setCheckInLastname(rs.getString("check_in_lastname"));
+                
+                roomInvoicePdf.setMinElectricityUnit(rs.getInt("min_electricity_unit"));
+                roomInvoicePdf.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
+                
+                roomInvoicePdf.setMinWaterUnit(rs.getInt("min_water_unit"));
+                roomInvoicePdf.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
                 
                 roomInvoicePdfs.add(roomInvoicePdf);
             }

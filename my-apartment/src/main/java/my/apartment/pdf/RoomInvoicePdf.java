@@ -13,7 +13,6 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfTable;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.io.IOException;
@@ -218,20 +217,10 @@ public class RoomInvoicePdf {
         document.setMargins(50f,50f,5f,10f);
         document.open();
 
-        /*Paragraph headerx = new Paragraph(
-                new Chunk(this.getMessageSourcesString(messageSource, "room.reserve"),
-                    fontx)
-        );*/
-
-
         for(Integer i = 0; i < jsonArrayData.length(); i++) {
             JSONObject j = jsonArrayData.getJSONObject(i);
             
-            String invoiceNo = j.getString("invoiceNo");
-
-            /*Paragraph header = new Paragraph(
-                    new Chunk(j.getString("buildingName"), this.getFontHeader())
-            );*/
+            System.out.println(j);
             
             String previousMeterString = this.getMessageSourcesString("electricity_water_meter.previous_meter");
             String electricMeterString = this.getMessageSourcesString("electricity_water_meter.electricity_meter");
@@ -240,6 +229,26 @@ public class RoomInvoicePdf {
             String valueString = this.getMessageSourcesString("room.invoice.value");
             
             String roomPriceString = this.getMessageSourcesString("room.invoice.room_price");
+            
+            String electricityUseMinimumUnitCalculateString = "";
+            if(j.getBoolean("electricityUseMinimunUnitCalculate")) {
+                electricityUseMinimumUnitCalculateString = "(" + this.getMessageSourcesString("room.invoice.if_electricity_usage_unit_less_than_")
+                        + " " + j.getInt("minElectricityUnit")
+                        + ". " + this.getMessageSourcesString("room.invoice.value_is_")
+                        + " " + this.decimalFormat(j.getBigDecimal("minElectricityCharge"))
+                        + ")";
+            }
+            
+            String waterUseMinimumUnitCalculateString = "";
+            if(j.getBoolean("waterUseMinimunUnitCalculate")) {
+                waterUseMinimumUnitCalculateString = "(" + this.getMessageSourcesString("room.invoice.if_water_usage_unit_less_than_")
+                        + " " + j.getInt("minWaterUnit")
+                        + ". " + this.getMessageSourcesString("room.invoice.value_is_")
+                        + " " + this.decimalFormat(j.getBigDecimal("minWaterCharge"))
+                        + ")";
+            }
+                    
+                    
             
             
             PdfPTable tableInvoiceNo = this.getTableHeadInvoiceNo(j);
@@ -255,7 +264,7 @@ public class RoomInvoicePdf {
                     + j.getString("electricityPreviousMeter") + ", "+ electricMeterString + " : "+ j.getString("electricityPresentMeter") + " \n"
                     + pricePerUnitString + " : " + this.decimalFormat(j.getBigDecimal("electricityChargePerUnit")) + "\n"
                     + usageUnitString + " : " + j.getInt("electricityUsageUnit") + "\n"
-                    + valueString
+                    + valueString + " " + electricityUseMinimumUnitCalculateString
                     , this.getFontDetail()));
             cellElectricity.setMinimumHeight(30f);
             cellElectricity.setPadding(5);
@@ -287,7 +296,7 @@ public class RoomInvoicePdf {
                     + j.getString("waterPreviousMeter") + ", "+ electricMeterString + " : "+ j.getString("waterPresentMeter") + " \n"
                     + pricePerUnitString + " : " + this.decimalFormat(j.getBigDecimal("waterChargePerUnit")) + "\n"
                     + usageUnitString + " : " + j.getInt("waterUsageUnit") + "\n"
-                    + valueString
+                    + valueString + " " + waterUseMinimumUnitCalculateString
                     , this.getFontDetail()));
             cellWater.setMinimumHeight(30f);
             cellWater.setPadding(5);
