@@ -181,5 +181,14 @@ public class CommonAppUtils {
         
         return result;
     }
+    
+    public static String getStringJsonObject(String key, JSONObject jsonObject) {
+        if(jsonObject.has(key)) {
+            return jsonObject.getString(key);
+        }
+        else {
+            return null;
+        }
+    }
 
 }

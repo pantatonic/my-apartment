@@ -2,6 +2,7 @@ package my.apartment.services;
 
 import java.util.List;
 import my.apartment.model.RoomInvoice;
+import my.apartment.model.RoomInvoicePdf;
 
 
 public interface RoomInvoiceDao {
@@ -14,6 +15,6 @@ public interface RoomInvoiceDao {
     
     public Boolean cancel(RoomInvoice roomInvoice);
     
-    public List<RoomInvoice> getById(Integer roomInvoiceId);
+    public List<RoomInvoicePdf> getById(Integer roomInvoiceId);
     
 }

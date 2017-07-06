@@ -20,6 +20,7 @@ import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomInvoice;
+import my.apartment.model.RoomInvoicePdf;
 import my.apartment.model.WaterMeter;
 import my.apartment.services.RoomDao;
 import my.apartment.services.RoomDaoImpl;
@@ -325,19 +326,19 @@ public class RoomInvoiceResource {
             
             RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
             
-            List<RoomInvoice> roomInvoicesReturn = new ArrayList<RoomInvoice>();
+            List<RoomInvoicePdf> roomInvoicePdfsReturn = new ArrayList<RoomInvoicePdf>();
             
             for(Integer i = 0; i < jsonArrayReceive.length(); i++) {
                 Integer roomInvoiceIdFromData = Integer.parseInt(jsonArrayReceive.getString(i), 10);
 
-                List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getById(roomInvoiceIdFromData);
+                List<RoomInvoicePdf> roomInvoicePdfs = roomInvoiceDaoImpl.getById(roomInvoiceIdFromData);
                 
-                if(!roomInvoices.isEmpty()) {
-                    roomInvoicesReturn.add(roomInvoices.get(0));
+                if(!roomInvoicePdfs.isEmpty()) {
+                    roomInvoicePdfsReturn.add(roomInvoicePdfs.get(0));
                 }
             }
             
-            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomInvoicesReturn);
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomInvoicePdfsReturn);
         }
         catch(Exception e) {
             e.printStackTrace();

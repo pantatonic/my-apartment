@@ -9,6 +9,7 @@ import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -17,6 +18,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.io.IOException;
 import java.math.BigDecimal;
+import my.apartment.common.CommonAppUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.context.MessageSource;
@@ -39,7 +41,7 @@ public class RoomInvoicePdf {
 
     private Font getFontHeader() throws DocumentException, IOException {
         Font fontHeader = new Font(BaseFont.createFont(this.useFontResource,
-            BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 30);
+            BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 13);
         
         return fontHeader;
     }
@@ -51,11 +53,34 @@ public class RoomInvoicePdf {
         return fontDetail;
     }
     
+    private Font getFontGrandTotal() throws DocumentException, IOException {
+        Font fontDetail = new Font(BaseFont.createFont(this.useFontResourceBold,
+            BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 14);
+        fontDetail.setColor(Color.WHITE);
+        
+        return fontDetail;
+    }
+    
     private Font getFontDetail() throws DocumentException, IOException {
         Font fontDetail = new Font(BaseFont.createFont(this.useFontResource,
             BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 12);
         
         return fontDetail;
+    }
+    
+    private Color getCellDetailBorderGrey() {
+        return new Color(130, 130, 130);
+    }
+    
+    private String getStringNoneJsonObject(String key, JSONObject jsonObject) {
+        String str = CommonAppUtils.getStringJsonObject(key, jsonObject);
+        
+        if(str == null) {
+            return "-";
+        }
+        else {
+            return str;
+        }
     }
     
     
@@ -91,7 +116,7 @@ public class RoomInvoicePdf {
 
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(new Color(234, 234, 234));
-
+        
         cell.setPhrase(new Phrase(this.getMessageSourcesString("electricity_water_meter.water_meter"), this.getFontHeadTable()));
         cell.setMinimumHeight(30f);
         cell.setPadding(5);
@@ -134,6 +159,39 @@ public class RoomInvoicePdf {
         return table;
     }
     
+    private PdfPTable getTableHeadInvoiceNo(JSONObject jsonObject) throws DocumentException, IOException {
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(100.0f);
+        table.setWidths(new float[] {35f, 35f});
+        
+        PdfPCell cell = new PdfPCell();
+        
+        cell.setPhrase(new Phrase(
+                this.getMessageSourcesString("room.invoice.invoice_no") + " : " + jsonObject.getString("invoiceNo") + "\n"
+                + this.getMessageSourcesString("apartment.building") + " : " + jsonObject.getString("buildingName") + "\n"
+                + this.getMessageSourcesString("building.room") + " : " + jsonObject.getString("roomNo")
+                //+ this.getStringNoneJsonObject("checkInName", jsonObject)
+                
+                , this.getFontHeader()));
+        cell.setMinimumHeight(30f);
+        cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setVerticalAlignment(Element.ALIGN_TOP);
+        cell.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell);
+        
+        cell.setPhrase(new Phrase(this.getMessageSourcesString("room.invoice.invoice_date") + " : " + jsonObject.getString("invoiceDate"), this.getFontHeader()));
+        cell.setMinimumHeight(30f);
+        cell.setPadding(5);
+        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        cell.setVerticalAlignment(Element.ALIGN_TOP);
+        cell.setBorder(Rectangle.NO_BORDER);
+        table.addCell(cell);
+        table.setSpacingAfter(10);
+
+        return table;
+    }
+    
     private BigDecimal calculateGrandTotal(JSONObject jsonObject) {
         BigDecimal grandTotal = jsonObject.getBigDecimal("electricityValue")
                 .add(jsonObject.getBigDecimal("waterValue"))
@@ -149,6 +207,7 @@ public class RoomInvoicePdf {
     ) throws DocumentException, IOException {
         document.setPageSize(PageSize.A5.rotate());
 
+        document.setMargins(50f,50f,5f,10f);
         document.open();
 
         /*Paragraph headerx = new Paragraph(
@@ -163,7 +222,7 @@ public class RoomInvoicePdf {
             String invoiceNo = j.getString("invoiceNo");
 
             /*Paragraph header = new Paragraph(
-                    new Chunk(invoiceNo, fontx)
+                    new Chunk(j.getString("buildingName"), this.getFontHeader())
             );*/
             
             String previousMeterString = this.getMessageSourcesString("electricity_water_meter.previous_meter");
@@ -174,9 +233,14 @@ public class RoomInvoicePdf {
             
             String roomPriceString = this.getMessageSourcesString("room.invoice.room_price");
             
+            
+            PdfPTable tableInvoiceNo = this.getTableHeadInvoiceNo(j);
+            
+            
             /** electricity table */
             PdfPTable tableElectricity = this.getTableHeadElectricity();
             PdfPCell cellElectricity = new PdfPCell();
+            cellElectricity.setBorderColor(this.getCellDetailBorderGrey());
 
             cellElectricity.setPhrase(new Phrase(
                     previousMeterString + " : "
@@ -210,6 +274,7 @@ public class RoomInvoicePdf {
             /** water table */
             PdfPTable tableWater = this.getTableHeadWater();
             PdfPCell cellWater = new PdfPCell();
+            cellWater.setBorderColor(this.getCellDetailBorderGrey());
             
             cellWater.setPhrase(new Phrase(
                     previousMeterString + " : "
@@ -243,6 +308,7 @@ public class RoomInvoicePdf {
             /** room table */
             PdfPTable tableRoom = this.getTableHeadRoom();
             PdfPCell cellRoom = new PdfPCell();
+            cellRoom.setBorderColor(this.getCellDetailBorderGrey());
             
             cellRoom.setPhrase(new Phrase(roomPriceString, this.getFontDetail()));
             cellRoom.setMinimumHeight(30f);
@@ -267,14 +333,16 @@ public class RoomInvoicePdf {
             
             PdfPCell cellGrandTotal = new PdfPCell();
             cellGrandTotal.setBackgroundColor(new Color(60,141,188));
-            cellGrandTotal.setPhrase(new Phrase(this.getMessageSourcesString("common.grand_total"), this.getFontHeadTable()));
+            cellGrandTotal.setBorderColor(new Color(60, 141, 188));
+            
+            cellGrandTotal.setPhrase(new Phrase(this.getMessageSourcesString("common.grand_total"), this.getFontGrandTotal()));
             cellGrandTotal.setMinimumHeight(30f);
             cellGrandTotal.setPadding(5);
             cellGrandTotal.setHorizontalAlignment(Element.ALIGN_LEFT);
             cellGrandTotal.setVerticalAlignment(Element.ALIGN_TOP);
             tableGrandTotal.addCell(cellGrandTotal);
 
-            cellGrandTotal.setPhrase(new Phrase(this.calculateGrandTotal(j) + "", this.getFontHeadTable()));
+            cellGrandTotal.setPhrase(new Phrase(this.calculateGrandTotal(j) + "", this.getFontGrandTotal()));
             cellGrandTotal.setMinimumHeight(30f);
             cellGrandTotal.setPadding(5);
             cellGrandTotal.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -282,10 +350,27 @@ public class RoomInvoicePdf {
             tableGrandTotal.addCell(cellGrandTotal);
             tableGrandTotal.setSpacingAfter(10);
             
+            System.out.println("-- pdf --");
+            System.out.println(j);
+            System.out.println("");
+            
+            
+            Paragraph footer = new Paragraph(
+                    new Chunk(
+                            this.getMessageSourcesString("room.invoice.check_in_name") + " : " 
+                            + this.getStringNoneJsonObject("checkInName", j) + " "
+                            + (this.getStringNoneJsonObject("checkInLastname", j).equals("-") ? " " : this.getStringNoneJsonObject("checkInLastname", j))
+                            , this.getFontHeader()
+                    )
+            );
+            
+            
+            document.add(tableInvoiceNo);
             document.add(tableElectricity);
             document.add(tableWater);
             document.add(tableRoom);
             document.add(tableGrandTotal);
+            document.add(footer);
 
             document.newPage();
         }

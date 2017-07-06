@@ -17,6 +17,7 @@ import my.apartment.common.CommonWsUtils;
 import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.RoomCurrentCheckIn;
 import my.apartment.model.RoomInvoice;
+import my.apartment.model.RoomInvoicePdf;
 import my.apartment.model.RoomReceipt;
 import my.apartment.services.RoomCurrentCheckInDao;
 import my.apartment.services.RoomCurrentCheckInDaoImpl;
@@ -52,7 +53,7 @@ public class RoomReceiptResource {
             
             RoomReceiptDao roomReceiptDaoImpl = new RoomReceiptDaoImpl();
             
-            List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getById(roomInvoiceId);
+            List<RoomInvoicePdf> roomInvoices = roomInvoiceDaoImpl.getById(roomInvoiceId);
             
             if(roomInvoices.isEmpty()) {
                 jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
@@ -60,7 +61,7 @@ public class RoomReceiptResource {
             }
             else {
                 /** roomInvoice data */
-                RoomInvoice roomInvoice = roomInvoices.get(0);
+                RoomInvoicePdf roomInvoice = roomInvoices.get(0);
                 
                 /** check invoice id already receipt */
                 if(roomReceiptDaoImpl.isAreadyReceiptOfInvoice(roomInvoiceId)) {

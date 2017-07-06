@@ -9,6 +9,7 @@ import my.apartment.common.CommonUtils;
 import my.apartment.common.CommonWsDb;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.model.RoomInvoice;
+import my.apartment.model.RoomInvoicePdf;
 
 
 public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
@@ -299,17 +300,26 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
     }
     
     @Override
-    public List<RoomInvoice> getById(Integer roomInvoiceId) {
+    public List<RoomInvoicePdf> getById(Integer roomInvoiceId) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         
-        List<RoomInvoice> roomInvoices = new ArrayList<RoomInvoice>();
+        List<RoomInvoicePdf> roomInvoicePdfs = new ArrayList<RoomInvoicePdf>();
         
         try {
             con = CommonWsDb.getDbConnection();
             
-            String stringQuery = "SELECT * FROM room_invoice WHERE id = ?";
+            String stringQuery = "SELECT room_invoice.*, building.id AS building_id, "
+                    + "building.name AS building_name, building.address AS building_address, building.tel AS building_tel, "
+                    + "room.room_no AS room_no, "
+                    + "current_check_in.name AS check_in_name, current_check_in.lastname AS check_in_lastname "
+                    
+                    + "FROM room_invoice JOIN room ON room_invoice.room_id = room.id "
+                    + "JOIN building ON room.building_id = building.id "
+                    + "LEFT JOIN current_check_in ON room_invoice.room_id = current_check_in.room_id "
+                    
+                    + "WHERE room_invoice.id = ?";
             
             ps = con.prepareStatement(stringQuery);
             ps.setInt(1, roomInvoiceId);
@@ -317,34 +327,44 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
             rs = ps.executeQuery();
             
             while(rs.next()) {
-                RoomInvoice roomInvoice = new RoomInvoice();
+                RoomInvoicePdf roomInvoicePdf = new RoomInvoicePdf();
              
-                roomInvoice.setId(rs.getInt("id"));
-                roomInvoice.setInvoiceNo(rs.getString("invoice_no"));
-                roomInvoice.setInvoiceDate(rs.getDate("invoice_date"));
-                roomInvoice.setMonth(rs.getInt("month"));
-                roomInvoice.setYear(rs.getInt("year"));
-                roomInvoice.setRoomId(rs.getInt("room_id"));
-                roomInvoice.setRoomPricePerMonth(rs.getBigDecimal("room_price_per_month"));
-                roomInvoice.setElectricityPreviousMeter(rs.getString("electricity_previous_meter"));
-                roomInvoice.setElectricityPresentMeter(rs.getString("electricity_present_meter"));
-                roomInvoice.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
-                roomInvoice.setElectricityUsageUnit(rs.getInt("electricity_usage_unit"));
-                roomInvoice.setElectricityValue(rs.getBigDecimal("electricity_value"));
-                roomInvoice.setElectricityUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("electricity_use_minimun_unit_calculate")));
-                roomInvoice.setWaterPreviousMeter(rs.getString("water_previous_meter"));
-                roomInvoice.setWaterPresentMeter(rs.getString("water_present_meter"));
-                roomInvoice.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
-                roomInvoice.setWaterUsageUnit(rs.getInt("water_usage_unit"));
-                roomInvoice.setWaterValue(rs.getBigDecimal("water_value"));
-                roomInvoice.setWaterUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("water_use_minimun_unit_calculate")));
-                roomInvoice.setStatus(rs.getInt("status"));
-                roomInvoice.setDescription(rs.getString("description"));
-                roomInvoice.setReceiptId(rs.getInt("receipt_id"));
-                roomInvoice.setCreatedDate(rs.getDate("created_date"));
-                roomInvoice.setUpdatedDate(rs.getDate("updated_date"));
+                roomInvoicePdf.setId(rs.getInt("id"));
+                roomInvoicePdf.setInvoiceNo(rs.getString("invoice_no"));
+                roomInvoicePdf.setInvoiceDate(rs.getDate("invoice_date"));
+                roomInvoicePdf.setMonth(rs.getInt("month"));
+                roomInvoicePdf.setYear(rs.getInt("year"));
+                roomInvoicePdf.setRoomId(rs.getInt("room_id"));
+                roomInvoicePdf.setRoomPricePerMonth(rs.getBigDecimal("room_price_per_month"));
+                roomInvoicePdf.setElectricityPreviousMeter(rs.getString("electricity_previous_meter"));
+                roomInvoicePdf.setElectricityPresentMeter(rs.getString("electricity_present_meter"));
+                roomInvoicePdf.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
+                roomInvoicePdf.setElectricityUsageUnit(rs.getInt("electricity_usage_unit"));
+                roomInvoicePdf.setElectricityValue(rs.getBigDecimal("electricity_value"));
+                roomInvoicePdf.setElectricityUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("electricity_use_minimun_unit_calculate")));
+                roomInvoicePdf.setWaterPreviousMeter(rs.getString("water_previous_meter"));
+                roomInvoicePdf.setWaterPresentMeter(rs.getString("water_present_meter"));
+                roomInvoicePdf.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
+                roomInvoicePdf.setWaterUsageUnit(rs.getInt("water_usage_unit"));
+                roomInvoicePdf.setWaterValue(rs.getBigDecimal("water_value"));
+                roomInvoicePdf.setWaterUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("water_use_minimun_unit_calculate")));
+                roomInvoicePdf.setStatus(rs.getInt("status"));
+                roomInvoicePdf.setDescription(rs.getString("description"));
+                roomInvoicePdf.setReceiptId(rs.getInt("receipt_id"));
+                roomInvoicePdf.setCreatedDate(rs.getDate("created_date"));
+                roomInvoicePdf.setUpdatedDate(rs.getDate("updated_date"));
                 
-                roomInvoices.add(roomInvoice);
+                roomInvoicePdf.setBuildingId(rs.getInt("building_id"));
+                roomInvoicePdf.setBuildingName(rs.getString("building_name"));
+                roomInvoicePdf.setBuildingAddress(rs.getString("building_address"));
+                roomInvoicePdf.setBuildingTel(rs.getString("building_tel"));
+                
+                roomInvoicePdf.setRoomNo(rs.getString("room_no"));
+                
+                roomInvoicePdf.setCheckInName(rs.getString("check_in_name"));
+                roomInvoicePdf.setCheckInLastname(rs.getString("check_in_lastname"));
+                
+                roomInvoicePdfs.add(roomInvoicePdf);
             }
         }
         catch(Exception e) {
@@ -354,7 +374,7 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
             CommonWsDb.closeFinally(ps, con, RoomInvoiceDaoImpl.class.getName());
         }
         
-        return roomInvoices;
+        return roomInvoicePdfs;
         
     }
     

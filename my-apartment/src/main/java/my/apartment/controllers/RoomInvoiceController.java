@@ -183,8 +183,7 @@ public class RoomInvoiceController {
      * @param formData
      * @param response
      * @param document
-     * @param writer
-     * @return 
+     * @param writer 
      * @throws com.lowagie.text.DocumentException 
      * @throws java.io.IOException 
      */
@@ -211,7 +210,7 @@ public class RoomInvoiceController {
                     .toString();
             
             jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room_invoice/post_get_room_invoice_by_id");
-                        
+
             JSONArray jsonArrayData = new JSONArray(jsonObjectReturn.get(CommonString.DATA_STRING).toString());
             
             new RoomInvoicePdf(messageSource).generateRoomInvoicePdf(document, writer, jsonArrayData);
