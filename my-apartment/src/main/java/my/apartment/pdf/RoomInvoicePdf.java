@@ -220,8 +220,6 @@ public class RoomInvoicePdf {
         for(Integer i = 0; i < jsonArrayData.length(); i++) {
             JSONObject j = jsonArrayData.getJSONObject(i);
             
-            System.out.println(j);
-            
             String previousMeterString = this.getMessageSourcesString("electricity_water_meter.previous_meter");
             String electricMeterString = this.getMessageSourcesString("electricity_water_meter.electricity_meter");
             String pricePerUnitString = this.getMessageSourcesString("room.invoice.price_per_unit");
