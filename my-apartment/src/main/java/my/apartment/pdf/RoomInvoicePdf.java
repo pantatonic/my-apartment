@@ -18,6 +18,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import my.apartment.common.CommonAppUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -169,9 +170,10 @@ public class RoomInvoicePdf {
         cell.setPhrase(new Phrase(
                 this.getMessageSourcesString("room.invoice.invoice_no") + " : " + jsonObject.getString("invoiceNo") + "\n"
                 + this.getMessageSourcesString("apartment.building") + " : " + jsonObject.getString("buildingName") + "\n"
-                + this.getMessageSourcesString("building.room") + " : " + jsonObject.getString("roomNo")
-                //+ this.getStringNoneJsonObject("checkInName", jsonObject)
-                
+                + this.getMessageSourcesString("building.room") + " : " + jsonObject.getString("roomNo") + "\n"
+                + this.getMessageSourcesString("room.invoice.check_in_name") + " : " 
+                + this.getStringNoneJsonObject("checkInName", jsonObject) + " "
+                + (this.getStringNoneJsonObject("checkInLastname", jsonObject).equals("-") ? " " : this.getStringNoneJsonObject("checkInLastname", jsonObject))
                 , this.getFontHeader()));
         cell.setMinimumHeight(30f);
         cell.setPadding(5);
@@ -198,6 +200,12 @@ public class RoomInvoicePdf {
                 .add(jsonObject.getBigDecimal("roomPricePerMonth"));
 
         return grandTotal;
+    }
+    
+    private String decimalFormat(BigDecimal bigDecimal) {
+        DecimalFormat df = new DecimalFormat("#,###.00");
+        
+        return df.format(bigDecimal);
     }
     
     public void generateRoomInvoicePdf(
@@ -259,9 +267,9 @@ public class RoomInvoicePdf {
 
             cellElectricity.setPhrase(new Phrase(
                     " \n"
-                    + j.getInt("electricityChargePerUnit") + "\n"
+                    + this.decimalFormat(j.getBigDecimal("electricityChargePerUnit")) + "\n"
                     + j.getInt("electricityUsageUnit") + "\n"
-                    + j.getBigDecimal("electricityValue")
+                    + this.decimalFormat(j.getBigDecimal("electricityValue"))
                     , this.getFontDetail()));
             cellElectricity.setMinimumHeight(30f);
             cellElectricity.setPadding(5);
@@ -293,9 +301,9 @@ public class RoomInvoicePdf {
             
             cellWater.setPhrase(new Phrase(
                     " \n"
-                    + j.getInt("waterChargePerUnit") + "\n"
+                    + this.decimalFormat(j.getBigDecimal("waterChargePerUnit")) + "\n"
                     + j.getInt("waterUsageUnit") + "\n"
-                    + j.getBigDecimal("waterValue")
+                    + this.decimalFormat(j.getBigDecimal("waterValue"))
                     , this.getFontDetail()));
             cellWater.setMinimumHeight(30f);
             cellWater.setPadding(5);
@@ -317,7 +325,7 @@ public class RoomInvoicePdf {
             cellRoom.setVerticalAlignment(Element.ALIGN_TOP);
             tableRoom.addCell(cellRoom);
             
-            cellRoom.setPhrase(new Phrase(j.getBigDecimal("roomPricePerMonth") + "", this.getFontDetail()));
+            cellRoom.setPhrase(new Phrase(this.decimalFormat(j.getBigDecimal("roomPricePerMonth")) + "", this.getFontDetail()));
             cellRoom.setMinimumHeight(30f);
             cellRoom.setPadding(5);
             cellRoom.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -342,35 +350,19 @@ public class RoomInvoicePdf {
             cellGrandTotal.setVerticalAlignment(Element.ALIGN_TOP);
             tableGrandTotal.addCell(cellGrandTotal);
 
-            cellGrandTotal.setPhrase(new Phrase(this.calculateGrandTotal(j) + "", this.getFontGrandTotal()));
+            cellGrandTotal.setPhrase(new Phrase(this.decimalFormat(this.calculateGrandTotal(j)) + "", this.getFontGrandTotal()));
             cellGrandTotal.setMinimumHeight(30f);
             cellGrandTotal.setPadding(5);
             cellGrandTotal.setHorizontalAlignment(Element.ALIGN_LEFT);
             cellGrandTotal.setVerticalAlignment(Element.ALIGN_TOP);
             tableGrandTotal.addCell(cellGrandTotal);
-            tableGrandTotal.setSpacingAfter(10);
-            
-            System.out.println("-- pdf --");
-            System.out.println(j);
-            System.out.println("");
-            
-            
-            Paragraph footer = new Paragraph(
-                    new Chunk(
-                            this.getMessageSourcesString("room.invoice.check_in_name") + " : " 
-                            + this.getStringNoneJsonObject("checkInName", j) + " "
-                            + (this.getStringNoneJsonObject("checkInLastname", j).equals("-") ? " " : this.getStringNoneJsonObject("checkInLastname", j))
-                            , this.getFontHeader()
-                    )
-            );
-            
-            
+            tableGrandTotal.setSpacingAfter(10);           
+
             document.add(tableInvoiceNo);
             document.add(tableElectricity);
             document.add(tableWater);
             document.add(tableRoom);
             document.add(tableGrandTotal);
-            document.add(footer);
 
             document.newPage();
         }
