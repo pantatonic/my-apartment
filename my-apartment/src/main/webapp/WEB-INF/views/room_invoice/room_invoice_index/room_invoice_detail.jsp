@@ -40,15 +40,17 @@
                         </tr>
                         <tr>
                             <td>
-                                <spring:message code="room.invoice.price_per_unit" />
+                                <spring:message code="room.invoice.price_per_unit" /> : 
+                                <span id="electricity-price-per-unit-display" class="data-display" data-key="electricityChargePerUnit"></span>
                             </td>
-                            <td><span id="electricity-price-per-unit-display" class="data-display" data-key="electricityChargePerUnit"></span></td>
+                            <td>&nbsp;</td>
                         </tr>
                         <tr>
                             <td>
-                                <spring:message code="room.invoice.usage_unit" />
+                                <spring:message code="room.invoice.usage_unit" /> : 
+                                <span id="electricity-usage-unit-display" class="data-display" data-key="electricityUsageUnit"></span>
                             </td>
-                            <td><span id="electricity-usage-unit-display" class="data-display" data-key="electricityUsageUnit"></span></td>
+                            <td>&nbsp;</td>
                         </tr>
                         <tr style="background-color: #f4f4f4;">
                             <td>
@@ -87,15 +89,17 @@
                         </tr>
                         <tr>
                             <td>
-                                <spring:message code="room.invoice.price_per_unit" />
+                                <spring:message code="room.invoice.price_per_unit" /> : 
+                                <span id="water-price-per-unit-display" class="data-display" data-key="waterChargePerUnit"></span>
                             </td>
-                            <td><span id="water-price-per-unit-display" class="data-display" data-key="waterChargePerUnit"></span></td>
+                            <td>&nbsp;</td>
                         </tr>
                         <tr>
                             <td>
-                                <spring:message code="room.invoice.usage_unit" />
+                                <spring:message code="room.invoice.usage_unit" /> : 
+                                <span id="water-usage-unit-display" class="data-display" data-key="waterUsageUnit"></span>
                             </td>
-                            <td><span id="water-usage-unit-display" class="data-display" data-key="waterUsageUnit"></span></td>
+                            <td>&nbsp;</td>
                         </tr>
                         <tr style="background-color: #f4f4f4;">
                             <td>
