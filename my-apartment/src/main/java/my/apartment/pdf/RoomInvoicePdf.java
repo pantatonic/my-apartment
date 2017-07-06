@@ -252,11 +252,9 @@ public class RoomInvoicePdf {
 
             cellElectricity.setPhrase(new Phrase(
                     previousMeterString + " : "
-                    + j.getString("electricityPreviousMeter") + ", "
-                    + electricMeterString + " : "
-                    + j.getString("electricityPresentMeter") + " \n"
-                    + pricePerUnitString + "\n"
-                    + usageUnitString + "\n"
+                    + j.getString("electricityPreviousMeter") + ", "+ electricMeterString + " : "+ j.getString("electricityPresentMeter") + " \n"
+                    + pricePerUnitString + " : " + this.decimalFormat(j.getBigDecimal("electricityChargePerUnit")) + "\n"
+                    + usageUnitString + " : " + j.getInt("electricityUsageUnit") + "\n"
                     + valueString
                     , this.getFontDetail()));
             cellElectricity.setMinimumHeight(30f);
@@ -267,8 +265,8 @@ public class RoomInvoicePdf {
 
             cellElectricity.setPhrase(new Phrase(
                     " \n"
-                    + this.decimalFormat(j.getBigDecimal("electricityChargePerUnit")) + "\n"
-                    + j.getInt("electricityUsageUnit") + "\n"
+                    + "\n"
+                    + "\n"
                     + this.decimalFormat(j.getBigDecimal("electricityValue"))
                     , this.getFontDetail()));
             cellElectricity.setMinimumHeight(30f);
@@ -286,11 +284,9 @@ public class RoomInvoicePdf {
             
             cellWater.setPhrase(new Phrase(
                     previousMeterString + " : "
-                    + j.getString("waterPreviousMeter") + ", "
-                    + electricMeterString + " : "
-                    + j.getString("waterPresentMeter") + " \n"
-                    + pricePerUnitString + "\n"
-                    + usageUnitString + "\n"
+                    + j.getString("waterPreviousMeter") + ", "+ electricMeterString + " : "+ j.getString("waterPresentMeter") + " \n"
+                    + pricePerUnitString + " : " + this.decimalFormat(j.getBigDecimal("waterChargePerUnit")) + "\n"
+                    + usageUnitString + " : " + j.getInt("waterUsageUnit") + "\n"
                     + valueString
                     , this.getFontDetail()));
             cellWater.setMinimumHeight(30f);
@@ -301,8 +297,8 @@ public class RoomInvoicePdf {
             
             cellWater.setPhrase(new Phrase(
                     " \n"
-                    + this.decimalFormat(j.getBigDecimal("waterChargePerUnit")) + "\n"
-                    + j.getInt("waterUsageUnit") + "\n"
+                    + "\n"
+                    + "\n"
                     + this.decimalFormat(j.getBigDecimal("waterValue"))
                     , this.getFontDetail()));
             cellWater.setMinimumHeight(30f);
