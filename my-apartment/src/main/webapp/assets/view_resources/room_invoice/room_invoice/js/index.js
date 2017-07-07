@@ -4,7 +4,8 @@ var _NOT_HAVE_METER_ATTR_ = 'not-have-meter';
 var _INVOICE_ID_ATTR_ = 'data-invoice-id';
 var _RECEIPT_ID_ATTR_ = 'data-receipt-id';
 var _RECEIPT_NO_ATTR_ = 'data-receipt-no';
-
+var _PDF_INVOICE_WINDOW_NAME_ = 'room_invoice_pdf';
+var _PDF_ROOM_INVOICE_HIDDEN_NAME_ = 'pdf_room_invoice_id';
 
 jQuery(document).ready(function() {
     facade.initialProcess();
@@ -167,6 +168,10 @@ var page = (function() {
                 page.getElement.getModalPdfRoomInvoice().find('#pdf-invoice-process-button').click(function() {
                     page.pdfRoomInvoiceProcess();
                 });
+                
+                jQuery('#pdf-invoice-single-process-button').click(function() {
+                    page.pdfRoomInvoiceProcessSingle(jQuery(this));
+                });
             },
             showRoomInvoice: function() {
                 var boxRoomContainer = page.getElement.getBoxRoomContainer();
@@ -242,6 +247,18 @@ var page = (function() {
                 });
             }
         },
+        getPdfInvoiceWindowParams: function(width_, height_) {
+            var params = [
+                'width=' + width_,
+                'height=' + height_,
+                'left=' + ((screen.width / 2)-(width_ / 2)),
+                //'top=' + ((screen.height / 2)-(height_ / 2)),
+                'top=10',
+                'fullscreen=yes'
+            ].join(',');
+            
+            return params;
+        },
         roomInvoiceMonthYear: {
             getMonth: function() {
                 var monthYear = page.getElement.getRoomInvoiceMonthYear().val();
@@ -295,7 +312,16 @@ var page = (function() {
             },
             getModalPdfRoomInvoice: function() {
                 return jQuery('#modal-room-pdf-invoice');
+            },
+            getPdfInvoiceTempForm: function() {
+                return jQuery('#pdf-invoice-form');
             }
+        },
+        getPdfWindowWidth: function() {
+            return (screen.width / 1.3);
+        },
+        getPdfWindowHeight: function() {
+            return (screen.height - 110);
         },
         boxRoomContainer: {
             noDataFound: function() {
@@ -546,6 +572,7 @@ var page = (function() {
                 modal_.find('#grand-total-display').html(app.valueUtils.numberFormat(grandTotal));
                 modal_.find('#room-no-display').html(roomNo);
                 modal_.find('#invoiceno-display').html(jsonData.invoiceNo);
+                modal_.find('#pdf-invoice-single-process-button').attr(_INVOICE_ID_ATTR_, roomInvoiceId);
                 
                 modal_.modal('show');
 
@@ -745,6 +772,30 @@ var page = (function() {
                 }
             }
         },
+        pdfRoomInvoiceProcessSingle: function(buttonSingleProcess) {
+            var roomInvoiceId = buttonSingleProcess.attr(_INVOICE_ID_ATTR_);
+            var form_ = page.getElement.getPdfInvoiceTempForm();
+            var width_ = page.getPdfWindowWidth();
+            var height_ = page.getPdfWindowHeight();
+            var params = page.getPdfInvoiceWindowParams(width_, height_);
+            var url_ = '';
+            var windowName = _PDF_INVOICE_WINDOW_NAME_;
+            
+            form_.html('');        
+            form_.append('<input type="hidden" name="' + _PDF_ROOM_INVOICE_HIDDEN_NAME_ + '" value="' + roomInvoiceId + '" >');
+            
+            buttonSingleProcess.bootstrapBtn('loading');
+            
+            setTimeout(function() {
+                window.open(url_, windowName, params);
+                
+                buttonSingleProcess.bootstrapBtn('reset');
+                
+                setTimeout(function() {
+                    form_.submit();
+                }, _DELAY_PROCESS_);
+            }, _DELAY_PROCESS_);
+        },
         pdfRoomInvoiceProcess: function() {
             var modal_ = page.getElement.getModalPdfRoomInvoice();
             var buttonPdfProcess = page.getElement.getPdfRoomInvoiceProcessButtin();
@@ -755,35 +806,28 @@ var page = (function() {
             var _pdfInvoiceProcess = function() {
                 buttonPdfProcess.bootstrapBtn('loading');
 
-                var width_ = (screen.width / 1.3);
-                var height_ = (screen.height - 110);
+                var width_ = page.getPdfWindowWidth();
+                var height_ = page.getPdfWindowHeight();
 
-                var params = [
-                    'width=' + width_,
-                    'height=' + height_,
-                    'left=' + ((screen.width / 2)-(width_ / 2)),
-                    //'top=' + ((screen.height / 2)-(height_ / 2)),
-                    'top=10',
-                    'fullscreen=yes'
-                ].join(',');
+                var params = page.getPdfInvoiceWindowParams(width_, height_);
                 
                 var url_ = '';
-                var windowName = 'room_invoice_pdf';
+                var windowName = _PDF_INVOICE_WINDOW_NAME_;
 
 
                 setTimeout(function() {
-                    var form_ = jQuery('#pdf-invoice-form');
+                    var form_ = page.getElement.getPdfInvoiceTempForm();
                     
                     form_.html('');
                     
                     for(var index in invoiceIdSet) {
-                        form_.append('<input type="hidden" name="pdf_room_invoice_id" value="' + invoiceIdSet[index] + '" >');
+                        form_.append('<input type="hidden" name="' + _PDF_ROOM_INVOICE_HIDDEN_NAME_ + '" value="' + invoiceIdSet[index] + '" >');
                     }
 
                     window.open(url_, windowName, params);
                     
                     setTimeout(function() {
-                        jQuery('#pdf-invoice-form').submit();
+                        form_.submit();
                     }, _DELAY_PROCESS_);
                     
                     buttonPdfProcess.bootstrapBtn('reset');
