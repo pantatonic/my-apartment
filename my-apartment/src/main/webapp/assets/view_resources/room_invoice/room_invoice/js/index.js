@@ -481,7 +481,8 @@ var page = (function() {
                 var grandTotal = jsonData.electricityValue + jsonData.waterValue + jsonData.roomPricePerMonth;
                 
                 modal_.find('#grand-total-display').html(app.valueUtils.numberFormat(grandTotal));
-                modal_.find('#room-no-display').html(roomNo);
+                modal_.find('#room-no-display').html(roomNo + ' ' + jsonData.invoiceNo);
+                modal_.find('#invoiceno-display').html(jsonData.invoiceNo);
                 
                 modal_.modal('show');
 

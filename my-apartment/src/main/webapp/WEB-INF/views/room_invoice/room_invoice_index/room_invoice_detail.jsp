@@ -20,6 +20,8 @@
                 </h4>
             </div>
             <div class="modal-body">
+                <b><spring:message code="room.invoice.invoice_no" /></b> : <span id="invoiceno-display"></span>
+                <br><br>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
