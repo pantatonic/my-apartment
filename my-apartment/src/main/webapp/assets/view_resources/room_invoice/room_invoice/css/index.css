@@ -131,7 +131,7 @@
     padding: 1px 5px 1px 5px;
 }
 
-#modal-room-invoice-detail .modal-body table {
+#modal-room-invoice-detail .modal-body table, #modal-room-receipt-detail .modal-body table {
     min-width: 400px;
 }
 

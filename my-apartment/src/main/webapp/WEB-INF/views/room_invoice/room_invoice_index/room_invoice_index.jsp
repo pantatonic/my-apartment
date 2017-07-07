@@ -132,6 +132,7 @@
         <jsp:include page="room_pdf_invoice.jsp" flush="true" />
         
         <jsp:include page="room_receipt_cancel.jsp" flush="true" />
+        <jsp:include page="room_receipt_detail.jsp" flush="true" />
         
     </tiles:putAttribute>
 </tiles:insertDefinition>    

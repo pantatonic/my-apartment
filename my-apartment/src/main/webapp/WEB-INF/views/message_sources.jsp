@@ -147,6 +147,8 @@
     "room.invoice.invoice_date":"<spring:message code="room.invoice.invoice_date" />",
     "room.invoice.check_in_name":"<spring:message code="room.invoice.check_in_name" />",
     
-    "room.receipt":"<spring:message code="room.receipt" />"
+    "room.receipt":"<spring:message code="room.receipt" />",
+    "room.receipt_no":"<spring:message code="room.receipt_no" />",
+    "room.receipt_reference_invoice_no":"<spring:message code="room.receipt_reference_invoice_no" />"
     }
 </div>

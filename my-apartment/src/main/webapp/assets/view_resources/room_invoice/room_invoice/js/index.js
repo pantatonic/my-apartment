@@ -229,8 +229,7 @@ var page = (function() {
                 boxRoomContainer.on('click', '.receipt-detail', function() {
                     var thisElement = jQuery(this);
                     
-                    //page.showRoomReceipt(thisElement);
-                    alert('Goto show room receipt');
+                    page.showRoomReceipt(thisElement);
                 });
             },
             cancelRoomReceipt: function() {
@@ -287,6 +286,9 @@ var page = (function() {
             },
             getModalRoomInvoiceDetail: function() {
                 return jQuery('#modal-room-invoice-detail');
+            },
+            getModalRoomReceiptDetail: function() {
+                return jQuery('#modal-room-receipt-detail');
             },
             getModalCancelRoomReceipt: function() {
                 return jQuery('#modal-cancel-room-receipt');
@@ -429,6 +431,67 @@ var page = (function() {
                 });
             }, _DELAY_PROCESS_);
         },
+        showRoomReceipt: function(receiptDetailButton) {
+            var roomReceiptId = receiptDetailButton.attr(_RECEIPT_ID_ATTR_);
+            var roomNo = receiptDetailButton.closest('.box-room_').attr('data-room-no');
+            var buildingList = page.getElement.getBuildingList();
+            var contentBox = buildingList.closest('.box-primary');
+            var modal_ = page.getElement.getModalRoomReceiptDetail();
+            var jsonData = receiptDetailButton.closest('.box-room_').find('.invoice-json-data').text();
+            jsonData = JSON.parse(jsonData);
+            var electricityMinCalMsgElement = modal_.find('#electricity-min-calculate-message');
+            var waterMinCalMsgElement = modal_.find('#water-min-calculate-message');
+
+            app.loadingInElement('show', contentBox);
+            
+            setTimeout(function() {
+                app.modalUtils.bodyScrollTop(modal_);
+                
+                for(var index in jsonData) {
+                    if(modal_.find('[data-key="' + index + '"]').length > 0) {
+                        if(typeof jsonData[index] == 'number') {
+                            modal_.find('[data-key="' + index + '"]').html(app.valueUtils.numberFormat(jsonData[index]));
+                        }
+                        else {
+                            modal_.find('[data-key="' + index + '"]').html(jsonData[index]);
+                        }
+                    }
+                    
+                    if(index == 'electricityUseMinimunUnitCalculate') {
+                        if(jsonData.electricityUseMinimunUnitCalculate) {
+                            modal_.find('#min-electricity-unit-display')
+                                    .html(app.valueUtils.undefinedToEmpty(jsonData.minElectricityUnit));
+                            modal_.find('#min-electricity-charge-display')
+                                    .html(app.valueUtils.undefinedToEmpty(jsonData.minElectricityCharge));
+
+                            modal_.find('#min-water-unit-display')
+                                    .html(app.valueUtils.undefinedToEmpty(jsonData.minWaterUnit));
+                            modal_.find('#min-water-charge-display')
+                                    .html(app.valueUtils.undefinedToEmpty(jsonData.minWaterCharge));
+
+
+                            electricityMinCalMsgElement.show();
+                            waterMinCalMsgElement.show();
+                        }
+                        else {
+                            electricityMinCalMsgElement.hide();
+                            waterMinCalMsgElement.hide();
+                        }
+                    }
+                }
+                
+                var grandTotal = jsonData.electricityValue + jsonData.waterValue + jsonData.roomPricePerMonth;
+                
+                modal_.find('#grand-total-display').html(app.valueUtils.numberFormat(grandTotal));
+                modal_.find('#room-no-display').html(roomNo);
+                modal_.find('#receiptno-display').html(jsonData.receiptNo);
+                modal_.find('#reference-invoice-no').html(jsonData.invoiceNo);
+                
+                modal_.modal('show');
+
+                app.loadingInElement('remove', contentBox);
+            }, _DELAY_PROCESS_);
+        },
         showRoomInvoice: function(invoiceDetailButton) {
             var roomInvoiceId = invoiceDetailButton.attr(_INVOICE_ID_ATTR_);
             var roomNo = invoiceDetailButton.closest('.box-room_').attr('data-room-no');
@@ -481,7 +544,7 @@ var page = (function() {
                 var grandTotal = jsonData.electricityValue + jsonData.waterValue + jsonData.roomPricePerMonth;
                 
                 modal_.find('#grand-total-display').html(app.valueUtils.numberFormat(grandTotal));
-                modal_.find('#room-no-display').html(roomNo + ' ' + jsonData.invoiceNo);
+                modal_.find('#room-no-display').html(roomNo);
                 modal_.find('#invoiceno-display').html(jsonData.invoiceNo);
                 
                 modal_.modal('show');
@@ -950,6 +1013,7 @@ var page = (function() {
                         boxRoom_.find('.cancel-receipt-button').attr(_INVOICE_ID_ATTR_, currentData.id);
                         boxRoom_.find('.cancel-receipt-button').attr(_RECEIPT_ID_ATTR_, currentData.receiptId);
                         boxRoom_.find('.cancel-receipt-button').attr(_RECEIPT_NO_ATTR_, currentData.receiptNo);
+                        boxRoom_.find('.receipt-detail').attr(_RECEIPT_ID_ATTR_, currentData.receiptId);
                     }
                 }
             };
