@@ -54,6 +54,12 @@
                                         <spring:message code="common.pdf" /> <spring:message code="room.invoice" />
                                     </a>
                                 </li>
+                                <li id="pdf-room-receipt">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-file-pdf-o"></i> 
+                                        <spring:message code="common.pdf" /> <spring:message code="room.receipt" />
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         
@@ -126,6 +132,32 @@
         <form id="pdf-invoice-form" method="post" target="room_invoice_pdf" action="<c:url value="pdf_room_invoice.html" />">
             
         </form>
+        
+        
+        <textarea id="table-pdf-receipt-template">
+            <table id="table-pdf-receipt" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 150px;">
+                            <label><input type="checkbox" id="main-pdf-receipt-checkbox"> 
+                                <spring:message code="common.checked_all" />
+                            </label>
+                        </th>
+                        <th><spring:message code="building.room" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </textarea>
+                    
+        <%-- use target same form #pdf-invoice-form --%>
+        <form id="pdf-receipt-form" method="post" target="room_invoice_pdf" action="<c:url value="pdf_room_receipt.html" />">
+            
+        </form>
+                    
+                    
                     
         <jsp:include page="room_invoice_cancel.jsp" flush="true" />
         <jsp:include page="room_invoice_detail.jsp" flush="true" />
@@ -133,6 +165,7 @@
         
         <jsp:include page="room_receipt_cancel.jsp" flush="true" />
         <jsp:include page="room_receipt_detail.jsp" flush="true" />
+        <jsp:include page="room_pdf_receipt.jsp" flush="true" />
         
     </tiles:putAttribute>
 </tiles:insertDefinition>    

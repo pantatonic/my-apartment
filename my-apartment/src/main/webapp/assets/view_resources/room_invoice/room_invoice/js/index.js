@@ -6,6 +6,7 @@ var _RECEIPT_ID_ATTR_ = 'data-receipt-id';
 var _RECEIPT_NO_ATTR_ = 'data-receipt-no';
 var _PDF_INVOICE_WINDOW_NAME_ = 'room_invoice_pdf';
 var _PDF_ROOM_INVOICE_HIDDEN_NAME_ = 'pdf_room_invoice_id';
+var _PDF_ROOM_RECEIPT_HIDDEN_NAME_ = 'pdf_room_receipt_id';
 
 jQuery(document).ready(function() {
     facade.initialProcess();
@@ -28,6 +29,7 @@ var facade = (function() {
             page.addEvent.payInvoice();
             page.addEvent.showRoomReceipt();
             page.addEvent.cancelRoomReceipt();
+            page.addEvent.pdfRoomReceipt();
         }
     };
 })();
@@ -97,6 +99,79 @@ var page = (function() {
                     
                     page.cancelRoomInvoice(thisElement);
                 });
+            },
+            pdfRoomReceipt: function() {
+                var buttonPdf = page.getElement.getPdfRoomReceiptButton();
+                
+                buttonPdf.click(function() {
+                    var modal_ = page.getElement.getModalPdfRoomReceipt();
+                    
+                    var checkboxs = page.getElement.getRoomCheckbox();
+                    
+                    if(checkboxs.length == 0) {
+                        if(!app.checkNoticeExist('notice-select-data')) {
+                            app.showNotice({
+                                type: WARNING_STRING,
+                                message: app.translate('common.please_enter_data'),
+                                addclass: 'notice-select-data'
+                            });
+                        }
+
+                        page.getElement.getBuildingList().addClass(INPUT_ERROR_CLASS);
+                    }
+                    else {
+                        var tableTemplate = jQuery('#table-pdf-receipt-template').val();
+                        var boxRoom_ = page.getElement.getBoxRoom_();
+                        var html_ = '';
+                        
+                        modal_.find('.modal-body').html(tableTemplate);
+                        
+                        boxRoom_.each(function() {
+                            var thisBoxRoom_ = jQuery(this);
+                            var alreadyReceipt = thisBoxRoom_.find('.already-receipt');
+                            
+                            if(alreadyReceipt.length > 0) {
+                                var currentReceiptId = alreadyReceipt.attr(_RECEIPT_ID_ATTR_);
+                                var labelRoomNo = thisBoxRoom_.attr('data-room-no');
+                                
+                                html_ += '<tr>'
+                                    + '<td class="text-center"><input type="checkbox" value="' + currentReceiptId + '"></td>'
+                                    + '<td>' + labelRoomNo + '</td>'
+                                    + '</tr>';
+                            }
+                        });
+                        
+                        html_ = html_.length == 0 ? '<tr><td colspan="2" class="text-center">_No Room To Export PDF Invoice_</td></tr>' : html_;
+                        
+                        var table_ = modal_.find('#table-pdf-receipt');
+                        
+                        table_.find('tbody').html(html_);
+                        table_.find('input[type="checkbox"]').prop('checked', true);
+                        
+                        modal_.modal('show');
+                    }
+                });
+                
+                page.getElement.getModalPdfRoomReceipt().on('click', '#main-pdf-receipt-checkbox', function() {
+                    var thisElement = jQuery(this);
+                    var modal_ = page.getElement.getModalPdfRoomReceipt();
+                    var checkboxs = modal_.find('#table-pdf-receipt tbody').find('input[type="checkbox"]');
+
+                    if(thisElement.is(':checked')) {
+                        checkboxs.prop('checked', true);
+                    }
+                    else {
+                        checkboxs.prop('checked', false);
+                    }
+                });
+                
+                page.getElement.getModalPdfRoomReceipt().find('#pdf-receipt-process-button').click(function() {
+                    page.pdfRoomReceiptProcess();
+                });
+
+                /*jQuery('#pdf-receipt-single-process-button').click(function() {
+                    page.pdfRoomInvoiceProcessSingle(jQuery(this));
+                });*/
             },
             pdfRoomInvoice: function() {
                 var buttonPdf = page.getElement.getPdfRoomInvoiceButton();
@@ -315,6 +390,18 @@ var page = (function() {
             },
             getPdfInvoiceTempForm: function() {
                 return jQuery('#pdf-invoice-form');
+            },
+            getModalPdfRoomReceipt: function() {
+                return jQuery('#modal-room-pdf-receipt');
+            },
+            getPdfReceiptTempForm: function() {
+                return jQuery('#pdf-receipt-form');
+            },
+            getPdfRoomReceiptProcessButton: function() {
+                return jQuery('#pdf-receipt-process-button');
+            },
+            getPdfRoomReceiptButton: function() {
+                return jQuery('#pdf-room-receipt');
             }
         },
         getPdfWindowWidth: function() {
@@ -772,6 +859,71 @@ var page = (function() {
                 }
             }
         },
+        pdfRoomReceiptProcess: function() {
+            var modal_ = page.getElement.getModalPdfRoomReceipt();
+            var buttonPdfProcess = page.getElement.getPdfRoomReceiptProcessButton();
+            var receiptIdSet = [];
+            var table_ = modal_.find('#table-pdf-receipt');
+            var checkboxs = table_.find('tbody').find('input[type="checkbox"]');
+            
+            var _pdfReceiptProcess = function() {
+                buttonPdfProcess.bootstrapBtn('loading');
+                
+                var width_ = page.getPdfWindowWidth();
+                var height_ = page.getPdfWindowHeight();
+                
+                var params = page.getPdfInvoiceWindowParams(width_, height_);
+                
+                var url_ = '';
+                var windowName = _PDF_INVOICE_WINDOW_NAME_; //use same pdf invoice window name
+                
+                setTimeout(function() {
+                    var form_ = page.getElement.getPdfReceiptTempForm();
+                    
+                    form_.html('');
+                    
+                    for(var index in receiptIdSet) {
+                        form_.append('<input type="hidden" name="' + _PDF_ROOM_RECEIPT_HIDDEN_NAME_ + '" value="' + receiptIdSet[index] + '" >');
+                    }
+                    
+                    window.open(url_, windowName, params);
+                    
+                    setTimeout(function() {
+                        form_.submit();
+                    }, _DELAY_PROCESS_);
+                    
+                    buttonPdfProcess.bootstrapBtn('reset');
+                }, _DELAY_PROCESS_);
+            };
+            
+            /** main process */
+            
+            var countCheckbox = 0;
+            
+            checkboxs.filter(function() {
+                return jQuery(this).prop('checked');
+            }).each(function() {
+                var thisCheckbox = jQuery(this);
+                var roomInvoiceId = thisCheckbox.val();
+
+                countCheckbox = countCheckbox + 1;
+
+                receiptIdSet.push(roomInvoiceId);
+            });
+            
+            if(countCheckbox == 0) {
+                if(!app.checkNoticeExist('notice-checked-data')) {
+                    app.showNotice({
+                        type: WARNING_STRING,
+                        message: app.translate('room.invoice.please_checked_room'),
+                        addclass: 'notice-checked-data'
+                    });
+                }
+            }
+            else {
+                _pdfReceiptProcess();
+            }
+        },
         pdfRoomInvoiceProcessSingle: function(buttonSingleProcess) {
             var roomInvoiceId = buttonSingleProcess.attr(_INVOICE_ID_ATTR_);
             var form_ = page.getElement.getPdfInvoiceTempForm();
@@ -1044,6 +1196,8 @@ var page = (function() {
                         boxRoom_.append(labelAlreadyReceiptTemplate);
                         
                         var alreadyReceiptElement = boxRoom_.find('.already-receipt');
+                        
+                        alreadyReceiptElement.attr(_RECEIPT_ID_ATTR_, currentData.receiptId);
                         
                         boxRoom_.find('.pay-invoice').remove();
                         boxRoom_.find('.cancel-invoice-button').remove();
