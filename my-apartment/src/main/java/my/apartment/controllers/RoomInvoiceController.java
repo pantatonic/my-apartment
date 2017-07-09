@@ -217,8 +217,6 @@ public class RoomInvoiceController {
         }
         catch(Exception e) {
             e.printStackTrace();
-            
-            
         }
     }
 }

@@ -1,6 +1,7 @@
 package my.apartment.wservices;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -19,12 +20,14 @@ import my.apartment.model.RoomCurrentCheckIn;
 import my.apartment.model.RoomInvoice;
 import my.apartment.model.RoomInvoicePdf;
 import my.apartment.model.RoomReceipt;
+import my.apartment.model.RoomReceiptPdf;
 import my.apartment.services.RoomCurrentCheckInDao;
 import my.apartment.services.RoomCurrentCheckInDaoImpl;
 import my.apartment.services.RoomInvoiceDao;
 import my.apartment.services.RoomInvoiceDaoImpl;
 import my.apartment.services.RoomReceiptDao;
 import my.apartment.services.RoomReceiptDaoImpl;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -136,6 +139,48 @@ public class RoomReceiptResource {
                 jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
                         CommonString.PROCESSING_FAILED_STRING);
             }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    /**
+     * 
+     * @param incomingData
+     * @return 
+     */
+    @Path("post_get_room_receipt_by_id")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String postGetRoomReceiptById(InputStream incomingData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
+            
+            JSONArray jsonArrayReceive = new JSONArray(jsonObjectReceive.get(CommonString.DATA_STRING).toString());
+            
+            RoomReceiptDao roomReceiptDaoImpl = new RoomReceiptDaoImpl();
+            
+            List<RoomReceiptPdf> roomReceiptPdfsReturn = new ArrayList<RoomReceiptPdf>();
+            
+            for(Integer i = 0; i < jsonArrayReceive.length(); i++) {
+                Integer roomReceiptIdFromData = Integer.parseInt(jsonArrayReceive.getString(i), 10);
+                
+                List<RoomReceiptPdf> roomReceiptPdfs = roomReceiptDaoImpl.getById(roomReceiptIdFromData);
+                
+                if(!roomReceiptPdfs.isEmpty()) {
+                    roomReceiptPdfsReturn.add(roomReceiptPdfs.get(0));
+                }
+            }
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomReceiptPdfsReturn);
         }
         catch(Exception e) {
             e.printStackTrace();

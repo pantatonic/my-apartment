@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import my.apartment.common.CommonUtils;
 import my.apartment.common.CommonWsDb;
 import my.apartment.common.CommonWsUtils;
 import my.apartment.model.RoomReceipt;
+import my.apartment.model.RoomReceiptPdf;
 
 
 public class RoomReceiptDaoImpl implements RoomReceiptDao {
@@ -180,6 +183,83 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
         }
 
         return resultCancel;
+    }
+    
+    @Override
+    public List<RoomReceiptPdf> getById(Integer roomReceiptId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<RoomReceiptPdf> roomReceiptPdfs = new ArrayList<RoomReceiptPdf>();
+
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT room_receipt.*, " +
+                "room_invoice.invoice_no AS invoice_no, " +
+                "room_invoice.room_id AS room_id, " +
+                "room_invoice.room_price_per_month AS room_price_per_month, " +
+                "room_invoice.electricity_previous_meter AS electricity_previous_meter, " +
+                "room_invoice.electricity_present_meter AS electricity_present_meter, " +
+                "room_invoice.electricity_charge_per_unit AS electricity_charge_per_unit, " +
+                "room_invoice.electricity_usage_unit AS electricity_usage_unit, " +
+                "room_invoice.electricity_value AS electricity_value, " +
+                "room_invoice.electricity_use_minimun_unit_calculate AS electricity_use_minimun_unit_calculate, " +
+                "room_invoice.water_previous_meter AS water_previous_meter, " +
+                "room_invoice.water_present_meter AS water_present_meter, " +
+                "room_invoice.water_charge_per_unit AS water_charge_per_unit, " +
+                "room_invoice.water_usage_unit AS water_usage_unit, " +
+                "room_invoice.water_value AS water_value, " +
+                "room_invoice.water_use_minimun_unit_calculate AS water_use_minimun_unit_calculate " +
+                "FROM room_receipt JOIN room_invoice ON room_receipt.id = room_invoice.receipt_id " +
+                "WHERE room_receipt.id = ? " +
+                "AND room_invoice.status = 2";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomReceiptId);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomReceiptPdf roomReceiptPdf = new RoomReceiptPdf();
+                
+                roomReceiptPdf.setId(rs.getInt("id"));
+                roomReceiptPdf.setReceiptNo(rs.getString("receipt_no"));
+                roomReceiptPdf.setInvoiceId(rs.getInt("invoice_id"));
+                roomReceiptPdf.setPayer(rs.getString("payer"));
+                roomReceiptPdf.setStatus(rs.getInt("status"));
+                roomReceiptPdf.setDescription(rs.getString("description"));
+                roomReceiptPdf.setCreatedDate(rs.getDate("created_date"));
+                roomReceiptPdf.setUpdatedDate(rs.getDate("updated_date"));
+                
+                roomReceiptPdf.setInvoiceNo(rs.getString("invoice_no"));
+                roomReceiptPdf.setRoomId(rs.getInt("room_id"));
+                roomReceiptPdf.setRoomPricePerMonth(rs.getBigDecimal("room_price_per_month"));
+                roomReceiptPdf.setElectricityPreviousMeter(rs.getString("electricity_previous_meter"));
+                roomReceiptPdf.setElectricityPresentMeter(rs.getString("electricity_present_meter"));
+                roomReceiptPdf.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
+                roomReceiptPdf.setElectricityUsageUnit(rs.getInt("electricity_usage_unit"));
+                roomReceiptPdf.setElectricityValue(rs.getBigDecimal("electricity_value"));
+                roomReceiptPdf.setElectricityUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("electricity_use_minimun_unit_calculate")));
+                roomReceiptPdf.setWaterPreviousMeter(rs.getString("water_previous_meter"));
+                roomReceiptPdf.setWaterPresentMeter(rs.getString("water_present_meter"));
+                roomReceiptPdf.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
+                roomReceiptPdf.setWaterUsageUnit(rs.getInt("water_usage_unit"));
+                roomReceiptPdf.setWaterValue(rs.getBigDecimal("water_value"));
+                roomReceiptPdf.setWaterUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("water_use_minimun_unit_calculate")));
+                
+                roomReceiptPdfs.add(roomReceiptPdf);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomInvoiceDaoImpl.class.getName());
+        }
+        
+        return roomReceiptPdfs;
     }
     
 }
