@@ -10,6 +10,7 @@ import my.apartment.common.CommonAppUtils;
 import my.apartment.common.CommonAppWsUtils;
 import my.apartment.common.CommonString;
 import my.apartment.common.JsonObjectUtils;
+import my.apartment.pdf.RoomReceiptPdf;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +121,7 @@ public class RoomReceiptController {
             
             JSONArray jsonArrayData = new JSONArray(jsonObjectReturn.get(CommonString.DATA_STRING).toString());
             
-            System.out.println(jsonArrayData);
+            new RoomReceiptPdf(messageSource).generateRoomReceiptPdf(document, writer, jsonArrayData);
         }
         catch(Exception e) {
             e.printStackTrace();

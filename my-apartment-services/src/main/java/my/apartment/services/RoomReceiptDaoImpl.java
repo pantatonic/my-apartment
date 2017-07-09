@@ -211,8 +211,19 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
                 "room_invoice.water_charge_per_unit AS water_charge_per_unit, " +
                 "room_invoice.water_usage_unit AS water_usage_unit, " +
                 "room_invoice.water_value AS water_value, " +
-                "room_invoice.water_use_minimun_unit_calculate AS water_use_minimun_unit_calculate " +
+                "room_invoice.water_use_minimun_unit_calculate AS water_use_minimun_unit_calculate, " +
+                    
+                "building.id AS building_id, " +
+                "building.name AS building_name, " +
+                "building.address AS building_address, " +
+                "building.tel AS building_tel, " +
+                    
+                "room.room_no AS room_no " +
+                    
                 "FROM room_receipt JOIN room_invoice ON room_receipt.id = room_invoice.receipt_id " +
+                "JOIN building ON room_invoice.room_id = building.id " +
+                "JOIN room ON room_invoice.room_id = room.id " +
+                    
                 "WHERE room_receipt.id = ? " +
                 "AND room_invoice.status = 2";
             
@@ -248,6 +259,13 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
                 roomReceiptPdf.setWaterUsageUnit(rs.getInt("water_usage_unit"));
                 roomReceiptPdf.setWaterValue(rs.getBigDecimal("water_value"));
                 roomReceiptPdf.setWaterUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("water_use_minimun_unit_calculate")));
+                
+                roomReceiptPdf.setBuildingId(rs.getInt("building_id"));
+                roomReceiptPdf.setBuildingName(rs.getString("building_name"));
+                roomReceiptPdf.setBuildingAddress(rs.getString("building_address"));
+                roomReceiptPdf.setBuildingTel(rs.getString("building_tel"));
+                
+                roomReceiptPdf.setRoomNo(rs.getString("room_no"));
                 
                 roomReceiptPdfs.add(roomReceiptPdf);
             }
