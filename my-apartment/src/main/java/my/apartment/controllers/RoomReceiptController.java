@@ -120,7 +120,7 @@ public class RoomReceiptController {
             jsonObjectReturn = CommonAppWsUtils.postWithJsonDataString(requestJson, "room_receipt/post_get_room_receipt_by_id");
             
             JSONArray jsonArrayData = new JSONArray(jsonObjectReturn.get(CommonString.DATA_STRING).toString());
-            
+
             new RoomReceiptPdf(messageSource).generateRoomReceiptPdf(document, writer, jsonArrayData);
         }
         catch(Exception e) {

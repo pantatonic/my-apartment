@@ -41,12 +41,17 @@ public class RoomReceiptPdf implements Serializable {
     private String buildingAddress;
     private String buildingTel;
     
+    private Integer minElectricityUnit;
+    private BigDecimal minElectricityCharge;
+    private Integer minWaterUnit;
+    private BigDecimal minWaterCharge;
+    
     private String roomNo;
 
     public RoomReceiptPdf() {
     }
 
-    public RoomReceiptPdf(Integer id, String receiptNo, Integer invoiceId, String payer, Integer status, String description, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString, String invoiceNo, Integer roomId, BigDecimal roomPricePerMonth, String electricityPreviousMeter, String electricityPresentMeter, BigDecimal electricityChargePerUnit, Integer electricityUsageUnit, BigDecimal electricityValue, Boolean electricityUseMinimunUnitCalculate, String waterPreviousMeter, String waterPresentMeter, BigDecimal waterChargePerUnit, Integer waterUsageUnit, BigDecimal waterValue, Boolean waterUseMinimunUnitCalculate, Integer buildingId, String buildingName, String buildingAddress, String buildingTel, String roomNo) {
+    public RoomReceiptPdf(Integer id, String receiptNo, Integer invoiceId, String payer, Integer status, String description, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString, String invoiceNo, Integer roomId, BigDecimal roomPricePerMonth, String electricityPreviousMeter, String electricityPresentMeter, BigDecimal electricityChargePerUnit, Integer electricityUsageUnit, BigDecimal electricityValue, Boolean electricityUseMinimunUnitCalculate, String waterPreviousMeter, String waterPresentMeter, BigDecimal waterChargePerUnit, Integer waterUsageUnit, BigDecimal waterValue, Boolean waterUseMinimunUnitCalculate, Integer buildingId, String buildingName, String buildingAddress, String buildingTel, Integer minElectricityUnit, BigDecimal minElectricityCharge, Integer minWaterUnit, BigDecimal minWaterCharge, String roomNo) {
         this.id = id;
         this.receiptNo = receiptNo;
         this.invoiceId = invoiceId;
@@ -76,6 +81,10 @@ public class RoomReceiptPdf implements Serializable {
         this.buildingName = buildingName;
         this.buildingAddress = buildingAddress;
         this.buildingTel = buildingTel;
+        this.minElectricityUnit = minElectricityUnit;
+        this.minElectricityCharge = minElectricityCharge;
+        this.minWaterUnit = minWaterUnit;
+        this.minWaterCharge = minWaterCharge;
         this.roomNo = roomNo;
     }
 
@@ -311,6 +320,38 @@ public class RoomReceiptPdf implements Serializable {
         this.buildingTel = buildingTel;
     }
 
+    public Integer getMinElectricityUnit() {
+        return minElectricityUnit;
+    }
+
+    public void setMinElectricityUnit(Integer minElectricityUnit) {
+        this.minElectricityUnit = minElectricityUnit;
+    }
+
+    public BigDecimal getMinElectricityCharge() {
+        return minElectricityCharge;
+    }
+
+    public void setMinElectricityCharge(BigDecimal minElectricityCharge) {
+        this.minElectricityCharge = minElectricityCharge;
+    }
+
+    public Integer getMinWaterUnit() {
+        return minWaterUnit;
+    }
+
+    public void setMinWaterUnit(Integer minWaterUnit) {
+        this.minWaterUnit = minWaterUnit;
+    }
+
+    public BigDecimal getMinWaterCharge() {
+        return minWaterCharge;
+    }
+
+    public void setMinWaterCharge(BigDecimal minWaterCharge) {
+        this.minWaterCharge = minWaterCharge;
+    }
+
     public String getRoomNo() {
         return roomNo;
     }
@@ -321,7 +362,7 @@ public class RoomReceiptPdf implements Serializable {
 
     @Override
     public String toString() {
-        return "RoomReceiptPdf{" + "id=" + id + ", receiptNo=" + receiptNo + ", invoiceId=" + invoiceId + ", payer=" + payer + ", status=" + status + ", description=" + description + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + ", invoiceNo=" + invoiceNo + ", roomId=" + roomId + ", roomPricePerMonth=" + roomPricePerMonth + ", electricityPreviousMeter=" + electricityPreviousMeter + ", electricityPresentMeter=" + electricityPresentMeter + ", electricityChargePerUnit=" + electricityChargePerUnit + ", electricityUsageUnit=" + electricityUsageUnit + ", electricityValue=" + electricityValue + ", electricityUseMinimunUnitCalculate=" + electricityUseMinimunUnitCalculate + ", waterPreviousMeter=" + waterPreviousMeter + ", waterPresentMeter=" + waterPresentMeter + ", waterChargePerUnit=" + waterChargePerUnit + ", waterUsageUnit=" + waterUsageUnit + ", waterValue=" + waterValue + ", waterUseMinimunUnitCalculate=" + waterUseMinimunUnitCalculate + ", buildingId=" + buildingId + ", buildingName=" + buildingName + ", buildingAddress=" + buildingAddress + ", buildingTel=" + buildingTel + ", roomNo=" + roomNo + '}';
+        return "RoomReceiptPdf{" + "id=" + id + ", receiptNo=" + receiptNo + ", invoiceId=" + invoiceId + ", payer=" + payer + ", status=" + status + ", description=" + description + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + ", invoiceNo=" + invoiceNo + ", roomId=" + roomId + ", roomPricePerMonth=" + roomPricePerMonth + ", electricityPreviousMeter=" + electricityPreviousMeter + ", electricityPresentMeter=" + electricityPresentMeter + ", electricityChargePerUnit=" + electricityChargePerUnit + ", electricityUsageUnit=" + electricityUsageUnit + ", electricityValue=" + electricityValue + ", electricityUseMinimunUnitCalculate=" + electricityUseMinimunUnitCalculate + ", waterPreviousMeter=" + waterPreviousMeter + ", waterPresentMeter=" + waterPresentMeter + ", waterChargePerUnit=" + waterChargePerUnit + ", waterUsageUnit=" + waterUsageUnit + ", waterValue=" + waterValue + ", waterUseMinimunUnitCalculate=" + waterUseMinimunUnitCalculate + ", buildingId=" + buildingId + ", buildingName=" + buildingName + ", buildingAddress=" + buildingAddress + ", buildingTel=" + buildingTel + ", minElectricityUnit=" + minElectricityUnit + ", minElectricityCharge=" + minElectricityCharge + ", minWaterUnit=" + minWaterUnit + ", minWaterCharge=" + minWaterCharge + ", roomNo=" + roomNo + '}';
     }
 
 }

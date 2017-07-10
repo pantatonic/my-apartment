@@ -172,9 +172,9 @@ public class RoomReceiptResource {
             
             for(Integer i = 0; i < jsonArrayReceive.length(); i++) {
                 Integer roomReceiptIdFromData = Integer.parseInt(jsonArrayReceive.getString(i), 10);
-                
+
                 List<RoomReceiptPdf> roomReceiptPdfs = roomReceiptDaoImpl.getById(roomReceiptIdFromData);
-                
+
                 if(!roomReceiptPdfs.isEmpty()) {
                     roomReceiptPdfsReturn.add(roomReceiptPdfs.get(0));
                 }

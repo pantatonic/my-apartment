@@ -2,6 +2,7 @@ package my.apartment.common;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -189,6 +190,12 @@ public class CommonAppUtils {
         else {
             return null;
         }
+    }
+    
+    public static String decimalFormat(BigDecimal bigDecimal) {
+        DecimalFormat df = new DecimalFormat("#,###.00");
+        
+        return df.format(bigDecimal);
     }
 
 }

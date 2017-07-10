@@ -17,7 +17,6 @@ import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import my.apartment.common.CommonAppUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -202,9 +201,7 @@ public class RoomInvoicePdf {
     }
     
     private String decimalFormat(BigDecimal bigDecimal) {
-        DecimalFormat df = new DecimalFormat("#,###.00");
-        
-        return df.format(bigDecimal);
+        return CommonAppUtils.decimalFormat(bigDecimal);
     }
     
     public void generateRoomInvoicePdf(

@@ -111,7 +111,7 @@
     margin-right: auto;
 }
 
-#box-room-template, .invoice-json-data, #table-pdf-invoice-template {
+#box-room-template, .invoice-json-data, #table-pdf-invoice-template, #table-pdf-receipt-template {
     display: none;
 }
 

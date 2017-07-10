@@ -217,19 +217,21 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
                 "building.name AS building_name, " +
                 "building.address AS building_address, " +
                 "building.tel AS building_tel, " +
+                "building.min_electricity_unit AS min_electricity_unit, building.min_electricity_charge AS min_electricity_charge, " +
+                "building.min_water_unit AS min_water_unit, building.min_water_charge AS min_water_charge, " +
                     
                 "room.room_no AS room_no " +
                     
                 "FROM room_receipt JOIN room_invoice ON room_receipt.id = room_invoice.receipt_id " +
-                "JOIN building ON room_invoice.room_id = building.id " +
                 "JOIN room ON room_invoice.room_id = room.id " +
+                "JOIN building ON room.building_id = building.id " +
                     
                 "WHERE room_receipt.id = ? " +
                 "AND room_invoice.status = 2";
             
             ps = con.prepareStatement(stringQuery);
             ps.setInt(1, roomReceiptId);
-            
+
             rs = ps.executeQuery();
             
             while(rs.next()) {
@@ -264,6 +266,12 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
                 roomReceiptPdf.setBuildingName(rs.getString("building_name"));
                 roomReceiptPdf.setBuildingAddress(rs.getString("building_address"));
                 roomReceiptPdf.setBuildingTel(rs.getString("building_tel"));
+                
+                roomReceiptPdf.setMinElectricityUnit(rs.getInt("min_electricity_unit"));
+                roomReceiptPdf.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
+                
+                roomReceiptPdf.setMinWaterUnit(rs.getInt("min_water_unit"));
+                roomReceiptPdf.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
                 
                 roomReceiptPdf.setRoomNo(rs.getString("room_no"));
                 
