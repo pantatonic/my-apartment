@@ -169,9 +169,9 @@ var page = (function() {
                     page.pdfRoomReceiptProcess();
                 });
 
-                /*jQuery('#pdf-receipt-single-process-button').click(function() {
-                    page.pdfRoomInvoiceProcessSingle(jQuery(this));
-                });*/
+                jQuery('#pdf-receipt-single-process-button').click(function() {
+                    page.pdfRoomReceiptProcessSingle(jQuery(this));
+                });
             },
             pdfRoomInvoice: function() {
                 var buttonPdf = page.getElement.getPdfRoomInvoiceButton();
@@ -599,7 +599,8 @@ var page = (function() {
                 modal_.find('#room-no-display').html(roomNo);
                 modal_.find('#receiptno-display').html(jsonData.receiptNo);
                 modal_.find('#reference-invoice-no').html(jsonData.invoiceNo);
-                
+                modal_.find('#pdf-receipt-single-process-button').attr(_RECEIPT_ID_ATTR_, jsonData.receiptId);
+
                 modal_.modal('show');
 
                 app.loadingInElement('remove', contentBox);
@@ -923,6 +924,30 @@ var page = (function() {
             else {
                 _pdfReceiptProcess();
             }
+        },
+        pdfRoomReceiptProcessSingle: function(buttonSingleProcess) {
+            var roomReceiptId = buttonSingleProcess.attr(_RECEIPT_ID_ATTR_);
+            var form_ = page.getElement.getPdfReceiptTempForm();
+            var width_ = page.getPdfWindowWidth();
+            var height_ = page.getPdfWindowHeight();
+            var params = page.getPdfInvoiceWindowParams(width_, height_);
+            var url_ = '';
+            var windowName = _PDF_INVOICE_WINDOW_NAME_; ////use same pdf invoice window name
+            
+            form_.html('');        
+            form_.append('<input type="hidden" name="' + _PDF_ROOM_RECEIPT_HIDDEN_NAME_ + '" value="' + roomReceiptId + '" >');
+            
+            buttonSingleProcess.bootstrapBtn('loading');
+    
+            setTimeout(function() {
+                window.open(url_, windowName, params);
+
+                buttonSingleProcess.bootstrapBtn('reset');
+
+                setTimeout(function() {
+                    form_.submit();
+                }, _DELAY_PROCESS_);
+            }, _DELAY_PROCESS_);
         },
         pdfRoomInvoiceProcessSingle: function(buttonSingleProcess) {
             var roomInvoiceId = buttonSingleProcess.attr(_INVOICE_ID_ATTR_);

@@ -129,6 +129,12 @@
             <div class="modal-footer">
                 <spring:message code="common.close" var="msgCloseModalButton"/>
                 ${commonHtml.getCloseModalButton(msgCloseModalButton)}
+                
+                <button type="button" id="pdf-receipt-single-process-button" class="btn btn-warning btn-flat" 
+                        data-loading-text="<spring:message code="common.now_processing" />">
+                    <i class="fa fa-file-pdf-o"></i> 
+                    <spring:message code="common.pdf" /> <spring:message code="room.receipt" />
+                </button>
             </div>
         </div>
     </div>
