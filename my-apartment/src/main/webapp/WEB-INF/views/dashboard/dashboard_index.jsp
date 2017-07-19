@@ -61,7 +61,7 @@
                                 <div class="box-tools pull-right">
                                     <button class="btn btn-box-tool refresh-chart-data" 
                                             target-operation="myCharts.roomByBuilding" 
-                                            title="_Refresh Data_">
+                                            title="<spring:message code="common.refresh_data" />">
                                         <i class="fa fa-refresh"></i>
                                     </button>
                                 </div>
@@ -94,14 +94,14 @@
                                 <div class="box-tools pull-right">
                                     <button class="btn btn-box-tool refresh-chart-data" 
                                             target-operation="myCharts.invoiceByBuildingMonth" 
-                                            title="_Refresh Data_">
+                                            title="<spring:message code="common.refresh_data" />">
                                         <i class="fa fa-refresh"></i>
                                     </button>
                                 </div>
                             </div>
                             <div class="box-body">
                                 <div class="col-xs-12">
-                                    <div class="input-group" id="input-group-month-year">
+                                    <div class="input-group">
                                         <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
                                         <input type="text" id="invoice-by-biulding-chart-month-year"  value="${currentYearMonth}"
                                                 autocomplete="off" class="form-control text-center" readonly="readonly">
@@ -116,7 +116,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        <div class="box">
+                        <div class="box" id="receipt-by-building-month-chart-box">
                             <div class="box-header with-border">
                                 <select class="building-list form-control">
                                     <c:forEach begin="0" end="${buildingList.length() - 1}" var="index">
@@ -130,13 +130,19 @@
                                 <div class="box-tools pull-right">
                                     <button class="btn btn-box-tool refresh-chart-data" 
                                             target-operation="myCharts.receiptByBuildingMonth" 
-                                            title="_Refresh Data_">
+                                            title="<spring:message code="common.refresh_data" />">
                                         <i class="fa fa-refresh"></i>
                                     </button>
                                 </div>
                             </div>
                             <div class="box-body">
                                 <div class="col-xs-12">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
+                                        <input type="text" id="receipt-by-biulding-chart-month-year"  value="${currentYearMonth}"
+                                                autocomplete="off" class="form-control text-center" readonly="readonly">
+                                    </div>
+                                    <br>
                                     <div id="receipt-by-building-month-chart"></div>
                                 </div>
                             </div>

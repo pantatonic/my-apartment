@@ -40,6 +40,7 @@
     "common.person_lastname":"<spring:message code="common.person_lastname" />",
     "common.remark":"<spring:message code="common.remark" />",
     "common.status":"<spring:message code="common.status" />",
+    "common.refresh_data":"<spring:message code="common.refresh_data" />",
     
     "account_not_found":"<spring:message code="account_not_found" />",
     "account_is_disabled":"<spring:message code="account_is_disabled" />",

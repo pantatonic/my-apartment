@@ -1,37 +1,70 @@
 /* global _DELAY_PROCESS_, _CONTEXT_PATH_, app */
 
 jQuery(document).ready(function () {
-    page.initialProcess();
-    page.addEvent();
-
+    facade.initialProcess();
+    facade.addEvent();
 });
+
+var facade = (function() {
+    
+    return {
+        initialProcess: function() {
+            page.initialProcess.initDatePicker();
+            page.initialProcess.initChart();
+        },
+        addEvent: function() {
+            page.addEvent.refreshChartData();
+            page.addEvent.getInvoiceByBuildingMonthChart();
+            page.addEvent.getReceiptByBuildingMonthChart();
+        }
+    };
+})();
 
 var page = (function () {
 
     return {
-        initialProcess: function () {
-            myCharts.roomByBuilding();
-            myCharts.invoiceByBuildingMonth();
-            myCharts.receiptByBuildingMonth();
-            
-            jQuery('#invoice-by-biulding-chart-month-year').datepicker({
-                format:'yyyy-mm',
-                minViewMode: 'months',
-                autoclose: true
-            }).on('changeDate',function(e) {
-                myCharts.invoiceByBuildingMonth();
-            });
-        },
-        addEvent: function () {
-            jQuery('.refresh-chart-data').click(function() {
-                var targetOperation = jQuery(this).attr('target-operation');
+        initialProcess: {
+            initDatePicker: function() {
+                jQuery('#invoice-by-biulding-chart-month-year').datepicker({
+                    format:'yyyy-mm',
+                    minViewMode: 'months',
+                    autoclose: true
+                }).on('changeDate',function(e) {
+                    myCharts.invoiceByBuildingMonth();
+                });
                 
-                eval(targetOperation)();
-            });
-            
-            jQuery('#invoice-by-building-month-chart-box').find('.building-list').change(function() {
+                jQuery('#receipt-by-biulding-chart-month-year').datepicker({
+                    format:'yyyy-mm',
+                    minViewMode: 'months',
+                    autoclose: true
+                }).on('changeDate',function(e) {
+                    myCharts.receiptByBuildingMonth();
+                });
+            },
+            initChart: function() {
+                myCharts.roomByBuilding();
                 myCharts.invoiceByBuildingMonth();
-            });
+                myCharts.receiptByBuildingMonth();
+            }
+        },
+        addEvent: {
+            refreshChartData: function() {
+                jQuery('.refresh-chart-data').click(function() {
+                    var targetOperation = jQuery(this).attr('target-operation');
+
+                    eval(targetOperation)();
+                });
+            },
+            getInvoiceByBuildingMonthChart: function() {
+                jQuery('#invoice-by-building-month-chart-box').find('.building-list').change(function() {
+                    myCharts.invoiceByBuildingMonth();
+                });
+            },
+            getReceiptByBuildingMonthChart: function() {
+                jQuery('#receipt-by-building-month-chart-box').find('.building-list').change(function() {
+                    myCharts.receiptByBuildingMonth();
+                });
+            }
         },
         getElement:{
             getRoomByBuildingChartContent: function() {
