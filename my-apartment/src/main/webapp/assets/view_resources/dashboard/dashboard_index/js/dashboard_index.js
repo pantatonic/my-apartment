@@ -13,6 +13,14 @@ var page = (function () {
             myCharts.roomByBuilding();
             myCharts.invoiceByBuildingMonth();
             myCharts.receiptByBuildingMonth();
+            
+            jQuery('#invoice-by-biulding-chart-month-year').datepicker({
+                format:'yyyy-mm',
+                minViewMode: 'months',
+                autoclose: true
+            }).on('changeDate',function(e) {
+                myCharts.invoiceByBuildingMonth();
+            });
         },
         addEvent: function () {
             jQuery('.refresh-chart-data').click(function() {
@@ -20,7 +28,10 @@ var page = (function () {
                 
                 eval(targetOperation)();
             });
-
+            
+            jQuery('#invoice-by-building-month-chart-box').find('.building-list').change(function() {
+                myCharts.invoiceByBuildingMonth();
+            });
         },
         getElement:{
             getRoomByBuildingChartContent: function() {
@@ -224,6 +235,11 @@ var myCharts = (function () {
             _loading(_chartContent, 'show');
             
             setTimeout(function() {
+                var chartBox = _chartContent.closest('#invoice-by-building-month-chart-box');
+                var buildingList = chartBox.find('.building-list');
+                
+                
+                
                 var tempDataSet = {
                     data: [
                         ['Cancel', 3],

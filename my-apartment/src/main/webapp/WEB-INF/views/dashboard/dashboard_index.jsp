@@ -80,9 +80,17 @@
                 
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        <div class="box">
+                        <div class="box" id="invoice-by-building-month-chart-box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">&nbsp;</h3>
+                                <select class="building-list form-control">
+                                    <c:forEach begin="0" end="${buildingList.length() - 1}" var="index">
+                                        <option value="${buildingList.getJSONObject(index).getInt("id")}" 
+                                                data-electricity-meter-digit="${buildingList.getJSONObject(index).getInt("electricityMeterDigit")}" 
+                                                data-water-meter-digit="${buildingList.getJSONObject(index).getInt("waterMeterDigit")}">
+                                            ${buildingList.getJSONObject(index).getString("name")}
+                                        </option>
+                                    </c:forEach>
+                                </select>
                                 <div class="box-tools pull-right">
                                     <button class="btn btn-box-tool refresh-chart-data" 
                                             target-operation="myCharts.invoiceByBuildingMonth" 
@@ -93,6 +101,12 @@
                             </div>
                             <div class="box-body">
                                 <div class="col-xs-12">
+                                    <div class="input-group" id="input-group-month-year">
+                                        <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
+                                        <input type="text" id="invoice-by-biulding-chart-month-year"  value="${currentYearMonth}"
+                                                autocomplete="off" class="form-control text-center" readonly="readonly">
+                                    </div>
+                                    <br>
                                     <div id="invoice-by-building-month-chart"></div>
                                 </div>
                             </div>
@@ -104,7 +118,15 @@
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                         <div class="box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">&nbsp;</h3>
+                                <select class="building-list form-control">
+                                    <c:forEach begin="0" end="${buildingList.length() - 1}" var="index">
+                                        <option value="${buildingList.getJSONObject(index).getInt("id")}" 
+                                                data-electricity-meter-digit="${buildingList.getJSONObject(index).getInt("electricityMeterDigit")}" 
+                                                data-water-meter-digit="${buildingList.getJSONObject(index).getInt("waterMeterDigit")}">
+                                            ${buildingList.getJSONObject(index).getString("name")}
+                                        </option>
+                                    </c:forEach>
+                                </select>
                                 <div class="box-tools pull-right">
                                     <button class="btn btn-box-tool refresh-chart-data" 
                                             target-operation="myCharts.receiptByBuildingMonth" 

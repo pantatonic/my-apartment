@@ -5,3 +5,12 @@
 #invoice-by-building-month-chart, #receipt-by-building-month-chart {
     height: 500px;
 }
+
+.building-list {
+    width: 200px;
+    margin: auto;
+}
+
+#invoice-by-building-month-chart-box #invoice-by-biulding-chart-month-year {
+    width: 100px !important;
+}
