@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -92,6 +93,38 @@ public class DashboardController {
             jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
         }
 
+        return jsonObjectReturn.toString();
+    }
+    
+    /**
+     * 
+     * @param buildingId
+     * @param month
+     * @param year
+     * @param response
+     * @return String
+     */
+    @RequestMapping(value = "/get_invoice_by_building_month_chart.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String getInvoiceByBuildingMonthChart(
+            @RequestParam("building_id") String buildingId,
+            @RequestParam("month") String month,
+            @RequestParam("year") String year,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "Test ok," + buildingId + ", " + month + ", " + year);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
         return jsonObjectReturn.toString();
     }
     

@@ -70,11 +70,36 @@ var page = (function () {
             getRoomByBuildingChartContent: function() {
                 return jQuery('#room-by-building-chart');
             },
-            getInvoiceByBuildingMonthChartContent: function() {
-                return jQuery('#invoice-by-building-month-chart');
+            invoiceByBuildingMonthChart: {
+                content: function() {
+                    return jQuery('#invoice-by-building-month-chart');
+                },
+                chartBox: function() {
+                    return jQuery('#invoice-by-building-month-chart-box');
+                },
+                buildingList: function() {
+                    return page.getElement.invoiceByBuildingMonthChart.chartBox().find('.building-list');
+                },
+                monthYear: function() {
+                    return page.getElement.invoiceByBuildingMonthChart.chartBox().find('#invoice-by-biulding-chart-month-year');
+                },
+                getMonth: function() {
+                    var monthYear = page.getElement.invoiceByBuildingMonthChart.monthYear().val();
+                    var splitText = monthYear.split('-');
+                
+                    return splitText[1];
+                },
+                getYear: function() {
+                    var monthYear = page.getElement.invoiceByBuildingMonthChart.monthYear().val();
+                    var splitText = monthYear.split('-');
+                
+                    return splitText[0];
+                }
             },
-            getReceiptByBuildingMonthChartContent: function() {
-                return jQuery('#receipt-by-building-month-chart');
+            receiptByBuildingMonthChart: {
+                content: function() {
+                    return jQuery('#receipt-by-building-month-chart');
+                }
             }
         }
     };
@@ -187,7 +212,7 @@ var myCharts = (function () {
             }, _DELAY_PROCESS_);
         },
         invoiceByBuildingMonth: function() {
-            var _chartContent = page.getElement.getInvoiceByBuildingMonthChartContent();
+            var _chartContent = page.getElement.invoiceByBuildingMonthChart.content();
             var _renderChart = function(dataChart) {
                 var counter = 0;
                 
@@ -268,9 +293,34 @@ var myCharts = (function () {
             _loading(_chartContent, 'show');
             
             setTimeout(function() {
-                var chartBox = _chartContent.closest('#invoice-by-building-month-chart-box');
-                var buildingList = chartBox.find('.building-list');
+                var chartBox = page.getElement.invoiceByBuildingMonthChart.chartBox();
+                var buildingList = page.getElement.invoiceByBuildingMonthChart.buildingList();
+                var month = page.getElement.invoiceByBuildingMonthChart.getMonth();
+                var year = page.getElement.invoiceByBuildingMonthChart.getYear();
                 
+                jQuery.ajax({
+                    type: 'get',
+                    url: _CONTEXT_PATH_ + '/get_invoice_by_building_month_chart.html',
+                    data: {
+                        building_id: buildingList.val(),
+                        month: month,
+                        year: year
+                    },
+                    cache: false,
+                    success:function(response) {
+                        console.log(response);
+                        dataChart = app.convertToJsonObject(response);
+                        
+                        //_loading(_chartContent, 'remove');
+                        
+                        //_renderChart(dataChart);
+                    },
+                    error: function() {
+                        _loading(_chartContent, 'remove');
+
+                        app.alertSomethingError();
+                    }
+                });
                 
                 
                 var tempDataSet = {
@@ -286,7 +336,7 @@ var myCharts = (function () {
             }, _DELAY_PROCESS_);
         },
         receiptByBuildingMonth: function() {
-            var _chartContent = page.getElement.getReceiptByBuildingMonthChartContent();
+            var _chartContent = page.getElement.receiptByBuildingMonthChart.content();
             var _renderChart = function(dataChart) {
                 var counter = 0;
                 
