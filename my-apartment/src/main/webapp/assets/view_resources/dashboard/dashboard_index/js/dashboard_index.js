@@ -163,11 +163,11 @@ var myCharts = (function () {
                         height: 500
                     },
                     title: {
-                        text: '_Invoice By Building_',
+                        text: app.translate('dashboard.chart.invoice_by_building'),
                         align: 'center'
                     },
                     subtitle: {
-                        text: '_Total_ : Xxx ' + app.translate('room.invoice'),
+                        text: app.translate('common.total') + ' : Xxx ' + app.translate('room.invoice'),
                         useHTML: true
                     },
                     tooltip: {
@@ -257,11 +257,11 @@ var myCharts = (function () {
                         height: 500
                     },
                     title: {
-                        text: '_Receipt By Building_',
+                        text: app.translate('dashboard.chart.receipt_by_building'),
                         align: 'center'
                     },
                     subtitle: {
-                        text: '_Total_ : Xxx ' + app.translate('room.room_receipt'),
+                        text: app.translate('common.total') + ' : Xxx ' + app.translate('room.room_receipt'),
                         useHTML: true
                     },
                     tooltip: {
