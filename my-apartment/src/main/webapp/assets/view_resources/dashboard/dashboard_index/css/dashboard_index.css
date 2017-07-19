@@ -1,3 +1,7 @@
 #room-by-building-chart {
     height: 400px;
 }
+
+#invoice-by-building-month-chart, #receipt-by-building-month-chart {
+    height: 500px;
+}

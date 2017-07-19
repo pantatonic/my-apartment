@@ -77,6 +77,53 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">&nbsp;</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool refresh-chart-data" 
+                                            target-operation="myCharts.invoiceByBuildingMonth" 
+                                            title="_Refresh Data_">
+                                        <i class="fa fa-refresh"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="col-xs-12">
+                                    <div id="invoice-by-building-month-chart"></div>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">&nbsp;</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool refresh-chart-data" 
+                                            target-operation="myCharts.receiptByBuildingMonth" 
+                                            title="_Refresh Data_">
+                                        <i class="fa fa-refresh"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="col-xs-12">
+                                    <div id="receipt-by-building-month-chart"></div>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </section>
         </div>

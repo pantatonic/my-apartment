@@ -11,6 +11,8 @@ var page = (function () {
     return {
         initialProcess: function () {
             myCharts.roomByBuilding();
+            myCharts.invoiceByBuildingMonth();
+            myCharts.receiptByBuildingMonth();
         },
         addEvent: function () {
             jQuery('.refresh-chart-data').click(function() {
@@ -23,6 +25,12 @@ var page = (function () {
         getElement:{
             getRoomByBuildingChartContent: function() {
                 return jQuery('#room-by-building-chart');
+            },
+            getInvoiceByBuildingMonthChartContent: function() {
+                return jQuery('#invoice-by-building-month-chart');
+            },
+            getReceiptByBuildingMonthChartContent: function() {
+                return jQuery('#receipt-by-building-month-chart');
             }
         }
     };
@@ -132,6 +140,193 @@ var myCharts = (function () {
                         app.alertSomethingError();
                     }
                 });
+            }, _DELAY_PROCESS_);
+        },
+        invoiceByBuildingMonth: function() {
+            var _chartContent = page.getElement.getInvoiceByBuildingMonthChartContent();
+            var _renderChart = function(dataChart) {
+                var counter = 0;
+                
+                _chartContent.highcharts({
+                    chart: {
+                        type: 'pie',
+                        style: {
+                            fontFamily: '"Source Sans Pro",sans-serif;'
+                        },
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 0,
+                        plotShadow: false,
+                        spacingBottom: 10,
+                        spacingTop: 10,
+                        spacingLeft: 0,
+                        spacingRight: 0,
+                        height: 500
+                    },
+                    title: {
+                        text: '_Invoice By Building_',
+                        align: 'center'
+                    },
+                    subtitle: {
+                        text: '_Total_ : Xxx ' + app.translate('room.invoice'),
+                        useHTML: true
+                    },
+                    tooltip: {
+                        enabled: true,
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+                        useHTML: true                        
+                    },
+                    plotOptions: {
+                        pie: {
+                            animation: true,
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                useHTML: false,
+                                distance: 20,
+                                formatter: function() {
+                                    counter++;
+                                    return '<div class="datalabel">'+
+                                                this.y + ' ' + app.translate('room.invoice') +
+                                                '<br>['+this.percentage.toFixed(2)+'%]'+
+                                            '</div>';
+                                }
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Invoice By Building',
+                        innerSize: '0%',
+                        /*data: [
+                            ['Spending type 1',   510.38],
+                            ['Spending type 2',       456.33],
+                            ['Spending type 3', 1214.03],
+                            ['Spending type 4',    400.77],
+                            ['Spending type 5',     402.91],
+                            ['Spending type 6',     240]
+                        ]*/
+                        data: dataChart.data
+                    }],
+                    colors: ['#c1c1c1', '#7cb5ec', '#90ed7d'],
+                    /* #f7a35c #8085e9 #f15c80 */
+                    exporting: {
+                        enabled: false
+                    },
+                    credits: {
+                        enabled :false
+                    }
+                });
+            };
+            
+            
+            _loading(_chartContent, 'show');
+            
+            setTimeout(function() {
+                var tempDataSet = {
+                    data: [
+                        ['Cancel', 3],
+                        ['Unbilled', 7],
+                        ['Billed', 9]
+                    ]
+                };
+
+                _renderChart(tempDataSet);
+                _loading(_chartContent, 'remove');
+            }, _DELAY_PROCESS_);
+        },
+        receiptByBuildingMonth: function() {
+            var _chartContent = page.getElement.getReceiptByBuildingMonthChartContent();
+            var _renderChart = function(dataChart) {
+                var counter = 0;
+                
+                _chartContent.highcharts({
+                    chart: {
+                        type: 'pie',
+                        style: {
+                            fontFamily: '"Source Sans Pro",sans-serif;'
+                        },
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 0,
+                        plotShadow: false,
+                        spacingBottom: 10,
+                        spacingTop: 10,
+                        spacingLeft: 0,
+                        spacingRight: 0,
+                        height: 500
+                    },
+                    title: {
+                        text: '_Receipt By Building_',
+                        align: 'center'
+                    },
+                    subtitle: {
+                        text: '_Total_ : Xxx ' + app.translate('room.room_receipt'),
+                        useHTML: true
+                    },
+                    tooltip: {
+                        enabled: true,
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+                        useHTML: true                        
+                    },
+                    plotOptions: {
+                        pie: {
+                            animation: true,
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                useHTML: false,
+                                distance: 20,
+                                formatter: function() {
+                                    counter++;
+                                    return '<div class="datalabel">'+
+                                                this.y + ' ' + app.translate('room.room_receipt') +
+                                                '<br>['+this.percentage.toFixed(2)+'%]'+
+                                            '</div>';
+                                }
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Invoice By Building',
+                        innerSize: '0%',
+                        /*data: [
+                            ['Spending type 1',   510.38],
+                            ['Spending type 2',       456.33],
+                            ['Spending type 3', 1214.03],
+                            ['Spending type 4',    400.77],
+                            ['Spending type 5',     402.91],
+                            ['Spending type 6',     240]
+                        ]*/
+                        data: dataChart.data
+                    }],
+                    colors: ['#c1c1c1', '#f39927'],
+                    /* #f7a35c #8085e9 #f15c80 */
+                    exporting: {
+                        enabled: false
+                    },
+                    credits: {
+                        enabled :false
+                    }
+                });
+            };
+            
+            
+            _loading(_chartContent, 'show');
+            
+            setTimeout(function() {
+                var tempDataSet = {
+                    data: [
+                        ['Cancel', 3],
+                        ['Receipt', 7]
+                    ]
+                };
+
+                _renderChart(tempDataSet);
+                _loading(_chartContent, 'remove');
             }, _DELAY_PROCESS_);
         }
     };
