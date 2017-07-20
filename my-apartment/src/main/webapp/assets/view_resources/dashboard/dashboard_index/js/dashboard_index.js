@@ -218,11 +218,18 @@ var myCharts = (function () {
                     url: _CONTEXT_PATH_ + '/get_room_by_building_chart.html',
                     cache: false,
                     success:function(response) {
-                        dataChart = app.convertToJsonObject(response);
+                        response = app.convertToJsonObject(response);
+                        
+                        if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                        }
+                        else {
+                            dataChart = app.convertToJsonObject(response);
+
+                            _renderChart(dataChart);
+                        }
                         
                         _loading(_chartContent, 'remove');
-                        
-                        _renderChart(dataChart);
                     },
                     error: function() {
                         _loading(_chartContent, 'remove');
@@ -339,11 +346,16 @@ var myCharts = (function () {
                     success:function(response) {
                         response = app.convertToJsonObject(response);
                         
-                        dataChart = app.convertToJsonObject(response);
+                        if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                        }
+                        else {
+                            dataChart = app.convertToJsonObject(response);
+
+                            _renderChart(dataChart);
+                        }
                         
                         _loading(_chartContent, 'remove');
-                        
-                        _renderChart(dataChart);
                     },
                     error: function() {
                         _loading(_chartContent, 'remove');
@@ -460,11 +472,16 @@ var myCharts = (function () {
                     success:function(response) {
                         response = app.convertToJsonObject(response);
                         
-                        dataChart = app.convertToJsonObject(response);
+                        if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                        }
+                        else {
+                            dataChart = app.convertToJsonObject(response);
+
+                            _renderChart(dataChart);
+                        }
                         
                         _loading(_chartContent, 'remove');
-                        
-                        _renderChart(dataChart);
                     },
                     error: function() {
                         _loading(_chartContent, 'remove');
