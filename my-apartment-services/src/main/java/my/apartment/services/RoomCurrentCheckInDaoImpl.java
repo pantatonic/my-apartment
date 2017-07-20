@@ -493,4 +493,52 @@ public class RoomCurrentCheckInDaoImpl implements RoomCurrentCheckInDao {
         return objectsReturn;
     }
     
+    @Override
+    public List<RoomCurrentCheckIn> getCurrentCheckInByBuildingId(Integer buildingId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<RoomCurrentCheckIn> roomCurrentCheckIns = new ArrayList<RoomCurrentCheckIn>();
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT current_check_in.*, room.id, building.id " +
+                "FROM current_check_in JOIN room ON current_check_in.room_id = room.id  " +
+                "JOIN building ON room.building_id = building.id " +
+                "WHERE building.id = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            
+            ps.setInt(1, buildingId);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomCurrentCheckIn roomCurrentCheckIn = new RoomCurrentCheckIn();
+            
+                roomCurrentCheckIn.setRoomId(rs.getInt("room_id"));
+                roomCurrentCheckIn.setCheckInDate(rs.getDate("check_in_date"));
+                roomCurrentCheckIn.setIdCard(rs.getString("id_card"));
+                roomCurrentCheckIn.setName(rs.getString("name"));
+                roomCurrentCheckIn.setLastname(rs.getString("lastname"));
+                roomCurrentCheckIn.setAddress(rs.getString("address"));
+                roomCurrentCheckIn.setRemark(rs.getString("remark"));
+                roomCurrentCheckIn.setCreatedDate(rs.getDate("created_date"));
+                roomCurrentCheckIn.setUpdatedDate(rs.getDate("updated_date"));
+
+                roomCurrentCheckIns.add(roomCurrentCheckIn);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomCurrentCheckInDaoImpl.class.getName());
+        }
+
+        return roomCurrentCheckIns;
+    }    
+    
 }

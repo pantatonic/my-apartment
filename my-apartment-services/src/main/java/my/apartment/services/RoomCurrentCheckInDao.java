@@ -14,4 +14,6 @@ public interface RoomCurrentCheckInDao {
     
     public Object[] getCheckInOutList(Integer roomId, Integer start, Integer length, String searString);
     
+    public List<RoomCurrentCheckIn> getCurrentCheckInByBuildingId(Integer buildingId);
+    
 }

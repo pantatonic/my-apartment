@@ -276,6 +276,30 @@ public class RoomResource {
         return jsonObjectReturn.toString();
     }
     
+    @Path("get_current_check_in_by_building_id/{building_id}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getCurrentCheckIn(
+            @PathParam("building_id") Integer buildingId
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomCurrentCheckInDao roomCurrentCheckInDaoImpl = new RoomCurrentCheckInDaoImpl();
+            
+            List<RoomCurrentCheckIn> roomCurrentCheckIns = roomCurrentCheckInDaoImpl.getCurrentCheckInByBuildingId(buildingId);
+
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomCurrentCheckIns);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
     @Path("get_current_notice_check_out")
     @GET
     @Produces(CommonWsUtils.MEDIA_TYPE_JSON)

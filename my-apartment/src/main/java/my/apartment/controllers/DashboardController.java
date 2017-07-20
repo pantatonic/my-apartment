@@ -74,6 +74,11 @@ public class DashboardController {
             String[] arrayCategories = new String[categoriesLength];
             Integer[] arrayRoomNumber = new Integer[categoriesLength];
             
+            Object[] objectReturn = new Object[3]; //1.all room number, 2.check in, 3.not check in
+            Object[] objectAllroom = new Integer[jsonArrayResultBuilding.length()];
+            Object[] objectCheckIn = new Integer[jsonArrayResultBuilding.length()];
+            Object[] objectNotCheckIn = new Integer[jsonArrayResultBuilding.length()];
+            
             for(Integer i = 0; i <= jsonArrayResultBuilding.length() - 1; i++) {
                 JSONObject j = jsonArrayResultBuilding.getJSONObject(i);
 
@@ -85,12 +90,24 @@ public class DashboardController {
                 
                 JSONObject resultRoomByBuilding = CommonAppWsUtils.get("room/room_get_by_building_id/" + buildingIdString);
                 JSONArray jsonArrayResultRoomByBuilding = resultRoomByBuilding.getJSONArray(CommonString.DATA_STRING);
-                
                 arrayRoomNumber[i] = jsonArrayResultRoomByBuilding.length();
+                
+                
+                JSONObject resultCurrentCheckInByBuilding = CommonAppWsUtils.get("room/get_current_check_in_by_building_id/" + buildingIdString);
+                JSONArray jsonArrayResultCurrentCheckInByBuilding = resultCurrentCheckInByBuilding.getJSONArray(CommonString.DATA_STRING);
+                
+                objectAllroom[i] = jsonArrayResultRoomByBuilding.length();
+                objectCheckIn[i] = jsonArrayResultCurrentCheckInByBuilding.length();
+                objectNotCheckIn[i] = jsonArrayResultRoomByBuilding.length() - jsonArrayResultCurrentCheckInByBuilding.length();
             }
             
+            objectReturn[0] = objectAllroom;
+            objectReturn[1] = objectCheckIn;
+            objectReturn[2] = objectNotCheckIn;
+
             jsonObjectReturn.put("categories", arrayCategories)
-                .put(CommonString.DATA_STRING, arrayRoomNumber);
+                    .put(CommonString.DATA_STRING, objectReturn)
+                    .put("data_", objectReturn);
 
         }
         catch(Exception e) {
