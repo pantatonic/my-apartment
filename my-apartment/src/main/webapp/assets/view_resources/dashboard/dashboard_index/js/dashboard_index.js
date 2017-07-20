@@ -174,13 +174,14 @@ var myCharts = (function () {
                         valueSuffix: ' ' + app.translate('building.rooms')
                     },
                     plotOptions: {
-                        bar: {
+                        column: {
                             dataLabels: {
                                 enabled: true
                             }
                         },
                         series: {
-                            pointWidth: 40
+                            pointWidth: 25,
+                            pointRange: 0.3
                         }
                     },
                     legend: {
@@ -192,16 +193,24 @@ var myCharts = (function () {
                         floating: true,
                         borderWidth: 1,
 
-                        shadow: true
+                        shadow: false
                     },
                     credits: {
                         enabled: false
                     },
                     series: [{
-                        showInLegend: false,
+                        showInLegend: true,
                         name: app.translate('dashboard.chart.number_of_room'),
                         //data: [107, 31]
-                        data: dataChart.data
+                        data: dataChart.data[0]
+                    },{
+                        showInLegend: true,
+                        name: app.translate('room.check_in'),
+                        data: dataChart.data[1]
+                    },{
+                        showInLegend: true,
+                        name: app.translate('room.not_check_in'),
+                        data: dataChart.data[2]
                     }],
                     exporting: {
                         enabled: false
