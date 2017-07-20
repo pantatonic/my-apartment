@@ -238,7 +238,7 @@ var myCharts = (function () {
                         spacingTop: 10,
                         spacingLeft: 0,
                         spacingRight: 0,
-                        height: 500
+                        height: 350
                     },
                     title: {
                         text: app.translate('dashboard.chart.invoice_by_building'),
@@ -350,7 +350,7 @@ var myCharts = (function () {
                         spacingTop: 10,
                         spacingLeft: 0,
                         spacingRight: 0,
-                        height: 500
+                        height: 350
                     },
                     title: {
                         text: app.translate('dashboard.chart.receipt_by_building'),

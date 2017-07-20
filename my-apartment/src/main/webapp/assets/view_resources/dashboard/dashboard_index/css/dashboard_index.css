@@ -3,7 +3,7 @@
 }
 
 #invoice-by-building-month-chart, #receipt-by-building-month-chart {
-    height: 500px;
+    height: 350px;
 }
 
 .building-list {
