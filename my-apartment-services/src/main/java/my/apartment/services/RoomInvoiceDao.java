@@ -17,4 +17,6 @@ public interface RoomInvoiceDao {
     
     public List<RoomInvoicePdf> getById(Integer roomInvoiceId);
     
+    public List<RoomInvoice> getAllRoomInvoiceMonthYear(Integer buildingId, Integer month, Integer year);
+    
 }

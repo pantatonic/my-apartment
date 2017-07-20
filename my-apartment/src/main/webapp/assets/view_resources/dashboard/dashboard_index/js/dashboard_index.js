@@ -215,7 +215,16 @@ var myCharts = (function () {
             var _chartContent = page.getElement.invoiceByBuildingMonthChart.content();
             var _renderChart = function(dataChart) {
                 var counter = 0;
-                
+                var _countData = function(dataChart) {
+                    var data_ = dataChart.data;
+                    var countData_ = 0;
+                    for(var i in data_) {
+                        countData_ = countData_ + (data_[i][1]);
+                    }
+                    
+                    return countData_;
+                };
+
                 _chartContent.highcharts({
                     chart: {
                         type: 'pie',
@@ -236,7 +245,7 @@ var myCharts = (function () {
                         align: 'center'
                     },
                     subtitle: {
-                        text: app.translate('common.total') + ' : Xxx ' + app.translate('room.invoice'),
+                        text: app.translate('common.total') + ' : ' + _countData(dataChart) + ' ' + app.translate('room.invoice'),
                         useHTML: true
                     },
                     tooltip: {
@@ -250,7 +259,7 @@ var myCharts = (function () {
                             allowPointSelect: true,
                             cursor: 'pointer',
                             dataLabels: {
-                                enabled: true,
+                                enabled: _countData(dataChart) > 0 ? true : false,
                                 useHTML: false,
                                 distance: 20,
                                 formatter: function() {
@@ -293,7 +302,6 @@ var myCharts = (function () {
             _loading(_chartContent, 'show');
             
             setTimeout(function() {
-                var chartBox = page.getElement.invoiceByBuildingMonthChart.chartBox();
                 var buildingList = page.getElement.invoiceByBuildingMonthChart.buildingList();
                 var month = page.getElement.invoiceByBuildingMonthChart.getMonth();
                 var year = page.getElement.invoiceByBuildingMonthChart.getYear();
@@ -308,12 +316,13 @@ var myCharts = (function () {
                     },
                     cache: false,
                     success:function(response) {
-                        console.log(response);
+                        response = app.convertToJsonObject(response);
+                        
                         dataChart = app.convertToJsonObject(response);
                         
-                        //_loading(_chartContent, 'remove');
+                        _loading(_chartContent, 'remove');
                         
-                        //_renderChart(dataChart);
+                        _renderChart(dataChart);
                     },
                     error: function() {
                         _loading(_chartContent, 'remove');
@@ -321,18 +330,6 @@ var myCharts = (function () {
                         app.alertSomethingError();
                     }
                 });
-                
-                
-                var tempDataSet = {
-                    data: [
-                        ['Cancel', 3],
-                        ['Unbilled', 7],
-                        ['Billed', 9]
-                    ]
-                };
-
-                _renderChart(tempDataSet);
-                _loading(_chartContent, 'remove');
             }, _DELAY_PROCESS_);
         },
         receiptByBuildingMonth: function() {

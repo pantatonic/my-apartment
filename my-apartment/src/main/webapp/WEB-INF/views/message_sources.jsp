@@ -149,6 +149,8 @@
     "room.invoice.invoice_no":"<spring:message code="room.invoice.invoice_no" />",
     "room.invoice.invoice_date":"<spring:message code="room.invoice.invoice_date" />",
     "room.invoice.check_in_name":"<spring:message code="room.invoice.check_in_name" />",
+    "room.invoice.unpaid":"<spring:message code="room.invoice.unpaid" />",
+    "room.invoice.paid":"<spring:message code="room.invoice.paid" />",
     
     "room.receipt":"<spring:message code="room.receipt" />",
     "room.room_receipt":"<spring:message code="room.room_receipt" />",

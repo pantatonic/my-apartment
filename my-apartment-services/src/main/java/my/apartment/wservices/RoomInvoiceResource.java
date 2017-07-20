@@ -349,6 +349,32 @@ public class RoomInvoiceResource {
         return jsonObjectReturn.toString();
     }
     
+    @Path("get_all_room_invoice_month_year/{building_id}/{month}/{year}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getAllRoomInvoiceMonthYear(
+            @PathParam("building_id") Integer buildingId,
+            @PathParam("month") Integer month,
+            @PathParam("year") Integer year
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+
+        try {
+            RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
+            
+            List<RoomInvoice> roomInvoices = roomInvoiceDaoImpl.getAllRoomInvoiceMonthYear(buildingId, month, year);
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomInvoices);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
 
     /**
      * PUT method for updating or creating an instance of RoomInvoiceResource

@@ -8,6 +8,9 @@ import my.apartment.common.CommonUtils;
 import my.apartment.common.JsonObjectUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class DashboardController {
+    
+    @Autowired
+    private MessageSource messageSource;
     
     /**
      * 
@@ -117,7 +123,13 @@ public class DashboardController {
         CommonAppUtils.setResponseHeader(response);
         
         try {
-            jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, "Test ok," + buildingId + ", " + month + ", " + year);
+            jsonObjectReturn = CommonAppWsUtils.get("room_invoice/get_all_room_invoice_month_year/" + buildingId + "/" + month + "/" + year);
+            
+            JSONObject dataReturn = new JSONObject();
+            
+            dataReturn.put(CommonString.DATA_STRING, this.getInvoiceByBuildingMonthChartGenerateData(jsonObjectReturn));
+            
+            return dataReturn.toString();
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -126,6 +138,55 @@ public class DashboardController {
         }
         
         return jsonObjectReturn.toString();
+    }
+    
+    /**
+     * 
+     * @param jsonObject
+     * @return Object[]
+     */
+    private Object[] getInvoiceByBuildingMonthChartGenerateData(JSONObject jsonObject) {
+        JSONArray data = new JSONArray(jsonObject.get(CommonString.DATA_STRING).toString());
+        
+        Integer countStatusZero = 0;
+        Integer countStatusOne = 0;
+        Integer counterStatusTwo = 0;
+        for(Integer i = 0; i < data.length(); i++) {
+            JSONObject j = data.getJSONObject(i);
+
+            switch (j.getInt("status")) {
+                case 0:
+                    countStatusZero = countStatusZero + 1;
+                    break;
+                case 1:
+                    countStatusOne = countStatusOne + 1;
+                    break;
+                case 2:
+                    counterStatusTwo = counterStatusTwo + 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        Object[] arrayObject = new Object[3];
+        
+        Object[] objectCancel = new Object[2];
+        objectCancel[0] = messageSource.getMessage("common.cancel", null, LocaleContextHolder.getLocale());
+        objectCancel[1] = countStatusZero;
+        arrayObject[0] = objectCancel;
+
+        Object[] objectUnbilled = new Object[2];
+        objectUnbilled[0] = messageSource.getMessage("room.invoice.unpaid", null, LocaleContextHolder.getLocale());
+        objectUnbilled[1] = countStatusOne;
+        arrayObject[1] = objectUnbilled;
+
+        Object[] objectBilled = new Object[2];
+        objectBilled[0] = messageSource.getMessage("room.invoice.paid", null, LocaleContextHolder.getLocale());
+        objectBilled[1] = counterStatusTwo;
+        arrayObject[2] = objectBilled;
+
+        return arrayObject;
     }
     
 }
