@@ -25,7 +25,7 @@ var page = (function () {
     return {
         initialProcess: {
             initDatePicker: function() {
-                jQuery('#invoice-by-biulding-chart-month-year').datepicker({
+                jQuery('#invoice-by-building-chart-month-year').datepicker({
                     format:'yyyy-mm',
                     minViewMode: 'months',
                     autoclose: true
@@ -33,7 +33,7 @@ var page = (function () {
                     myCharts.invoiceByBuildingMonth();
                 });
                 
-                jQuery('#receipt-by-biulding-chart-month-year').datepicker({
+                jQuery('#receipt-by-building-chart-month-year').datepicker({
                     format:'yyyy-mm',
                     minViewMode: 'months',
                     autoclose: true
@@ -81,7 +81,7 @@ var page = (function () {
                     return page.getElement.invoiceByBuildingMonthChart.chartBox().find('.building-list');
                 },
                 monthYear: function() {
-                    return page.getElement.invoiceByBuildingMonthChart.chartBox().find('#invoice-by-biulding-chart-month-year');
+                    return page.getElement.invoiceByBuildingMonthChart.chartBox().find('#invoice-by-building-chart-month-year');
                 },
                 getMonth: function() {
                     var monthYear = page.getElement.invoiceByBuildingMonthChart.monthYear().val();
@@ -99,6 +99,27 @@ var page = (function () {
             receiptByBuildingMonthChart: {
                 content: function() {
                     return jQuery('#receipt-by-building-month-chart');
+                },
+                chartBox: function() {
+                    return jQuery('#receipt-by-building-month-chart-box');
+                },
+                buildingList: function() {
+                    return page.getElement.receiptByBuildingMonthChart.chartBox().find('.building-list');
+                },
+                monthYear: function() {
+                    return page.getElement.receiptByBuildingMonthChart.chartBox().find('#receipt-by-building-chart-month-year');
+                },
+                getMonth: function() {
+                    var monthYear = page.getElement.receiptByBuildingMonthChart.monthYear().val();
+                    var splitText = monthYear.split('-');
+                
+                    return splitText[1];
+                },
+                getYear: function() {
+                    var monthYear = page.getElement.receiptByBuildingMonthChart.monthYear().val();
+                    var splitText = monthYear.split('-');
+                
+                    return splitText[0];
                 }
             }
         }
@@ -336,7 +357,16 @@ var myCharts = (function () {
             var _chartContent = page.getElement.receiptByBuildingMonthChart.content();
             var _renderChart = function(dataChart) {
                 var counter = 0;
-                
+                var _countData = function(dataChart) {
+                    var data_ = dataChart.data;
+                    var countData_ = 0;
+                    for(var i in data_) {
+                        countData_ = countData_ + (data_[i][1]);
+                    }
+                    
+                    return countData_;
+                };
+
                 _chartContent.highcharts({
                     chart: {
                         type: 'pie',
@@ -357,7 +387,7 @@ var myCharts = (function () {
                         align: 'center'
                     },
                     subtitle: {
-                        text: app.translate('common.total') + ' : Xxx ' + app.translate('room.room_receipt'),
+                        text: app.translate('common.total') + ' : ' + _countData(dataChart) + ' ' + app.translate('room.room_receipt'),
                         useHTML: true
                     },
                     tooltip: {
@@ -371,7 +401,7 @@ var myCharts = (function () {
                             allowPointSelect: true,
                             cursor: 'pointer',
                             dataLabels: {
-                                enabled: true,
+                                enabled: _countData(dataChart) > 0 ? true : false,
                                 useHTML: false,
                                 distance: 20,
                                 formatter: function() {
@@ -414,15 +444,34 @@ var myCharts = (function () {
             _loading(_chartContent, 'show');
             
             setTimeout(function() {
-                var tempDataSet = {
-                    data: [
-                        ['Cancel', 3],
-                        ['Receipt', 7]
-                    ]
-                };
+                var buildingList = page.getElement.receiptByBuildingMonthChart.buildingList();
+                var month = page.getElement.receiptByBuildingMonthChart.getMonth();
+                var year = page.getElement.receiptByBuildingMonthChart.getYear();
+                
+                jQuery.ajax({
+                    type: 'get',
+                    url: _CONTEXT_PATH_ + '/get_receipt_by_building_month_chart.html',
+                    data: {
+                        building_id: buildingList.val(),
+                        month: month,
+                        year: year
+                    },
+                    cache: false,
+                    success:function(response) {
+                        response = app.convertToJsonObject(response);
+                        
+                        dataChart = app.convertToJsonObject(response);
+                        
+                        _loading(_chartContent, 'remove');
+                        
+                        _renderChart(dataChart);
+                    },
+                    error: function() {
+                        _loading(_chartContent, 'remove');
 
-                _renderChart(tempDataSet);
-                _loading(_chartContent, 'remove');
+                        app.alertSomethingError();
+                    }
+                });
             }, _DELAY_PROCESS_);
         }
     };

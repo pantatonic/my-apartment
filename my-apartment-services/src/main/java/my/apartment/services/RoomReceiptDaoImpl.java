@@ -288,4 +288,55 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
         return roomReceiptPdfs;
     }
     
+    @Override
+    public List<RoomReceipt> getAllRoomReceiptMonthYear(Integer buildingId, Integer month, Integer year) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<RoomReceipt> roomReceiptsReturn = new ArrayList<RoomReceipt>();
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT room_receipt.* " +
+                "FROM room_receipt JOIN room_invoice ON room_receipt.invoice_id = room_invoice.id " +
+                "JOIN room ON room_invoice.room_id = room.id " +
+                "JOIN building ON room.building_id = building.id " +
+                "WHERE room_invoice.month = ? " +
+                "AND room_invoice.year = ? " +
+                "AND building.id = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, month);
+            ps.setInt(2, year);
+            ps.setInt(3, buildingId);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomReceipt roomReceipt = new RoomReceipt();
+                
+                roomReceipt.setId(rs.getInt("id"));
+                roomReceipt.setReceiptNo(rs.getString("receipt_no"));
+                roomReceipt.setInvoiceId(rs.getInt("invoice_id"));
+                roomReceipt.setPayer(rs.getString("payer"));
+                roomReceipt.setStatus(rs.getInt("status"));
+                roomReceipt.setDescription(rs.getString("description"));
+                roomReceipt.setCreatedDate(rs.getDate("created_date"));
+                roomReceipt.setUpdatedDate(rs.getDate("updated_date"));
+                
+                roomReceiptsReturn.add(roomReceipt);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomReceiptDaoImpl.class.getName());
+        }
+        
+        return roomReceiptsReturn;
+    }
+    
 }

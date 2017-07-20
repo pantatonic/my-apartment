@@ -189,4 +189,83 @@ public class DashboardController {
         return arrayObject;
     }
     
+    /**
+     * 
+     * @param buildingId
+     * @param month
+     * @param year
+     * @param response
+     * @return String
+     */
+    @RequestMapping(value = "/get_receipt_by_building_month_chart.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String getReceiptByBuildingMonthChart(
+            @RequestParam("building_id") String buildingId,
+            @RequestParam("month") String month,
+            @RequestParam("year") String year,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            jsonObjectReturn = CommonAppWsUtils.get("room_receipt/get_all_room_receipt_month_year/" + buildingId + "/" + month + "/" + year);
+            
+            JSONObject dataReturn = new JSONObject();
+            
+            dataReturn.put(CommonString.DATA_STRING, this.getReceiptByBuildingMonthChartGenerateData(jsonObjectReturn));
+            
+            return dataReturn.toString();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    /**
+     * 
+     * @param jsonObject
+     * @return Object
+     */
+    private Object[] getReceiptByBuildingMonthChartGenerateData(JSONObject jsonObject) {
+        JSONArray data = new JSONArray(jsonObject.get(CommonString.DATA_STRING).toString());
+        
+        Integer countStatusZero = 0;
+        Integer countStatusOne = 0;
+        for(Integer i = 0; i < data.length(); i++) {
+            JSONObject j = data.getJSONObject(i);
+
+            switch (j.getInt("status")) {
+                case 0:
+                    countStatusZero = countStatusZero + 1;
+                    break;
+                case 1:
+                    countStatusOne = countStatusOne + 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        Object[] arrayObject = new Object[2];
+        
+        Object[] objectCancel = new Object[2];
+        objectCancel[0] = messageSource.getMessage("common.cancel", null, LocaleContextHolder.getLocale());
+        objectCancel[1] = countStatusZero;
+        arrayObject[0] = objectCancel;
+
+        Object[] objectReceipt = new Object[2];
+        objectReceipt[0] = messageSource.getMessage("room.receipt", null, LocaleContextHolder.getLocale());
+        objectReceipt[1] = countStatusOne;
+        arrayObject[1] = objectReceipt;
+
+
+        return arrayObject;
+    }
+    
 }

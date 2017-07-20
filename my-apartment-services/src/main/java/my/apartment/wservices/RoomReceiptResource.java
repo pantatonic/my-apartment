@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import my.apartment.common.CommonString;
 import my.apartment.common.CommonWsUtils;
@@ -188,6 +189,39 @@ public class RoomReceiptResource {
             jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         
+        return jsonObjectReturn.toString();
+    }
+    
+    /**
+     * 
+     * @param buildingId
+     * @param month
+     * @param year
+     * @return String
+     */
+    @Path("get_all_room_receipt_month_year/{building_id}/{month}/{year}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getAllRoomReceiptMonthYear(
+            @PathParam("building_id") Integer buildingId,
+            @PathParam("month") Integer month,
+            @PathParam("year") Integer year
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+
+        try {
+            RoomReceiptDao roomReceiptDaoImpl = new RoomReceiptDaoImpl();
+
+            List<RoomReceipt> roomReceipts = roomReceiptDaoImpl.getAllRoomReceiptMonthYear(buildingId, month, year);
+
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomReceipts);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+
         return jsonObjectReturn.toString();
     }
 

@@ -15,4 +15,6 @@ public interface RoomReceiptDao {
     
     public List<RoomReceiptPdf> getById(Integer roomInvoiceId);
     
+    public List<RoomReceipt> getAllRoomReceiptMonthYear(Integer buildingId, Integer month, Integer year);
+    
 }

@@ -11,7 +11,7 @@
     margin: auto;
 }
 
-#invoice-by-building-month-chart-box #invoice-by-biulding-chart-month-year, 
-#receipt-by-building-month-chart-box #receipt-by-biulding-chart-month-year {
+#invoice-by-building-month-chart-box #invoice-by-building-chart-month-year, 
+#receipt-by-building-month-chart-box #receipt-by-building-chart-month-year {
     width: 100px !important;
 }

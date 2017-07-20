@@ -103,7 +103,7 @@
                                 <div class="col-xs-12">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
-                                        <input type="text" id="invoice-by-biulding-chart-month-year"  value="${currentYearMonth}"
+                                        <input type="text" id="invoice-by-building-chart-month-year"  value="${currentYearMonth}"
                                                 autocomplete="off" class="form-control text-center" readonly="readonly">
                                     </div>
                                     <br>
@@ -139,7 +139,7 @@
                                 <div class="col-xs-12">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></div>
-                                        <input type="text" id="receipt-by-biulding-chart-month-year"  value="${currentYearMonth}"
+                                        <input type="text" id="receipt-by-building-chart-month-year"  value="${currentYearMonth}"
                                                 autocomplete="off" class="form-control text-center" readonly="readonly">
                                     </div>
                                     <br>
