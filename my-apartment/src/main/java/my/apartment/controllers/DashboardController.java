@@ -38,8 +38,13 @@ public class DashboardController {
         
         modelAndView.addObject("buildingList", jsonArrayBuilding);
         
-        String currentMonth = CommonUtils.getCurrentMonthString();
-        String currentYear = CommonUtils.getCurrentYearString();
+        String currentMonth = CommonUtils.getPreviousMonthYear(Integer.parseInt(CommonUtils.getCurrentMonthString(), 10),
+                Integer.parseInt(CommonUtils.getCurrentYearString(), 10)).get("month").toString();
+        
+        String currentYear = CommonUtils.getPreviousMonthYear(Integer.parseInt(CommonUtils.getCurrentMonthString(), 10),
+                Integer.parseInt(CommonUtils.getCurrentYearString(), 10)).get("year").toString();
+        
+        
         
         modelAndView.addObject("currentYearMonth", currentYear + "-" + currentMonth);
         
