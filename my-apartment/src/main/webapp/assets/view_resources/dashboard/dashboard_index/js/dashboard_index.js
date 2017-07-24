@@ -404,7 +404,7 @@ var myCharts = (function () {
                         height: 350
                     },
                     title: {
-                        text: app.translate('dashboard.chart.receipt_by_building'),
+                        text: app.translate('dashboard.chart.receipt_of_invoice_by_building'),
                         align: 'center'
                     },
                     subtitle: {

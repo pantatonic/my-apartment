@@ -53,6 +53,7 @@
     "dashboard.chart.building_name":"<spring:message code="dashboard.chart.building_name" />",
     "dashboard.chart.invoice_by_building":"<spring:message code="dashboard.chart.invoice_by_building" />",
     "dashboard.chart.receipt_by_building":"<spring:message code="dashboard.chart.receipt_by_building" />",
+    "dashboard.chart.receipt_of_invoice_by_building":"<spring:message code="dashboard.chart.receipt_of_invoice_by_building" />",
     
     "apartment":"<spring:message code="apartment" />",
     
