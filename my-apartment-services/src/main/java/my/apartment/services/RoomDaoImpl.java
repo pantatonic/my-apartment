@@ -1172,4 +1172,41 @@ public class RoomDaoImpl implements RoomDao {
         return rncofds;
     }
     
+    @Override
+    public Boolean checkRoomHaveElectricityAndWaterMeter(Integer roomId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Boolean checkResult = Boolean.FALSE;
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+
+            String aliasFieldCount = "count_row";
+            
+            String stringQuery = "SELECT COUNT(electricity_meter.room_id) AS " + aliasFieldCount + " " +
+                "FROM electricity_meter " +
+                "WHERE electricity_meter.room_id = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, roomId);
+            rs = ps.executeQuery();
+            
+            rs.first();
+            
+            if(rs.getInt(aliasFieldCount) > 0) {
+                checkResult = Boolean.TRUE;
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
+        }
+        
+        return checkResult;
+    }
+    
 }

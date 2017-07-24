@@ -210,18 +210,27 @@ public class RoomResource {
                  * if have data not allow to delete
                  */
                 
-                Boolean resultDelete = roomDaoImpl.deleteById(roomId);
+                Boolean resultCheck = roomDaoImpl.checkRoomHaveElectricityAndWaterMeter(roomId);
                 
-                if(resultDelete == Boolean.TRUE) {
-                    jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
-                            CommonString.DELETE_DATA_SUCCESS_STRING);
+                if(resultCheck == Boolean.FALSE) {
+                    /** allow to delete */
+                    Boolean resultDelete = roomDaoImpl.deleteById(roomId);
+                
+                    if(resultDelete == Boolean.TRUE) {
+                        jsonObjectReturn = JsonObjectUtils.setSuccessWithMessage(jsonObjectReturn, 
+                                CommonString.DELETE_DATA_SUCCESS_STRING);
+                    }
+                    else {
+                        jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
+                                CommonString.PROCESSING_FAILED_STRING);
+                    }
                 }
                 else {
+                    /** not allow to delete */
                     jsonObjectReturn = JsonObjectUtils.setErrorWithMessage(jsonObjectReturn, 
-                            CommonString.PROCESSING_FAILED_STRING);
+                                CommonString.HAS_ANY_DATA_STRING);
                 }
             }
-            
         }
         catch(Exception e) {
             e.printStackTrace();

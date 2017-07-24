@@ -49,4 +49,6 @@ public interface RoomDao {
     
     public List<RoomNoticeCheckOutForDashboard> getCurrentNoticeCheckOutByBuildingId(Integer buildingId);
     
+    public Boolean checkRoomHaveElectricityAndWaterMeter(Integer roomId);
+    
 }
