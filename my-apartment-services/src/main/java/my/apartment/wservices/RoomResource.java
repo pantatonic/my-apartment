@@ -23,6 +23,7 @@ import my.apartment.model.Room;
 import my.apartment.model.RoomCurrentCheckIn;
 import my.apartment.model.RoomInvoice;
 import my.apartment.model.RoomNoticeCheckOut;
+import my.apartment.model.RoomNoticeCheckOutForDashboard;
 import my.apartment.model.RoomReservation;
 import my.apartment.model.WaterMeter;
 import my.apartment.services.RoomCurrentCheckInDao;
@@ -649,6 +650,30 @@ public class RoomResource {
         catch(Exception e) {
             e.printStackTrace();
             
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @Path("get_notice_check_out_by_building_data_list/{building_id}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getNoticeCheckOutByBuildingDataList(
+            @PathParam("building_id") Integer buildingId
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            List<RoomNoticeCheckOutForDashboard> rncofds = roomDaoImpl.getCurrentNoticeCheckOutByBuildingId(buildingId);
+
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, rncofds);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        
             jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
         }
         

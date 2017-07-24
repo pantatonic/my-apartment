@@ -11,11 +11,13 @@ var facade = (function() {
         initialProcess: function() {
             page.initialProcess.initDatePicker();
             page.initialProcess.initChart();
+            page.initialProcess.initDataList();
         },
         addEvent: function() {
             page.addEvent.refreshChartData();
             page.addEvent.getInvoiceByBuildingMonthChart();
             page.addEvent.getReceiptByBuildingMonthChart();
+            page.addEvent.getNoticeCheckOutByBuilding();
         }
     };
 })();
@@ -45,6 +47,9 @@ var page = (function () {
                 myCharts.roomByBuilding();
                 myCharts.invoiceByBuildingMonth();
                 myCharts.receiptByBuildingMonth();
+            },
+            initDataList: function() {
+                dataList.getNoticeCheckOutByBuilding();
             }
         },
         addEvent: {
@@ -55,14 +60,20 @@ var page = (function () {
                     eval(targetOperation)();
                 });
             },
-            getInvoiceByBuildingMonthChart: function() {
-                jQuery('#invoice-by-building-month-chart-box').find('.building-list').change(function() {
+            getInvoiceByBuildingMonthChart: function() {                
+                page.getElement.invoiceByBuildingMonthChart.buildingList().change(function() {
                     myCharts.invoiceByBuildingMonth();
                 });
             },
             getReceiptByBuildingMonthChart: function() {
-                jQuery('#receipt-by-building-month-chart-box').find('.building-list').change(function() {
+                page.getElement.receiptByBuildingMonthChart.buildingList().change(function() {
                     myCharts.receiptByBuildingMonth();
+                });
+            },
+            
+            getNoticeCheckOutByBuilding: function() {
+                page.getElement.noticeCheckOutDataList.buildingList().change(function() {
+                    dataList.getNoticeCheckOutByBuilding();
                 });
             }
         },
@@ -120,6 +131,20 @@ var page = (function () {
                     var splitText = monthYear.split('-');
                 
                     return splitText[0];
+                }
+            },
+            noticeCheckOutDataList: {
+                content: function() {
+                    return jQuery('#notice-check-out-list-table-content');
+                },
+                box: function() {
+                    return jQuery('#notice-check-out-by-building-list-box');
+                },
+                buildingList: function() {
+                    return page.getElement.noticeCheckOutDataList.box().find('.building-list');
+                },
+                tableList: function() {
+                    return page.getElement.noticeCheckOutDataList.box().find('table#notice-check-out-list-table');
                 }
             }
         }
@@ -494,6 +519,77 @@ var myCharts = (function () {
                     },
                     error: function() {
                         _loading(_chartContent, 'remove');
+
+                        app.alertSomethingError();
+                    }
+                });
+            }, _DELAY_PROCESS_);
+        }
+    };
+})();
+
+var dataList = (function() {
+    var _loading = function(contentElement, type) {
+        if(type == 'show') {
+            app.loadingInElement('show',
+            contentElement.parent().parent().parent());
+        }
+        else {
+            app.loadingInElement('remove',
+            contentElement.parent().parent().parent());
+        }
+    };
+    
+    return {
+        getNoticeCheckOutByBuilding: function() {
+            var _tableList = page.getElement.noticeCheckOutDataList.tableList();
+            var _renderDataList = function(dataList) {
+                var data_ = dataList.data;
+                var html_ = '';
+                
+                for(var index in data_) {
+                    var currentData = data_[index];
+                    html_ += '<tr>'
+                        + '<td>' + app.valueUtils.undefinedToEmpty(currentData.noticeCheckOutDate) + '</td>'
+                        + '<td>' + app.valueUtils.undefinedToEmpty(currentData.roomNo) + '</td>'
+                        + '<td>' + app.valueUtils.undefinedToEmpty(currentData.buildingName) + '</td>'
+                        + '<td>' + app.valueUtils.undefinedToEmpty(currentData.remark) + '</td>'
+                        + '</tr>';                    
+                }
+                
+                if(data_.length === 0 ) {
+                    html_ = '<tr><td colspan="4" class="text-center">' + app.translate('common.data_not_found') + '</td></tr>';
+                }
+                
+                _tableList.find('tbody').html(html_);
+            };
+            
+            _loading(_tableList, 'show');
+            
+            setTimeout(function() {
+                var buildingList = page.getElement.noticeCheckOutDataList.buildingList();
+                
+                jQuery.ajax({
+                    type: 'get',
+                    url: _CONTEXT_PATH_ + '/get_notice_check_out_by_building_data_list.html',
+                    data: {
+                        building_id: buildingList.val()
+                    },
+                    cache: false,
+                    success:function(response) {
+                        response = app.convertToJsonObject(response);
+                        
+                        if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                        }
+                        else {
+                            _renderDataList(response);
+                        }
+                        
+                        _loading(_tableList, 'remove');
+                    },
+                    error: function() {
+                        _loading(_tableList, 'remove');
 
                         app.alertSomethingError();
                     }

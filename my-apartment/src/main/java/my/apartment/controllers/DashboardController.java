@@ -290,4 +290,32 @@ public class DashboardController {
         return arrayObject;
     }
     
+    /**
+     * 
+     * @param buildingId
+     * @param response
+     * @return String
+     */
+    @RequestMapping(value = "/get_notice_check_out_by_building_data_list.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String getNoticeCheckOutByBuildingDataList(
+            @RequestParam("building_id") String buildingId,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            jsonObjectReturn = CommonAppWsUtils.get("room/get_notice_check_out_by_building_data_list/" + buildingId);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+
+        return jsonObjectReturn.toString();
+    }
+    
 }

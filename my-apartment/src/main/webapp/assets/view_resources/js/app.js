@@ -46,7 +46,7 @@ var app = {
     },
     loadingInElement : function(type, elementObject) {
         if (type == 'show') {
-            if (jQuery('.overlay-in-element').length > 0) {
+            if (elementObject.find('.overlay-in-element').length > 0) {
                 return false;
             }
             var over = '<div class="overlay-in-element">' +

@@ -5,6 +5,7 @@ import java.util.List;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomNoticeCheckOut;
+import my.apartment.model.RoomNoticeCheckOutForDashboard;
 import my.apartment.model.WaterMeter;
 
 
@@ -45,5 +46,7 @@ public interface RoomDao {
     public BigDecimal getWaterChargePerUnitByRoomId(Integer roomId);
     
     public Boolean getIsUseWaterMinimunUnitCalculateByRoomId(Integer roomId);
+    
+    public List<RoomNoticeCheckOutForDashboard> getCurrentNoticeCheckOutByBuildingId(Integer buildingId);
     
 }

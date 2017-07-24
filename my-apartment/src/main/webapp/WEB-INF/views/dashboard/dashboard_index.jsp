@@ -152,6 +152,54 @@
                         </div>
                     </div>
                 </div>
+                                                
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="box" id="notice-check-out-by-building-list-box">
+                            <div class="box-header with-border">
+                                <select class="building-list form-control">
+                                    <c:forEach begin="0" end="${buildingList.length() - 1}" var="index">
+                                        <option value="${buildingList.getJSONObject(index).getInt("id")}" 
+                                                data-electricity-meter-digit="${buildingList.getJSONObject(index).getInt("electricityMeterDigit")}" 
+                                                data-water-meter-digit="${buildingList.getJSONObject(index).getInt("waterMeterDigit")}">
+                                            ${buildingList.getJSONObject(index).getString("name")}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool refresh-chart-data" 
+                                            target-operation="dataList.getNoticeCheckOutByBuilding" 
+                                            title="<spring:message code="common.refresh_data" />">
+                                        <i class="fa fa-refresh"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div id="notice-check-out-list-table-content" class="table-responsive">
+                                    <table id="notice-check-out-list-table" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="4" class="text-center"><spring:message code="room.notice_check_out" /></th>
+                                            </tr>
+                                            <tr>
+                                                <th><spring:message code="room.notice_check_out_date" /></th>
+                                                <th><spring:message code="room.room_no" /></th>
+                                                <th><spring:message code="dashboard.chart.building_name" /></th>
+                                                <th><spring:message code="common.remark" /></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </section>
         </div>

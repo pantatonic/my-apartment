@@ -18,6 +18,7 @@ import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomCheckInOutHistory;
 import my.apartment.model.RoomNoticeCheckOut;
+import my.apartment.model.RoomNoticeCheckOutForDashboard;
 import my.apartment.model.WaterMeter;
 
 
@@ -1122,6 +1123,53 @@ public class RoomDaoImpl implements RoomDao {
         }
         
         return resultReturn;
+    }
+    
+    @Override
+    public List<RoomNoticeCheckOutForDashboard> getCurrentNoticeCheckOutByBuildingId(Integer buildingId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        List<RoomNoticeCheckOutForDashboard> rncofds = new ArrayList<RoomNoticeCheckOutForDashboard>();
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT notice_check_out.*, room.room_no AS room_no, building.id AS building_id, building.name As building_name " +
+                "FROM notice_check_out JOIN room on notice_check_out.room_id = room.id " +
+                "JOIN building ON room.building_id = building.id " +
+                "WHERE building.id = ?";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, buildingId);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomNoticeCheckOutForDashboard r = new RoomNoticeCheckOutForDashboard();
+                
+                r.setRoomId(rs.getInt("room_id"));
+                r.setNoticeCheckOutDate(rs.getDate("notice_check_out_date"));
+                r.setRemark(rs.getString("remark"));
+                r.setCreatedDate(rs.getDate("created_date"));
+                r.setUpdatedDate(rs.getDate("updated_date"));
+                
+                r.setRoomNo(rs.getString("room_no"));
+                r.setBuildingId(rs.getInt("building_id"));
+                r.setBuildingName(rs.getString("building_name"));
+                
+                rncofds.add(r);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
+        }
+        
+        return rncofds;
     }
     
 }

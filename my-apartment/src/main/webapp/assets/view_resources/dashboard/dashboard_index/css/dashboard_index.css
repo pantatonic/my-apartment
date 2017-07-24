@@ -15,3 +15,13 @@
 #receipt-by-building-month-chart-box #receipt-by-building-chart-month-year {
     width: 100px !important;
 }
+
+#notice-check-out-by-building-list-box .box-body {
+    max-height: 400px; 
+    overflow-y: auto;
+}
+
+#notice-check-out-list-table-content thead tr:last-child th:nth-child(1), 
+#notice-check-out-list-table-content thead tr:last-child th:nth-child(2) {
+    width: 180px !important;
+}
