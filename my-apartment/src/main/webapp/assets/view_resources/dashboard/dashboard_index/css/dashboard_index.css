@@ -21,6 +21,10 @@
     overflow-y: auto;
 }
 
+#notice-check-out-list-table-content {
+    font-size: 13px;
+}
+
 #notice-check-out-list-table-content thead tr:last-child th:nth-child(1), 
 #notice-check-out-list-table-content thead tr:last-child th:nth-child(2) {
     width: 180px !important;
