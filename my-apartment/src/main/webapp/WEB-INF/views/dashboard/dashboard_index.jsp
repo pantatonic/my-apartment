@@ -5,7 +5,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <tiles:insertDefinition name="defaultTemplate">
-    <tiles:putAttribute name="title" value="Test Tiles" />
+    <spring:message code="dashboard.dashboard.page_title" var="msgPageTitle" /> 
+    <tiles:putAttribute name="title" value="${msgPageTitle}" />
     <tiles:putAttribute name="css">
         <link rel="stylesheet" 
               href="<c:url value="/assets/view_resources/dashboard/dashboard_index/css/dashboard_index.css?v=${randomTextVersion}"/>">
@@ -46,7 +47,7 @@
             <section class="content-header">
                 <h1>
                     <spring:message code="dashboard.dashboard.page_title" />
-                    <small><spring:message code="dashboard.dashboard.page_sub_title" /></small>
+                    <%-- <small><spring:message code="dashboard.dashboard.page_sub_title" /></small> --%>
                 </h1>
             </section>
 

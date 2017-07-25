@@ -17,7 +17,7 @@
                scope="application" /> --%>
         <%--<c:set var="baseUrl"  value="http://localhost:7001/my-apartment/" scope="application" />--%>
 
-        <title></title>
+        <title><spring:message code="apartment.my_apartment" /></title>
         
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -252,7 +252,7 @@
         
         <div class="login-box">
             <div class="login-logo">
-                <b>My</b> Apartment | ${sessionScope.userFirstname}
+                <b>My</b> Apartment
                 <jsp:include page="WEB-INF/views/message_sources.jsp" />
             </div>
             <div class="login-box-body">
