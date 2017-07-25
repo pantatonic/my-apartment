@@ -1,3 +1,8 @@
+.hr-separate {
+    margin-top: 0px;
+    border-top: 1px solid #dddddd;
+}
+
 #room-by-building-chart {
     height: 400px;
 }
