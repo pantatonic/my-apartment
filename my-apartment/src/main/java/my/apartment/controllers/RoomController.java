@@ -672,6 +672,12 @@ public class RoomController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param roomId
+     * @param response
+     * @return String
+     */
     @RequestMapping(value = "/remove_notice_check_out.html", method = {RequestMethod.POST})
     @ResponseBody
     public String removeNoticeCheckOut(

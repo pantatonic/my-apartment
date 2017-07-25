@@ -318,4 +318,32 @@ public class DashboardController {
         return jsonObjectReturn.toString();
     }
     
+    /**
+     * 
+     * @param buildingId
+     * @param response
+     * @return String
+     */
+    @RequestMapping(value = "/get_room_data_by_building_data_list.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String getRoomDataByBuildingDataList(
+            @RequestParam("building_id") String buildingId,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            jsonObjectReturn = CommonAppWsUtils.get("room/get_room_data_by_building_data_list/" + buildingId);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
 }

@@ -201,6 +201,55 @@
                         </div>
                     </div>
                 </div>
+                                            
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="box" id="room-data-by-building-list-box">
+                            <div class="box-header with-border">
+                                <select class="building-list form-control">
+                                    <c:forEach begin="0" end="${buildingList.length() - 1}" var="index">
+                                        <option value="${buildingList.getJSONObject(index).getInt("id")}" 
+                                                data-electricity-meter-digit="${buildingList.getJSONObject(index).getInt("electricityMeterDigit")}" 
+                                                data-water-meter-digit="${buildingList.getJSONObject(index).getInt("waterMeterDigit")}">
+                                            ${buildingList.getJSONObject(index).getString("name")}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool refresh-chart-data" 
+                                            target-operation="dataList.getRoomDataByBuilding" 
+                                            title="<spring:message code="common.refresh_data" />">
+                                        <i class="fa fa-refresh"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div id="room-data-list-table-content" class="table-responsive">
+                                    <table id="room-data-list-table" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="5" class="text-center">_Room Data_</th>
+                                            </tr>
+                                            <tr>
+                                                <th><spring:message code="room.floor" /></th>
+                                                <th><spring:message code="room.room_no" /></th>
+                                                <th><spring:message code="room.price_per_month" /></th>
+                                                <th><spring:message code="room.status" /></th>
+                                                <th>&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </section>
         </div>

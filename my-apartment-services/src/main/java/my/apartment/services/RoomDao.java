@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
+import my.apartment.model.RoomForDashboard;
 import my.apartment.model.RoomNoticeCheckOut;
 import my.apartment.model.RoomNoticeCheckOutForDashboard;
 import my.apartment.model.WaterMeter;
@@ -50,5 +51,7 @@ public interface RoomDao {
     public List<RoomNoticeCheckOutForDashboard> getCurrentNoticeCheckOutByBuildingId(Integer buildingId);
     
     public Boolean checkRoomHaveElectricityAndWaterMeter(Integer roomId);
+    
+    public List<RoomForDashboard> getRoomDataByBuilding(Integer buildingId);
     
 }

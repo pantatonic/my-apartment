@@ -21,6 +21,7 @@ import my.apartment.common.JsonObjectUtils;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomCurrentCheckIn;
+import my.apartment.model.RoomForDashboard;
 import my.apartment.model.RoomInvoice;
 import my.apartment.model.RoomNoticeCheckOut;
 import my.apartment.model.RoomNoticeCheckOutForDashboard;
@@ -684,6 +685,28 @@ public class RoomResource {
             e.printStackTrace();
         
             jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
+    @Path("get_room_data_by_building_data_list/{building_id}")
+    @GET
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getRoomDataByBuildingDataList(
+            @PathParam("building_id") Integer buildingId
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            RoomDao roomDaoImpl = new RoomDaoImpl();
+            
+            List<RoomForDashboard> roomForDashboard = roomDaoImpl.getRoomDataByBuilding(buildingId);
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, roomForDashboard);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
         }
         
         return jsonObjectReturn.toString();

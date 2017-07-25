@@ -17,6 +17,7 @@ import my.apartment.common.Config;
 import my.apartment.model.ElectricityMeter;
 import my.apartment.model.Room;
 import my.apartment.model.RoomCheckInOutHistory;
+import my.apartment.model.RoomForDashboard;
 import my.apartment.model.RoomNoticeCheckOut;
 import my.apartment.model.RoomNoticeCheckOutForDashboard;
 import my.apartment.model.WaterMeter;
@@ -1125,6 +1126,11 @@ public class RoomDaoImpl implements RoomDao {
         return resultReturn;
     }
     
+    /**
+     * 
+     * @param buildingId
+     * @return List
+     */
     @Override
     public List<RoomNoticeCheckOutForDashboard> getCurrentNoticeCheckOutByBuildingId(Integer buildingId) {
         Connection con = null;
@@ -1172,6 +1178,11 @@ public class RoomDaoImpl implements RoomDao {
         return rncofds;
     }
     
+    /**
+     * 
+     * @param roomId
+     * @return Boolean
+     */
     @Override
     public Boolean checkRoomHaveElectricityAndWaterMeter(Integer roomId) {
         Connection con = null;
@@ -1209,4 +1220,52 @@ public class RoomDaoImpl implements RoomDao {
         return checkResult;
     }
     
+    @Override
+    public List<RoomForDashboard> getRoomDataByBuilding(Integer buildingId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<RoomForDashboard> roomForDashboards = new ArrayList<RoomForDashboard>();
+
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT room.*, room_status.status AS room_status_text " +
+                "FROM room JOIN room_status ON room_status_id = room_status.id " +
+                "WHERE room.building_id = ? " +
+                "ORDER BY room.floor_seq ASC";
+            
+            ps = con.prepareStatement(stringQuery);
+            ps.setInt(1, buildingId);
+            
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomForDashboard roomForDashboard = new RoomForDashboard();
+                
+                roomForDashboard.setId(rs.getInt("id"));
+                roomForDashboard.setBuildingId(buildingId);
+                roomForDashboard.setFloorSeq(rs.getInt("floor_seq"));
+                roomForDashboard.setRoomNo(rs.getString("room_no"));
+                roomForDashboard.setName(rs.getString("name"));
+                roomForDashboard.setPricePerMonth(rs.getBigDecimal("price_per_month"));
+                roomForDashboard.setRoomStatusId(rs.getInt("room_status_id"));
+                roomForDashboard.setStartupElectricityMeter(rs.getString("startup_electricity_meter"));
+                roomForDashboard.setStartupWaterMeter(rs.getString("startup_water_meter"));
+                
+                roomForDashboard.setRoomStatusText(rs.getString("room_status_text"));
+                
+                roomForDashboards.add(roomForDashboard);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomDaoImpl.class.getName());
+        }
+        
+        return roomForDashboards;
+    }
 }

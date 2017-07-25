@@ -50,6 +50,7 @@ var page = (function () {
             },
             initDataList: function() {
                 dataList.getNoticeCheckOutByBuilding();
+                dataList.getRoomDataByBuilding();
             }
         },
         addEvent: {
@@ -145,6 +146,20 @@ var page = (function () {
                 },
                 tableList: function() {
                     return page.getElement.noticeCheckOutDataList.box().find('table#notice-check-out-list-table');
+                }
+            },
+            roomDataList: {
+                content: function() {
+                    return jQuery('#room-data-list-table-content');
+                },
+                box: function() {
+                    return jQuery('#room-data-by-building-list-box');
+                },
+                buildingList: function() {
+                    return page.getElement.roomDataList.box().find('.building-list');
+                },
+                tableList: function() {
+                    return page.getElement.roomDataList.box().find('table#room-data-list-table');
                 }
             }
         }
@@ -586,6 +601,77 @@ var dataList = (function() {
                             _renderDataList(response);
                         }
                         
+                        _loading(_tableList, 'remove');
+                    },
+                    error: function() {
+                        _loading(_tableList, 'remove');
+
+                        app.alertSomethingError();
+                    }
+                });
+            }, _DELAY_PROCESS_);
+        },
+        getRoomDataByBuilding: function() {
+            var _tableList = page.getElement.roomDataList.tableList();
+            var _renderDataList = function(dataList) {
+                var data_ = dataList.data;
+                var html_ = '';
+                var _display = {
+                    pricePerMonth: function(pricePerMonth) {
+                        var p = app.valueUtils.undefinedToEmpty(pricePerMonth);
+                        
+                        return app.valueUtils.isEmptyValue(p.toString()) ? '' : app.valueUtils.numberFormat(p);
+                    },
+                    statusText: function(statusText) {
+                        var s = app.valueUtils.undefinedToEmpty(statusText);
+                        
+                        return app.valueUtils.isEmptyValue(s) ? '' : app.translate(s);
+                    }
+                };
+                
+                for(var index in data_) {
+                    var currentData = data_[index];
+                    var pricePerMonth_ = _display.pricePerMonth(currentData.pricePerMonth);
+                    var statusText_ = _display.statusText(currentData.roomStatusText);
+                    
+                    html_ += '<tr>'
+                        + '<td>' + app.valueUtils.undefinedToEmpty(currentData.floorSeq) + '</td>'
+                        + '<td>' + app.valueUtils.undefinedToEmpty(currentData.roomNo) + '</td>'
+                        + '<td>' + pricePerMonth_ + '</td>'
+                        + '<td>' + statusText_ + '</td>'
+                        + '<td>&nbsp;</td>'
+                        + '</tr>';      
+                }
+                
+                if(data_.length === 0 ) {
+                    html_ = '<tr><td colspan="5" class="text-center">' + app.translate('common.data_not_found') + '</td></tr>';
+                }
+                
+                _tableList.find('tbody').html(html_);
+            };
+            
+            _loading(_tableList, 'show');
+            
+            setTimeout(function() {
+                var buildingList = page.getElement.roomDataList.buildingList();
+                
+                jQuery.ajax({
+                    type: 'get',
+                    url: _CONTEXT_PATH_ + '/get_room_data_by_building_data_list.html',
+                    data: {
+                        building_id: buildingList.val()
+                    },
+                    cache: false,
+                    success:function(response) {
+                        response = app.convertToJsonObject(response);
+
+                        if(response.message == SESSION_EXPIRE_STRING) {
+                                app.alertSessionExpired();
+                        }
+                        else {
+                            _renderDataList(response);
+                        }
+
                         _loading(_tableList, 'remove');
                     },
                     error: function() {
