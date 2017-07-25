@@ -11,6 +11,11 @@
     margin: auto;
 }
 
+.data-list-top-head {
+    background-color: #295f67;
+    color: #ffffff;
+}
+
 #invoice-by-building-month-chart-box #invoice-by-building-chart-month-year, 
 #receipt-by-building-month-chart-box #receipt-by-building-chart-month-year {
     width: 100px !important;
@@ -21,11 +26,21 @@
     overflow-y: auto;
 }
 
-#notice-check-out-list-table-content {
+#notice-check-out-list-table-content, #room-data-list-table-content {
     font-size: 13px;
 }
 
 #notice-check-out-list-table-content thead tr:last-child th:nth-child(1), 
 #notice-check-out-list-table-content thead tr:last-child th:nth-child(2) {
     width: 180px !important;
+}
+
+#room-data-list-table-content thead tr:last-child th:nth-child(1) {
+    width: 80px !important;
+}
+#room-data-list-table-content thead tr:last-child th:nth-child(2) {
+    width: 200px !important;
+}
+#room-data-list-table-content thead tr:last-child th:last-child {
+    width: 150px !important;
 }

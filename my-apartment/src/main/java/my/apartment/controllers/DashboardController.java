@@ -335,7 +335,15 @@ public class DashboardController {
         CommonAppUtils.setResponseHeader(response);
         
         try {
-            jsonObjectReturn = CommonAppWsUtils.get("room/get_room_data_by_building_data_list/" + buildingId);
+            JSONObject jsonObjectGetRoomData = CommonAppWsUtils.get("room/get_room_data_by_building_data_list/" + buildingId);
+            
+            JSONObject jsonObjectGetCurrentCheckIn = CommonAppWsUtils.get("room/get_current_check_in");
+            
+            jsonObjectReturn.put(CommonString.DATA_STRING,
+                    new JSONObject()
+                            .put("roomData", jsonObjectGetRoomData.get(CommonString.DATA_STRING))
+                            .put("currentCheckIn", jsonObjectGetCurrentCheckIn.get(CommonString.DATA_STRING))
+            );
         }
         catch(Exception e) {
             e.printStackTrace();

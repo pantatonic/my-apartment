@@ -18,6 +18,7 @@ var facade = (function() {
             page.addEvent.getInvoiceByBuildingMonthChart();
             page.addEvent.getReceiptByBuildingMonthChart();
             page.addEvent.getNoticeCheckOutByBuilding();
+            page.addEvent.getRoomDataByBuilding();
         }
     };
 })();
@@ -71,10 +72,14 @@ var page = (function () {
                     myCharts.receiptByBuildingMonth();
                 });
             },
-            
             getNoticeCheckOutByBuilding: function() {
                 page.getElement.noticeCheckOutDataList.buildingList().change(function() {
                     dataList.getNoticeCheckOutByBuilding();
+                });
+            },
+            getRoomDataByBuilding: function() {
+                page.getElement.roomDataList.buildingList().change(function() {
+                    dataList.getRoomDataByBuilding();
                 });
             }
         },
@@ -614,7 +619,7 @@ var dataList = (function() {
         getRoomDataByBuilding: function() {
             var _tableList = page.getElement.roomDataList.tableList();
             var _renderDataList = function(dataList) {
-                var data_ = dataList.data;
+                var data_ = dataList.data.roomData;
                 var html_ = '';
                 var _display = {
                     pricePerMonth: function(pricePerMonth) {
@@ -622,24 +627,37 @@ var dataList = (function() {
                         
                         return app.valueUtils.isEmptyValue(p.toString()) ? '' : app.valueUtils.numberFormat(p);
                     },
-                    statusText: function(statusText) {
+                    statusText: function(statusText, roomStatusId) {
                         var s = app.valueUtils.undefinedToEmpty(statusText);
                         
-                        return app.valueUtils.isEmptyValue(s) ? '' : app.translate(s);
+                        return app.valueUtils.isEmptyValue(s) ? '' 
+                        : '<span class="label ' + app.system.getRoomStatusColorClass(roomStatusId) + '">' 
+                                + app.translate(s) + '</span>';
+                    }
+                };
+                _setCheckInLabel = function() {
+                    var dataCurrentCheckIn = dataList.data.currentCheckIn;
+                    var table_ = page.getElement.roomDataList.tableList();
+                    
+                    for(var index in dataCurrentCheckIn) {
+                        var currentData = dataCurrentCheckIn[index];
+                        var td_ = table_.find('tr[data-room-id="' + currentData.roomId + '"]').find('td:last');
+                        
+                        td_.html('<span class="label label-info">' + app.translate('room.check_in') + '</span>');
                     }
                 };
                 
                 for(var index in data_) {
                     var currentData = data_[index];
                     var pricePerMonth_ = _display.pricePerMonth(currentData.pricePerMonth);
-                    var statusText_ = _display.statusText(currentData.roomStatusText);
+                    var statusText_ = _display.statusText(currentData.roomStatusText, currentData.roomStatusId);
                     
-                    html_ += '<tr>'
+                    html_ += '<tr data-room-id="' + currentData.id + '">'
                         + '<td>' + app.valueUtils.undefinedToEmpty(currentData.floorSeq) + '</td>'
                         + '<td>' + app.valueUtils.undefinedToEmpty(currentData.roomNo) + '</td>'
                         + '<td>' + pricePerMonth_ + '</td>'
                         + '<td>' + statusText_ + '</td>'
-                        + '<td>&nbsp;</td>'
+                        + '<td class="text-center">&nbsp;</td>'
                         + '</tr>';      
                 }
                 
@@ -648,6 +666,8 @@ var dataList = (function() {
                 }
                 
                 _tableList.find('tbody').html(html_);
+                
+                _setCheckInLabel(dataList);
             };
             
             _loading(_tableList, 'show');

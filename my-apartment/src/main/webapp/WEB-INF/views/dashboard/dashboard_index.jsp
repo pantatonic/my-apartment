@@ -179,7 +179,7 @@
                                 <div id="notice-check-out-list-table-content" class="table-responsive">
                                     <table id="notice-check-out-list-table" class="table table-bordered table-striped">
                                         <thead>
-                                            <tr>
+                                            <tr class="data-list-top-head">
                                                 <th colspan="4" class="text-center"><spring:message code="room.notice_check_out" /></th>
                                             </tr>
                                             <tr>
@@ -227,8 +227,8 @@
                                 <div id="room-data-list-table-content" class="table-responsive">
                                     <table id="room-data-list-table" class="table table-bordered table-striped">
                                         <thead>
-                                            <tr>
-                                                <th colspan="5" class="text-center">_Room Data_</th>
+                                            <tr class="data-list-top-head">
+                                                <th colspan="5" class="text-center"><spring:message code="dashboard.data_list.room_data" /></th>
                                             </tr>
                                             <tr>
                                                 <th><spring:message code="room.floor" /></th>

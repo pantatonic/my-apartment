@@ -54,6 +54,7 @@
     "dashboard.chart.invoice_by_building":"<spring:message code="dashboard.chart.invoice_by_building" />",
     "dashboard.chart.receipt_by_building":"<spring:message code="dashboard.chart.receipt_by_building" />",
     "dashboard.chart.receipt_of_invoice_by_building":"<spring:message code="dashboard.chart.receipt_of_invoice_by_building" />",
+    "dashboard.data_list.room_data":"<spring:message code="dashboard.data_list.room_data" />",
     
     "apartment":"<spring:message code="apartment" />",
     
