@@ -299,7 +299,7 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
         try {
             con = CommonWsDb.getDbConnection();
             
-            String stringQuery = "SELECT room_receipt.* " +
+            String stringQuery = "SELECT room_receipt.*, room_invoice.room_price_per_month, room_invoice.electricity_value, room_invoice.water_value " +
                 "FROM room_receipt JOIN room_invoice ON room_receipt.invoice_id = room_invoice.id " +
                 "JOIN room ON room_invoice.room_id = room.id " +
                 "JOIN building ON room.building_id = building.id " +
@@ -325,6 +325,10 @@ public class RoomReceiptDaoImpl implements RoomReceiptDao {
                 roomReceipt.setDescription(rs.getString("description"));
                 roomReceipt.setCreatedDate(rs.getDate("created_date"));
                 roomReceipt.setUpdatedDate(rs.getDate("updated_date"));
+                
+                roomReceipt.setRoomPricePerMonth(rs.getBigDecimal("room_price_per_month"));
+                roomReceipt.setElectricityValue(rs.getBigDecimal("electricity_value"));
+                roomReceipt.setWaterValue(rs.getBigDecimal("water_value"));
                 
                 roomReceiptsReturn.add(roomReceipt);
             }

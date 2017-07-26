@@ -140,6 +140,9 @@ var page = (function () {
                     var splitText = monthYear.split('-');
                 
                     return splitText[0];
+                },
+                getTableChartDetailList: function() {
+                    return page.getElement.receiptByBuildingMonthChart.chartBox().find('#receipt-by-building-month-chart-detail-list') ;
                 }
             },
             noticeCheckOutDataList: {
@@ -318,19 +321,19 @@ var myCharts = (function () {
                     var calculateTotal = function(dt) {
                         return dt.electricityValue + dt.waterValue + dt.roomPricePerMonth;
                     };
-                    var tdCancel = tableChartDetailList.find('tbody tr:nth-child(1) td:nth-child(2)');
-                    var tdUnpaid = tableChartDetailList.find('tbody tr:nth-child(2) td:nth-child(2)');
-                    var tdPaid = tableChartDetailList.find('tbody tr:nth-child(3) td:nth-child(2)');
+                    //var tdCancel = tableChartDetailList.find('tbody tr:nth-child(1) td:nth-child(2)');
+                    var tdUnpaid = tableChartDetailList.find('tbody tr:nth-child(1) td:nth-child(2)');
+                    var tdPaid = tableChartDetailList.find('tbody tr:nth-child(2) td:nth-child(2)');
                     
-                    tdCancel.html('');
+                    //tdCancel.html('');
                     tdUnpaid.html('');
                     tdPaid.html('');
                     
                     for(var index in dataChartDetailList) {
-                        if(dataChartDetailList[index].status == 0) { //cancel
+                        /*if(dataChartDetailList[index].status == 0) { //cancel
                             countCancelValue = countCancelValue + calculateTotal(dataChartDetailList[index]);
                         }
-                        else
+                        else*/
                         if(dataChartDetailList[index].status == 1) { //unpaid
                             countUnpaidValue = countUnpaidValue + calculateTotal(dataChartDetailList[index]);
                         }
@@ -340,7 +343,7 @@ var myCharts = (function () {
                         }
                     }
                     
-                    tdCancel.html(app.valueUtils.numberFormat(countCancelValue));
+                    //tdCancel.html(app.valueUtils.numberFormat(countCancelValue));
                     tdUnpaid.html(app.valueUtils.numberFormat(countUnpaidValue));
                     tdPaid.html(app.valueUtils.numberFormat(countPaidValue));
                 };
@@ -459,10 +462,10 @@ var myCharts = (function () {
         },
         receiptByBuildingMonth: function() {
             var _chartContent = page.getElement.receiptByBuildingMonthChart.content();
-            var _renderChart = function(dataChart) {
+            var _renderChart = function(response) {
                 var counter = 0;
-                var _countData = function(dataChart) {
-                    var data_ = dataChart.data;
+                var _countData = function(response) {
+                    var data_ = response.data.chartData;
                     var countData_ = 0;
                     for(var i in data_) {
                         countData_ = countData_ + (data_[i][1]);
@@ -470,6 +473,35 @@ var myCharts = (function () {
                     
                     return countData_;
                 };
+                _setChartDetailList = function() {
+                    var dataChartDetailList = response.data.chartDetailList;
+                    var tableChartDetailList = page.getElement.receiptByBuildingMonthChart.getTableChartDetailList();
+                    var countCancelValue = 0;
+                    var countReceiptValue = 0;
+                    var calculateTotal = function(dt) {
+                        return dt.electricityValue + dt.waterValue + dt.roomPricePerMonth;
+                    };
+                    //var tdCancel = tableChartDetailList.find('tbody tr:nth-child(1) td:nth-child(2)');
+                    var tdReceipt = tableChartDetailList.find('tbody tr:nth-child(1) td:nth-child(2)');
+                    
+                    //tdCancel.html('');
+                    tdReceipt.html('');
+                    
+                    for(var index in dataChartDetailList) {
+                        /*if(dataChartDetailList[index].status == 0) { //cancel
+                            countCancelValue = countCancelValue + calculateTotal(dataChartDetailList[index]);
+                        }
+                        else*/
+                        if(dataChartDetailList[index].status == 1) { //receipt
+                            countReceiptValue = countReceiptValue + calculateTotal(dataChartDetailList[index]);
+                        }
+                    }
+                    
+                    //tdCancel.html(app.valueUtils.numberFormat(countCancelValue));
+                    tdReceipt.html(app.valueUtils.numberFormat(countReceiptValue));
+                };
+                
+                _setChartDetailList();
 
                 _chartContent.highcharts({
                     chart: {
@@ -491,7 +523,7 @@ var myCharts = (function () {
                         align: 'center'
                     },
                     subtitle: {
-                        text: app.translate('common.total') + ' : ' + _countData(dataChart) + ' ' + app.translate('room.room_receipt'),
+                        text: app.translate('common.total') + ' : ' + _countData(response) + ' ' + app.translate('room.room_receipt'),
                         useHTML: true
                     },
                     tooltip: {
@@ -505,7 +537,7 @@ var myCharts = (function () {
                             allowPointSelect: true,
                             cursor: 'pointer',
                             dataLabels: {
-                                enabled: _countData(dataChart) > 0 ? true : false,
+                                enabled: _countData(response) > 0 ? true : false,
                                 useHTML: false,
                                 distance: 20,
                                 formatter: function() {
@@ -531,7 +563,7 @@ var myCharts = (function () {
                             ['Spending type 5',     402.91],
                             ['Spending type 6',     240]
                         ]*/
-                        data: dataChart.data
+                        data: response.data.chartData
                     }],
                     colors: ['#c1c1c1', '#f39927'],
                     /* #f7a35c #8085e9 #f15c80 */
@@ -568,9 +600,7 @@ var myCharts = (function () {
                                 app.alertSessionExpired();
                         }
                         else {
-                            dataChart = app.convertToJsonObject(response);
-
-                            _renderChart(dataChart);
+                            _renderChart(response);
                         }
                         
                         _loading(_chartContent, 'remove');

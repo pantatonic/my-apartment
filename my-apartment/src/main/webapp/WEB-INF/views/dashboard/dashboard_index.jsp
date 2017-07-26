@@ -168,10 +168,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <%--<tr>
                                                 <td><spring:message code="common.cancel" /></td>
                                                 <td>&nbsp;</td>
-                                            </tr>
+                                            </tr>--%>
                                             <tr>
                                                 <td><spring:message code="room.invoice.unpaid" /></td>
                                                 <td>&nbsp;</td>
@@ -226,10 +226,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <%--<tr>
                                                 <td><spring:message code="common.cancel" /></td>
                                                 <td>&nbsp;</td>
-                                            </tr>
+                                            </tr>--%>
                                             <tr>
                                                 <td><spring:message code="room.receipt" /></td>
                                                 <td>&nbsp;</td>

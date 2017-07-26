@@ -234,13 +234,19 @@ public class DashboardController {
         CommonAppUtils.setResponseHeader(response);
         
         try {
-            jsonObjectReturn = CommonAppWsUtils.get("room_receipt/get_all_room_receipt_month_year/" + buildingId + "/" + month + "/" + year);
+            JSONObject jsonObjectDataChart = CommonAppWsUtils.get("room_receipt/get_all_room_receipt_month_year/" + buildingId + "/" + month + "/" + year);
             
-            JSONObject dataReturn = new JSONObject();
+            /*JSONObject dataReturn = new JSONObject();
             
             dataReturn.put(CommonString.DATA_STRING, this.getReceiptByBuildingMonthChartGenerateData(jsonObjectReturn));
             
-            return dataReturn.toString();
+            return dataReturn.toString();*/
+            
+            jsonObjectReturn.put(CommonString.DATA_STRING,
+                    new JSONObject()
+                            .put("chartData", this.getReceiptByBuildingMonthChartGenerateData(jsonObjectDataChart))
+                            .put("chartDetailList", jsonObjectDataChart.get(CommonString.DATA_STRING))
+                    );
         }
         catch(Exception e) {
             e.printStackTrace();

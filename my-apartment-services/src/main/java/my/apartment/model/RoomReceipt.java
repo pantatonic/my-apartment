@@ -1,6 +1,7 @@
 package my.apartment.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -18,11 +19,15 @@ public class RoomReceipt implements Serializable {
     private String createdDateString;
     private Date updatedDate;
     private String updatedDateString;
+    
+    private BigDecimal roomPricePerMonth;
+    private BigDecimal electricityValue;
+    private BigDecimal waterValue ;
 
     public RoomReceipt() {
     }
 
-    public RoomReceipt(Integer id, String receiptNo, Integer invoiceId, String payer, Integer status, String description, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString) {
+    public RoomReceipt(Integer id, String receiptNo, Integer invoiceId, String payer, Integer status, String description, Date createdDate, String createdDateString, Date updatedDate, String updatedDateString, BigDecimal roomPricePerMonth, BigDecimal electricityValue, BigDecimal waterValue) {
         this.id = id;
         this.receiptNo = receiptNo;
         this.invoiceId = invoiceId;
@@ -33,6 +38,9 @@ public class RoomReceipt implements Serializable {
         this.createdDateString = createdDateString;
         this.updatedDate = updatedDate;
         this.updatedDateString = updatedDateString;
+        this.roomPricePerMonth = roomPricePerMonth;
+        this.electricityValue = electricityValue;
+        this.waterValue = waterValue;
     }
 
     public Integer getId() {
@@ -115,9 +123,33 @@ public class RoomReceipt implements Serializable {
         this.updatedDateString = updatedDateString;
     }
 
+    public BigDecimal getRoomPricePerMonth() {
+        return roomPricePerMonth;
+    }
+
+    public void setRoomPricePerMonth(BigDecimal roomPricePerMonth) {
+        this.roomPricePerMonth = roomPricePerMonth;
+    }
+
+    public BigDecimal getElectricityValue() {
+        return electricityValue;
+    }
+
+    public void setElectricityValue(BigDecimal electricityValue) {
+        this.electricityValue = electricityValue;
+    }
+
+    public BigDecimal getWaterValue() {
+        return waterValue;
+    }
+
+    public void setWaterValue(BigDecimal waterValue) {
+        this.waterValue = waterValue;
+    }
+
     @Override
     public String toString() {
-        return "RoomReceipt{" + "id=" + id + ", receiptNo=" + receiptNo + ", invoiceId=" + invoiceId + ", payer=" + payer + ", status=" + status + ", description=" + description + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + '}';
+        return "RoomReceipt{" + "id=" + id + ", receiptNo=" + receiptNo + ", invoiceId=" + invoiceId + ", payer=" + payer + ", status=" + status + ", description=" + description + ", createdDate=" + createdDate + ", createdDateString=" + createdDateString + ", updatedDate=" + updatedDate + ", updatedDateString=" + updatedDateString + ", roomPricePerMonth=" + roomPricePerMonth + ", electricityValue=" + electricityValue + ", waterValue=" + waterValue + '}';
     }
 
 }
