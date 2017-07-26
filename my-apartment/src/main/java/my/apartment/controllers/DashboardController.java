@@ -146,20 +146,11 @@ public class DashboardController {
         
         try {
             JSONObject jsonObjectDataChart = CommonAppWsUtils.get("room_invoice/get_all_room_invoice_month_year/" + buildingId + "/" + month + "/" + year);
-            
-            JSONObject jsonObjectDataChartDetailList 
-                    = CommonAppWsUtils.get("room_invoice/get_room_invoice_month_year/" + buildingId + "/" + month + "/" + year);
-            
-            
-            //JSONObject dataReturn = new JSONObject();
-            
-            //dataReturn.put(CommonString.DATA_STRING, this.getInvoiceByBuildingMonthChartGenerateData(jsonObjectDataChart));
-            
-            
+
             jsonObjectReturn.put(CommonString.DATA_STRING,
                     new JSONObject()
                             .put("chartData", this.getInvoiceByBuildingMonthChartGenerateData(jsonObjectDataChart))
-                            .put("chartDetailList", jsonObjectDataChartDetailList.get(CommonString.DATA_STRING))
+                            .put("chartDetailList", jsonObjectDataChart.get(CommonString.DATA_STRING))
                     );
             
             return jsonObjectReturn.toString();
