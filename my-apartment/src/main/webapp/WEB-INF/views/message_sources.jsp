@@ -42,6 +42,7 @@
     "common.status":"<spring:message code="common.status" />",
     "common.refresh_data":"<spring:message code="common.refresh_data" />",
     "common.type":"<spring:message code="common.type" />",
+    "common.all_value":"<spring:message code="common.all_value" />",
     
     "account_not_found":"<spring:message code="account_not_found" />",
     "account_is_disabled":"<spring:message code="account_is_disabled" />",

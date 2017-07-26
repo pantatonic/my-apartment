@@ -180,6 +180,10 @@
                                                 <td><spring:message code="room.invoice.paid" /></td>
                                                 <td>&nbsp;</td>
                                             </tr>
+                                            <tr>
+                                                <td class="text-bold"><spring:message code="common.all_value" /></td>
+                                                <td class="text-bold">&nbsp;</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

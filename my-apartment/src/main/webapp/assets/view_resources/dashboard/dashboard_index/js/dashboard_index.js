@@ -324,10 +324,12 @@ var myCharts = (function () {
                     //var tdCancel = tableChartDetailList.find('tbody tr:nth-child(1) td:nth-child(2)');
                     var tdUnpaid = tableChartDetailList.find('tbody tr:nth-child(1) td:nth-child(2)');
                     var tdPaid = tableChartDetailList.find('tbody tr:nth-child(2) td:nth-child(2)');
+                    var tdAllValue = tableChartDetailList.find('tbody tr:nth-child(3) td:nth-child(2)');
                     
                     //tdCancel.html('');
                     tdUnpaid.html('');
                     tdPaid.html('');
+                    tdAllValue.html('');
                     
                     for(var index in dataChartDetailList) {
                         /*if(dataChartDetailList[index].status == 0) { //cancel
@@ -346,6 +348,7 @@ var myCharts = (function () {
                     //tdCancel.html(app.valueUtils.numberFormat(countCancelValue));
                     tdUnpaid.html(app.valueUtils.numberFormat(countUnpaidValue));
                     tdPaid.html(app.valueUtils.numberFormat(countPaidValue));
+                    tdAllValue.html(app.valueUtils.numberFormat(countUnpaidValue + countPaidValue));
                 };
 
                 _setChartDetailList();
