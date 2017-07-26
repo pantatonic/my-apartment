@@ -160,6 +160,28 @@
                                     </div>
                                     <br>
                                     <div id="invoice-by-building-month-chart"></div>
+                                    <table class="table table-bordered table-striped" id="invoice-by-building-month-chart-detail-list">
+                                        <thead>
+                                            <tr>
+                                                <th><spring:message code="common.type" /></th>
+                                                <th><spring:message code="room.invoice.value" /></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><spring:message code="common.cancel" /></td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td><spring:message code="room.invoice.unpaid" /></td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td><spring:message code="room.invoice.paid" /></td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div class="box-footer">
@@ -196,6 +218,28 @@
                                     </div>
                                     <br>
                                     <div id="receipt-by-building-month-chart"></div>
+                                    <table class="table table-bordered table-striped" id="receipt-by-building-month-chart-detail-list">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 50%;"><spring:message code="common.type" /></th>
+                                                <th style="width: 50%;"><spring:message code="room.invoice.value" /></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><spring:message code="common.cancel" /></td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td><spring:message code="room.receipt" /></td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div class="box-footer">
