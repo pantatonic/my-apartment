@@ -144,6 +144,9 @@
                                     </c:forEach>
                                 </select>
                                 <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-flat btn-box-tool info-chart-data-list" target-modal="#modal-invoice-chart-data-list">
+                                        <i class="fa fa-info-circle"></i>
+                                    </button>
                                     <button class="btn btn-box-tool refresh-chart-data" 
                                             target-operation="myCharts.invoiceByBuildingMonth" 
                                             title="<spring:message code="common.refresh_data" />">
@@ -206,6 +209,9 @@
                                     </c:forEach>
                                 </select>
                                 <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-flat btn-box-tool info-chart-data-list" target-modal="#modal-receipt-chart-data-list">
+                                        <i class="fa fa-info-circle"></i>
+                                    </button>
                                     <button class="btn btn-box-tool refresh-chart-data" 
                                             target-operation="myCharts.receiptByBuildingMonth" 
                                             title="<spring:message code="common.refresh_data" />">
@@ -236,6 +242,10 @@
                                             </tr>--%>
                                             <tr>
                                                 <td><spring:message code="room.receipt" /></td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                             </tr>
                                             <tr>
@@ -306,6 +316,9 @@
             </section>
         </div>
 
+        <jsp:include page="modal_invoice_chart_data_list.jsp" flush="true" />
+        
+        <jsp:include page="modal_receipt_chart_data_list.jsp" flush="true" />
 
     </tiles:putAttribute>
 </tiles:insertDefinition>

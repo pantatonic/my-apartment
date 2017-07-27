@@ -181,6 +181,35 @@ var app = {
             };
 
             return color[roomStatusId];
+        },
+        getInvoiceStatusLabel: function(status) {
+            switch(status) {
+                case 0:
+                    return '<span class="label label-room-status label-default">' + app.translate('common.cancel') + '</span>';
+                    break;
+                case 1:
+                    return '<span class="label label-room-status label-primary">' + app.translate('room.invoice.unpaid') + '</span>';
+                    break;
+                case 2:
+                    return '<span class="label label-room-status label-success">' + app.translate('room.invoice.paid') + '</span>';
+                    break;
+                default:
+                    alert('Invalid status');
+                    break;
+            }
+        },
+        getReceiptStatusLabel: function(status) {
+            switch(status) {
+                case 0:
+                    return '<span class="label label-room-status label-default">' + app.translate('common.cancel') + '</span>';
+                    break;
+                case 1:
+                    return '<span class="label label-room-status label-primary">' + app.translate('room.receipt') + '</span>';
+                    break;
+                default:
+                    alert('Invalid status');
+                    break;
+            }
         }
     }
     

@@ -19,6 +19,7 @@ var facade = (function() {
             page.addEvent.getReceiptByBuildingMonthChart();
             page.addEvent.getNoticeCheckOutByBuilding();
             page.addEvent.getRoomDataByBuilding();
+            page.addEvent.infoChartDataList();
         }
     };
 })();
@@ -80,6 +81,13 @@ var page = (function () {
             getRoomDataByBuilding: function() {
                 page.getElement.roomDataList.buildingList().change(function() {
                     dataList.getRoomDataByBuilding();
+                });
+            },
+            infoChartDataList: function() {
+                jQuery('.info-chart-data-list').click(function() {
+                    var thisElement = jQuery(this);
+                    
+                    jQuery(thisElement.attr('target-modal')).modal('show');
                 });
             }
         },
@@ -350,8 +358,38 @@ var myCharts = (function () {
                     tdPaid.html(app.valueUtils.numberFormat(countPaidValue));
                     tdAllValue.html(app.valueUtils.numberFormat(countUnpaidValue + countPaidValue));
                 };
+                var _setModalDataList = function() {
+                    var modalDataList = jQuery('#modal-invoice-chart-data-list');
+                    var dataChartDetailList = response.data.chartDetailList;
+                    var modalTableDataList = modalDataList.find('.modal-body table');
+                    var html_ = '';
+                    
+                    for(var index in dataChartDetailList) {
+                        var currentData = dataChartDetailList[index];
+                        var total = currentData.roomPricePerMonth + currentData.electricityValue + currentData.waterValue;
+                        
+                        html_ += '<tr>'
+                            + '<td>' + currentData.invoiceNo + '</td>'
+                            + '<td>' + currentData.invoiceDate + '</td>'
+                            + '<td>' + currentData.roomNo + '</td>'
+                            + '<td>' + app.valueUtils.numberFormat(total) + '</td>'
+                            + '<td>' + app.system.getInvoiceStatusLabel(currentData.status) + '</td>'
+                            + '</tr>';
+                    }
+                    
+                    if(dataChartDetailList.length === 0 ) {
+                        html_ = '<tr><td colspan="5" class="text-center">' + app.translate('common.data_not_found') + '</td></tr>';
+                    }
+
+                    modalTableDataList.find('tbody').html(html_);
+                };
+
+                
+                
+                /** process of _renderChart */
 
                 _setChartDetailList();
+                _setModalDataList();
 
                 _chartContent.highcharts({
                     chart: {
@@ -503,8 +541,36 @@ var myCharts = (function () {
                     //tdCancel.html(app.valueUtils.numberFormat(countCancelValue));
                     tdReceipt.html(app.valueUtils.numberFormat(countReceiptValue));
                 };
+                var _setModalDataList = function() {
+                    var modalDataList = jQuery('#modal-receipt-chart-data-list');
+                    var dataChartDetailList = response.data.chartDetailList;
+                    var modalTableDataList = modalDataList.find('.modal-body table');
+                    var html_ = '';
+                    
+                    for(var index in dataChartDetailList) {
+                        var currentData = dataChartDetailList[index];
+                        var total = currentData.roomPricePerMonth + currentData.electricityValue + currentData.waterValue;
+
+                        html_ += '<tr>'
+                            + '<td>' + currentData.receiptNo + '</td>'
+                            + '<td>' + currentData.createdDate + '</td>'
+                            + '<td>' + app.valueUtils.numberFormat(total) + '</td>'
+                            + '<td>' + app.system.getReceiptStatusLabel(currentData.status) + '</td>'
+                            + '</tr>';
+                    }
+                    
+                    if(dataChartDetailList.length === 0 ) {
+                        html_ = '<tr><td colspan="5" class="text-center">' + app.translate('common.data_not_found') + '</td></tr>';
+                    }
+
+                    modalTableDataList.find('tbody').html(html_);
+                };
+                
+                
+                /** process of _renderChart */
                 
                 _setChartDetailList();
+                _setModalDataList();
 
                 _chartContent.highcharts({
                     chart: {
