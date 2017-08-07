@@ -480,4 +480,110 @@ public class RoomInvoiceDaoImpl implements RoomInvoiceDao {
         return roomInvoicesReturn;
     }
     
+    /**
+     * 
+     * @param start
+     * @param length
+     * @return Object[]
+     */
+    @Override
+    public Object[] getAllUnpaidInvoice(Integer start, Integer length) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Object[] objectsReturn = new Object[2];
+        
+        List<RoomInvoice> roomInvoiceReturn = new ArrayList<RoomInvoice>();
+        objectsReturn[0] = roomInvoiceReturn;
+        
+        try {
+            con = CommonWsDb.getDbConnection();
+            
+            String stringQuery = "SELECT room_invoice.*, room_receipt.receipt_no, room.room_no, "
+                    + "building.min_electricity_unit, building.min_electricity_charge,"
+                    + "building.min_water_unit, building.min_water_charge "
+                    + "FROM room_invoice JOIN room ON room_invoice.room_id = room.id "
+                    + "JOIN building ON room.building_id = building.id " 
+                    + "LEFT JOIN room_receipt ON room_invoice.receipt_id = room_receipt.id "
+                    + "WHERE room_invoice.status = 1 "
+                    + "ORDER BY room_invoice.invoice_date DESC";
+            
+            String stringQueryNumRow = "SELECT COUNT(room_invoice.id) AS count_row "
+                    + "FROM room_invoice JOIN room ON room_invoice.room_id = room.id "
+                    + "JOIN building ON room.building_id = building.id " 
+                    + "LEFT JOIN room_receipt ON room_invoice.receipt_id = room_receipt.id "
+                    + "WHERE room_invoice.status = 1 "
+                    + "ORDER BY room_invoice.invoice_date DESC";
+            
+             /** get total records */
+            ps = con.prepareStatement(stringQueryNumRow);
+            rs = ps.executeQuery();
+            
+            rs.first();
+            Integer totalRecord = rs.getInt("count_row");
+
+            objectsReturn[1] = totalRecord;
+            /** ---------------- */
+            
+            /** get data records */
+            stringQuery += " LIMIT " + start.toString() + "," + length.toString();
+            
+            ps = con.prepareStatement(stringQuery);
+            rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                RoomInvoice roomInvoice = new RoomInvoice();
+             
+                roomInvoice.setId(rs.getInt("id"));
+                roomInvoice.setInvoiceNo(rs.getString("invoice_no"));
+                roomInvoice.setInvoiceDate(rs.getDate("invoice_date"));
+                roomInvoice.setMonth(rs.getInt("month"));
+                roomInvoice.setYear(rs.getInt("year"));
+                roomInvoice.setRoomId(rs.getInt("room_id"));
+                
+                roomInvoice.setRoomNo(rs.getString("room_no"));
+                
+                roomInvoice.setRoomPricePerMonth(rs.getBigDecimal("room_price_per_month"));
+                roomInvoice.setElectricityPreviousMeter(rs.getString("electricity_previous_meter"));
+                roomInvoice.setElectricityPresentMeter(rs.getString("electricity_present_meter"));
+                roomInvoice.setElectricityChargePerUnit(rs.getBigDecimal("electricity_charge_per_unit"));
+                roomInvoice.setElectricityUsageUnit(rs.getInt("electricity_usage_unit"));
+                roomInvoice.setElectricityValue(rs.getBigDecimal("electricity_value"));
+                roomInvoice.setElectricityUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("electricity_use_minimun_unit_calculate")));
+                roomInvoice.setWaterPreviousMeter(rs.getString("water_previous_meter"));
+                roomInvoice.setWaterPresentMeter(rs.getString("water_present_meter"));
+                roomInvoice.setWaterChargePerUnit(rs.getBigDecimal("water_charge_per_unit"));
+                roomInvoice.setWaterUsageUnit(rs.getInt("water_usage_unit"));
+                roomInvoice.setWaterValue(rs.getBigDecimal("water_value"));
+                roomInvoice.setWaterUseMinimunUnitCalculate(CommonWsDb.getBooleanFromInt(rs.getInt("water_use_minimun_unit_calculate")));
+                roomInvoice.setStatus(rs.getInt("status"));
+                roomInvoice.setDescription(rs.getString("description"));
+                roomInvoice.setReceiptId(rs.getInt("receipt_id"));
+                roomInvoice.setCreatedDate(rs.getDate("created_date"));
+                roomInvoice.setUpdatedDate(rs.getDate("updated_date"));
+                
+                roomInvoice.setReceiptNo(rs.getString("receipt_no"));
+                
+                roomInvoice.setMinElectricityUnit(CommonWsUtils.integerZeroToNull(rs.getInt("min_electricity_unit")));
+                roomInvoice.setMinElectricityCharge(rs.getBigDecimal("min_electricity_charge"));
+                roomInvoice.setMinWaterUnit(CommonWsUtils.integerZeroToNull(rs.getInt("min_water_unit")));
+                roomInvoice.setMinWaterCharge(rs.getBigDecimal("min_water_charge"));
+                
+                roomInvoiceReturn.add(roomInvoice);
+            }
+            /** --------------- */
+            
+            objectsReturn[0] = roomInvoiceReturn;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            CommonWsDb.closeFinally(ps, con, RoomInvoiceDaoImpl.class.getName());
+        }
+        
+        return objectsReturn;
+    }
+    
 }

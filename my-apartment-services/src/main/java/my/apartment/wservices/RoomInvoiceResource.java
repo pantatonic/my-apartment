@@ -375,6 +375,36 @@ public class RoomInvoiceResource {
         return jsonObjectReturn.toString();
     }
     
+    @Path("get_all_unpaid_invoice")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(CommonWsUtils.MEDIA_TYPE_JSON)
+    public String getAllUnpaidInvoice(InputStream incomingData) {
+        JSONObject jsonObjectReturn = new JSONObject();
+        
+        try {
+            JSONObject jsonObjectReceive = CommonWsUtils.receiveJsonObject(incomingData);
+
+            Integer start = Integer.parseInt(jsonObjectReceive.getString("start"), 10);
+            Integer length = Integer.parseInt(jsonObjectReceive.getString("length"), 10);
+            
+            RoomInvoiceDao roomInvoiceDaoImpl = new RoomInvoiceDaoImpl();
+            
+            Object[] resultObject = roomInvoiceDaoImpl.getAllUnpaidInvoice(start, length);
+            
+            jsonObjectReturn = JsonObjectUtils.setSuccessWithDataList(jsonObjectReturn, (List<RoomInvoice>) resultObject[0]);
+
+            jsonObjectReturn.put("totalRecords", resultObject[1]);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setServiceError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
 
     /**
      * PUT method for updating or creating an instance of RoomInvoiceResource

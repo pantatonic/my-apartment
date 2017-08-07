@@ -19,4 +19,6 @@ public interface RoomInvoiceDao {
     
     public List<RoomInvoice> getAllRoomInvoiceMonthYear(Integer buildingId, Integer month, Integer year);
     
+    public Object[] getAllUnpaidInvoice(Integer start, Integer length);
+    
 }

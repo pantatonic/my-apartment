@@ -263,6 +263,49 @@
                     </div>
                 </div>
                                                 
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="box" id="unpaid-invoice-list-box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">&nbsp;</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool refresh-chart-data" 
+                                            target-operation="dataList.getUnpaidInvoice" 
+                                            title="<spring:message code="common.refresh_data" />">
+                                        <i class="fa fa-refresh"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div id="unpaid-invoice-table-content" class="table-responsive">
+                                    <table id="unpaid-invoice-list-table" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr class="data-list-top-head">
+                                                <th class="text-center" colspan="6">
+                                                    <spring:message code="room.invoice.unpaid" /> <spring:message code="room.invoice" />
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th><spring:message code="room.invoice.invoice_no" /></th>
+                                                <th><spring:message code="room.invoice.invoice_date" /></th>
+                                                <th><spring:message code="room.room_no" /></th>
+                                                <th><spring:message code="room.invoice.value" /></th>
+                                                <th><spring:message code="common.status" /></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                                
                 <hr class="hr-separate">
                                                 
                 <div class="row">

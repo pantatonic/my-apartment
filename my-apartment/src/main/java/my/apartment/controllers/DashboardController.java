@@ -362,4 +362,59 @@ public class DashboardController {
         return jsonObjectReturn.toString();
     }
     
+    @RequestMapping(value = "/get_unpaid_invoice_data_list.html", method = {RequestMethod.GET})
+    @ResponseBody
+    public String getUnpaidInvoiceDataList(
+            @RequestParam(value = "draw", required = true) String draw,
+            @RequestParam(value = "start", required = true) String start,
+            @RequestParam(value = "length", required = true) String length,
+            HttpServletResponse response
+    ) {
+        JSONObject jsonObjectReturn = new JSONObject();
+
+        CommonAppUtils.setResponseHeader(response);
+        
+        try {
+            JSONObject requestJsonObject = new JSONObject();
+            requestJsonObject.put("start", start)
+                    .put("length", length);
+            
+            String requestJson = requestJsonObject.toString();
+            
+            JSONObject resultWsJsonObject = CommonAppWsUtils.postWithJsonDataString(requestJson, "room_invoice/get_all_unpaid_invoice");
+
+            JSONArray jsonArrayData = resultWsJsonObject.getJSONArray(CommonString.DATA_STRING);
+            JSONArray jsonArrayReturn = new JSONArray();
+            
+            for(Integer i = 0; i <= jsonArrayData.length() - 1; i++) {
+                JSONObject j = jsonArrayData.getJSONObject(i);
+                JSONObject tempJsonObject = new JSONObject();
+                
+                tempJsonObject.put("invoiceNo", JsonObjectUtils.getDataStringWithEmpty("invoiceNo", j));
+                tempJsonObject.put("invoiceDate", JsonObjectUtils.getDataStringWithEmpty("invoiceDate", j));
+                tempJsonObject.put("roomNo", JsonObjectUtils.getDataStringWithEmpty("roomNo", j));
+                tempJsonObject.put("value", 
+                        j.getBigDecimal("roomPricePerMonth")
+                                .add(j.getBigDecimal("electricityValue"))
+                                .add(j.getBigDecimal("waterValue"))
+                );
+                tempJsonObject.put("status", JsonObjectUtils.getDataStringWithEmpty("status", j));
+                
+                jsonArrayReturn.put(tempJsonObject);
+            }
+            
+            jsonObjectReturn.put("draw", draw)
+                    .put("recordsTotal", resultWsJsonObject.getInt("totalRecords"))
+                    .put("recordsFiltered", resultWsJsonObject.getInt("totalRecords"))
+                    .put(CommonString.DATA_STRING, jsonArrayReturn);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            
+            jsonObjectReturn = JsonObjectUtils.setControllerError(jsonObjectReturn);
+        }
+        
+        return jsonObjectReturn.toString();
+    }
+    
 }

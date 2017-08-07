@@ -8,6 +8,10 @@
     background-color: #f39c12;
 }
 
+#unpaid-invoice-list-table .data-list-top-head {
+    background-color: #f39c12;
+}
+
 #room-by-building-chart {
     height: 400px;
 }
@@ -36,7 +40,7 @@
     overflow-y: auto;
 }
 
-#notice-check-out-list-table-content, #room-data-list-table-content {
+#notice-check-out-list-table-content, #room-data-list-table-content, #unpaid-invoice-table-content {
     font-size: 13px;
 }
 

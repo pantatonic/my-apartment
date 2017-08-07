@@ -53,6 +53,7 @@ var page = (function () {
             initDataList: function() {
                 dataList.getNoticeCheckOutByBuilding();
                 dataList.getRoomDataByBuilding();
+                dataList.getUnpaidInvoice();
             }
         },
         addEvent: {
@@ -838,6 +839,45 @@ var dataList = (function() {
                     }
                 });
             }, _DELAY_PROCESS_);
+        },
+        getUnpaidInvoice: function() {
+            var table_ = jQuery('#unpaid-invoice-list-table');
+            
+            table_.dataTable({
+                destroy: true,
+                autoWidth: false,
+                processing: true,
+                serverSide: true,  
+                bFilter: false,
+                ajax: {
+                    url: _CONTEXT_PATH_ + '/get_unpaid_invoice_data_list.html',
+                    type: 'get'/*,
+                    data: {
+                        room_id: 'test 123'
+                    }*/
+                },
+                columns: [
+                    {data: 'invoiceNo'},
+                    {data: 'invoiceDate'},
+                    {data: 'roomNo'},
+                    {data: 'value'},
+                    {data: 'status'}
+                ],
+                drawCallback: function(settings) {
+                    //app.data_table.set_full_width();
+                    table_.find('tbody tr').each(function() {
+                        var thisTr = jQuery(this);
+                        var currentStatusTd = thisTr.find('td:last');
+                        var currentValueTd = thisTr.find('td').eq(3);
+                        
+                        var value = parseFloat(currentValueTd.text());
+                        var status = parseInt(currentStatusTd.text(), 10);
+                        
+                        currentValueTd.html(app.valueUtils.numberFormat(value));
+                        currentStatusTd.html(app.system.getInvoiceStatusLabel(status));
+                    });
+                }
+            });
         }
     };
 })();
